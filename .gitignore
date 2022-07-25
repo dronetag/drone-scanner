@@ -1,8 +1,10 @@
+# Files with google api key are ignored, so your key wont get accidentaly pushed to repository
 /assets/config/
+**/android/app/src/main/AndroidManifest.xml
+**/ios/Runner/AppDelegate.swift
 
 # Miscellaneous
 *.class
-*.lock
 *.log
 *.pyc
 *.swp
