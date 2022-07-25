@@ -1,6 +1,19 @@
 # Drone Scanner
 
-DroneScanner is the application for scanning surroundings for data broadcasted by Unmanned Aerial Vehicle, such as identification and location. It gathers the data and presents them to user on map.
+Drone Scanner is an application for scanning surroundings for data broadcasted by Unmanned Aerial Vehicle, such as identification and location. It gathers the data and presents them to user on map.
+
+
+Drone Scanner can track all the nearby flights over Direct Remote ID standards. Browse real-time data about drones on a detailed map highlighting specific flying space zones. Download Drone Scanner for free and discover what drones fly above your head.
+
+Features:
+- Discover drones flying nearby in real-time
+- Examine detailed information broadcasted by drones via Bluetooth 4, Bluetooth 5, Wi-Fi Beacon, and Wi-Fi NAN
+- Browse a detailed map with your location and all nearby aircraft
+- Check available data about drones, including real-time height, direction, pilot identification, pilot position, operation description, and location history
+- Various flying zones marked and highlighted on the map
+- Easy export of collected data
+- Continuously updated to reflect the latest EU & US regulations
+
 
 ## Getting Started
 
@@ -15,7 +28,9 @@ samples, guidance on mobile development, and a full API reference.
 
 # Google Maps
 
-The application uses Google Maps API. In order for it to work, you need to obtain your API key. Replace "YOUR_API_KEY" in *assets/config/google_map_api.json* and *android/app/src/main/AndroidManifest.xml* with your key.
+The application uses Google Maps API. In order for it to work, you need to obtain your API key. Paste your key to *android/app/src/main/AndroidManifest.xml* and *ios/Runner/AppDelegate.swift*. Create file *google_map_api.json* in *assets/config*, see example file to see the required structure.
+
+The files which contain Google Maps API are added to .gitignore, so your key will not be accidentally commited. If you wish to commit changes in these files, use 'git add -f file'.
 
 ---
 
