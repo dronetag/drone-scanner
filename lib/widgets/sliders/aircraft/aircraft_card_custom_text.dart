@@ -24,7 +24,7 @@ class AircraftCardCustomText extends StatelessWidget {
       'Unknown Location',
       textScaleFactor: 0.9,
     );
-    late final text;
+    var text = 'Unknown Location';
     if (preference == ListFieldPreference.distance) {
       if (context.read<StandardsCubit>().state.locationEnabled && loc != null) {
         distanceFromMe = calculateDistance(
@@ -33,7 +33,7 @@ class AircraftCardCustomText extends StatelessWidget {
           context.read<MapCubit>().state.userLocation.latitude,
           context.read<MapCubit>().state.userLocation.longitude,
         );
-        if ((!context.read<StandardsCubit>().state.locationEnabled)) {
+        if (!context.read<StandardsCubit>().state.locationEnabled) {
           return emptyText;
         } else {
           text = '~${distanceFromMe.toStringAsFixed(2)} km away';
