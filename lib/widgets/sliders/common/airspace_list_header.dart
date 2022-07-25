@@ -41,6 +41,7 @@ class AirspaceListHeader extends StatelessWidget {
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),
+        color: Colors.white,
       ),
       height: headerHeight,
       width: width,
