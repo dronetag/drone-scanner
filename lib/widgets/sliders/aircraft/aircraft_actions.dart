@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
@@ -55,12 +54,15 @@ void handleAction(BuildContext context, AircraftAction action) {
   final zoneItem = context.read<SelectedZoneCubit>().state.selectedZone;
   final selectedMac =
       context.read<SelectedAircraftCubit>().state.selectedAircraftMac;
-  final messagePackList = selectedMac != null
-      ? context.read<AircraftCubit>().packsForDevice(context
-          .read<SelectedAircraftCubit>()
-          .state
-          .selectedAircraftMac as String) as List<MessagePack>
-      : [];
+  var messagePackList = context.read<AircraftCubit>().packsForDevice(context
+      .read<SelectedAircraftCubit>()
+      .state
+      .selectedAircraftMac as String);
+  if (selectedMac == null ||
+      messagePackList == null ||
+      messagePackList.isEmpty) {
+    return;
+  }
 
   switch (action) {
     case AircraftAction.delete:
@@ -69,7 +71,7 @@ void handleAction(BuildContext context, AircraftAction action) {
         'Would you really like to delete aircraft data?',
         () {
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
-          context.read<AircraftCubit>().deletePack(selectedMac as String);
+          context.read<AircraftCubit>().deletePack(selectedMac);
           showSnackBar(
             context,
             'Aircraft data were deleted.',

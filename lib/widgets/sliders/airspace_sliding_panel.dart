@@ -154,14 +154,18 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
       // ignore: prefer_function_declarations_over_variables
       final setFilterCallback = (filter) {
         setState(() {
-          context.read<SlidersCubit>().setFilterValue(filter);
+          if (filter is FilterValue) {
+            context.read<SlidersCubit>().setFilterValue(filter);
+          }
         });
       };
 
       // ignore: prefer_function_declarations_over_variables
       final setSortCallback = (sort) {
         setState(() {
-          context.read<SlidersCubit>().setSortValue(sort);
+          if (sort is SortValue) {
+            context.read<SlidersCubit>().setSortValue(sort);
+          }
         });
       };
 

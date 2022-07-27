@@ -1,1 +1,68 @@
-include: package:effective_dart/analysis_options.1.3.0.yaml
+include: package:pedantic/analysis_options.yaml
+analyzer:
+  errors:
+    missing_required_param: error
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: true
+linter:
+  rules:
+    - camel_case_types
+    - camel_case_extensions
+    - library_names
+    - file_names
+    - library_prefixes
+    - non_constant_identifier_names
+    - constant_identifier_names
+    - directives_ordering
+    - lines_longer_than_80_chars
+    - curly_braces_in_flow_control_structures
+    - slash_for_doc_comments
+    - package_api_docs
+    - implementation_imports
+    - avoid_relative_lib_imports
+    - prefer_relative_imports
+    - prefer_adjacent_string_concatenation
+    - prefer_interpolation_to_compose_strings
+    - unnecessary_brace_in_string_interps
+    - prefer_collection_literals
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - avoid_function_literals_in_foreach_calls
+    - prefer_iterable_whereType
+    - prefer_function_declarations_over_variables
+    - unnecessary_lambdas
+    - prefer_equal_for_default_values
+    - avoid_init_to_null
+    - unnecessary_getters_setters
+    - unnecessary_this
+    - prefer_initializing_formals
+    - type_init_formals
+    - empty_constructor_bodies
+    - unnecessary_new
+    - unnecessary_const
+    - avoid_catching_errors
+    - use_rethrow_when_possible
+    - use_to_and_as_if_applicable
+    - one_member_abstracts
+    - prefer_final_fields
+    - use_setters_to_change_properties
+    - avoid_setters_without_getters
+    - avoid_returning_this
+    - type_annotate_public_apis
+    - omit_local_variable_types
+    - avoid_types_on_closure_parameters
+    - avoid_return_types_on_setters
+    - prefer_generic_function_type_aliases
+    - avoid_private_typedef_functions
+    - avoid_positional_boolean_parameters
+    - hash_and_equals
+    - avoid_equals_and_hash_code_on_mutable_classes
+    - avoid_null_checks_in_equality_operators
+
+#   Disabled rules:
+#    - avoid_catches_without_on_clauses
+#    - avoid_classes_with_only_static_members
+#    - avoid_returning_null
+#    - prefer_mixin
+#    - public_member_api_docs

@@ -85,19 +85,29 @@ class ZonesCubit extends Cubit<ZonesState> {
       final extractedData = json.decode(response.body) as List;
 
       for (var prodData in extractedData) {
-        // ignore: omit_local_variable_types
-        List<LatLng> coords = [];
-        for (var coordData in prodData['region']['coordinates'][0]) {
+        var coords = <LatLng>[];
+        for (List<double> coordData in prodData['region']['coordinates'][0]) {
           coords.add(LatLng(coordData[0], coordData[1]));
         }
         loadedZones.add(
           ZoneItem(
-            id: prodData['id'],
-            name: prodData['name'],
-            country: prodData['country'],
-            lowerAltitudeRef: prodData['properties']['lower_altitude_ref'],
-            upperAltitudeRef: prodData['properties']['upper_altitude_ref'],
-            amId: prodData['properties']['am_id'],
+            id: (prodData['id'] is String ? prodData['id'] as String : ''),
+            name:
+                (prodData['name'] is String ? prodData['name'] as String : ''),
+            country: (prodData['country'] is String
+                ? prodData['country'] as String
+                : ''),
+            lowerAltitudeRef:
+                (prodData['properties']['lower_altitude_ref'] is String
+                    ? prodData['properties']['lower_altitude_ref'] as String
+                    : ''),
+            upperAltitudeRef:
+                (prodData['properties']['upper_altitude_ref'] is String
+                    ? prodData['properties']['upper_altitude_ref'] as String
+                    : ''),
+            amId: (prodData['properties']['am_id'] is String
+                ? prodData['properties']['am_id'] as String
+                : ''),
             coordinates: coords,
             lowerAltitude: 0,
             upperAltitude: 0,

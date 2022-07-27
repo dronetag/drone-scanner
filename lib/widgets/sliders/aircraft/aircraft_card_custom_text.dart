@@ -43,8 +43,9 @@ class AircraftCardCustomText extends StatelessWidget {
       if (loc == null || loc.latitude == null || loc.longitude == null) {
         return emptyText;
       } else {
-        text =
-            '${loc.latitude!.toStringAsFixed(6)}, ${loc.longitude!.toStringAsFixed(6)}';
+        final latText = '${loc.latitude!.toStringAsFixed(6)}';
+        final longText = '${loc.longitude!.toStringAsFixed(6)}';
+        text = '$latText, $longText}';
       }
     } else if (preference == ListFieldPreference.speed) {
       if (loc == null ||

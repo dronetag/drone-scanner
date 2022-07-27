@@ -59,8 +59,9 @@ class _RefreshingTextState extends State<RefreshingText> {
           text += ' ago';
         }
         if (expiresSoon && !widget.short) {
-          text +=
-              ', Expires in ${(context.watch<AircraftCubit>().state.cleanTimeSec - packAge).toStringAsFixed(0)} sec';
+          final expiryTime =
+              context.watch<AircraftCubit>().state.cleanTimeSec - packAge;
+          text += ', Expires in ${(expiryTime).toStringAsFixed(0)} sec';
         }
         if (expiresSoon) {
           return Text(

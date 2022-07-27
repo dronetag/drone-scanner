@@ -31,7 +31,7 @@ class HomeBody extends StatelessWidget {
         ShowcaseItem(
           showcaseKey: context.read<ShowcaseCubit>().mapKey,
           description: context.read<ShowcaseCubit>().mapDescription,
-          title: "Map",
+          title: 'Map',
           padding: EdgeInsets.only(bottom: height / 3),
           child: const Toolbar(),
         ),

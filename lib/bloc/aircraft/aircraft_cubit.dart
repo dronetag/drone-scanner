@@ -82,7 +82,7 @@ class AircraftState {
   }
 
   AircraftState(
-      {required packHistory,
+      {required Map<String, List<MessagePack>> packHistory,
       required this.cleanOldPacks,
       required this.cleanTimeSec})
       : _packHistory = packHistory;
@@ -196,7 +196,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   void resetExpiryTimers() {
-    var toDelete = [];
+    var toDelete = <String>[];
     state.packHistory().forEach((key, value) {
       if (state.packHistory()[key] == null) return;
       final lastTStamp = state
