@@ -45,6 +45,9 @@ class LocationFields {
                         ? AppColors.droneScannerHighlightBlue
                         : AppColors.dark,
                   ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     loc.status.toString().replaceAll('AircraftStatus.', ''),
                     style: TextStyle(
@@ -67,6 +70,9 @@ class LocationFields {
                     Icons.navigation_sharp,
                     size: 20,
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
                 Text(
                   directionAsString(loc?.direction),
@@ -102,6 +108,12 @@ class LocationFields {
           ),
         ],
       ),
+      if (context.read<StandardsCubit>().state.locationEnabled &&
+          distanceFromMe != null)
+        AircraftDetailField(
+          headlineText: 'Distance from me',
+          fieldText: '${distanceFromMe.toStringAsFixed(6)} km',
+        ),
       AircraftDetailRow(
         children: [
           AircraftDetailField(
@@ -171,12 +183,6 @@ class LocationFields {
         headlineText: 'Time Accuracy',
         fieldText: timeAccuracyToString(loc?.timeAccuracy),
       ),
-      if (context.read<StandardsCubit>().state.locationEnabled &&
-          distanceFromMe != null)
-        AircraftDetailField(
-          headlineText: 'Distance from me',
-          fieldText: '${distanceFromMe.toStringAsFixed(6)} km',
-        ),
     ];
   }
 }

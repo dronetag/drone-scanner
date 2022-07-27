@@ -62,7 +62,7 @@ class ConnectionFields {
             ),
           ),
           AircraftDetailField(
-            headlineText: 'RSSI',
+            headlineText: 'Signal Strength (RSSI)',
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -70,6 +70,9 @@ class ConnectionFields {
                   Icons.signal_cellular_alt,
                   color: AppColors.droneScannerHighlightBlue,
                   size: Sizes.iconSize / 3 * 2,
+                ),
+                SizedBox(
+                  width: 10,
                 ),
                 Text(
                   '${messagePackList.last.lastMessageRssi} dBm',
@@ -102,7 +105,7 @@ class ConnectionFields {
           ),
           AircraftDetailField(
             headlineText: 'Received',
-            fieldText: messagePackList.length.toString(),
+            fieldText: '${messagePackList.length} messages',
           ),
         ],
       ),

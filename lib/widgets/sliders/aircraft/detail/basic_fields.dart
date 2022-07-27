@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
+import '../../../../constants/colors.dart';
 import '../../common/headline.dart';
 import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
@@ -31,11 +32,44 @@ class BasicFields {
         ),
       AircraftDetailRow(
         children: [
-          AircraftDetailField(
-            headlineText: 'UAS ID',
-            fieldText: messagePackList.last.basicIdMessage == null
-                ? 'Unknown'
-                : '${messagePackList.last.basicIdMessage?.uasId}',
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              AircraftDetailField(
+                headlineText: 'UAS ID',
+                fieldText: messagePackList.last.basicIdMessage == null
+                    ? 'Unknown'
+                    : '${messagePackList.last.basicIdMessage?.uasId}',
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              if (messagePackList.last.basicIdMessage?.uasId
+                      .startsWith('1596') ==
+                  true)
+                Text.rich(
+                  TextSpan(
+                    style: const TextStyle(
+                      color: AppColors.droneScannerLightGray,
+                    ),
+                    children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Image.asset(
+                          'assets/images/dronetag.png',
+                          height: 16,
+                          width: 24,
+                          alignment: Alignment.topCenter,
+                          color: AppColors.droneScannerLightGray,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Dronetag Mini',
+                      ),
+                    ],
+                  ),
+                ),
+            ],
           ),
         ],
       ),

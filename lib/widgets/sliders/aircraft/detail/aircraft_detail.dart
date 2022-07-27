@@ -93,7 +93,9 @@ class AircraftDetail extends StatelessWidget {
         ...OperatorFields.buildOperatorFields(
           context,
           messagePackList.last.systemDataMessage!,
-          messagePackList.last.operatorIdMessage!,
+          messagePackList.last.operatorIDValid()
+              ? messagePackList.last.operatorIdMessage!
+              : null,
         ),
       if (context.watch<ShowcaseCubit>().state.showcaseActive)
         ShowcaseItem(
