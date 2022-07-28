@@ -57,7 +57,7 @@ class CustomAboutDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Image.asset(
-                      'assets/images/drone_inverted.png',
+                      'assets/images/icon_transparent.png',
                       width: MediaQuery.of(context).size.height / 12,
                     ),
                     const Text(
@@ -129,7 +129,7 @@ class CustomAboutDialog extends StatelessWidget {
                             applicationVersion:
                                 packageInfo?.version ?? 'unknown',
                             applicationIcon: Image.asset(
-                              'assets/images/drone.png',
+                              'assets/images/icon_transparent.png',
                               width: 48,
                               height: 64,
                             ),

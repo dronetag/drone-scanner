@@ -2,18 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Drone Scanner would like to show your location in the application</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Drone Scanner needs the bluetooth permission to acquire data from nearby aircraft</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Drone Scanner uses Bluetooth to connect to your devices.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Application needs to locate user to properly work</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>DroneScanner</string>
+	<string>Drone Scanner</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -32,6 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Drone Scanner needs the bluetooth permission to acquire data from nearby aircraft.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Drone Scanner uses Bluetooth gather data from nearby aircraft.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Application needs Your location to show nearby aircraft.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -50,8 +50,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 </dict>
 </plist>

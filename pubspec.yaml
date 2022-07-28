@@ -1,12 +1,12 @@
 name: drone_scanner
 description: An application for scanning nearby Remote ID advertisements using Bluetooth and Wi-Fi.
 
-version: 0.0.1+1
+version: 0.1.0+1
 publish_to: 'none'
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
-  flutter: ^2.5.3
+  flutter: ^3.0.4
 
 dependencies:
   flutter:
@@ -37,6 +37,7 @@ dependencies:
   package_info: ^2.0.2
   effective_dart: ^1.3.1
   pedantic: ^1.11.0
+  localstorage: ^4.0.0+1
 
   # does not support android v2 embedding, should not be used
   #downloads_path_provider: ^0.1.0
@@ -53,7 +54,8 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/drone.png"
+  remove_alpha_ios: true
+  image_path: "assets/images/icon.png"
 
 # The following section is specific to Flutter.
 flutter:

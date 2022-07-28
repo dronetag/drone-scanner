@@ -43,11 +43,11 @@ android {
 
    
     defaultConfig {
-        applicationId "cz.dronetag.flutterodidexample"
-        minSdkVersion 31
-        targetSdkVersion 31
-        versionName '1.0.2'
-        versionCode 3
+        applicationId "cz.dronetag.dronescanner"
+        minSdkVersion 21
+        targetSdkVersion 32
+        versionName '0.1.0'
+        versionCode 1
     }
 
     buildTypes {
