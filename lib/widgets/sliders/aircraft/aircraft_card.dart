@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../utils/utils.dart';
 import '../common/refreshing_text.dart';
 import 'aircraft_card_custom_text.dart';
+import 'aircraft_card_title.dart';
 
 class AircraftCard extends StatelessWidget {
   final MessagePack messagePack;
@@ -25,6 +27,9 @@ class AircraftCard extends StatelessWidget {
         messagePack.operatorIdMessage?.operatorId.substring(0, 2);
     final isAirborne =
         messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
+
+    final givenLabel =
+        context.read<AircraftCubit>().getAircraftLabel(messagePack.macAddress);
 
     Image? flag;
     if (messagePack.operatorIDValid() &&
@@ -54,30 +59,9 @@ class AircraftCard extends StatelessWidget {
             const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
         leading: buildLeading(context),
         trailing: buildTrailing(context),
-        title: Text.rich(
-          TextSpan(
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-            children: [
-              if (messagePack.basicIdMessage?.uasId.startsWith('1596') == true)
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Image.asset(
-                    'assets/images/dronetag.png',
-                    height: 16,
-                    width: 24,
-                    alignment: Alignment.topRight,
-                    color: theme.brightness == Brightness.light
-                        ? Colors.black
-                        : Colors.white,
-                  ),
-                ),
-              TextSpan(
-                text: ' $uasIdText',
-              ),
-            ],
-          ),
+        title: AircraftCardTitle(
+          uasId: uasIdText,
+          givenLabel: givenLabel,
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
