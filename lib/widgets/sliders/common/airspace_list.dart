@@ -51,8 +51,15 @@ class AirspaceList extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: context.watch<SlidersCubit>().isAtSnapPoint()
-                          ? (height - height / 20 - headerHeight) * 0.3
-                          : height - height / 20 - headerHeight,
+                          ? (height -
+                                  (MediaQuery.of(context).viewPadding.top +
+                                      height / 20) -
+                                  headerHeight) *
+                              0.3
+                          : height -
+                              (MediaQuery.of(context).viewPadding.top +
+                                  height / 20) -
+                              headerHeight,
                       child: ListView.separated(
                         itemCount: children.length,
                         physics: const BouncingScrollPhysics(),

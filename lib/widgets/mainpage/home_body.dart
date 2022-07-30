@@ -36,7 +36,8 @@ class HomeBody extends StatelessWidget {
           child: const Toolbar(),
         ),
         AirspaceSlidingPanel(
-          maxSize: height - height / 20,
+          maxSize:
+              height - (MediaQuery.of(context).viewPadding.top + height / 20),
           minSize: isLandscape
               ? height / Sizes.toolbarMinSizeRatioLandscape
               : height / Sizes.toolbarMinSizeRatioPortrait,

@@ -22,7 +22,6 @@ class _ToolbarState extends State<Toolbar> {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).viewPadding.top;
-    final height = MediaQuery.of(context).size.height;
     const borderRadius = Radius.circular(Sizes.panelBorderRadius);
     final toolbarColor = colors.AppColors.droneScannerDarkGray
         .withOpacity(colors.AppColors.toolbarOpacity);
@@ -40,7 +39,7 @@ class _ToolbarState extends State<Toolbar> {
         color: toolbarColor,
       ),
       margin: EdgeInsets.symmetric(
-        vertical: statusBarHeight + height / 20,
+        vertical: statusBarHeight + Sizes.mapContentMargin,
         horizontal: Sizes.mapContentMargin,
       ),
       height: Sizes.toolbarHeight,

@@ -75,14 +75,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
                 topLeft: borderRadius,
                 topRight: borderRadius,
               ),
-              boxShadow: sliderMaximized
-                  ? const []
-                  : const <BoxShadow>[
-                      BoxShadow(
-                        blurRadius: 10.0,
-                        color: Color.fromRGBO(0, 0, 0, 0.4),
-                      )
-                    ],
+              boxShadow: [],
               onPanelOpened: () {
                 chevron.setDirection(ChevronDirection.downwards);
                 context

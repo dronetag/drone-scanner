@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -25,10 +26,21 @@ class MyHomePage extends StatelessWidget {
           context.read<ShowcaseCubit>().onShowcaseFinish(context);
         },
         builder: Builder(
-          builder: (context) => const Scaffold(
-            // ensure the keyboard does not move the content up
-            resizeToAvoidBottomInset: false,
-            body: HomeBody(),
+          builder: (context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle.dark,
+            child: Container(
+              color: Colors.white,
+              child: SafeArea(
+                top: false,
+                left: false,
+                right: false,
+                child: const Scaffold(
+                  // ensure the keyboard does not move the content up
+                  resizeToAvoidBottomInset: false,
+                  body: HomeBody(),
+                ),
+              ),
+            ),
           ),
         ),
       ),
