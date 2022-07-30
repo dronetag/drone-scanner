@@ -36,10 +36,11 @@ class ShowcaseItem extends StatelessWidget {
       description: description,
       title: title,
       titleTextStyle: TextStyle(
-          color: textColor ?? AppColors.droneScannerBlue,
-          fontWeight: FontWeight.bold,
-          fontSize: 23,
-          height: 2),
+        color: textColor ?? AppColors.droneScannerBlue,
+        fontWeight: FontWeight.bold,
+        fontSize: 23,
+        height: 2,
+      ),
       descTextStyle: TextStyle(
         color: textColor ?? Colors.black,
       ),

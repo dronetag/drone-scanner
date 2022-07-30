@@ -20,10 +20,11 @@ class ScanningState {
     required this.usedTechnologies,
   });
 
-  ScanningState copyWith(
-          {bool? isScanningWifi,
-          bool? isScanningBluetooth,
-          UsedTechnologies? usedTechnologies}) =>
+  ScanningState copyWith({
+    bool? isScanningWifi,
+    bool? isScanningBluetooth,
+    UsedTechnologies? usedTechnologies,
+  }) =>
       ScanningState(
         isScanningBluetooth: isScanningBluetooth ?? this.isScanningBluetooth,
         isScanningWifi: isScanningWifi ?? this.isScanningWifi,
@@ -39,15 +40,17 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   SelectedAircraftCubit selectedAircraftCubit;
   AircraftCubit aircraftCubit;
 
-  OpendroneIdCubit(
-      {required this.mapCubit,
-      required this.selectedAircraftCubit,
-      required this.aircraftCubit})
-      : super(ScanningState(
-          isScanningBluetooth: false,
-          isScanningWifi: false,
-          usedTechnologies: UsedTechnologies.None,
-        )) {
+  OpendroneIdCubit({
+    required this.mapCubit,
+    required this.selectedAircraftCubit,
+    required this.aircraftCubit,
+  }) : super(
+          ScanningState(
+            isScanningBluetooth: false,
+            isScanningWifi: false,
+            usedTechnologies: UsedTechnologies.None,
+          ),
+        ) {
     btStateListener = FlutterOpenDroneId.bluetoothState.listen(btStateCallback);
     wifiStateListener = FlutterOpenDroneId.wifiState.listen(
       (scanning) => wifiStateCallback(
@@ -78,8 +81,10 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     aircraftCubit.addPack(pack);
     if (mapCubit.state.lockOnPoint &&
         pack.macAddress == selectedAircraftCubit.state.selectedAircraftMac) {
-      mapCubit.centerToLocDouble(pack.locationMessage?.latitude as double,
-          pack.locationMessage?.longitude as double);
+      mapCubit.centerToLocDouble(
+        pack.locationMessage?.latitude as double,
+        pack.locationMessage?.longitude as double,
+      );
     }
   }
 

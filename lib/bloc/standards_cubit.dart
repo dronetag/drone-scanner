@@ -47,32 +47,35 @@ class StandardsState {
     bool? internetAvailable,
   }) =>
       StandardsState(
-          androidSystem: androidSystem ?? this.androidSystem,
-          btLegacy: btLegacy ?? this.btLegacy,
-          btExtended: btExtended ?? this.btExtended,
-          wifiBeacon: wifiBeacon ?? this.wifiBeacon,
-          wifiNaN: wifiNaN ?? this.wifiNaN,
-          btExtendedClaimed: btExtendedClaimed ?? this.btExtendedClaimed,
-          maxAdvDataLen: maxAdvDataLen ?? this.maxAdvDataLen,
-          btEnabled: btEnabled ?? this.btEnabled,
-          locationEnabled: locationEnabled ?? this.locationEnabled,
-          internetAvailable: internetAvailable ?? this.internetAvailable);
+        androidSystem: androidSystem ?? this.androidSystem,
+        btLegacy: btLegacy ?? this.btLegacy,
+        btExtended: btExtended ?? this.btExtended,
+        wifiBeacon: wifiBeacon ?? this.wifiBeacon,
+        wifiNaN: wifiNaN ?? this.wifiNaN,
+        btExtendedClaimed: btExtendedClaimed ?? this.btExtendedClaimed,
+        maxAdvDataLen: maxAdvDataLen ?? this.maxAdvDataLen,
+        btEnabled: btEnabled ?? this.btEnabled,
+        locationEnabled: locationEnabled ?? this.locationEnabled,
+        internetAvailable: internetAvailable ?? this.internetAvailable,
+      );
 }
 
 class StandardsCubit extends Cubit<StandardsState> {
   StandardsCubit()
-      : super(StandardsState(
-          androidSystem: false,
-          btLegacy: false,
-          btExtended: false,
-          wifiBeacon: false,
-          wifiNaN: false,
-          btExtendedClaimed: false,
-          maxAdvDataLen: 0,
-          btEnabled: false,
-          internetAvailable: false,
-          locationEnabled: false,
-        ));
+      : super(
+          StandardsState(
+            androidSystem: false,
+            btLegacy: false,
+            btExtended: false,
+            wifiBeacon: false,
+            wifiNaN: false,
+            btExtendedClaimed: false,
+            maxAdvDataLen: 0,
+            btEnabled: false,
+            internetAvailable: false,
+            locationEnabled: false,
+          ),
+        );
 
   Future<void> fetchAndSetStandards() async {
     var androidSystem = false;

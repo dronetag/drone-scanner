@@ -14,8 +14,12 @@ class ZoneItem {
     'special_use_airspace': ZoneType.specialUseAirspace,
   };
 
-  static final labels = Map.fromIterables(ZoneType.values,
-      ['Airport', 'Controlled airspace', 'Special use airspace', 'Other']);
+  static final labels = Map.fromIterables(ZoneType.values, [
+    'Airport',
+    'Controlled airspace',
+    'Special use airspace',
+    'Other',
+  ]);
 
   final String id;
   final String name;

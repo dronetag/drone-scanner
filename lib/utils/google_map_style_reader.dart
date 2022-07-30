@@ -39,8 +39,14 @@ class GoogleMapStyleReader {
             final def = entry.value;
             if (def.styleFile == null) return entry;
             final content = await rootBundle.loadString(def.styleFile!);
-            return MapEntry(entry.key,
-                MapLayerStyleDefinition(def.styleFile, def.gmapType, content));
+            return MapEntry(
+              entry.key,
+              MapLayerStyleDefinition(
+                def.styleFile,
+                def.gmapType,
+                content,
+              ),
+            );
           },
         ),
       ),

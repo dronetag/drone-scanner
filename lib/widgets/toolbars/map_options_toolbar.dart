@@ -51,7 +51,7 @@ class MapOptionsToolbar extends StatelessWidget {
                   width: toolbarWidth,
                   height: toolbarHeight / 3,
                   child: IconButton(
-                    padding: const EdgeInsets.all(0),
+                    padding: EdgeInsets.zero,
                     iconSize: Sizes.iconSize,
                     onPressed: () {
                       context.read<MapCubit>().centerToUser();
@@ -65,7 +65,7 @@ class MapOptionsToolbar extends StatelessWidget {
                   width: toolbarWidth,
                   height: toolbarHeight / 3,
                   child: IconButton(
-                    padding: const EdgeInsets.all(0),
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       if (context.read<MapCubit>().state.mapStyle ==
                           MapType.normal) {
@@ -82,7 +82,7 @@ class MapOptionsToolbar extends StatelessWidget {
                   width: toolbarWidth,
                   height: toolbarHeight / 3,
                   child: IconButton(
-                    padding: const EdgeInsets.all(0),
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       showAlertDialog(
                         context,
@@ -92,8 +92,10 @@ class MapOptionsToolbar extends StatelessWidget {
                               .read<SlidersCubit>()
                               .setShowDroneDetail(show: false);
                           context.read<AircraftCubit>().clear();
-                          showSnackBar(context,
-                              'All the gathered aircraft data were deleted.');
+                          showSnackBar(
+                            context,
+                            'All the gathered aircraft data were deleted.',
+                          );
                         },
                       );
                     },

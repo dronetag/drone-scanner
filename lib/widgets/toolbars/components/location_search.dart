@@ -34,7 +34,7 @@ class _LocationSearchState extends State<LocationSearch> {
       title: 'Map Toolbar',
       child: InkWell(
         onTap: () async {
-          var place = await PlacesAutocomplete.show(
+          final place = await PlacesAutocomplete.show(
             startText: locationCache ?? '',
             hint: 'Search',
             context: context,

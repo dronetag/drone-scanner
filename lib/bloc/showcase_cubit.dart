@@ -115,8 +115,10 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     emit(state.copyWith(showcaseActive: true));
   }
 
-  Future<void> setShowcaseActive(
-      {required BuildContext context, required bool active}) async {
+  Future<void> setShowcaseActive({
+    required BuildContext context,
+    required bool active,
+  }) async {
     // if dismissing showcase, restart scans and recover state
     if (!active) {
       await context.read<AircraftCubit>().removeShowcaseDummyPack();
@@ -155,7 +157,10 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   }
 
   void onKeyComplete(
-      BuildContext context, int? index, GlobalKey<State<StatefulWidget>> key) {
+    BuildContext context,
+    int? index,
+    GlobalKey<State<StatefulWidget>> key,
+  ) {
     if (key == lastKey) {
       context.read<SelectedAircraftCubit>().unselectAircraft();
       context.read<SlidersCubit>().setShowDroneDetail(show: false);
@@ -166,7 +171,10 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   }
 
   void onKeyStart(
-      BuildContext context, int? index, GlobalKey<State<StatefulWidget>> key) {
+    BuildContext context,
+    int? index,
+    GlobalKey<State<StatefulWidget>> key,
+  ) {
     if (key == droneDetailPanelKey) {
       context
           .read<SelectedAircraftCubit>()

@@ -29,10 +29,10 @@ class AircraftDetailHeader extends StatelessWidget {
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     // ignore: omit_local_variable_types
     final List<MessagePack> messagePackList = selectedMac != null
-        ? context.watch<AircraftCubit>().packsForDevice(context
-            .watch<SelectedAircraftCubit>()
-            .state
-            .selectedAircraftMac as String) as List<MessagePack>
+        ? context.watch<AircraftCubit>().packsForDevice(
+              context.watch<SelectedAircraftCubit>().state.selectedAircraftMac
+                  as String,
+            ) as List<MessagePack>
         : [];
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -40,9 +40,11 @@ class AircraftDetailHeader extends StatelessWidget {
     chevron.setContext(context);
     chevron.setColor(AppColors.droneScannerDetailButtonsColor);
     if (chevron.getDirection() != ChevronDirection.none) {
-      chevron.setDirection(context.watch<SlidersCubit>().state.sliderMaximized
-          ? ChevronDirection.downwards
-          : ChevronDirection.upwards);
+      chevron.setDirection(
+        context.watch<SlidersCubit>().state.sliderMaximized
+            ? ChevronDirection.downwards
+            : ChevronDirection.upwards,
+      );
     }
     return Container(
       decoration: const BoxDecoration(
@@ -70,16 +72,20 @@ class AircraftDetailHeader extends StatelessWidget {
           if (context.read<SlidersCubit>().panelController.isAttached &&
               !context.read<SlidersCubit>().panelController.isPanelClosed)
             Expanded(
-                child: messagePackList.isNotEmpty
-                    ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
-                    : Container()),
+              child: messagePackList.isNotEmpty
+                  ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
+                  : Container(),
+            ),
         ],
       ),
     );
   }
 
-  Widget buildHeaderButtonsRow(BuildContext context,
-      List<MessagePack> messagePackList, ZoneItem? zoneItem) {
+  Widget buildHeaderButtonsRow(
+    BuildContext context,
+    List<MessagePack> messagePackList,
+    ZoneItem? zoneItem,
+  ) {
     final height = MediaQuery.of(context).size.height;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -204,17 +210,19 @@ class AircraftDetailHeader extends StatelessWidget {
               messagePackList.last.basicIdMessage?.uasId.startsWith('1596') ==
                   true)
             WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Image.asset(
-                  'assets/images/dronetag.png',
-                  height: 18,
-                  width: 24,
-                  alignment: Alignment.topCenter,
-                  color: Colors.white,
-                )),
+              alignment: PlaceholderAlignment.middle,
+              child: Image.asset(
+                'assets/images/dronetag.png',
+                height: 18,
+                width: 24,
+                alignment: Alignment.topCenter,
+                color: Colors.white,
+              ),
+            ),
           TextSpan(
-              text: messagePackList.last.basicIdMessage?.uasId ??
-                  'Unknown UAS ID'),
+            text:
+                messagePackList.last.basicIdMessage?.uasId ?? 'Unknown UAS ID',
+          ),
         ],
       ),
     );

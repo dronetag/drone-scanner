@@ -28,7 +28,7 @@ class ZoneDetail extends StatelessWidget {
       );
     }
     var zoneType = '';
-    var zoneTypeRaw = zoneItem.type.toString().replaceAll('ZoneType.', '');
+    final zoneTypeRaw = zoneItem.type.toString().replaceAll('ZoneType.', '');
     for (var i = 0; i < zoneTypeRaw.length; ++i) {
       if (i == 0) {
         zoneType += zoneTypeRaw[i].toUpperCase();
@@ -65,14 +65,16 @@ class ZoneDetail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: Text.rich(
-                TextSpan(children: [
-                  if (countryCode != null && flag != null)
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: flag,
-                    ),
-                  TextSpan(text: zoneItem.id),
-                ]),
+                TextSpan(
+                  children: [
+                    if (countryCode != null && flag != null)
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: flag,
+                      ),
+                    TextSpan(text: zoneItem.id),
+                  ],
+                ),
               ),
             ),
             const Text('AM ID:'),
@@ -155,24 +157,26 @@ class ZoneDetail extends StatelessWidget {
         ),
         ...zoneItem.coordinates
             .map(
-              (e) => TableRow(children: [
-                TableCell(
-                  verticalAlignment: TableCellVerticalAlignment.middle,
-                  child: Center(
-                    child: Text(
-                      e.latitude.toStringAsFixed(6),
+              (e) => TableRow(
+                children: [
+                  TableCell(
+                    verticalAlignment: TableCellVerticalAlignment.middle,
+                    child: Center(
+                      child: Text(
+                        e.latitude.toStringAsFixed(6),
+                      ),
                     ),
                   ),
-                ),
-                TableCell(
-                  verticalAlignment: TableCellVerticalAlignment.top,
-                  child: Center(
-                    child: Text(
-                      e.longitude.toStringAsFixed(5),
+                  TableCell(
+                    verticalAlignment: TableCellVerticalAlignment.top,
+                    child: Center(
+                      child: Text(
+                        e.longitude.toStringAsFixed(5),
+                      ),
                     ),
                   ),
-                ),
-              ]),
+                ],
+              ),
             )
             .toList(),
       ],

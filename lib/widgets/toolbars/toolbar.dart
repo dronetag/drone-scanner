@@ -40,8 +40,9 @@ class _ToolbarState extends State<Toolbar> {
         color: toolbarColor,
       ),
       margin: EdgeInsets.symmetric(
-          vertical: statusBarHeight + height / 20,
-          horizontal: Sizes.mapContentMargin),
+        vertical: statusBarHeight + height / 20,
+        horizontal: Sizes.mapContentMargin,
+      ),
       height: Sizes.toolbarHeight,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

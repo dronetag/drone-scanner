@@ -6,13 +6,13 @@ class PreferencesField extends StatelessWidget {
   final String text;
   final Color color;
 
-  const PreferencesField(
-      {Key? key,
-      required this.label,
-      required this.icon,
-      required this.color,
-      required this.text})
-      : super(key: key);
+  const PreferencesField({
+    Key? key,
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

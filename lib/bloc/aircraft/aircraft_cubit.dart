@@ -68,10 +68,11 @@ class AircraftState {
                 userPos.latitude,
                 userPos.longitude);
             final e2Dist = calculateDistance(
-                e2.value.last.locationMessage?.latitude as double,
-                e2.value.last.locationMessage?.longitude as double,
-                userPos.latitude,
-                userPos.longitude);
+              e2.value.last.locationMessage?.latitude as double,
+              e2.value.last.locationMessage?.longitude as double,
+              userPos.latitude,
+              userPos.longitude,
+            );
             if (e1Dist < e2Dist) {
               return -1;
             }
@@ -81,20 +82,21 @@ class AircraftState {
     );
   }
 
-  AircraftState(
-      {required Map<String, List<MessagePack>> packHistory,
-      required this.cleanOldPacks,
-      required this.cleanTimeSec})
-      : _packHistory = packHistory;
+  AircraftState({
+    required Map<String, List<MessagePack>> packHistory,
+    required this.cleanOldPacks,
+    required this.cleanTimeSec,
+  }) : _packHistory = packHistory;
 
   AircraftState copyWith(
           {Map<String, List<MessagePack>>? packHistory,
           bool? cleanOldPacks,
           int? cleanTimeSec}) =>
       AircraftState(
-          packHistory: packHistory ?? _packHistory,
-          cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
-          cleanTimeSec: cleanTimeSec ?? this.cleanTimeSec);
+        packHistory: packHistory ?? _packHistory,
+        cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
+        cleanTimeSec: cleanTimeSec ?? this.cleanTimeSec,
+      );
 }
 
 class AircraftCubit extends Cubit<AircraftState> {
@@ -139,18 +141,22 @@ class AircraftCubit extends Cubit<AircraftState> {
         source: pigeon.MessageSource.BluetoothLegacy,
       ),
       selfIdMessage: pigeon.SelfIdMessage(
-          macAddress: '00:00:5e:00:53:ae',
-          receivedTimestamp: DateTime.now().microsecondsSinceEpoch,
-          descriptionType: 0,
-          operationDescription: 'This is very secret operation!'),
+        macAddress: '00:00:5e:00:53:ae',
+        receivedTimestamp: DateTime.now().microsecondsSinceEpoch,
+        descriptionType: 0,
+        operationDescription: 'This is very secret operation!',
+      ),
     ),
   ];
 
   AircraftCubit()
-      : super(AircraftState(
+      : super(
+          AircraftState(
             packHistory: <String, List<MessagePack>>{},
             cleanOldPacks: false,
-            cleanTimeSec: 100));
+            cleanTimeSec: 100,
+          ),
+        );
 
   // load persistently saved settings
   Future<void> fetchSavedSettings() async {
@@ -242,7 +248,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       // set received time
       pack.locationMessage?.receivedTimestamp =
           DateTime.now().millisecondsSinceEpoch;
-      var data = state.packHistory();
+      final data = state.packHistory();
       //
       if (!data.containsKey(pack.macAddress)) {
         data[pack.macAddress] = [pack];
@@ -273,11 +279,11 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   Future<MessagePack?> addShowcaseDummyPack() async {
     await clear();
-    var pack = _packs[0];
+    final pack = _packs[0];
     pack.locationMessage?.receivedTimestamp =
         DateTime.now().millisecondsSinceEpoch;
     try {
-      var data = state.packHistory();
+      final data = state.packHistory();
       data[pack.macAddress] = [pack];
       emit(state.copyWith(packHistory: data));
     } on Exception {
@@ -296,7 +302,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       _expiryTimers.remove(mac);
     }
 
-    var data = state.packHistory();
+    final data = state.packHistory();
     data.removeWhere((key, _) => mac == key);
     emit(state.copyWith(packHistory: data));
   }

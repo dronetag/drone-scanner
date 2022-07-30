@@ -131,8 +131,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   void userLocationChanged(LocationData currentLocation) {
     void updateLoc() {
       context.read<MapCubit>().setUserLocationDouble(
-          currentLocation.latitude as double,
-          currentLocation.longitude as double);
+            currentLocation.latitude as double,
+            currentLocation.longitude as double,
+          );
       // force centering only of first startup
       if (!context.read<MapCubit>().state.wasCenteredOnUser) {
         context.read<MapCubit>().centerToUser();

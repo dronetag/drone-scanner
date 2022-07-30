@@ -107,14 +107,15 @@ class PreferencesPage extends StatelessWidget {
     final maxAdvDataLenText = state.maxAdvDataLen.toString();
     final buttonStyle = ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
-          AppColors.droneScannerPreferencesButtonColor),
+        AppColors.droneScannerPreferencesButtonColor,
+      ),
     );
     return [
       Align(
         alignment: Alignment.centerLeft,
         child: IconButton(
           alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.all(0),
+          padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
             Icons.arrow_back,
@@ -123,14 +124,15 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       const Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 10.0),
-            child: Text(
-              'Preferences',
-              textScaleFactor: 2,
-            ),
-          )),
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: Text(
+            'Preferences',
+            textScaleFactor: 2,
+          ),
+        ),
+      ),
       if (isLandscape) const SizedBox(),
       const Headline(
         text: 'Standards',
@@ -168,7 +170,8 @@ class PreferencesPage extends StatelessWidget {
                 child: Icon(
                   Icons.system_security_update_warning,
                   color: AppColors.droneScannerOrange,
-                ))
+                ),
+              )
             : negativeIcon,
       ),
       if (state.androidSystem)

@@ -62,7 +62,8 @@ class AirspaceList extends StatelessWidget {
                         },
                         separatorBuilder: (context, _) {
                           return Divider(
-                              color: Theme.of(context).colorScheme.secondary);
+                            color: Theme.of(context).colorScheme.secondary,
+                          );
                         },
                       ),
                     ),
@@ -118,8 +119,9 @@ class AirspaceList extends StatelessWidget {
                   context.read<SelectedZoneCubit>().unselectZone();
                   if (value.last.locationMessage != null) {
                     context.read<MapCubit>().centerToLocDouble(
-                        value.last.locationMessage?.latitude as double,
-                        value.last.locationMessage?.longitude as double);
+                          value.last.locationMessage?.latitude as double,
+                          value.last.locationMessage?.longitude as double,
+                        );
                   }
                   context.read<SlidersCubit>().setShowDroneDetail(show: true);
                 },
@@ -142,8 +144,9 @@ class AirspaceList extends StatelessWidget {
                       context.read<SelectedZoneCubit>().selectZone(z);
                       context.read<SelectedAircraftCubit>().unselectAircraft();
                       context.read<MapCubit>().centerToLocDouble(
-                          z.coordinates.first.latitude,
-                          z.coordinates.first.longitude);
+                            z.coordinates.first.latitude,
+                            z.coordinates.first.longitude,
+                          );
                       context
                           .read<SlidersCubit>()
                           .setShowDroneDetail(show: true);

@@ -31,9 +31,11 @@ class AirspaceListHeader extends StatelessWidget {
     chevron.setContext(context);
     chevron.setColor(AppColors.droneScannerLightGray);
     if (chevron.getDirection() != ChevronDirection.none) {
-      chevron.setDirection(context.watch<SlidersCubit>().state.sliderMaximized
-          ? ChevronDirection.downwards
-          : ChevronDirection.upwards);
+      chevron.setDirection(
+        context.watch<SlidersCubit>().state.sliderMaximized
+            ? ChevronDirection.downwards
+            : ChevronDirection.upwards,
+      );
     }
     return Container(
       decoration: const BoxDecoration(

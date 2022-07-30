@@ -12,7 +12,9 @@ import 'aircraft_detail_row.dart';
 
 class ConnectionFields {
   static List<Widget> buildConnectionFields(
-      BuildContext context, List<MessagePack> messagePackList) {
+    BuildContext context,
+    List<MessagePack> messagePackList,
+  ) {
     final source = messagePackList.last.getPackSource();
     final sourceText = getSourceText(source);
     final sourceShortcut = getSourceShortcut(source);

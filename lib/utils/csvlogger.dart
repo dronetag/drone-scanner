@@ -42,9 +42,13 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
       row.add(loc.verticalAccuracy ?? '');
       row.add(loc.baroAccuracy ?? '');
       row.add(loc.speedAccuracy ?? '');
-      row.add(loc.time != null
-          ? DateTime.fromMillisecondsSinceEpoch(loc.time as int)
-          : '');
+      row.add(
+        loc.time != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                loc.time as int,
+              )
+            : '',
+      );
       row.add(loc.timeAccuracy ?? '');
       csvData.add(header);
       csvData.add(row);

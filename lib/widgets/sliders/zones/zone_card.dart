@@ -47,13 +47,15 @@ class ZoneCard extends StatelessWidget {
         children: [
           // Operator ID row
           Text.rich(
-            TextSpan(children: [
-              if (countryCode != null && flag != null)
-                WidgetSpan(
-                  child: flag,
-                ),
-              TextSpan(text: zone.id),
-            ]),
+            TextSpan(
+              children: [
+                if (countryCode != null && flag != null)
+                  WidgetSpan(
+                    child: flag,
+                  ),
+                TextSpan(text: zone.id),
+              ],
+            ),
           ),
           Text('${zone.amId}'),
         ],

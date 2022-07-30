@@ -14,7 +14,9 @@ import 'aircraft_detail_row.dart';
 
 class LocationFields {
   static List<Widget> buildLocationFields(
-      BuildContext context, pigeon.LocationMessage? loc) {
+    BuildContext context,
+    pigeon.LocationMessage? loc,
+  ) {
     double? distanceFromMe;
     if (context.read<StandardsCubit>().state.locationEnabled && loc != null) {
       distanceFromMe = calculateDistance(
@@ -98,7 +100,9 @@ class LocationFields {
             child: IconCenterToLoc(
               onPressedCallback: () {
                 context.read<MapCubit>().centerToLocDouble(
-                    loc?.latitude as double, loc?.longitude as double);
+                      loc?.latitude as double,
+                      loc?.longitude as double,
+                    );
                 context
                     .read<SlidersCubit>()
                     .panelController

@@ -7,12 +7,12 @@ class CustomDropdownButton extends StatelessWidget {
   final List<String> items;
   final Function(String?) valueChangedCallback;
 
-  const CustomDropdownButton(
-      {Key? key,
-      required this.value,
-      required this.items,
-      required this.valueChangedCallback})
-      : super(key: key);
+  const CustomDropdownButton({
+    Key? key,
+    required this.value,
+    required this.items,
+    required this.valueChangedCallback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

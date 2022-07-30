@@ -16,7 +16,7 @@ enum ToolbarMenuAction {
 }
 
 Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
-  return await showMenu<ToolbarMenuAction>(
+  return showMenu<ToolbarMenuAction>(
     context: context,
     items: [
       if (context.read<StandardsCubit>().state.androidSystem)
@@ -24,15 +24,15 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
           value: ToolbarMenuAction.toggleWifi,
           padding: EdgeInsets.zero,
           child: StatefulBuilder(
-            builder: (_context, _setState) => CheckboxListTile(
+            builder: (context, setState) => CheckboxListTile(
               contentPadding: EdgeInsets.zero,
-              value: _context.watch<OpendroneIdCubit>().state.isScanningWifi,
+              value: context.watch<OpendroneIdCubit>().state.isScanningWifi,
               onChanged: (value) {
-                _context
+                context
                     .read<OpendroneIdCubit>()
                     .setWifiUsed(wifiUsed: value!)
                     .then(
-                      (value) => _setState(
+                      (value) => setState(
                         () {},
                       ),
                     );
@@ -54,24 +54,24 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         padding: EdgeInsets.zero,
         child: StatefulBuilder(
           builder: (_context, _setState) => CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              value:
-                  _context.watch<OpendroneIdCubit>().state.isScanningBluetooth,
-              onChanged: (value) {
-                _context
-                    .read<OpendroneIdCubit>()
-                    .setBtUsed(btUsed: value!)
-                    .then((value) => _setState);
-                late final String snackBarText;
-                if (value) {
-                  snackBarText = 'Bluetooth Scanning Stopped.';
-                } else {
-                  snackBarText = 'Bluetooth Scanning Started.';
-                }
-                showSnackBar(context, snackBarText);
-              },
-              title: const Text('Enable Bluetooth'),
-              controlAffinity: ListTileControlAffinity.leading),
+            contentPadding: EdgeInsets.zero,
+            value: _context.watch<OpendroneIdCubit>().state.isScanningBluetooth,
+            onChanged: (value) {
+              _context
+                  .read<OpendroneIdCubit>()
+                  .setBtUsed(btUsed: value!)
+                  .then((value) => _setState);
+              late final String snackBarText;
+              if (value) {
+                snackBarText = 'Bluetooth Scanning Stopped.';
+              } else {
+                snackBarText = 'Bluetooth Scanning Started.';
+              }
+              showSnackBar(context, snackBarText);
+            },
+            title: const Text('Enable Bluetooth'),
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
         ),
       ),
       const PopupMenuDivider(

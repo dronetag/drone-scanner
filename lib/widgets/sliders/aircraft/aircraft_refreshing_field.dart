@@ -8,9 +8,11 @@ class AircraftRefresingField extends StatelessWidget {
   final String label;
   final MessagePack pack;
 
-  const AircraftRefresingField(
-      {Key? key, required this.pack, required this.label})
-      : super(key: key);
+  const AircraftRefresingField({
+    Key? key,
+    required this.pack,
+    required this.label,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

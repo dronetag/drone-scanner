@@ -17,14 +17,14 @@ enum AircraftAction {
 }
 
 Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
-  return await showMenu<AircraftAction>(
+  return showMenu<AircraftAction>(
     context: context,
     items: [
       PopupMenuItem(
         value: AircraftAction.mapLock,
-        child: Text(context.read<MapCubit>().state.lockOnPoint
-            ? 'Unock Map'
-            : 'Lock Map'),
+        child: Text(
+          context.read<MapCubit>().state.lockOnPoint ? 'Unock Map' : 'Lock Map',
+        ),
       ),
       const PopupMenuItem(
         value: AircraftAction.share,
@@ -54,7 +54,7 @@ void handleAction(BuildContext context, AircraftAction action) {
   final zoneItem = context.read<SelectedZoneCubit>().state.selectedZone;
   final selectedMac =
       context.read<SelectedAircraftCubit>().state.selectedAircraftMac;
-  var messagePackList = context.read<AircraftCubit>().packsForDevice(context
+  final messagePackList = context.read<AircraftCubit>().packsForDevice(context
       .read<SelectedAircraftCubit>()
       .state
       .selectedAircraftMac as String);
@@ -113,13 +113,15 @@ void handleAction(BuildContext context, AircraftAction action) {
           messagePackList.last.locationMessage != null) {
         context.read<MapCubit>().toggleLockOnPoint();
         context.read<MapCubit>().centerToLocDouble(
-            messagePackList.last.locationMessage?.latitude as double,
-            messagePackList.last.locationMessage?.longitude as double);
+              messagePackList.last.locationMessage?.latitude as double,
+              messagePackList.last.locationMessage?.longitude as double,
+            );
       } else {
         if (zoneItem != null) {
           context.read<MapCubit>().centerToLocDouble(
-              zoneItem.coordinates.first.latitude,
-              zoneItem.coordinates.first.longitude);
+                zoneItem.coordinates.first.latitude,
+                zoneItem.coordinates.first.longitude,
+              );
         }
       }
       showSnackBar(context, snackBarText);

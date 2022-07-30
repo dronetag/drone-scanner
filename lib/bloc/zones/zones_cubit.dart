@@ -91,23 +91,22 @@ class ZonesCubit extends Cubit<ZonesState> {
         }
         loadedZones.add(
           ZoneItem(
-            id: (prodData['id'] is String ? prodData['id'] as String : ''),
-            name:
-                (prodData['name'] is String ? prodData['name'] as String : ''),
-            country: (prodData['country'] is String
+            id: prodData['id'] is String ? prodData['id'] as String : '',
+            name: prodData['name'] is String ? prodData['name'] as String : '',
+            country: prodData['country'] is String
                 ? prodData['country'] as String
-                : ''),
+                : '',
             lowerAltitudeRef:
-                (prodData['properties']['lower_altitude_ref'] is String
+                prodData['properties']['lower_altitude_ref'] is String
                     ? prodData['properties']['lower_altitude_ref'] as String
-                    : ''),
+                    : '',
             upperAltitudeRef:
-                (prodData['properties']['upper_altitude_ref'] is String
+                prodData['properties']['upper_altitude_ref'] is String
                     ? prodData['properties']['upper_altitude_ref'] as String
-                    : ''),
-            amId: (prodData['properties']['am_id'] is String
+                    : '',
+            amId: prodData['properties']['am_id'] is String
                 ? prodData['properties']['am_id'] as String
-                : ''),
+                : '',
             coordinates: coords,
             lowerAltitude: 0,
             upperAltitude: 0,

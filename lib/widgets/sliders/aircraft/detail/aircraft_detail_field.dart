@@ -7,9 +7,12 @@ class AircraftDetailField extends StatelessWidget {
   final String? fieldText;
   final Widget? child;
 
-  const AircraftDetailField(
-      {Key? key, required this.headlineText, this.fieldText, this.child})
-      : super(key: key);
+  const AircraftDetailField({
+    Key? key,
+    required this.headlineText,
+    this.fieldText,
+    this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

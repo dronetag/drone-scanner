@@ -78,7 +78,7 @@ class LocationService {
 
     if (!settingsSet) _setSettings();
 
-    var locationData = await location.getLocation();
+    final locationData = await location.getLocation();
 
     if (locationData.latitude == null || locationData.longitude == null) {
       return null;

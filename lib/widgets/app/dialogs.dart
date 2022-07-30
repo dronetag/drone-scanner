@@ -6,13 +6,13 @@ import '../../constants/sizes.dart';
 void showAlertDialog(
     BuildContext context, String alertText, Function confirmCallback) {
   // set up the buttons
-  Widget cancelButton = TextButton(
+  final Widget cancelButton = TextButton(
     child: const Text('Cancel'),
     onPressed: () {
       Navigator.of(context).pop();
     },
   );
-  Widget continueButton = TextButton(
+  final Widget continueButton = TextButton(
     child: const Text('Continue'),
     onPressed: () {
       Navigator.of(context).pop();
@@ -37,8 +37,11 @@ void showAlertDialog(
   );
 }
 
-void showSnackBar(BuildContext context, String snackBarText,
-    {Color textColor = AppColors.droneScannerDarkGray}) {
+void showSnackBar(
+  BuildContext context,
+  String snackBarText, {
+  Color textColor = AppColors.droneScannerDarkGray,
+}) {
   final snackBar = SnackBar(
     elevation: MediaQuery.of(context).size.height / 2,
     backgroundColor: Colors.white,

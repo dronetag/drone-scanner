@@ -5,9 +5,9 @@ import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
 
 double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-  var p = 0.017453292519943295;
-  var c = math.cos;
-  var a = 0.5 -
+  const p = 0.017453292519943295;
+  const c = math.cos;
+  final a = 0.5 -
       c((lat2 - lat1) * p) / 2 +
       c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
   return 12742 * math.asin(math.sqrt(a));
@@ -123,7 +123,7 @@ String directionAsString(double? direction) {
   if (direction != 361) {
     return sprintf('%3.0f °', [direction]);
   } else {
-    return ('Unknown');
+    return 'Unknown';
   }
 }
 

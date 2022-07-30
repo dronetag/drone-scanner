@@ -33,7 +33,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     final sliderMaximized = context.watch<SlidersCubit>().state.sliderMaximized;
     final borderRadius =
         sliderMaximized ? const Radius.circular(0) : const Radius.circular(10);
@@ -42,8 +42,9 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
         // check if aircraft to be shown was not deleted
         if (state.showDroneDetail) {
           final messagePackList = context.watch<AircraftCubit>().packsForDevice(
-              context.watch<SelectedAircraftCubit>().state.selectedAircraftMac
-                  as String);
+                context.watch<SelectedAircraftCubit>().state.selectedAircraftMac
+                    as String,
+              );
           // empty or was deleted, return to list
           if (messagePackList == null || messagePackList.isEmpty) {
             context.read<SlidersCubit>().setShowDroneDetail(show: false);

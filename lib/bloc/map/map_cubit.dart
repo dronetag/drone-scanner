@@ -87,10 +87,15 @@ class MapCubit extends Cubit<GMapState> {
   }
 
   Future<void>? centerToLoc(gmap.LatLng loc) {
-    return controller?.getZoomLevel().then((currentZoomLevel) {
-      moveCamera(gmap.CameraUpdate.newCameraPosition(
-          gmap.CameraPosition(target: loc, zoom: currentZoomLevel)));
-    });
+    return controller?.getZoomLevel().then(
+      (currentZoomLevel) {
+        moveCamera(
+          gmap.CameraUpdate.newCameraPosition(
+            gmap.CameraPosition(target: loc, zoom: currentZoomLevel),
+          ),
+        );
+      },
+    );
   }
 
   Future<void>? centerToLocDouble(double lat, double long) =>
@@ -109,8 +114,12 @@ class MapCubit extends Cubit<GMapState> {
   }
 
   Future<void> setUserLocationDouble(double lat, double long) async {
-    emit(state.copyWith(
-        userLocation: gmap.LatLng(lat, long), userLocationValid: true));
+    emit(
+      state.copyWith(
+        userLocation: gmap.LatLng(lat, long),
+        userLocationValid: true,
+      ),
+    );
   }
 
   Future<void> setDroppedPinLocation(gmap.LatLng loc) async {
@@ -287,8 +296,9 @@ class MapCubit extends Cubit<GMapState> {
                       context.read<SelectedZoneCubit>().unselectZone();
                       if (haslocation) {
                         context.read<MapCubit>().centerToLocDouble(
-                            e.last.locationMessage?.latitude as double,
-                            e.last.locationMessage?.longitude as double);
+                              e.last.locationMessage?.latitude as double,
+                              e.last.locationMessage?.longitude as double,
+                            );
                       }
                       context
                           .read<SlidersCubit>()
@@ -328,7 +338,8 @@ class MapCubit extends Cubit<GMapState> {
             title: 'Operator Location',
           ),
           icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
-              gmap.BitmapDescriptor.hueYellow),
+            gmap.BitmapDescriptor.hueYellow,
+          ),
           position: gmap.LatLng(
             systemData.operatorLatitude,
             systemData.operatorLongitude,
@@ -345,7 +356,8 @@ class MapCubit extends Cubit<GMapState> {
             title: 'Pin',
           ),
           icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
-              gmap.BitmapDescriptor.hueMagenta),
+            gmap.BitmapDescriptor.hueMagenta,
+          ),
           position: gmap.LatLng(
             context.read<MapCubit>().state.pinLocation.latitude,
             context.read<MapCubit>().state.pinLocation.longitude,

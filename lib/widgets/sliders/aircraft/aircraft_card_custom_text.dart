@@ -18,9 +18,9 @@ class AircraftCardCustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = messagePack.locationMessage;
     double? distanceFromMe;
-    var preference = context.watch<SlidersCubit>().state.listFieldPreference;
+    final preference = context.watch<SlidersCubit>().state.listFieldPreference;
 
-    final emptyText = Text(
+    const emptyText = Text(
       'Unknown Location',
       textScaleFactor: 0.9,
     );
@@ -43,8 +43,8 @@ class AircraftCardCustomText extends StatelessWidget {
       if (loc == null || loc.latitude == null || loc.longitude == null) {
         return emptyText;
       } else {
-        final latText = '${loc.latitude!.toStringAsFixed(6)}';
-        final longText = '${loc.longitude!.toStringAsFixed(6)}';
+        final latText = loc.latitude!.toStringAsFixed(6);
+        final longText = loc.longitude!.toStringAsFixed(6);
         text = '$latText, $longText}';
       }
     } else if (preference == ListFieldPreference.speed) {

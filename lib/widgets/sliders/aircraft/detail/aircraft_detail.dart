@@ -22,14 +22,15 @@ class AircraftDetail extends StatelessWidget {
     final selectedMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     if (selectedMac == null) return Container();
-    final messagePackList = context
-        .watch<AircraftCubit>()
-        .packsForDevice(selectedMac) as List<MessagePack>;
+    final messagePackList =
+        context.watch<AircraftCubit>().packsForDevice(selectedMac) ?? [];
     // empty or was deleted, return to list
-    if (context.watch<AircraftCubit>().packsForDevice(context
-                .watch<SelectedAircraftCubit>()
-                .state
-                .selectedAircraftMac as String) ==
+    if (context.watch<AircraftCubit>().packsForDevice(
+                  context
+                      .watch<SelectedAircraftCubit>()
+                      .state
+                      .selectedAircraftMac as String,
+                ) ==
             null ||
         messagePackList.isEmpty) {
       context.read<SlidersCubit>().setShowDroneDetail(show: false);
@@ -84,7 +85,9 @@ class AircraftDetail extends StatelessWidget {
   }
 
   List<Widget> buildChildren(
-      BuildContext context, List<MessagePack> messagePackList) {
+    BuildContext context,
+    List<MessagePack> messagePackList,
+  ) {
     final loc = messagePackList.last.locationMessage;
     return [
       ...ConnectionFields.buildConnectionFields(context, messagePackList),

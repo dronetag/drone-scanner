@@ -8,7 +8,9 @@ import 'aircraft_detail_row.dart';
 
 class BasicFields {
   static List<Widget> buildBasicFields(
-      BuildContext context, List<MessagePack> messagePackList) {
+    BuildContext context,
+    List<MessagePack> messagePackList,
+  ) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return [
