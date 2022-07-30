@@ -38,9 +38,9 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
                     );
                 late final String snackBarText;
                 if (value) {
-                  snackBarText = 'Wi-Fi Scanning Stopped.';
-                } else {
                   snackBarText = 'Wi-Fi Scanning Started.';
+                } else {
+                  snackBarText = 'Wi-Fi Scanning Stopped.';
                 }
                 showSnackBar(context, snackBarText);
               },
@@ -63,9 +63,9 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
                   .then((value) => _setState);
               late final String snackBarText;
               if (value) {
-                snackBarText = 'Bluetooth Scanning Stopped.';
-              } else {
                 snackBarText = 'Bluetooth Scanning Started.';
+              } else {
+                snackBarText = 'Bluetooth Scanning Stopped.';
               }
               showSnackBar(context, snackBarText);
             },
