@@ -183,7 +183,9 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
 
   Future<void> onMapCreated(GoogleMapController controller) async {
     await _waitForMapReady(controller);
+    if (!mounted) return;
     await context.read<MapCubit>().assignController(controller);
+    if (!mounted) return;
     await context.read<MapCubit>().setMapStyle();
   }
 

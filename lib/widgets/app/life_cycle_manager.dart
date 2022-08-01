@@ -72,20 +72,25 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   Future<void> _initPermissionsIOS() async {
     final btStatus = await Permission.bluetooth.request();
     if (btStatus.isGranted) {
+      if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: true);
+      if (!mounted) return;
       await context.read<OpendroneIdCubit>().isBtTurnedOn().then(
         (value) {
           if (value) context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
         },
       );
     } else {
+      if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: false);
     }
     final status = await Permission.location.request();
     if (status.isGranted) {
       initLocation();
+      if (!mounted) return;
       await context.read<StandardsCubit>().setLocationEnabled(enabled: true);
     } else {
+      if (!mounted) return;
       await context.read<StandardsCubit>().setLocationEnabled(enabled: false);
     }
   }
@@ -93,24 +98,30 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   Future<void> _initPermissionsAndroid() async {
     final status = await Permission.location.request();
     if (status.isDenied) {
+      if (!mounted) return;
       await context.read<StandardsCubit>().setLocationEnabled(enabled: false);
     } else {
       initLocation();
+      if (!mounted) return;
       await context.read<StandardsCubit>().setLocationEnabled(enabled: true);
     }
     final btStatus = await Permission.bluetooth.request();
     // scan makes sense just on android
     final btScanStatus = await Permission.bluetoothScan.request();
     if (btStatus.isGranted && btScanStatus.isGranted) {
+      if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: true);
+      if (!mounted) return;
       await context.read<OpendroneIdCubit>().isBtTurnedOn().then(
         (value) {
           if (value) context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
         },
       );
     } else {
+      if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: false);
     }
+    if (!mounted) return;
     await context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: true);
   }
 
@@ -123,6 +134,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   Future<void> checkPermissions() async {
     final loc = await Permission.location.isGranted;
     // check loc, if was not set before, init listener
+    if (!mounted) return;
     if (loc && !context.read<StandardsCubit>().state.locationEnabled) {
       initLocation();
     }

@@ -17,8 +17,7 @@ class OperatorFields {
     pigeon.SystemDataMessage systemMessage,
     pigeon.OperatorIdMessage opMessage,
   ) {
-    final countryCode =
-        opMessage == null ? null : opMessage.operatorId.substring(0, 2);
+    final countryCode = opMessage?.operatorId.substring(0, 2);
 
     Image? flag;
 
