@@ -215,6 +215,13 @@ class AircraftCubit extends Cubit<AircraftState> {
     await _saveLabels();
   }
 
+  Future<void> deleteAircraftLabel(String mac) async {
+    var labels = state.aircraftLabels;
+    labels.remove(mac);
+    emit(state.copyWith(aircraftLabels: labels));
+    await _saveLabels();
+  }
+
   String? getAircraftLabel(String mac) {
     return state.aircraftLabels[mac];
   }

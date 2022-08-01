@@ -275,29 +275,43 @@ class MapCubit extends Cubit<GMapState> {
                   } else {
                     markerHue = gmap.BitmapDescriptor.hueBlue;
                   }
+                  var haslocation = true;
+                  if (e.isEmpty ||
+                      e.last.locationMessage == null ||
+                      e.last.locationMessage?.latitude == null ||
+                      e.last.locationMessage?.longitude == null) {
+                    haslocation = false;
+                  }
+                  final uasIdText = e.last.basicIdMessage != null
+                      ? e.last.basicIdMessage?.uasId
+                      : 'Unknown UAS ID';
+                  final givenLabel = context
+                      .read<AircraftCubit>()
+                      .getAircraftLabel(e.last.macAddress);
 
+                  final infoWindowText = givenLabel ?? uasIdText;
                   return gmap.Marker(
                     markerId: gmap.MarkerId(e.last.macAddress),
                     infoWindow: gmap.InfoWindow(
-                      title: e.last.basicIdMessage != null
-                          ? e.last.basicIdMessage?.uasId
-                          : 'Unknown UAS ID',
+                      title: infoWindowText,
                     ),
-                    position: gmap.LatLng(
-                      e.last.locationMessage!.latitude!,
-                      e.last.locationMessage!.longitude!,
-                    ),
+                    position: haslocation
+                        ? gmap.LatLng(
+                            e.last.locationMessage!.latitude!,
+                            e.last.locationMessage!.longitude!,
+                          )
+                        : const gmap.LatLng(0, 0),
                     onTap: () {
                       context
                           .read<SelectedAircraftCubit>()
                           .selectAircraft(e.last.macAddress);
                       context.read<SelectedZoneCubit>().unselectZone();
-
-                      context.read<MapCubit>().centerToLocDouble(
-                            e.last.locationMessage!.latitude!,
-                            e.last.locationMessage!.longitude!,
-                          );
-
+                      if (haslocation) {
+                        context.read<MapCubit>().centerToLocDouble(
+                              e.last.locationMessage!.latitude!,
+                              e.last.locationMessage!.longitude!,
+                            );
+                      }
                       context
                           .read<SlidersCubit>()
                           .setShowDroneDetail(show: true);

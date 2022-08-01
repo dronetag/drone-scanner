@@ -48,7 +48,7 @@ class AircraftCard extends StatelessWidget {
     }
     final uasIdText = messagePack.basicIdMessage?.uasId != null &&
             messagePack.basicIdMessage?.uasId != ''
-        ? messagePack.basicIdMessage?.uasId
+        ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
 
     return Opacity(
