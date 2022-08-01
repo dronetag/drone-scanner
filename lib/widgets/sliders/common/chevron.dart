@@ -24,19 +24,19 @@ class Chevron extends CustomPainter {
     canvas.drawPath(path, paint);
   }
 
-  void setDirection(ChevronDirection dir) {
+  set direction(ChevronDirection dir) {
     _dir = dir;
   }
 
-  void setColor(Color color) {
+  set color(Color color) {
     _color = color;
   }
 
-  void setContext(BuildContext context) {
+  set context(BuildContext? context) {
     _context = context;
   }
 
-  ChevronDirection getDirection() {
+  ChevronDirection get direction {
     if (_dir == null) return ChevronDirection.notset;
     return _dir!;
   }

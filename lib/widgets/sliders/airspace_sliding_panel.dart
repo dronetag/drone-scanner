@@ -65,9 +65,9 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
                       .read<SlidersCubit>()
                       .setSliderMaximized(maximized: false);
                 }
-                if (chevron.getDirection() != ChevronDirection.none) {
+                if (chevron.direction != ChevronDirection.none) {
                   setState(() {
-                    chevron.setDirection(ChevronDirection.none);
+                    chevron.direction = ChevronDirection.none;
                   });
                 }
               },
@@ -77,13 +77,13 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
               ),
               boxShadow: const [],
               onPanelOpened: () {
-                chevron.setDirection(ChevronDirection.downwards);
+                chevron.direction = ChevronDirection.downwards;
                 context
                     .read<SlidersCubit>()
                     .setSliderMaximized(maximized: true);
               },
               onPanelClosed: () {
-                chevron.setDirection(ChevronDirection.upwards);
+                chevron.direction = ChevronDirection.upwards;
                 context
                     .read<SlidersCubit>()
                     .setSliderMaximized(maximized: false);

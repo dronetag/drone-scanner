@@ -40,14 +40,12 @@ class AircraftDetailHeader extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = isLandscape ? height / 6 : height / 12;
-    chevron.setContext(context);
-    chevron.setColor(AppColors.droneScannerDetailButtonsColor);
-    if (chevron.getDirection() != ChevronDirection.none) {
-      chevron.setDirection(
-        context.watch<SlidersCubit>().state.sliderMaximized
-            ? ChevronDirection.downwards
-            : ChevronDirection.upwards,
-      );
+    chevron.context = context;
+    chevron.color = AppColors.droneScannerDetailButtonsColor;
+    if (chevron.direction != ChevronDirection.none) {
+      chevron.direction = context.watch<SlidersCubit>().state.sliderMaximized
+          ? ChevronDirection.downwards
+          : ChevronDirection.upwards;
     }
     return Container(
       decoration: const BoxDecoration(
