@@ -121,9 +121,13 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   }) async {
     // if dismissing showcase, restart scans and recover state
     if (!active) {
-      await context.read<AircraftCubit>().removeShowcaseDummyPack();
-      context.read<AircraftCubit>().applyCachedState();
-      await context.read<OpendroneIdCubit>().start();
+      await context
+          .read<AircraftCubit>()
+          .removeShowcaseDummyPack()
+          .then((value) {
+        context.read<AircraftCubit>().applyCachedState();
+        context.read<OpendroneIdCubit>().start();
+      });
     }
     emit(state.copyWith(showcaseActive: active));
   }

@@ -53,14 +53,14 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         value: ToolbarMenuAction.toggleBT,
         padding: EdgeInsets.zero,
         child: StatefulBuilder(
-          builder: (_context, _setState) => CheckboxListTile(
+          builder: (context, setState) => CheckboxListTile(
             contentPadding: EdgeInsets.zero,
-            value: _context.watch<OpendroneIdCubit>().state.isScanningBluetooth,
+            value: context.watch<OpendroneIdCubit>().state.isScanningBluetooth,
             onChanged: (value) {
-              _context
+              context
                   .read<OpendroneIdCubit>()
                   .setBtUsed(btUsed: value!)
-                  .then((value) => _setState);
+                  .then((value) => setState);
               late final String snackBarText;
               if (value) {
                 snackBarText = 'Bluetooth Scanning Started.';

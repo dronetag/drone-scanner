@@ -18,20 +18,20 @@ import '../toolbars/map_options_toolbar.dart';
 
 class MapUIGoogle extends StatefulWidget {
   final List<dynamic> mapObjects;
-  final bool _compassEnabled = true;
-  final bool _mapToolbarEnabled = false;
-  final CameraTargetBounds _cameraTargetBounds = CameraTargetBounds.unbounded;
-  final MinMaxZoomPreference _minMaxZoomPreference =
+  bool get _compassEnabled => true;
+  bool get _mapToolbarEnabled => false;
+  CameraTargetBounds get _cameraTargetBounds => CameraTargetBounds.unbounded;
+  MinMaxZoomPreference get _minMaxZoomPreference =>
       MinMaxZoomPreference.unbounded;
-  final bool _rotateGesturesEnabled = false;
-  final bool _tiltGesturesEnabled = false;
-  final bool _scrollGesturesEnabled = true;
-  final bool _zoomControlsEnabled = false;
-  final bool _zoomGesturesEnabled = true;
-  final bool _indoorViewEnabled = true;
-  final bool _myLocationEnabled = true;
-  final bool _myTrafficEnabled = false;
-  final bool _myLocationButtonEnabled = false;
+  bool get _rotateGesturesEnabled => false;
+  bool get _tiltGesturesEnabled => false;
+  bool get _scrollGesturesEnabled => true;
+  bool get _zoomControlsEnabled => false;
+  bool get _zoomGesturesEnabled => true;
+  bool get _indoorViewEnabled => true;
+  bool get _myLocationEnabled => true;
+  bool get _myTrafficEnabled => false;
+  bool get _myLocationButtonEnabled => false;
 
   const MapUIGoogle({required this.mapObjects, Key? key}) : super(key: key);
 
@@ -45,7 +45,6 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
   @override
   void dispose() {
     context.read<MapCubit>().controller?.dispose();
-    context.read<MapCubit>().controller == null;
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
@@ -161,7 +160,6 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
         ),
         if (!context.watch<MapCubit>().state.isReady)
           Align(
-            alignment: Alignment.center,
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: height,
@@ -183,7 +181,7 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
     context.read<MapCubit>().position = position;
   }
 
-  void onMapCreated(GoogleMapController controller) async {
+  Future<void> onMapCreated(GoogleMapController controller) async {
     await _waitForMapReady(controller);
     await context.read<MapCubit>().assignController(controller);
     await context.read<MapCubit>().setMapStyle();

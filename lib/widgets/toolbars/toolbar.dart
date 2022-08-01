@@ -44,7 +44,6 @@ class _ToolbarState extends State<Toolbar> {
       ),
       height: Sizes.toolbarHeight,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(
@@ -78,7 +77,7 @@ class _ToolbarState extends State<Toolbar> {
               },
               elevation: 0,
               padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(minWidth: 0),
+              constraints: const BoxConstraints(),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               fillColor: Colors.transparent,
               child: const Icon(

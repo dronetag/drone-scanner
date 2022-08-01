@@ -18,10 +18,13 @@ class LocationFields {
     pigeon.LocationMessage? loc,
   ) {
     double? distanceFromMe;
-    if (context.read<StandardsCubit>().state.locationEnabled && loc != null) {
+    if (context.read<StandardsCubit>().state.locationEnabled &&
+        loc != null &&
+        loc.latitude != null &&
+        loc.longitude != null) {
       distanceFromMe = calculateDistance(
-        loc.latitude as double,
-        loc.longitude as double,
+        loc.latitude!,
+        loc.longitude!,
         context.read<MapCubit>().state.userLocation.latitude,
         context.read<MapCubit>().state.userLocation.longitude,
       );
@@ -47,7 +50,7 @@ class LocationFields {
                         ? AppColors.droneScannerHighlightBlue
                         : AppColors.dark,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Text(
@@ -67,13 +70,13 @@ class LocationFields {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Transform.rotate(
-                  angle: loc?.direction as double,
+                  angle: loc?.direction ?? 0,
                   child: const Icon(
                     Icons.navigation_sharp,
                     size: 20,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(
@@ -99,10 +102,14 @@ class LocationFields {
             alignment: Alignment.centerRight,
             child: IconCenterToLoc(
               onPressedCallback: () {
-                context.read<MapCubit>().centerToLocDouble(
-                      loc?.latitude as double,
-                      loc?.longitude as double,
-                    );
+                if (loc != null &&
+                    loc.latitude != null &&
+                    loc.longitude != null) {
+                  context.read<MapCubit>().centerToLocDouble(
+                        loc.latitude!,
+                        loc.longitude!,
+                      );
+                }
                 context
                     .read<SlidersCubit>()
                     .panelController

@@ -44,9 +44,8 @@ class AircraftState {
           (e1, e2) {
             if (e1.value.last.basicIdMessage == null) return 1;
             if (e2.value.last.basicIdMessage == null) return -1;
-            return e1.value.last.basicIdMessage?.uasId
-                    .compareTo(e2.value.last.basicIdMessage?.uasId as String)
-                as int;
+            return e1.value.last.basicIdMessage!.uasId
+                .compareTo(e2.value.last.basicIdMessage!.uasId);
           },
         ),
     );
@@ -58,18 +57,21 @@ class AircraftState {
         ..sort(
           (e1, e2) {
             if (e1.value.last.locationMessage == null ||
-                e1.value.last.locationMessage?.latitude == null) return 0;
+                e1.value.last.locationMessage?.latitude == null ||
+                e1.value.last.locationMessage?.longitude == null) return 0;
             if (e2.value.last.locationMessage == null ||
-                e2.value.last.locationMessage?.latitude == null) return 0;
+                e2.value.last.locationMessage?.latitude == null ||
+                e2.value.last.locationMessage?.longitude == null) return 0;
 
             final e1Dist = calculateDistance(
-                e1.value.last.locationMessage?.latitude as double,
-                e1.value.last.locationMessage?.longitude as double,
-                userPos.latitude,
-                userPos.longitude);
+              e1.value.last.locationMessage!.latitude!,
+              e1.value.last.locationMessage!.longitude!,
+              userPos.latitude,
+              userPos.longitude,
+            );
             final e2Dist = calculateDistance(
-              e2.value.last.locationMessage?.latitude as double,
-              e2.value.last.locationMessage?.longitude as double,
+              e2.value.last.locationMessage!.latitude!,
+              e2.value.last.locationMessage!.longitude!,
               userPos.latitude,
               userPos.longitude,
             );
@@ -88,10 +90,11 @@ class AircraftState {
     required this.cleanTimeSec,
   }) : _packHistory = packHistory;
 
-  AircraftState copyWith(
-          {Map<String, List<MessagePack>>? packHistory,
-          bool? cleanOldPacks,
-          int? cleanTimeSec}) =>
+  AircraftState copyWith({
+    Map<String, List<MessagePack>>? packHistory,
+    bool? cleanOldPacks,
+    int? cleanTimeSec,
+  }) =>
       AircraftState(
         packHistory: packHistory ?? _packHistory,
         cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
@@ -202,14 +205,15 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   void resetExpiryTimers() {
-    var toDelete = <String>[];
+    final toDelete = <String>[];
     state.packHistory().forEach((key, value) {
-      if (state.packHistory()[key] == null) return;
-      final lastTStamp = state
-          .packHistory()[key]
-          ?.last
-          .locationMessage
-          ?.receivedTimestamp as int;
+      if (state.packHistory()[key] == null ||
+          state.packHistory()[key]!.isEmpty ||
+          state.packHistory()[key]!.last.locationMessage == null) {
+        return;
+      }
+      final lastTStamp =
+          state.packHistory()[key]!.last.locationMessage!.receivedTimestamp;
       final packAgeSec =
           (DateTime.now().millisecondsSinceEpoch - lastTStamp) / 1000;
       final duration = state.cleanTimeSec - packAgeSec.toInt();
@@ -226,13 +230,13 @@ class AircraftCubit extends Cubit<AircraftState> {
         deletePack(key);
       });
     });
-    for (var element in toDelete) {
+    for (final element in toDelete) {
       deletePack(element);
     }
   }
 
-  MessagePack findByMacAddress(String mac) {
-    return state.packHistory()[mac]?.first as MessagePack;
+  MessagePack? findByMacAddress(String mac) {
+    return state.packHistory()[mac]?.last;
   }
 
   List<MessagePack>? packsForDevice(String mac) {
@@ -311,7 +315,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     await checkStoragePermission();
     var csv = '';
     state.packHistory().forEach((key, value) {
-      final csvData = createCSV(state.packHistory()[key] as List<MessagePack>);
+      final csvData = createCSV(value);
       csv += const ListToCsvConverter().convert(csvData);
     });
     if (save) {
@@ -321,21 +325,24 @@ class AircraftCubit extends Cubit<AircraftState> {
     }
   }
 
-  Future<String> exportPackToCSV(
-      {required String mac, required bool save}) async {
+  Future<String> exportPackToCSV({
+    required String mac,
+    required bool save,
+  }) async {
     if (state.packHistory()[mac] == null) return '';
     // request permission
     await checkStoragePermission();
 
-    final csvData = createCSV(state.packHistory()[mac] as List<MessagePack>);
+    final csvData = createCSV(state.packHistory()[mac]!);
 
     final csv = const ListToCsvConverter().convert(csvData);
 
     /// Write to a file
     late final String uasId;
     if (state.packHistory()[mac]!.isNotEmpty &&
+        state.packHistory()[mac]?.last.basicIdMessage != null &&
         state.packHistory()[mac]?.last.basicIdMessage?.uasId != null) {
-      uasId = state.packHistory()[mac]?.last.basicIdMessage?.uasId as String;
+      uasId = state.packHistory()[mac]!.last.basicIdMessage!.uasId;
     } else {
       uasId = mac;
     }
@@ -363,13 +370,15 @@ class AircraftCubit extends Cubit<AircraftState> {
       return '';
     }
     final generalDownloadDir = Directory('/storage/emulated/0/Download');
-    name = name.replaceAll(':', '-');
+    final resultName = name.replaceAll(':', '-');
     final pathOfTheFileToWrite =
-        '${generalDownloadDir.path}/csv_export$name.csv';
-    var file = await File(pathOfTheFileToWrite).create(recursive: false);
+        '${generalDownloadDir.path}/csv_export$resultName.csv';
+    var file = await File(pathOfTheFileToWrite).create();
     file = await file.writeAsString(csv);
     return pathOfTheFileToWrite.replaceAll(
-        '/storage/emulated/0/Download', 'Downloads');
+      '/storage/emulated/0/Download',
+      'Downloads',
+    );
   }
 
   Future<String> _shareExportFile(String csv, String name) async {

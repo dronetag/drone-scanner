@@ -171,8 +171,11 @@ class AppTheme {
         vertical: Sizes.standard,
       ),
       border: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.lightGray),
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        borderSide: BorderSide(color: AppColors.lightGray),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+      ),
       enabledBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.gray),
       ),

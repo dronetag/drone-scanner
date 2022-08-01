@@ -46,9 +46,8 @@ class ScanningStateIcons extends StatelessWidget {
                   }
                 });
               },
-              elevation: 2.0,
               padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(minWidth: 0),
+              constraints: const BoxConstraints(),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               shape: const CircleBorder(),
               child: Icon(
@@ -85,9 +84,8 @@ class ScanningStateIcons extends StatelessWidget {
                   }
                   showSnackBar(context, snackBarText);
                 },
-                elevation: 2.0,
                 padding: const EdgeInsets.all(8),
-                constraints: const BoxConstraints(minWidth: 0),
+                constraints: const BoxConstraints(),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 shape: const CircleBorder(),
                 child: Icon(

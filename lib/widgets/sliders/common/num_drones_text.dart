@@ -14,7 +14,6 @@ class NumDronesText extends StatelessWidget {
     final numPacks = context.watch<AircraftCubit>().state.packHistory().length;
     final numPacksText = numPacks == 1 ? ' drone around' : ' drones around';
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
           alignment: Alignment.center,

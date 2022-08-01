@@ -13,7 +13,7 @@ class Chevron extends CustomPainter {
     final paint = Paint();
     paint.color = _color ?? Colors.white;
 
-    var path = Path();
+    final path = Path();
     if (_dir == ChevronDirection.upwards) {
       createUpwardPath(path, size);
     } else if (_dir == ChevronDirection.downwards) {

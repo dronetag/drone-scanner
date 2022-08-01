@@ -36,10 +36,8 @@ class _LocationSearchState extends State<LocationSearch> {
         onTap: () async {
           final place = await PlacesAutocomplete.show(
             startText: locationCache ?? '',
-            hint: 'Search',
             context: context,
             apiKey: googleApikey,
-            mode: Mode.fullscreen,
             types: [],
             strictbounds: false,
           );
@@ -56,11 +54,14 @@ class _LocationSearchState extends State<LocationSearch> {
             final geometry = detail.result.geometry!;
             final lat = geometry.location.lat;
             final lang = geometry.location.lng;
-            var newlatlang = LatLng(lat, lang);
-
+            final newlatlang = LatLng(lat, lang);
+            if (!mounted) return;
             await context.read<MapCubit>().centerToLoc(newlatlang);
+            if (!mounted) return;
             await context.read<MapCubit>().setDroppedPinLocation(newlatlang);
+            if (!mounted) return;
             await context.read<MapCubit>().setDroppedPin(pinDropped: true);
+            if (!mounted) return;
             if (context.read<SlidersCubit>().panelController.isPanelOpen) {
               await context
                   .read<SlidersCubit>()
@@ -74,7 +75,7 @@ class _LocationSearchState extends State<LocationSearch> {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Center(
             child: ListTile(
               title: Text(

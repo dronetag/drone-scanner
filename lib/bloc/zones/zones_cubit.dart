@@ -16,7 +16,7 @@ class ZonesState {
           ZoneItem(
             id: 'd013e3424fa0-6brw70-42419-83asd5-a8256db',
             name: 'LKR9 (Prague)',
-            type: ZoneItem.zoneTypeMapping['controlled_airspace'] as ZoneType,
+            type: ZoneItem.zoneTypeMapping['controlled_airspace']!,
             lowerAltitudeRef: 'AGL',
             upperAltitudeRef: 'QNH',
             amId: 'b09qe7c4809-244-34',
@@ -32,7 +32,7 @@ class ZonesState {
           ZoneItem(
             id: '123e3424fa0-6bfb70-42419-83asd5-a8256db',
             name: 'LKP1 PRAZSKÝ HRAD',
-            type: ZoneItem.zoneTypeMapping['controlled_airspace'] as ZoneType,
+            type: ZoneItem.zoneTypeMapping['controlled_airspace']!,
             lowerAltitudeRef: 'AGL',
             upperAltitudeRef: 'QNH',
             amId: '70924809-244-34',
@@ -48,7 +48,7 @@ class ZonesState {
           ZoneItem(
             id: '55ee34afa0-4dfb70-43419-8319-8aed5-a82f9db',
             name: 'M.R STEFANIK',
-            type: ZoneItem.zoneTypeMapping['airport'] as ZoneType,
+            type: ZoneItem.zoneTypeMapping['airport']!,
             lowerAltitudeRef: 'AGL',
             upperAltitudeRef: 'QNH',
             amId: '70924809-244-34',
@@ -80,13 +80,14 @@ class ZonesCubit extends Cubit<ZonesState> {
     try {
       final response = await http.get(url);
       // ignore: omit_local_variable_types
-      List<ZoneItem> loadedZones = [];
+      final List<ZoneItem> loadedZones = [];
       // map with string keys, value is another map
       final extractedData = json.decode(response.body) as List;
 
-      for (var prodData in extractedData) {
-        var coords = <LatLng>[];
-        for (List<double> coordData in prodData['region']['coordinates'][0]) {
+      for (final prodData in extractedData) {
+        final coords = <LatLng>[];
+        for (final List<double> coordData in prodData['region']['coordinates']
+            [0]) {
           coords.add(LatLng(coordData[0], coordData[1]));
         }
         loadedZones.add(

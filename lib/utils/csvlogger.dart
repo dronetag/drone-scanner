@@ -1,7 +1,7 @@
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
 List<List<dynamic>> createCSV(List<MessagePack> list) {
-  var csvData = <List<dynamic>>[];
+  final csvData = <List<dynamic>>[];
   for (var i = 0; i < list.length; ++i) {
     final pack = list[i];
     csvData.add(['mac address']);
@@ -9,8 +9,8 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
     if (pack.locationMessage != null) {
       final loc = pack.locationMessage!;
       csvData.add(['Location Message', loc.source]);
-      var row = <dynamic>[];
-      var header = <dynamic>[
+      final row = <dynamic>[];
+      final header = <dynamic>[
         'status',
         'heightType',
         'direction',
@@ -45,7 +45,7 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
       row.add(
         loc.time != null
             ? DateTime.fromMillisecondsSinceEpoch(
-                loc.time as int,
+                loc.time!,
               )
             : '',
       );
@@ -56,8 +56,8 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
     if (pack.basicIdMessage != null) {
       final message = pack.basicIdMessage!;
       csvData.add(['BasicId Message', message.source]);
-      var header = <dynamic>['idType', 'uaType', 'uasId'];
-      var row = <dynamic>[];
+      final header = <dynamic>['idType', 'uaType', 'uasId'];
+      final row = <dynamic>[];
       row.add(message.idType ?? '');
       row.add(message.uaType ?? '');
       row.add(message.uasId);
@@ -67,8 +67,8 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
     if (pack.operatorIdMessage != null) {
       final message = pack.operatorIdMessage!;
       csvData.add(['OperatorId Message', message.source]);
-      var header = <dynamic>['operatorId'];
-      var row = <dynamic>[];
+      final header = <dynamic>['operatorId'];
+      final row = <dynamic>[];
       row.add(message.operatorId);
       csvData.add(header);
       csvData.add(row);
@@ -76,8 +76,8 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
     if (pack.selfIdMessage != null) {
       final message = pack.selfIdMessage!;
       csvData.add(['SelfId Message', message.source]);
-      var row = <dynamic>[];
-      var header = <dynamic>['descriptionType', 'operationDescription'];
+      final row = <dynamic>[];
+      final header = <dynamic>['descriptionType', 'operationDescription'];
       row.add(message.descriptionType);
       row.add(message.operationDescription);
       csvData.add(header);
@@ -86,7 +86,7 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
     if (pack.authenticationMessage != null) {
       final message = pack.authenticationMessage!;
       csvData.add(['Authentication Message', message.source]);
-      var header = <dynamic>[
+      final header = <dynamic>[
         'authType',
         'authDataPage',
         'authLastPageIndex',
@@ -94,7 +94,7 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
         'authTimestamp',
         'authData',
       ];
-      var row = <dynamic>[];
+      final row = <dynamic>[];
       row.add(message.authType ?? '');
       row.add(message.authDataPage);
       row.add(message.authLastPageIndex.toString());
@@ -109,7 +109,7 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
     if (pack.systemDataMessage != null) {
       final message = pack.systemDataMessage!;
       csvData.add(['System Data Message', message.source]);
-      var header = <dynamic>[
+      final header = <dynamic>[
         'operatorLocationType',
         'classificationType',
         'operatorLatitude',
@@ -123,7 +123,7 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
         'operatorAltitudeGeo',
         'systemTimestamp'
       ];
-      var row = <dynamic>[];
+      final row = <dynamic>[];
       row.add(message.operatorLocationType ?? '');
       row.add(message.classificationType ?? '');
       row.add(message.operatorLatitude);

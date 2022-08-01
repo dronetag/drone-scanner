@@ -14,8 +14,7 @@ class ZoneDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final zoneItem =
-        context.watch<SelectedZoneCubit>().state.selectedZone as ZoneItem;
+    final zoneItem = context.watch<SelectedZoneCubit>().state.selectedZone!;
 
     final countryCode = zoneItem.country;
     double? distanceFromMe;

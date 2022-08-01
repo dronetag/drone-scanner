@@ -36,15 +36,16 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
     final width = MediaQuery.of(context).size.width;
     final sliderMaximized = context.watch<SlidersCubit>().state.sliderMaximized;
     final borderRadius =
-        sliderMaximized ? const Radius.circular(0) : const Radius.circular(10);
+        sliderMaximized ? Radius.zero : const Radius.circular(10);
     return BlocBuilder<SlidersCubit, SlidersState>(
       builder: (context, state) {
         // check if aircraft to be shown was not deleted
         if (state.showDroneDetail) {
-          final messagePackList = context.watch<AircraftCubit>().packsForDevice(
-                context.watch<SelectedAircraftCubit>().state.selectedAircraftMac
-                    as String,
-              );
+          final selMac =
+              context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
+          final messagePackList = selMac != null
+              ? context.watch<AircraftCubit>().packsForDevice(selMac)
+              : null;
           // empty or was deleted, return to list
           if (messagePackList == null || messagePackList.isEmpty) {
             context.read<SlidersCubit>().setShowDroneDetail(show: false);
@@ -55,7 +56,6 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
           builder: (context, orientation) {
             return SlidingUpPanel(
               controller: context.read<SlidersCubit>().panelController,
-              defaultPanelState: PanelState.CLOSED,
               maxHeight: widget.maxSize,
               minHeight: widget.minSize,
               snapPoint: orientation == Orientation.landscape ? null : 0.3,
@@ -75,7 +75,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
                 topLeft: borderRadius,
                 topRight: borderRadius,
               ),
-              boxShadow: [],
+              boxShadow: const [],
               onPanelOpened: () {
                 chevron.setDirection(ChevronDirection.downwards);
                 context

@@ -28,7 +28,7 @@ class PreferencesFieldWithDescription extends StatelessWidget {
             Text(
               description,
               textScaleFactor: 0.8,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.droneScannerLightGray,
               ),
             ),

@@ -54,13 +54,11 @@ void handleAction(BuildContext context, AircraftAction action) {
   final zoneItem = context.read<SelectedZoneCubit>().state.selectedZone;
   final selectedMac =
       context.read<SelectedAircraftCubit>().state.selectedAircraftMac;
-  final messagePackList = context.read<AircraftCubit>().packsForDevice(context
-      .read<SelectedAircraftCubit>()
-      .state
-      .selectedAircraftMac as String);
-  if (selectedMac == null ||
-      messagePackList == null ||
-      messagePackList.isEmpty) {
+  if (selectedMac == null) return;
+  final messagePackList = context.read<AircraftCubit>().packsForDevice(
+        selectedMac,
+      );
+  if (messagePackList == null || messagePackList.isEmpty) {
     return;
   }
 
@@ -110,11 +108,13 @@ void handleAction(BuildContext context, AircraftAction action) {
       }
       // aircraft
       if (messagePackList.isNotEmpty &&
-          messagePackList.last.locationMessage != null) {
+          messagePackList.last.locationMessage != null &&
+          messagePackList.last.locationMessage!.longitude != null &&
+          messagePackList.last.locationMessage!.latitude != null) {
         context.read<MapCubit>().toggleLockOnPoint();
         context.read<MapCubit>().centerToLocDouble(
-              messagePackList.last.locationMessage?.latitude as double,
-              messagePackList.last.locationMessage?.longitude as double,
+              messagePackList.last.locationMessage!.latitude!,
+              messagePackList.last.locationMessage!.longitude!,
             );
       } else {
         if (zoneItem != null) {

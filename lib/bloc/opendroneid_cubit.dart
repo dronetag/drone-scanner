@@ -80,10 +80,13 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   void scanCallback(MessagePack pack) {
     aircraftCubit.addPack(pack);
     if (mapCubit.state.lockOnPoint &&
-        pack.macAddress == selectedAircraftCubit.state.selectedAircraftMac) {
+        pack.macAddress == selectedAircraftCubit.state.selectedAircraftMac &&
+        pack.locationMessage != null &&
+        pack.locationMessage!.latitude != null &&
+        pack.locationMessage!.longitude != null) {
       mapCubit.centerToLocDouble(
-        pack.locationMessage?.latitude as double,
-        pack.locationMessage?.longitude as double,
+        pack.locationMessage!.latitude!,
+        pack.locationMessage!.longitude!,
       );
     }
   }

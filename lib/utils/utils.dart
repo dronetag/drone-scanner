@@ -140,7 +140,6 @@ Image? getFlag(String countryCode) {
       'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
       width: 24,
       height: 12,
-      alignment: Alignment.center,
     );
   } on Exception {
     flag = null;

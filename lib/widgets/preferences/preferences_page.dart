@@ -40,7 +40,7 @@ class PreferencesPage extends StatelessWidget {
                 description:
                     'This page contains infomation about supported standards on your device and additional settings',
                 title: 'Preferences',
-                child: Container(
+                child: ColoredBox(
                   color: Theme.of(context).backgroundColor,
                   child: Padding(
                     padding: isLandscape
@@ -58,7 +58,6 @@ class PreferencesPage extends StatelessWidget {
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               crossAxisSpacing: 10,
-                              mainAxisSpacing: 0,
                               mainAxisExtent: 35,
                             ),
                             shrinkWrap: true,
@@ -253,7 +252,6 @@ class PreferencesPage extends StatelessWidget {
       ),
       if (isLandscape) const SizedBox(),
       Align(
-        alignment: Alignment.center,
         child: SizedBox(
           width: width / 2,
           child: ElevatedButton(
@@ -267,7 +265,6 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       Align(
-        alignment: Alignment.center,
         child: SizedBox(
           width: width / 2,
           child: ElevatedButton(
@@ -294,7 +291,7 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
-      PreferencesFieldWithDescription(
+      const PreferencesFieldWithDescription(
         label: 'Clean automatically:',
         description:
             'Aircrafts inactive for chosen time will be\nautomatically cleared',
@@ -304,23 +301,21 @@ class PreferencesPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text('Time to clean:'),
-          Container(
+          SizedBox(
             width: width / 3,
             child: SpinBox(
               spacing: 1,
               min: 10,
               max: 1000.0,
-              textAlign: TextAlign.center,
               value:
                   context.watch<AircraftCubit>().state.cleanTimeSec.toDouble(),
-              decimals: 0,
               step: 5,
               onChanged: (v) => context.read<AircraftCubit>().setcleanTimeSec(
                     v.toInt(),
                   ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                contentPadding: const EdgeInsets.only(
+                contentPadding: EdgeInsets.only(
                   top: 5,
                 ),
                 constraints: BoxConstraints(
@@ -335,7 +330,7 @@ class PreferencesPage extends StatelessWidget {
         label: 'List field preference:',
         description:
             'Choose which information your prefer\nto see in the list of aircrafts',
-        child: Container(
+        child: SizedBox(
           width: width / 3,
           child: CustomDropdownButton(
             value:
@@ -345,7 +340,7 @@ class PreferencesPage extends StatelessWidget {
                 context.read<SlidersCubit>().setListFieldPreference(newValue);
               }
             },
-            items: [
+            items: const [
               'Distance',
               'Location',
               'Speed',
@@ -354,7 +349,6 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       Align(
-        alignment: Alignment.center,
         child: SizedBox(
           width: width / 2,
           child: ElevatedButton(
@@ -374,7 +368,6 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       Align(
-        alignment: Alignment.center,
         child: SizedBox(
           width: width / 2,
           child: ElevatedButton(
@@ -387,7 +380,6 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       Align(
-        alignment: Alignment.center,
         child: SizedBox(
           width: width / 2,
           child: ElevatedButton(

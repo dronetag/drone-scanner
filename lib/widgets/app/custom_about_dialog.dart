@@ -39,7 +39,7 @@ class CustomAboutDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Container(
+            child: DecoratedBox(
               decoration: const BoxDecoration(
                 gradient: RadialGradient(
                   colors: [
@@ -90,7 +90,9 @@ class CustomAboutDialog extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 2),
+                        horizontal: 5,
+                        vertical: 2,
+                      ),
                       child: Text(
                         buildText,
                         style: const TextStyle(
@@ -104,7 +106,7 @@ class CustomAboutDialog extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Container(
+            child: DecoratedBox(
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(

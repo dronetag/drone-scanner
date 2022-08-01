@@ -48,6 +48,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     } else {
       return;
     }
+    if (!mounted) return;
     if (context.read<ShowcaseCubit>().state.showcaseActive) {
       await context.read<OpendroneIdCubit>().stop();
     }
@@ -55,11 +56,13 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        if (!mounted) return;
         await context
             .read<StandardsCubit>()
             .setInternetAvailable(available: true);
       }
     } on SocketException catch (_) {
+      if (!mounted) return;
       await context
           .read<StandardsCubit>()
           .setInternetAvailable(available: false);
@@ -123,17 +126,22 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     if (loc && !context.read<StandardsCubit>().state.locationEnabled) {
       initLocation();
     }
+    if (!mounted) return;
     await context.read<StandardsCubit>().setLocationEnabled(enabled: loc);
     final bt = await Permission.bluetooth.isGranted;
+    if (!mounted) return;
     await context.read<StandardsCubit>().setBluetoothEnabled(enabled: bt);
   }
 
   void userLocationChanged(LocationData currentLocation) {
     void updateLoc() {
-      context.read<MapCubit>().setUserLocationDouble(
-            currentLocation.latitude as double,
-            currentLocation.longitude as double,
-          );
+      if (currentLocation.latitude != null &&
+          currentLocation.longitude != null) {
+        context.read<MapCubit>().setUserLocationDouble(
+              currentLocation.latitude!,
+              currentLocation.longitude!,
+            );
+      }
       // force centering only of first startup
       if (!context.read<MapCubit>().state.wasCenteredOnUser) {
         context.read<MapCubit>().centerToUser();
@@ -153,6 +161,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        if (!mounted) return;
         await context
             .read<StandardsCubit>()
             .setInternetAvailable(available: true);

@@ -28,11 +28,14 @@ class AircraftDetailHeader extends StatelessWidget {
     final selectedMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     // ignore: omit_local_variable_types
-    final List<MessagePack> messagePackList = selectedMac != null
+    final List<MessagePack> messagePackList = selectedMac != null &&
+            context.watch<AircraftCubit>().packsForDevice(
+                      selectedMac,
+                    ) !=
+                null
         ? context.watch<AircraftCubit>().packsForDevice(
-              context.watch<SelectedAircraftCubit>().state.selectedAircraftMac
-                  as String,
-            ) as List<MessagePack>
+              selectedMac,
+            )!
         : [];
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -173,7 +176,7 @@ class AircraftDetailHeader extends StatelessWidget {
 
   void showInfoDialog(BuildContext context, String message, String title) {
     // Create button
-    Widget okButton = TextButton(
+    final Widget okButton = TextButton(
       child: const Text('OK'),
       onPressed: () {
         Navigator.of(context).pop();
@@ -229,7 +232,9 @@ class AircraftDetailHeader extends StatelessWidget {
   }
 
   Widget buildSubtitle(
-      BuildContext context, List<MessagePack> messagePackList) {
+    BuildContext context,
+    List<MessagePack> messagePackList,
+  ) {
     final countryCode =
         messagePackList.last.operatorIdMessage?.operatorId.substring(0, 2);
     Image? flag;

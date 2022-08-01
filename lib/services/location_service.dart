@@ -26,8 +26,7 @@ class LocationService {
       permissions != loc.PermissionStatus.granted;
 
   void _setSettings() {
-    location.changeSettings(
-        accuracy: defaultAccuracy, interval: defaultInterval);
+    location.changeSettings(interval: defaultInterval);
     settingsSet = true;
   }
 
@@ -55,7 +54,7 @@ class LocationService {
       await Permission.location.request();
     }
 
-    return await Permission.location.isGranted;
+    return Permission.location.isGranted;
   }
 
   Future<Location?> getCurrentLocation({
@@ -84,11 +83,9 @@ class LocationService {
       return null;
     }
 
-    lastLocation = Location(
+    return lastLocation = Location(
       latitude: locationData.latitude!,
       longitude: locationData.longitude!,
     );
-
-    return lastLocation;
   }
 }

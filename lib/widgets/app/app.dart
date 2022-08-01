@@ -20,7 +20,7 @@ class App extends StatefulWidget {
   /// Function to retrieve package info and make it
   /// globally available across the project via [packageInfo]
   /// from file `app.dart`
-  void _retirevePackageInfo() async {
+  Future<void> _retirevePackageInfo() async {
     packageInfo = await PackageInfo.fromPlatform();
   }
 }

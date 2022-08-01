@@ -43,7 +43,7 @@ class AircraftCard extends StatelessWidget {
     }
     final uasIdText = messagePack.basicIdMessage?.uasId != null &&
             messagePack.basicIdMessage?.uasId != ''
-        ? (messagePack.basicIdMessage?.uasId as String)
+        ? messagePack.basicIdMessage?.uasId
         : 'Unknown UAS ID';
 
     return Opacity(
@@ -116,17 +116,19 @@ class AircraftCard extends StatelessWidget {
         messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
     final icon = isAirborne ? Icons.flight_takeoff : Icons.flight_land;
     final aircraftText = messagePack.locationMessage == null ||
-            messagePack.locationMessage?.status == pigeon.AircraftStatus.Ground
+            messagePack.locationMessage!.status == pigeon.AircraftStatus.Ground
         ? 'Grounded'
-        : '${messagePack.locationMessage?.height.toString() as String} m';
+        : '${messagePack.locationMessage!.height.toString()} m';
     return SizedBox(
       width: width / 8,
       child: Column(
         children: [
-          Icon(icon,
-              color: isAirborne
-                  ? AppColors.droneScannerHighlightBlue
-                  : AppColors.dark),
+          Icon(
+            icon,
+            color: isAirborne
+                ? AppColors.droneScannerHighlightBlue
+                : AppColors.dark,
+          ),
           const SizedBox(
             height: 2,
           ),

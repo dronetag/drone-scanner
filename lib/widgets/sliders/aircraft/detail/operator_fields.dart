@@ -19,7 +19,7 @@ class OperatorFields {
   ) {
     final countryCode =
         opMessage == null ? null : opMessage.operatorId.substring(0, 2);
-    print(opMessage?.operatorId);
+
     Image? flag;
 
     flag = getFlag(countryCode);

@@ -31,7 +31,7 @@ class GoogleMapStyleReader {
     _preloadAllFiles();
   }
 
-  void _preloadAllFiles() async {
+  Future<void> _preloadAllFiles() async {
     layers = Map.fromEntries(
       await Future.wait(
         mapStyles.entries.map(

@@ -4,7 +4,10 @@ import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 
 void showAlertDialog(
-    BuildContext context, String alertText, Function confirmCallback) {
+  BuildContext context,
+  String alertText,
+  VoidCallback confirmCallback,
+) {
   // set up the buttons
   final Widget cancelButton = TextButton(
     child: const Text('Cancel'),
@@ -47,11 +50,9 @@ void showSnackBar(
     backgroundColor: Colors.white,
     duration: const Duration(milliseconds: 1500),
     behavior: SnackBarBehavior.floating,
-    content: Container(
-      child: Text(
-        snackBarText,
-        style: TextStyle(color: textColor),
-      ),
+    content: Text(
+      snackBarText,
+      style: TextStyle(color: textColor),
     ),
     margin: EdgeInsets.only(
       bottom: MediaQuery.of(context).size.height / 2,

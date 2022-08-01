@@ -36,7 +36,7 @@ class MapCubit extends Cubit<GMapState> {
     await controller.getVisibleRegion();
     this.controller = controller;
 
-    for (var callback in postLoadCallbacks) {
+    for (final callback in postLoadCallbacks) {
       callback();
     }
     postLoadCallbacks = [];
@@ -152,7 +152,6 @@ class MapCubit extends Cubit<GMapState> {
     return gmap.CameraPosition(
       target: gmap.LatLng(phoneLocation.latitude, phoneLocation.longitude),
       zoom: 12.0,
-      tilt: 0.0,
     );
   }
 
@@ -195,8 +194,9 @@ class MapCubit extends Cubit<GMapState> {
                   context.read<SelectedZoneCubit>().selectZone(e);
                   context.read<SelectedAircraftCubit>().unselectAircraft();
                   context.read<MapCubit>().centerToLocDouble(
-                      e.coordinates.first.latitude,
-                      e.coordinates.first.longitude);
+                        e.coordinates.first.latitude,
+                        e.coordinates.first.longitude,
+                      );
                   context.read<SlidersCubit>().setShowDroneDetail(show: true);
                 },
               ),
@@ -217,7 +217,7 @@ class MapCubit extends Cubit<GMapState> {
               (e) => gmap.Circle(
                 center: e.coordinates.first,
                 circleId: gmap.CircleId(e.name),
-                radius: e.radius as double,
+                radius: e.radius ?? 0,
                 fillColor: selZone == e
                     ? MapAppTheme.selectedZoneColor
                     : MapAppTheme.airspaceZoneColor[e.type] ??
@@ -232,8 +232,9 @@ class MapCubit extends Cubit<GMapState> {
                   context.read<SelectedZoneCubit>().selectZone(e);
                   context.read<SelectedAircraftCubit>().unselectAircraft();
                   context.read<MapCubit>().centerToLocDouble(
-                      e.coordinates.first.latitude,
-                      e.coordinates.first.longitude);
+                        e.coordinates.first.latitude,
+                        e.coordinates.first.longitude,
+                      );
                   context.read<SlidersCubit>().setShowDroneDetail(show: true);
                 },
               ),
@@ -244,7 +245,7 @@ class MapCubit extends Cubit<GMapState> {
 
   Set<gmap.Marker> buildMarkers(BuildContext context, String? selItemMac) {
     // ignore: omit_local_variable_types
-    Set<gmap.Marker> markers = context
+    final Set<gmap.Marker> markers = context
                 .watch<SlidersCubit>()
                 .state
                 .filterValue !=
@@ -256,7 +257,13 @@ class MapCubit extends Cubit<GMapState> {
                 .state
                 .packHistory()
                 .values
-                .where((e) => e.isNotEmpty)
+                .where(
+                  (e) =>
+                      e.isNotEmpty &&
+                      e.last.locationMessage != null &&
+                      e.last.locationMessage?.latitude != null &&
+                      e.last.locationMessage?.longitude != null,
+                )
                 .map(
                 (e) {
                   late final double markerHue;
@@ -268,13 +275,6 @@ class MapCubit extends Cubit<GMapState> {
                   } else {
                     markerHue = gmap.BitmapDescriptor.hueBlue;
                   }
-                  var haslocation = true;
-                  if (e.isEmpty ||
-                      e.last.locationMessage == null ||
-                      e.last.locationMessage?.latitude == null ||
-                      e.last.locationMessage?.longitude == null) {
-                    haslocation = false;
-                  }
 
                   return gmap.Marker(
                     markerId: gmap.MarkerId(e.last.macAddress),
@@ -283,23 +283,21 @@ class MapCubit extends Cubit<GMapState> {
                           ? e.last.basicIdMessage?.uasId
                           : 'Unknown UAS ID',
                     ),
-                    position: haslocation
-                        ? gmap.LatLng(
-                            e.last.locationMessage?.latitude as double,
-                            e.last.locationMessage?.longitude as double,
-                          )
-                        : const gmap.LatLng(0, 0),
+                    position: gmap.LatLng(
+                      e.last.locationMessage!.latitude!,
+                      e.last.locationMessage!.longitude!,
+                    ),
                     onTap: () {
                       context
                           .read<SelectedAircraftCubit>()
                           .selectAircraft(e.last.macAddress);
                       context.read<SelectedZoneCubit>().unselectZone();
-                      if (haslocation) {
-                        context.read<MapCubit>().centerToLocDouble(
-                              e.last.locationMessage?.latitude as double,
-                              e.last.locationMessage?.longitude as double,
-                            );
-                      }
+
+                      context.read<MapCubit>().centerToLocDouble(
+                            e.last.locationMessage!.latitude!,
+                            e.last.locationMessage!.longitude!,
+                          );
+
                       context
                           .read<SlidersCubit>()
                           .setShowDroneDetail(show: true);
@@ -330,22 +328,24 @@ class MapCubit extends Cubit<GMapState> {
           .read<AircraftCubit>()
           .packsForDevice(selItemMac)!
           .last
-          .systemDataMessage as SystemDataMessage;
-      markers.add(
-        gmap.Marker(
-          markerId: const gmap.MarkerId('takeoff'),
-          infoWindow: const gmap.InfoWindow(
-            title: 'Operator Location',
+          .systemDataMessage;
+      if (systemData != null) {
+        markers.add(
+          gmap.Marker(
+            markerId: const gmap.MarkerId('takeoff'),
+            infoWindow: const gmap.InfoWindow(
+              title: 'Operator Location',
+            ),
+            icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
+              gmap.BitmapDescriptor.hueYellow,
+            ),
+            position: gmap.LatLng(
+              systemData.operatorLatitude,
+              systemData.operatorLongitude,
+            ),
           ),
-          icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
-            gmap.BitmapDescriptor.hueYellow,
-          ),
-          position: gmap.LatLng(
-            systemData.operatorLatitude,
-            systemData.operatorLongitude,
-          ),
-        ),
-      );
+        );
+      }
     }
     // add dropped pin if it exists
     if (context.watch<MapCubit>().state.droppedPin) {
@@ -370,14 +370,14 @@ class MapCubit extends Cubit<GMapState> {
 
   Set<gmap.Polyline> buildPolylines(BuildContext context, String? selItemMac) {
     // ignore: omit_local_variable_types
-    Set<gmap.Polyline> polylines = {};
+    final Set<gmap.Polyline> polylines = {};
     List<MessagePack>? selItemHistory;
     if (selItemMac == null) return {};
     selItemHistory =
         context.read<AircraftCubit>().state.packHistory()[selItemMac];
     if (selItemHistory == null) return {};
-    final maxPoints = 75;
-    var filteredList = [];
+    const maxPoints = 75;
+    var filteredList = <MessagePack>[];
     // calc portion of history that will be filtered out
     final skip = selItemHistory.length ~/ maxPoints;
 
@@ -390,21 +390,26 @@ class MapCubit extends Cubit<GMapState> {
         }
       }
     }
-    final _polylineData = filteredList.map(
+    final polylineData = filteredList
+        .where(
+      (e) =>
+          e.locationMessage != null &&
+          e.locationMessage!.latitude != null &&
+          e.locationMessage != null &&
+          e.locationMessage!.longitude != null,
+    )
+        .map(
       (e) {
-        if (e.locationMessage == null) {
-          return const gmap.LatLng(0, 0);
-        }
         return gmap.LatLng(
-          e.locationMessage?.latitude as double,
-          e.locationMessage?.longitude as double,
+          e.locationMessage!.latitude!,
+          e.locationMessage!.longitude!,
         );
       },
     ).toList();
     polylines.add(
       gmap.Polyline(
         polylineId: gmap.PolylineId(selItemMac),
-        points: _polylineData,
+        points: polylineData,
         color: MapAppTheme.flightTrajectoryStrokeColor,
         width: MapAppTheme.flightTrajectoryStrokeWidth,
       ),

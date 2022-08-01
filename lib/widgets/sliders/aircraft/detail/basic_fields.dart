@@ -43,7 +43,7 @@ class BasicFields {
                     ? 'Unknown'
                     : '${messagePackList.last.basicIdMessage?.uasId}',
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               if (messagePackList.last.basicIdMessage?.uasId
@@ -65,7 +65,7 @@ class BasicFields {
                           color: AppColors.droneScannerLightGray,
                         ),
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: 'Dronetag Mini',
                       ),
                     ],
@@ -85,8 +85,9 @@ class BasicFields {
           messagePackList.last.selfIdMessage?.operationDescription != null)
         Align(
           alignment: Alignment.centerRight,
-          child: Text(messagePackList.last.selfIdMessage?.operationDescription
-              as String),
+          child: Text(
+            messagePackList.last.selfIdMessage!.operationDescription,
+          ),
         ),
     ];
   }

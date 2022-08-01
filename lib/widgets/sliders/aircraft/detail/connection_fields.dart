@@ -73,7 +73,7 @@ class ConnectionFields {
                   color: AppColors.droneScannerHighlightBlue,
                   size: Sizes.iconSize / 3 * 2,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(

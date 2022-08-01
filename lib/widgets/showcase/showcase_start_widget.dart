@@ -25,14 +25,12 @@ class ShowcaseStartWidget extends StatelessWidget {
         color: Colors.white,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.all(
               Sizes.showcaseMargin,
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   heading,

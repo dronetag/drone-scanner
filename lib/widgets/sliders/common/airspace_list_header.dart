@@ -12,8 +12,8 @@ import 'num_drones_text.dart';
 
 class AirspaceListHeader extends StatelessWidget {
   final Chevron chevron;
-  final Function setSortCallback;
-  final Function setFilterCallback;
+  final Function(SortValue) setSortCallback;
+  final Function(FilterValue) setFilterCallback;
   const AirspaceListHeader({
     Key? key,
     required this.chevron,
@@ -65,7 +65,6 @@ class AirspaceListHeader extends StatelessWidget {
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // hide zones, fix later
                   /*

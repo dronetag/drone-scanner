@@ -19,9 +19,12 @@ class ButtonsAppTheme {
   /// states.
   /// FIXME: Not enough, resolve for the rest of states.
   static MaterialStateProperty<T> _resolveWithDisabled<T>(
-          T normal, T disabled) =>
-      MaterialStateProperty.resolveWith((states) =>
-          states.contains(MaterialState.disabled) ? disabled : normal);
+    T normal,
+    T disabled,
+  ) =>
+      MaterialStateProperty.resolveWith(
+        (states) => states.contains(MaterialState.disabled) ? disabled : normal,
+      );
 
   static final baseStyle = ButtonStyle(
     shape: MaterialStateProperty.all(defaultShape),
@@ -32,8 +35,10 @@ class ButtonsAppTheme {
   static final defaultStyle = baseStyle.copyWith(
     backgroundColor: _resolveWithDisabled(AppColors.gray, Colors.transparent),
     foregroundColor: _resolveWithDisabled(Colors.white, AppColors.lightGray),
-    side: _resolveWithDisabled(BorderSide.none,
-        const BorderSide(color: AppColors.lightGray, width: 2.0)),
+    side: _resolveWithDisabled(
+      BorderSide.none,
+      const BorderSide(color: AppColors.lightGray, width: 2.0),
+    ),
   );
 
   /// Default text button style
@@ -47,8 +52,10 @@ class ButtonsAppTheme {
     backgroundColor:
         _resolveWithDisabled(AppColors.dronetagBlue, Colors.transparent),
     foregroundColor: _resolveWithDisabled(Colors.white, AppColors.lightGray),
-    side: _resolveWithDisabled(BorderSide.none,
-        const BorderSide(color: AppColors.lightGray, width: 2.0)),
+    side: _resolveWithDisabled(
+      BorderSide.none,
+      const BorderSide(color: AppColors.lightGray, width: 2.0),
+    ),
     shadowColor: MaterialStateProperty.all(AppColors.primaryGlow),
     elevation: _resolveWithDisabled(8.0, 0),
   );
@@ -65,13 +72,15 @@ class ButtonsAppTheme {
 
   static final largeStyle = baseStyle.copyWith(
     minimumSize: MaterialStateProperty.all(
-        const Size(Sizes.standard * 6, Sizes.standard * 6)),
+      const Size(Sizes.standard * 6, Sizes.standard * 6),
+    ),
   );
 
   static final withoutPaddingStyle = baseStyle.copyWith(
     padding: MaterialStateProperty.all(EdgeInsets.zero),
     minimumSize: MaterialStateProperty.all(
-        const Size(Sizes.standard * 6, Sizes.standard * 6)),
+      const Size(Sizes.standard * 6, Sizes.standard * 6),
+    ),
   );
 
   static final largeWithoutPaddingStyle = largeStyle.merge(withoutPaddingStyle);
@@ -83,18 +92,21 @@ class ButtonsAppTheme {
 
   static final smallerStyle = baseStyle.copyWith(
     padding: MaterialStateProperty.all(
-        const EdgeInsets.symmetric(horizontal: Sizes.standard)),
+      const EdgeInsets.symmetric(horizontal: Sizes.standard),
+    ),
     minimumSize: MaterialStateProperty.all(const Size.square(32.0)),
   );
 
   static final underlinedTextButtonStyle = textButtonStyle.copyWith(
-      textStyle: MaterialStateProperty.all(
-          AppTheme.lightTheme.textTheme.bodyText2!.copyWith(
+    textStyle: MaterialStateProperty.all(
+      AppTheme.lightTheme.textTheme.bodyText2!.copyWith(
         decoration: TextDecoration.underline,
-      )),
-      foregroundColor: MaterialStateProperty.all(
-        AppColors.gray,
-      ));
+      ),
+    ),
+    foregroundColor: MaterialStateProperty.all(
+      AppColors.gray,
+    ),
+  );
 
   static final negativeStyle = baseStyle.copyWith(
     backgroundColor: MaterialStateProperty.all(AppColors.negative),
@@ -107,14 +119,18 @@ class ButtonsAppTheme {
   static final primaryTextStyle = textButtonStyle.copyWith(
     foregroundColor:
         _resolveWithDisabled(AppColors.dronetagBlue, AppColors.lightGray),
-    textStyle: MaterialStateProperty.all(AppTheme
-        .lightTheme.textTheme.bodyText1!
-        .copyWith(fontWeight: FontWeight.w700)),
+    textStyle: MaterialStateProperty.all(
+      AppTheme.lightTheme.textTheme.bodyText1!.copyWith(
+        fontWeight: FontWeight.w700,
+      ),
+    ),
   );
 
   static final primaryDestructiveTextStyle = textButtonStyle.copyWith(
-    foregroundColor:
-        _resolveWithDisabled(AppColors.negative, AppColors.lightGray),
+    foregroundColor: _resolveWithDisabled(
+      AppColors.negative,
+      AppColors.lightGray,
+    ),
   );
 
   // -- Themes definitions

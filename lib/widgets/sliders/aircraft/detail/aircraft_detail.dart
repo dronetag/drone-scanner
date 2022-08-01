@@ -25,11 +25,13 @@ class AircraftDetail extends StatelessWidget {
     final messagePackList =
         context.watch<AircraftCubit>().packsForDevice(selectedMac) ?? [];
     // empty or was deleted, return to list
-    if (context.watch<AircraftCubit>().packsForDevice(
+    if (context.watch<SelectedAircraftCubit>().state.selectedAircraftMac ==
+            null ||
+        context.watch<AircraftCubit>().packsForDevice(
                   context
                       .watch<SelectedAircraftCubit>()
                       .state
-                      .selectedAircraftMac as String,
+                      .selectedAircraftMac!,
                 ) ==
             null ||
         messagePackList.isEmpty) {
@@ -55,7 +57,6 @@ class AircraftDetail extends StatelessWidget {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
-                    mainAxisSpacing: 0,
                     mainAxisExtent: 50,
                   ),
                   padding: const EdgeInsets.all(3),

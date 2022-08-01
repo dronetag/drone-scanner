@@ -23,7 +23,6 @@ class CustomDropdownButton extends StatelessWidget {
         color: AppColors.droneScannerDarkGray,
       ),
       elevation: 16,
-      underline: null,
       onChanged: valueChangedCallback,
       items: items
           .map(
@@ -31,7 +30,7 @@ class CustomDropdownButton extends StatelessWidget {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),

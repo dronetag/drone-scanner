@@ -26,15 +26,15 @@ class MyHomePage extends StatelessWidget {
           context.read<ShowcaseCubit>().onShowcaseFinish(context);
         },
         builder: Builder(
-          builder: (context) => AnnotatedRegion(
+          builder: (context) => const AnnotatedRegion(
             value: SystemUiOverlayStyle.dark,
-            child: Container(
+            child: ColoredBox(
               color: Colors.white,
               child: SafeArea(
                 top: false,
                 left: false,
                 right: false,
-                child: const Scaffold(
+                child: Scaffold(
                   // ensure the keyboard does not move the content up
                   resizeToAvoidBottomInset: false,
                   body: HomeBody(),
