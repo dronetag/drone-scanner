@@ -22,7 +22,6 @@ class AircraftCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final countryCode =
         messagePack.operatorIdMessage?.operatorId.substring(0, 2);
     final isAirborne =
@@ -46,7 +45,7 @@ class AircraftCard extends StatelessWidget {
         flag = null;
       }
     }
-    final uasIdText = messagePack.basicIdMessage?.uasId != null &&
+    final uasIdText = messagePack.basicIdMessage != null &&
             messagePack.basicIdMessage?.uasId != ''
         ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
