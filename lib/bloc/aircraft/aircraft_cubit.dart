@@ -384,12 +384,22 @@ class AircraftCubit extends Cubit<AircraftState> {
   Future<String> _shareExportFile(String csv, String name) async {
     final directory = await getApplicationDocumentsDirectory();
 
-    final pathOfTheFileToWrite = '${directory.path}/csv_export-$name.csv';
+    late final String pathOfTheFileToWrite;
+    if (Platform.isAndroid) {
+      pathOfTheFileToWrite = '${directory.path}/csv_export-$name.csv';
+    } else {
+      pathOfTheFileToWrite = '${directory.path}/csv_export.csv';
+    }
     var file = File(pathOfTheFileToWrite);
     file = await file.writeAsString(csv);
 
-    await Share.shareFilesWithResult([pathOfTheFileToWrite], text: 'Your Data');
-    return pathOfTheFileToWrite;
+    final result = await Share.shareFilesWithResult([pathOfTheFileToWrite],
+        text: 'Your Data');
+    if (result.status == ShareResultStatus.success) {
+      return pathOfTheFileToWrite;
+    } else {
+      return "";
+    }
   }
 
   void cacheCurrentState() {

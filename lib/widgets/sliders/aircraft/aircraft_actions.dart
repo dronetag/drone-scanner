@@ -28,11 +28,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
       ),
       const PopupMenuItem(
         value: AircraftAction.share,
-        child: Text('Share'),
-      ),
-      const PopupMenuItem(
-        value: AircraftAction.export,
-        child: Text('Export'),
+        child: Text('Export Data'),
       ),
       const PopupMenuItem(
         value: AircraftAction.delete,
@@ -83,7 +79,9 @@ void handleAction(BuildContext context, AircraftAction action) {
           .exportPackToCSV(mac: messagePackList.last.macAddress, save: false)
           .then(
         (value) {
-          showSnackBar(context, 'CSV shared successfuly.');
+          if (value.isNotEmpty) {
+            showSnackBar(context, 'CSV shared successfuly.');
+          }
         },
       );
       break;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../bloc/standards_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../utils/utils.dart';
@@ -90,7 +92,9 @@ class ConnectionFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'Mac Address',
+            headlineText: context.read<StandardsCubit>().state.androidSystem
+                ? 'Mac Address'
+                : 'Identifier',
             fieldText: messagePackList.last.macAddress,
           ),
         ],
