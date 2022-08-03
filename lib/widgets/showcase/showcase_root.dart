@@ -25,7 +25,7 @@ class ShowcaseRoot extends StatelessWidget {
           text: context.read<ShowcaseCubit>().rootDescription,
           startCallback: () {
             final w = ShowCaseWidget.of(context);
-            w?.next();
+            w.next();
           },
           skipCallback: () {
             context

@@ -45,14 +45,14 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
   @override
   void dispose() {
     context.read<MapCubit>().controller?.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override

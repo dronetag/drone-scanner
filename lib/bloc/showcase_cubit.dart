@@ -148,8 +148,8 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     context.read<SlidersCubit>().setShowDroneDetail(show: false);
     context.read<AircraftCubit>().addShowcaseDummyPack();
     context.read<SlidersCubit>().panelController.animatePanelToSnapPoint();
-    WidgetsBinding.instance?.addPostFrameCallback(
-      (_) => ShowCaseWidget.of(context)?.startShowCase(keys),
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ShowCaseWidget.of(context).startShowCase(keys),
     );
   }
 
