@@ -25,7 +25,7 @@ dependencies:
   permission_handler: ^9.2.0
   flutter_spinbox: ^0.8.0
   path_provider: ^2.0.9
-  showcaseview: ^1.1.5
+  showcaseview: ^1.1.7
   shared_preferences: ^2.0.13
   device_info_plus: ^3.2.2
   f_logs: ^2.0.0 
