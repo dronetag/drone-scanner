@@ -15,13 +15,13 @@ class OperatorFields {
   static List<Widget> buildOperatorFields(
     BuildContext context,
     pigeon.SystemDataMessage systemMessage,
-    pigeon.OperatorIdMessage opMessage,
+    pigeon.OperatorIdMessage? opMessage,
   ) {
     final countryCode = opMessage?.operatorId.substring(0, 2);
 
     Image? flag;
+    if (countryCode != null) flag = getFlag(countryCode);
 
-    flag = getFlag(countryCode);
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return [
@@ -44,7 +44,9 @@ class OperatorFields {
                     style: const TextStyle(
                       color: AppColors.droneScannerDetailFieldColor,
                     ),
-                    text: opMessage.operatorId,
+                    text: opMessage != null
+                        ? opMessage.operatorId
+                        : 'Unknown Operator ID',
                   ),
                 ],
               ),
@@ -56,8 +58,8 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Location',
-            fieldText:
-                '${systemMessage.operatorLatitude.toStringAsFixed(3)}, ${systemMessage.operatorLongitude.toStringAsFixed(3)}',
+            fieldText: '${systemMessage.operatorLatitude.toStringAsFixed(3)}, '
+                '${systemMessage.operatorLongitude.toStringAsFixed(3)}',
           ),
           Align(
             alignment: Alignment.centerRight,

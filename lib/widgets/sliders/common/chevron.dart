@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 enum ChevronDirection { upwards, downwards, none, notset }
 
 class Chevron extends CustomPainter {
-  BuildContext? _context;
+  BuildContext? context;
+  Color? color;
   ChevronDirection? _dir;
-  Color? _color;
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (_context == null || _dir == null) return;
+    if (context == null || _dir == null) return;
     final paint = Paint();
-    paint.color = _color ?? Colors.white;
+    paint.color = color ?? Colors.white;
 
     final path = Path();
     if (_dir == ChevronDirection.upwards) {
@@ -26,14 +26,6 @@ class Chevron extends CustomPainter {
 
   set direction(ChevronDirection dir) {
     _dir = dir;
-  }
-
-  set color(Color color) {
-    _color = color;
-  }
-
-  set context(BuildContext? context) {
-    _context = context;
   }
 
   ChevronDirection get direction {

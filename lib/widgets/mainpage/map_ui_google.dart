@@ -177,6 +177,7 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
     );
   }
 
+  // ignore: use_setters_to_change_properties
   void _updateCameraPosition(CameraPosition position) {
     context.read<MapCubit>().position = position;
   }

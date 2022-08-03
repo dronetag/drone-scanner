@@ -38,7 +38,8 @@ class PreferencesPage extends StatelessWidget {
               body: ShowcaseItem(
                 showcaseKey: context.read<ShowcaseCubit>().aboutPageKey,
                 description:
-                    'This page contains infomation about supported standards on your device and additional settings',
+                    'This page contains infomation about supported standards '
+                    'on your device and additional settings',
                 title: 'Preferences',
                 child: ColoredBox(
                   color: Theme.of(context).backgroundColor,
@@ -137,8 +138,9 @@ class PreferencesPage extends StatelessWidget {
         text: 'Standards',
         child: Tooltip(
           triggerMode: TooltipTriggerMode.tap,
-          message:
-              'Each phone may support different standards which the application attemps to use. See which standards are supported on your device.',
+          message: 'Each phone may support different standards which the '
+              'application attemps to use. See which standards are supported '
+              'on your device.',
           child: Icon(
             Icons.help_outline,
             color: AppColors.droneScannerLightGray,
@@ -165,7 +167,8 @@ class PreferencesPage extends StatelessWidget {
             ? const Tooltip(
                 triggerMode: TooltipTriggerMode.tap,
                 message:
-                    'Warning: Support claimed by manufactur does not fully guarantee that Bluetooth Extended actualy will work.',
+                    'Warning: Support claimed by manufactur does not fully '
+                    'guarantee that Bluetooth Extended actualy will work.',
                 child: Icon(
                   Icons.system_security_update_warning,
                   color: AppColors.droneScannerOrange,
@@ -217,7 +220,8 @@ class PreferencesPage extends StatelessWidget {
         child: Tooltip(
           triggerMode: TooltipTriggerMode.tap,
           message:
-              'See what permissions are currently granted with possibility to change them from the system settings.',
+              'See what permissions are currently granted with possibility '
+              'to change them from the system settings.',
           child: Icon(
             Icons.help_outline,
             color: AppColors.droneScannerLightGray,
@@ -281,8 +285,8 @@ class PreferencesPage extends StatelessWidget {
         text: 'Data Preferences',
         child: Tooltip(
           triggerMode: TooltipTriggerMode.tap,
-          message:
-              'The application can delete old records after certain time passes after the last message from device is received.',
+          message: 'The application can delete old records after certain time '
+              'passes after the last message from device is received.',
           child: Icon(
             Icons.help_outline,
             color: AppColors.droneScannerLightGray,
@@ -328,8 +332,8 @@ class PreferencesPage extends StatelessWidget {
       ),
       PreferencesFieldWithDescription(
         label: 'List field preference:',
-        description:
-            'Choose which information your prefer\nto see in the list of aircrafts',
+        description: 'Choose which information your prefer\nto see in the list '
+            'of aircrafts',
         child: SizedBox(
           width: width / 3,
           child: CustomDropdownButton(

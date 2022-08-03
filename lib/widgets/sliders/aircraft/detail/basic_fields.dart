@@ -13,6 +13,14 @@ class BasicFields {
   ) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+    final idTypeString = messagePackList.last.basicIdMessage?.idType.toString();
+    final uaTypeString = messagePackList.last.basicIdMessage?.uaType.toString();
+
+    final idTypeLabel =
+        idTypeString?.replaceAll('IdType.', '').replaceAll('_', ' ');
+    final uaTypeLabel =
+        uaTypeString?.replaceAll('UaType.', '').replaceAll('_', ' ');
+
     return [
       const Headline(text: 'AIRCRAFT'),
       if (isLandscape) const SizedBox(),
@@ -21,14 +29,12 @@ class BasicFields {
           children: [
             AircraftDetailField(
               headlineText: 'UA ID Type',
-              fieldText:
-                  '${messagePackList.last.basicIdMessage?.idType.toString().replaceAll("IdType.", "").replaceAll("_", " ")}',
+              fieldText: idTypeLabel,
             ),
             if (messagePackList.last.basicIdMessage?.uaType != null)
               AircraftDetailField(
                 headlineText: 'UA Type',
-                fieldText:
-                    '${messagePackList.last.basicIdMessage?.uaType.toString().replaceAll("UaType.", "").replaceAll("_", " ")}',
+                fieldText: uaTypeLabel,
               ),
           ],
         ),

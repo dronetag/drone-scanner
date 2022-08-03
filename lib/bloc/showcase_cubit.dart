@@ -49,22 +49,30 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   final GlobalKey lastKey = GlobalKey();
 
   final String rootDescription =
-      'A quick tutorial will guide you through the features of this application step by step.';
+      'A quick tutorial will guide you through the features of this '
+      'application step by step.';
   final String showInfoDescription =
       'Show additional information and settings.';
   final String scanningStateDescription =
-      'Icons show which technology is currently used for scanning.\nTap to start and stop scans.';
+      'Icons show which technology is currently used for scanning.\nTap to '
+      'start and stop scans.';
   final String searchDescription = 'Use the bar to search for locations.';
   final String mapDescription =
-      'Pan, zoom and rotate map with touch gestures, tap on aircraft or zone to highlight.';
+      'Pan, zoom and rotate map with touch gestures, tap on aircraft or zone '
+      'to highlight.';
   final String mapToolbarDescription =
-      'Use the map toolbar to center on your position, change zoom or switch to satellite map';
+      'Use the map toolbar to center on your position, change zoom or switch '
+      'to satellite map';
   final String droneDetailPanelDescription =
-      'After tap on item on list or selecting aircraft from map, see detailed Aircraft information.\nAll the data acquired will be shown here.';
+      'After tap on item on list or selecting aircraft from map, see '
+      'detailed Aircraft information.\nAll the data acquired will be shown '
+      'here.';
   final String droneDetailMoreDescription =
-      'More options are accessible in the menu. Export, share, delete data or lock map center to aircraft.';
+      'More options are accessible in the menu. Export, share, delete data or '
+      'lock map center to aircraft.';
   final String droneListDescription =
-      'Detected aircraft and zones are displayed in a list. Slide panel upwards to maximize.';
+      'Detected aircraft and zones are displayed in a list. Slide panel '
+      'upwards to maximize.';
   final String droneListFilterDescription =
       'Use filter to show aircraft, zones or both.';
   final String droneListSortDescription =

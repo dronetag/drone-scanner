@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
-import 'package:http/http.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';

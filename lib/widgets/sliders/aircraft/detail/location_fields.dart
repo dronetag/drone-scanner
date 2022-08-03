@@ -95,7 +95,8 @@ class LocationFields {
           AircraftDetailField(
             headlineText: 'Location',
             fieldText: loc != null
-                ? '${loc.latitude?.toStringAsFixed(6)}, ${loc.longitude?.toStringAsFixed(6)}'
+                ? '${loc.latitude?.toStringAsFixed(6)}, '
+                    '${loc.longitude?.toStringAsFixed(6)}'
                 : 'Unknown',
           ),
           Align(
