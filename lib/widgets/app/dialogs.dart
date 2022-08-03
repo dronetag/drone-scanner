@@ -43,11 +43,11 @@ void showAlertDialog(
 void showSnackBar(
   BuildContext context,
   String snackBarText, {
-  Color textColor = AppColors.droneScannerDarkGray,
+  Color textColor = Colors.white,
 }) {
   final snackBar = SnackBar(
     elevation: MediaQuery.of(context).size.height / 2,
-    backgroundColor: Colors.white,
+    backgroundColor: AppColors.droneScannerDarkGray.withOpacity(0.7),
     duration: const Duration(milliseconds: 1500),
     behavior: SnackBarBehavior.floating,
     content: Text(
@@ -55,7 +55,7 @@ void showSnackBar(
       style: TextStyle(color: textColor),
     ),
     margin: EdgeInsets.only(
-      bottom: MediaQuery.of(context).size.height / 2,
+      bottom: MediaQuery.of(context).size.height / 10,
       right: Sizes.mapContentMargin,
       left: Sizes.mapContentMargin,
     ),
