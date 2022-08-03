@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:http/http.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
+import '../../../../bloc/standards_cubit.dart';
+import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import 'basic_fields.dart';
 import 'connection_fields.dart';
@@ -40,13 +43,18 @@ class AircraftDetail extends StatelessWidget {
     }
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final maxSliderHeight = maxSliderSize(
+      height: height,
+      statusBarHeight: MediaQuery.of(context).viewPadding.top,
+      androidSystem: context.read<StandardsCubit>().state.androidSystem,
+    );
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = isLandscape ? height / 6 : height / 12;
     final dataChildren = buildChildren(context, messagePackList);
     return Padding(
       padding: EdgeInsets.only(
-        top: isLandscape ? height / 5 : height / 20,
+        top: 0,
         left: width / 20,
         right: width / 20,
       ),
@@ -54,12 +62,12 @@ class AircraftDetail extends StatelessWidget {
           //title: buildTitle(context, messagePackList),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? GridView.builder(
+                  padding: EdgeInsets.only(top: headerHeight),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisExtent: 50,
                   ),
-                  padding: const EdgeInsets.all(3),
                   shrinkWrap: true,
                   itemCount: dataChildren.length,
                   itemBuilder: (context, index) {
@@ -73,16 +81,10 @@ class AircraftDetail extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: context.watch<SlidersCubit>().isAtSnapPoint()
-                          ? (height -
-                                  (MediaQuery.of(context).viewPadding.top +
-                                      height / 20) -
-                                  headerHeight) *
-                              0.3
-                          : height -
-                              (MediaQuery.of(context).viewPadding.top +
-                                  height / 20) -
-                              headerHeight,
+                          ? (maxSliderHeight) * 0.3
+                          : maxSliderHeight,
                       child: ListView.builder(
+                        padding: EdgeInsets.only(top: headerHeight),
                         itemCount: dataChildren.length,
                         itemBuilder: (context, index) => dataChildren[index],
                       ),

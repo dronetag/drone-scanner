@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
+import '../../bloc/standards_cubit.dart';
 import '../../constants/sizes.dart';
+import '../../utils/utils.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/airspace_sliding_panel.dart';
 import '../toolbars/toolbar.dart';
@@ -36,8 +38,11 @@ class HomeBody extends StatelessWidget {
           child: const Toolbar(),
         ),
         AirspaceSlidingPanel(
-          maxSize:
-              height - (MediaQuery.of(context).viewPadding.top + height / 20),
+          maxSize: maxSliderSize(
+            height: height,
+            statusBarHeight: MediaQuery.of(context).viewPadding.top,
+            androidSystem: context.read<StandardsCubit>().state.androidSystem,
+          ),
           minSize: isLandscape
               ? height / Sizes.toolbarMinSizeRatioLandscape
               : height / Sizes.toolbarMinSizeRatioPortrait,

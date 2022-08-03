@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
+import '../../../../utils/utils.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
+import '../../../bloc/standards_cubit.dart';
 import '../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../bloc/zones/zones_cubit.dart';
 import '../../showcase/showcase_item.dart';
@@ -29,57 +31,51 @@ class AirspaceList extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = isLandscape ? height / 6 : height / 12;
+    final maxSliderHeight = maxSliderSize(
+      height: height,
+      statusBarHeight: MediaQuery.of(context).viewPadding.top,
+      androidSystem: context.read<StandardsCubit>().state.androidSystem,
+    );
     final children = buildListChildren(context);
     return ShowcaseItem(
       showcaseKey: context.read<ShowcaseCubit>().droneListKey,
       description: context.read<ShowcaseCubit>().droneListDescription,
       title: 'List Panel',
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: isLandscape ? height / 10 : height / 20,
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: NotificationListener<OverscrollNotification>(
-                onNotification: (value) {
-                  // close on overscroll
-                  context.read<SlidersCubit>().closeSlider();
-                  return true;
-                },
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: context.watch<SlidersCubit>().isAtSnapPoint()
-                          ? (height -
-                                  (MediaQuery.of(context).viewPadding.top +
-                                      height / 20) -
-                                  headerHeight) *
-                              0.3
-                          : height -
-                              (MediaQuery.of(context).viewPadding.top +
-                                  height / 20) -
-                              headerHeight,
-                      child: ListView.separated(
-                        itemCount: children.length,
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return children[index];
-                        },
-                        separatorBuilder: (context, _) {
-                          return Divider(
-                            color: Theme.of(context).colorScheme.secondary,
-                          );
-                        },
-                      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: NotificationListener<OverscrollNotification>(
+              onNotification: (value) {
+                // close on overscroll
+                context.read<SlidersCubit>().closeSlider();
+                return true;
+              },
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: context.watch<SlidersCubit>().isAtSnapPoint()
+                        ? (maxSliderHeight) * 0.3
+                        : maxSliderHeight,
+                    child: ListView.separated(
+                      padding: EdgeInsets.only(top: headerHeight),
+                      itemCount: children.length,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return children[index];
+                      },
+                      separatorBuilder: (context, _) {
+                        return Divider(
+                          color: Theme.of(context).colorScheme.secondary,
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

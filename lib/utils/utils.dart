@@ -4,6 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
 
+double maxSliderSize({
+  required double height,
+  required double statusBarHeight,
+  required bool androidSystem,
+}) {
+  if (androidSystem) {
+    return height - (statusBarHeight + 10);
+  } else {
+    return height - (statusBarHeight + height / 20);
+  }
+}
+
 double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   const p = 0.017453292519943295;
   const c = math.cos;

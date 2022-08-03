@@ -398,7 +398,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     if (result.status == ShareResultStatus.success) {
       return pathOfTheFileToWrite;
     } else {
-      return "";
+      return '';
     }
   }
 
