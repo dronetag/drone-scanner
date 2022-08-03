@@ -1,11 +1,19 @@
+<img src="assets/images/icon.png" width="96" />
+
 # Drone Scanner
 
 Drone Scanner is an application for scanning surroundings for data broadcasted by Unmanned Aerial Vehicle, such as identification and location. It gathers the data and presents them to user on map.
 
-
 Drone Scanner can track all the nearby flights over Direct Remote ID standards. Browse real-time data about drones on a detailed map highlighting specific flying space zones. Download Drone Scanner for free and discover what drones fly above your head.
 
-Features:
+---
+
+> 💡 _This README is a work-in-progress and will be soon updated with all necessary information about the application architecture, ways to build the project, and ways to contribute to this project._
+
+---
+
+## Features
+
 - Discover drones flying nearby in real-time
 - Examine detailed information broadcasted by drones via Bluetooth 4, Bluetooth 5, Wi-Fi Beacon, and Wi-Fi NAN
 - Browse a detailed map with your location and all nearby aircraft
@@ -13,6 +21,11 @@ Features:
 - Various flying zones marked and highlighted on the map
 - Easy export of collected data
 - Continuously updated to reflect the latest EU & US regulations
+
+## Screenshots
+
+<img src="assets/screenshots/IMG_9743.PNG" height="400" />
+<img src="assets/screenshots/IMG_9744.PNG" height="400" />
 
 
 ## Getting Started

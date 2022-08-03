@@ -1,9 +1,13 @@
 name: drone_scanner
-description: An application for scanning nearby Remote ID advertisements using Bluetooth and Wi-Fi.
+description: >
+  Multi-platform mobile application for receiving Remote ID information
+  broadcasted by nearby UAVs, compatible with ASTM F3411, ASD-STAN prEN
+  4709-002 standards
+repository: https://github.com/dronetag/drone-scanner
+issue_tracker: https://github.com/dronetag/drone-scanner/issues
+version: 0.2.0
 
-version: 0.1.0+1
-publish_to: 'none'
-
+publish_to: none
 environment:
   sdk: '>=2.12.0 <3.0.0'
   flutter: ^3.0.4
