@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const toolbarOpacity = 0.75;
+  static const toolbarOpacity = 0.8;
   // drone scanner colors
   static const darkGray = Color.fromARGB(255, 22, 24, 25);
   static const dark = Color(0xff586065);
