@@ -42,26 +42,25 @@ class _ToolbarState extends State<Toolbar> {
         vertical: statusBarHeight + Sizes.mapContentMargin,
         horizontal: Sizes.mapContentMargin,
       ),
+      padding: EdgeInsets.symmetric(horizontal: Sizes.toolbarMargin),
       height: Sizes.toolbarHeight,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const SizedBox(
-            width: 10,
-          ),
           const Expanded(
             flex: 2,
             // source: https://www.fluttercampus.com/guide/254/google-map-autocomplete-place-search-flutter/
             child: LocationSearch(),
           ),
-          ShowcaseItem(
-            showcaseKey: context.read<ShowcaseCubit>().scanningStateKey,
-            description: context.read<ShowcaseCubit>().scanningStateDescription,
-            title: 'Map Toolbar',
-            child: const ScanningStateIcons(),
-          ),
-          const SizedBox(
-            width: 5,
+          Expanded(
+            flex: 1,
+            child: ShowcaseItem(
+              showcaseKey: context.read<ShowcaseCubit>().scanningStateKey,
+              description:
+                  context.read<ShowcaseCubit>().scanningStateDescription,
+              title: 'Map Toolbar',
+              child: const ScanningStateIcons(),
+            ),
           ),
           ShowcaseItem(
             showcaseKey: context.read<ShowcaseCubit>().showInfoKey,
@@ -76,7 +75,7 @@ class _ToolbarState extends State<Toolbar> {
                 );
               },
               elevation: 0,
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(0),
               constraints: const BoxConstraints(),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               fillColor: Colors.transparent,
@@ -86,9 +85,6 @@ class _ToolbarState extends State<Toolbar> {
                 size: Sizes.iconSize,
               ),
             ),
-          ),
-          const SizedBox(
-            width: 10,
           ),
         ],
       ),

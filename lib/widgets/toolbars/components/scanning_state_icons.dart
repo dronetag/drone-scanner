@@ -16,6 +16,7 @@ class ScanningStateIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         BlocBuilder<OpendroneIdCubit, ScanningState>(
           builder: (context, state) {
@@ -46,7 +47,7 @@ class ScanningStateIcons extends StatelessWidget {
                   }
                 });
               },
-              padding: const EdgeInsets.all(8),
+              //padding: const EdgeInsets.all(8),
               constraints: const BoxConstraints(),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               shape: const CircleBorder(),
@@ -59,9 +60,6 @@ class ScanningStateIcons extends StatelessWidget {
               ),
             );
           },
-        ),
-        const SizedBox(
-          width: 5,
         ),
         // wifi not supported on iOS at all
         if (context.watch<StandardsCubit>().state.androidSystem)
@@ -84,7 +82,7 @@ class ScanningStateIcons extends StatelessWidget {
                   }
                   showSnackBar(context, snackBarText);
                 },
-                padding: const EdgeInsets.all(8),
+                //padding: const EdgeInsets.all(8),
                 constraints: const BoxConstraints(),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 shape: const CircleBorder(),
