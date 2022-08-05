@@ -23,9 +23,6 @@ class NumDronesText extends StatelessWidget {
               Radius.circular(5),
             ),
           ),
-          padding: const EdgeInsets.only(
-            top: 2,
-          ),
           width: 20,
           height: 20,
           child: Text(
@@ -37,7 +34,10 @@ class NumDronesText extends StatelessWidget {
             ),
           ),
         ),
-        Text(numPacksText),
+        Text(
+          numPacksText,
+          textScaleFactor: 0.9,
+        ),
       ],
     );
   }

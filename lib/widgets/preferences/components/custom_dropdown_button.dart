@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
 
 class CustomDropdownButton extends StatelessWidget {
   final String value;
@@ -16,27 +17,34 @@ class CustomDropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: value,
-      icon: const Icon(
-        Icons.arrow_downward,
-        color: AppColors.darkGray,
-      ),
-      elevation: 16,
-      onChanged: valueChangedCallback,
-      items: items
-          .map(
-            (value) => DropdownMenuItem(
-              value: value,
-              child: Text(
-                value,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        value: value,
+        icon: RotatedBox(
+          quarterTurns: 3,
+          child: const Icon(
+            Icons.chevron_left,
+            color: AppColors.darkGray,
+            size: Sizes.iconSize,
+          ),
+        ),
+        elevation: 16,
+        onChanged: valueChangedCallback,
+        items: items
+            .map(
+              (value) => DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value,
+                  textScaleFactor: 0.9,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
-          )
-          .toList(),
+            )
+            .toList(),
+      ),
     );
   }
 }

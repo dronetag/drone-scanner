@@ -35,6 +35,10 @@ class AirspaceListHeader extends StatelessWidget {
           ? ChevronDirection.downwards
           : ChevronDirection.upwards;
     }
+    const labelStyle = TextStyle(
+      fontWeight: FontWeight.w600,
+      color: AppColors.lightGray,
+    );
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -64,29 +68,49 @@ class AirspaceListHeader extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // hide zones, fix later
-                  /*
-                  const Text("Show:"),
-                  buildFilterCombo(context),
-                  */
                   const NumDronesText(),
+                  // filtering is not useful, uncomment when zones are implemented
+                  /*
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: Row(
                       children: [
                         const SizedBox(),
                         if (context.watch<SlidersCubit>().state.filterValue !=
                             FilterValue.zones)
-                          const Text('Sort by'),
+                          const Text(
+                            'Show',
+                            textScaleFactor: 0.9,
+                            style: labelStyle,
+                          ),
                         const SizedBox(
                           width: 5,
                         ),
                         if (context.read<SlidersCubit>().state.filterValue !=
                             FilterValue.zones)
-                          buildSortCombo(context),
+                          buildFilterCombo(context),
                       ],
                     ),
+                  ),*/
+                  Row(
+                    children: [
+                      const SizedBox(),
+                      if (context.watch<SlidersCubit>().state.filterValue !=
+                          FilterValue.zones)
+                        const Text(
+                          'Sort by',
+                          textScaleFactor: 0.9,
+                          style: labelStyle,
+                        ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      if (context.read<SlidersCubit>().state.filterValue !=
+                          FilterValue.zones)
+                        buildSortCombo(context),
+                    ],
                   ),
+
                   const SizedBox(
                     width: 10,
                   ),
