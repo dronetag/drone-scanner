@@ -32,76 +32,71 @@ class MapOptionsToolbar extends StatelessWidget {
           description: context.read<ShowcaseCubit>().mapToolbarDescription,
           title: 'Map Options',
           child: Container(
+            padding: EdgeInsets.zero,
             decoration: BoxDecoration(
               color: AppColors.lightGray.withOpacity(0.5),
               borderRadius: const BorderRadius.all(
                 Radius.circular(Sizes.panelBorderRadius),
               ),
               boxShadow: const <BoxShadow>[
-                BoxShadow(blurRadius: 10.0, color: Color.fromRGBO(0, 0, 0, 0.1))
+                BoxShadow(
+                  blurRadius: 10.0,
+                  color: Color.fromRGBO(0, 0, 0, 0.1),
+                )
               ],
             ),
             height: toolbarHeight,
             width: toolbarWidth,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: [
-                SizedBox(
-                  width: toolbarWidth,
-                  height: toolbarHeight / 3,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    iconSize: Sizes.iconSize,
-                    onPressed: () {
-                      context.read<MapCubit>().centerToUser();
-                    },
-                    icon: const Icon(
-                      Icons.location_searching,
-                    ),
+                IconButton(
+                  constraints: BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  iconSize: Sizes.iconSize,
+                  onPressed: () {
+                    context.read<MapCubit>().centerToUser();
+                  },
+                  icon: const Icon(
+                    Icons.location_searching,
                   ),
                 ),
-                SizedBox(
-                  width: toolbarWidth,
-                  height: toolbarHeight / 3,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      if (context.read<MapCubit>().state.mapStyle ==
-                          MapType.normal) {
-                        context.read<MapCubit>().setMapStyle(MapType.satellite);
-                      } else {
-                        context.read<MapCubit>().setMapStyle(MapType.normal);
-                      }
-                    },
-                    iconSize: Sizes.iconSize,
-                    icon: const Icon(Icons.layers),
-                  ),
+                IconButton(
+                  constraints: BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    if (context.read<MapCubit>().state.mapStyle ==
+                        MapType.normal) {
+                      context.read<MapCubit>().setMapStyle(MapType.satellite);
+                    } else {
+                      context.read<MapCubit>().setMapStyle(MapType.normal);
+                    }
+                  },
+                  iconSize: Sizes.iconSize,
+                  icon: const Icon(Icons.layers),
                 ),
-                SizedBox(
-                  width: toolbarWidth,
-                  height: toolbarHeight / 3,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      showAlertDialog(
-                        context,
-                        'Are you sure you want to delete all gathered data?',
-                        () {
-                          context
-                              .read<SlidersCubit>()
-                              .setShowDroneDetail(show: false);
-                          context.read<AircraftCubit>().clear();
-                          showSnackBar(
-                            context,
-                            'All the gathered aircraft data were deleted.',
-                          );
-                        },
-                      );
-                    },
-                    iconSize: Sizes.iconSize,
-                    icon: const Icon(Icons.delete),
-                  ),
+                IconButton(
+                  constraints: BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    showAlertDialog(
+                      context,
+                      'Are you sure you want to delete all gathered data?',
+                      () {
+                        context
+                            .read<SlidersCubit>()
+                            .setShowDroneDetail(show: false);
+                        context.read<AircraftCubit>().clear();
+                        showSnackBar(
+                          context,
+                          'All the gathered aircraft data were deleted.',
+                        );
+                      },
+                    );
+                  },
+                  iconSize: Sizes.iconSize,
+                  icon: const Icon(Icons.delete),
                 ),
               ],
             ),
