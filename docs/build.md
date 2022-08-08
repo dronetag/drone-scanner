@@ -1,7 +1,7 @@
 
 ## Dependencies
 
-- GoogleMaps 
+- GoogleMaps [pub.dev][]
 - ShowcaseView
 
 ## Google Maps
