@@ -45,13 +45,16 @@ class PreferencesPage extends StatelessWidget {
                   color: Theme.of(context).backgroundColor,
                   child: Padding(
                     padding: isLandscape
-                        ? const EdgeInsets.only(
+                        ? EdgeInsets.only(
+                            top: MediaQuery.of(context).viewPadding.top,
                             bottom: 5,
                             left: Sizes.mapContentMargin,
                             right: Sizes.mapContentMargin,
                           )
-                        : const EdgeInsets.symmetric(
-                            horizontal: Sizes.mapContentMargin,
+                        : EdgeInsets.only(
+                            top: MediaQuery.of(context).viewPadding.top,
+                            left: Sizes.mapContentMargin,
+                            right: Sizes.mapContentMargin,
                           ),
                     child: isLandscape
                         ? GridView.builder(
@@ -70,8 +73,12 @@ class PreferencesPage extends StatelessWidget {
                               );
                             },
                           )
-                        : ListView(
-                            children: itemList,
+                        : ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) => Padding(
+                                padding: EdgeInsets.only(bottom: 8),
+                                child: itemList[index]),
+                            itemCount: itemList.length,
                           ),
                   ),
                 ),
@@ -130,6 +137,7 @@ class PreferencesPage extends StatelessWidget {
           child: Text(
             'Preferences',
             textScaleFactor: 2,
+            style: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -223,37 +231,38 @@ class PreferencesPage extends StatelessWidget {
       ),
       if (isLandscape) const SizedBox(),
       PreferencesField(
-        label: 'Wi-Fi:',
+        label: 'Wi-Fi',
         text: state.androidSystem ? 'Granted' : 'Not Granted',
         color: state.androidSystem ? AppColors.green : AppColors.red,
         icon: state.androidSystem ? positiveIcon : negativeIcon,
       ),
       PreferencesField(
-        label: 'Location:',
+        label: 'Location',
         text: state.locationEnabled ? 'Granted' : 'Not Granted',
         color: state.locationEnabled ? AppColors.green : AppColors.red,
         icon: state.locationEnabled ? positiveIcon : negativeIcon,
       ),
       PreferencesField(
-        label: 'Bluetooth:',
+        label: 'Bluetooth',
         text: state.btEnabled ? 'Granted' : 'Not Granted',
         color: state.btEnabled ? AppColors.green : AppColors.red,
         icon: state.btEnabled ? positiveIcon : negativeIcon,
       ),
       if (isLandscape) const SizedBox(),
-      Align(
-        child: SizedBox(
-          width: width / 2,
-          child: ElevatedButton(
-            onPressed: AppSettings.openAppSettings,
-            style: buttonStyle,
-            child: const Text(
-              'Open App Settings',
-              textAlign: TextAlign.center,
+      if (state.androidSystem)
+        Align(
+          child: SizedBox(
+            width: width / 2,
+            child: ElevatedButton(
+              onPressed: AppSettings.openAppSettings,
+              style: buttonStyle,
+              child: const Text(
+                'Open App Settings',
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ),
-      ),
       Align(
         child: SizedBox(
           width: width / 2,
@@ -320,22 +329,19 @@ class PreferencesPage extends StatelessWidget {
         label: 'List field preference:',
         description: 'Choose which information your prefer\nto see in the list '
             'of aircrafts',
-        child: SizedBox(
-          width: width / 3,
-          child: CustomDropdownButton(
-            value:
-                context.watch<SlidersCubit>().state.listFieldPreferenceString(),
-            valueChangedCallback: (newValue) {
-              if (newValue != null) {
-                context.read<SlidersCubit>().setListFieldPreference(newValue);
-              }
-            },
-            items: const [
-              'Distance',
-              'Location',
-              'Speed',
-            ],
-          ),
+        child: CustomDropdownButton(
+          value:
+              context.watch<SlidersCubit>().state.listFieldPreferenceString(),
+          valueChangedCallback: (newValue) {
+            if (newValue != null) {
+              context.read<SlidersCubit>().setListFieldPreference(newValue);
+            }
+          },
+          items: const [
+            'Distance',
+            'Location',
+            'Speed',
+          ],
         ),
       ),
       Align(

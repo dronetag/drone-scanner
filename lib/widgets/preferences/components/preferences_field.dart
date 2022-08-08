@@ -23,6 +23,9 @@ class PreferencesField extends StatelessWidget {
         children: [
           Text(
             label,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+            ),
           ),
           const Spacer(),
           icon,
@@ -33,6 +36,7 @@ class PreferencesField extends StatelessWidget {
             text,
             style: TextStyle(
               color: color,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
