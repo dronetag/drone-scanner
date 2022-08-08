@@ -5,6 +5,8 @@ Drone Scanner is an application for scanning surroundings for data broadcasted b
 
 Drone Scanner can track all the nearby flights over Direct Remote ID standards. Browse real-time data about drones on a detailed map highlighting specific flying space zones. 
 
+The application was inspired by [OpenDroneID Android receiver application](https://github.com/opendroneid/receiver-android).
+
 For more in-depth description, refer to documentation folder.
 
 ## Documentation Contents
