@@ -89,16 +89,15 @@ class ConnectionFields {
           ),
         ],
       ),
-      AircraftDetailRow(
-        children: [
-          AircraftDetailField(
-            headlineText: context.read<StandardsCubit>().state.androidSystem
-                ? 'Mac Address'
-                : 'Identifier',
-            fieldText: messagePackList.last.macAddress,
-          ),
-        ],
-      ),
+      if (context.read<StandardsCubit>().state.androidSystem)
+        AircraftDetailRow(
+          children: [
+            AircraftDetailField(
+              headlineText: 'Mac Address',
+              fieldText: messagePackList.last.macAddress,
+            ),
+          ],
+        ),
       AircraftDetailRow(
         children: [
           AircraftRefresingField(

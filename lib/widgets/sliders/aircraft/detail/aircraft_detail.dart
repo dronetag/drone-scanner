@@ -102,14 +102,7 @@ class AircraftDetail extends StatelessWidget {
     return [
       ...ConnectionFields.buildConnectionFields(context, messagePackList),
       ...BasicFields.buildBasicFields(context, messagePackList),
-      if (messagePackList.last.systemDataValid())
-        ...OperatorFields.buildOperatorFields(
-          context,
-          messagePackList.last.systemDataMessage!,
-          messagePackList.last.operatorIDValid()
-              ? messagePackList.last.operatorIdMessage!
-              : null,
-        ),
+      ...LocationFields.buildLocationFields(context, loc),
       if (context.watch<ShowcaseCubit>().state.showcaseActive)
         ShowcaseItem(
           //padding: EdgeInsets.only(top: -headerHeight),
@@ -119,7 +112,14 @@ class AircraftDetail extends StatelessWidget {
           title: 'Aircraft Detail',
           child: Container(),
         ),
-      ...LocationFields.buildLocationFields(context, loc),
+      if (messagePackList.last.systemDataValid())
+        ...OperatorFields.buildOperatorFields(
+          context,
+          messagePackList.last.systemDataMessage!,
+          messagePackList.last.operatorIDValid()
+              ? messagePackList.last.operatorIdMessage!
+              : null,
+        ),
     ];
   }
 }

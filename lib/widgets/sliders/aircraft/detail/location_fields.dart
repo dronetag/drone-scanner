@@ -18,6 +18,7 @@ class LocationFields {
     pigeon.LocationMessage? loc,
   ) {
     double? distanceFromMe;
+    late final String distanceText;
     if (context.read<StandardsCubit>().state.locationEnabled &&
         loc != null &&
         loc.latitude != null &&
@@ -28,6 +29,13 @@ class LocationFields {
         context.read<MapCubit>().state.userLocation.latitude,
         context.read<MapCubit>().state.userLocation.longitude,
       );
+      if (distanceFromMe > 1) {
+        distanceText = '${distanceFromMe.toStringAsFixed(3)} km';
+      } else {
+        distanceText = '${(distanceFromMe * 1000).toStringAsFixed(1)} m';
+      }
+    } else {
+      distanceText = 'Unknown';
     }
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -95,8 +103,8 @@ class LocationFields {
           AircraftDetailField(
             headlineText: 'Location',
             fieldText: loc != null
-                ? '${loc.latitude?.toStringAsFixed(6)}, '
-                    '${loc.longitude?.toStringAsFixed(6)}'
+                ? '${loc.latitude?.toStringAsFixed(4)}, '
+                    '${loc.longitude?.toStringAsFixed(4)}'
                 : 'Unknown',
           ),
           Align(
@@ -120,35 +128,9 @@ class LocationFields {
           ),
         ],
       ),
-      if (context.read<StandardsCubit>().state.locationEnabled &&
-          distanceFromMe != null)
-        AircraftDetailField(
-          headlineText: 'Distance from me',
-          fieldText: '${distanceFromMe.toStringAsFixed(6)} km',
-        ),
-      AircraftDetailRow(
-        children: [
-          AircraftDetailField(
-            headlineText: 'Altitude Press',
-            fieldText: getAltitudeAsString(loc?.altitudePressure),
-          ),
-          AircraftDetailField(
-            headlineText: 'Altitude Geod.',
-            fieldText: getAltitudeAsString(loc?.altitudeGeodetic),
-          ),
-        ],
-      ),
-      AircraftDetailRow(
-        children: [
-          AircraftDetailField(
-            headlineText: 'Horizontal Accuracy',
-            fieldText: horizontalAccuracyToString(loc?.horizontalAccuracy),
-          ),
-          AircraftDetailField(
-            headlineText: 'Vertical Accuracy',
-            fieldText: verticalAccuracyToString(loc?.verticalAccuracy),
-          ),
-        ],
+      AircraftDetailField(
+        headlineText: 'Distance from me',
+        fieldText: distanceText,
       ),
       AircraftDetailRow(
         children: [
@@ -167,6 +149,18 @@ class LocationFields {
       ),
       AircraftDetailRow(
         children: [
+          AircraftDetailField(
+            headlineText: 'Altitude Press',
+            fieldText: getAltitudeAsString(loc?.altitudePressure),
+          ),
+          AircraftDetailField(
+            headlineText: 'Altitude Geod.',
+            fieldText: getAltitudeAsString(loc?.altitudeGeodetic),
+          ),
+        ],
+      ),
+      AircraftDetailRow(
+        children: [
           if (loc != null && loc.speedHorizontal != null)
             AircraftDetailField(
               headlineText: 'Horizontal Speed',
@@ -177,6 +171,18 @@ class LocationFields {
               headlineText: 'Vertical Speed',
               fieldText: '${loc.speedVertical} m/s',
             ),
+        ],
+      ),
+      AircraftDetailRow(
+        children: [
+          AircraftDetailField(
+            headlineText: 'Horizontal Accuracy',
+            fieldText: horizontalAccuracyToString(loc?.horizontalAccuracy),
+          ),
+          AircraftDetailField(
+            headlineText: 'Vertical Accuracy',
+            fieldText: verticalAccuracyToString(loc?.verticalAccuracy),
+          ),
         ],
       ),
       AircraftDetailRow(

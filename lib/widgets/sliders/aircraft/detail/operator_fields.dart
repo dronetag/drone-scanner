@@ -4,6 +4,7 @@ import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
+import '../../../../bloc/standards_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
@@ -18,6 +19,23 @@ class OperatorFields {
     pigeon.OperatorIdMessage? opMessage,
   ) {
     final countryCode = opMessage?.operatorId.substring(0, 2);
+    double? distanceFromMe;
+    late final String distanceText;
+    if (context.read<StandardsCubit>().state.locationEnabled) {
+      distanceFromMe = calculateDistance(
+        systemMessage.operatorLatitude,
+        systemMessage.operatorLongitude,
+        context.read<MapCubit>().state.userLocation.latitude,
+        context.read<MapCubit>().state.userLocation.longitude,
+      );
+      if (distanceFromMe > 1) {
+        distanceText = '${distanceFromMe.toStringAsFixed(3)} km';
+      } else {
+        distanceText = '${(distanceFromMe * 1000).toStringAsFixed(1)} m';
+      }
+    } else {
+      distanceText = 'Unknown';
+    }
 
     Image? flag;
     if (countryCode != null) flag = getFlag(countryCode);
@@ -58,8 +76,8 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Location',
-            fieldText: '${systemMessage.operatorLatitude.toStringAsFixed(3)}, '
-                '${systemMessage.operatorLongitude.toStringAsFixed(3)}',
+            fieldText: '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
+                '${systemMessage.operatorLongitude.toStringAsFixed(4)}',
           ),
           Align(
             alignment: Alignment.centerRight,
@@ -77,6 +95,10 @@ class OperatorFields {
             ),
           ),
         ],
+      ),
+      AircraftDetailField(
+        headlineText: 'Distance from me',
+        fieldText: distanceText,
       ),
       AircraftDetailRow(
         children: [
