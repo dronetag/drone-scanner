@@ -16,7 +16,7 @@ For more in-depth description, refer to documentation folder.
 * [Code Architecture](./docs/architecture.md)
     * Declares the directory structure and overall architecture
 * [Project Setup and Building](./docs/build.md)
-    * Insturctions of how to setup and build the project
+    * Instructions on how to setup and build the project, information about used dependencies
     
 ## Other resources
 
@@ -30,10 +30,7 @@ Useful resources for any Flutter developer
 
 ---
 
-## Screenshots
-
-<img src="assets/screenshots/IMG_9743.PNG" height="400" />
-<img src="assets/screenshots/IMG_9744.PNG" height="400" />
+<img src="/assets/screenshots/app-usage.gif" height="400" />
 
 ---
 
