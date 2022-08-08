@@ -54,8 +54,7 @@ class AircraftCard extends StatelessWidget {
       opacity: isAirborne ? 1.0 : 0.75,
       child: ListTile(
         minLeadingWidth: 0,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+        contentPadding: EdgeInsets.zero,
         leading: buildLeading(context),
         trailing: buildTrailing(context),
         title: AircraftCardTitle(

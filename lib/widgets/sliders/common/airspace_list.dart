@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:http/http.dart';
 
 import '../../../../utils/utils.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
@@ -11,6 +12,8 @@ import '../../../bloc/sliders_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../bloc/zones/zones_cubit.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
 import '../../showcase/showcase_item.dart';
 import '../aircraft/aircraft_card.dart';
 import '../zones/zone_card.dart';
@@ -52,12 +55,15 @@ class AirspaceList extends StatelessWidget {
               },
               child: Column(
                 children: [
-                  SizedBox(
+                  Container(
+                    margin: EdgeInsets.only(top: headerHeight),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Sizes.mapContentMargin),
                     height: context.watch<SlidersCubit>().isAtSnapPoint()
-                        ? (maxSliderHeight) * 0.3
-                        : maxSliderHeight,
+                        ? (maxSliderHeight) * 0.3 - headerHeight
+                        : maxSliderHeight - headerHeight,
                     child: ListView.separated(
-                      padding: EdgeInsets.only(top: headerHeight),
+                      padding: EdgeInsets.zero,
                       itemCount: children.length,
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
@@ -66,7 +72,7 @@ class AirspaceList extends StatelessWidget {
                       },
                       separatorBuilder: (context, _) {
                         return Divider(
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: AppColors.droneScannerLightGray,
                         );
                       },
                     ),

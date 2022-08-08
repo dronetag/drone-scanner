@@ -57,8 +57,8 @@ class AirspaceListHeader extends StatelessWidget {
               painter: chevron,
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 5),
-                width: headerHeight / 5 * 3,
-                height: headerHeight / 10,
+                width: width / 8,
+                height: headerHeight / 15,
               ),
             ),
           ),
@@ -69,7 +69,7 @@ class AirspaceListHeader extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const NumDronesText(),
-                  // filtering is not useful, uncomment when zones are implemented
+                  // filtering is not used, uncomment when zones are implemented
                   /*
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -111,14 +111,14 @@ class AirspaceListHeader extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(
+                  /*const SizedBox(
                     width: 10,
                   ),
                   if (context.read<SlidersCubit>().state.filterValue ==
                       FilterValue.zones)
                     SizedBox(
                       width: width / 3,
-                    ),
+                    ),*/
                 ],
               ),
             ),

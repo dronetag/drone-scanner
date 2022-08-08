@@ -78,12 +78,13 @@ class AircraftDetail extends StatelessWidget {
                 )
               : Column(
                   children: [
-                    SizedBox(
+                    Container(
+                      margin: EdgeInsets.only(top: headerHeight),
                       height: context.watch<SlidersCubit>().isAtSnapPoint()
-                          ? (maxSliderHeight) * 0.3
-                          : maxSliderHeight,
+                          ? maxSliderHeight * 0.3 - headerHeight
+                          : maxSliderHeight - headerHeight,
                       child: ListView.builder(
-                        padding: EdgeInsets.only(top: headerHeight),
+                        padding: EdgeInsets.zero,
                         itemCount: dataChildren.length,
                         itemBuilder: (context, index) => dataChildren[index],
                       ),
