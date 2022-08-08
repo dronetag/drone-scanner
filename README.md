@@ -31,7 +31,7 @@ Useful resources for any Flutter developer
 ---
 
 <p float="middle">
-<img src="/assets/screenshots/app-usage.gif" height="400" />
+<img src="/assets/screenshots/app-usage.gif"/>
 </p>
 
 ---
