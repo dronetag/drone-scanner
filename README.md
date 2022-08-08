@@ -22,6 +22,10 @@ Drone Scanner can track all the nearby flights over Direct Remote ID standards. 
 - Easy export of collected data
 - Continuously updated to reflect the latest EU & US regulations
 
+### Supported smartphones
+
+- the ability of a phone to receive Bluetooth 5 Extended Advertisements must be proven experimentally. A list of smartphones that have been tested for receiving Remote ID signals is available [here](hhttps://github.com/opendroneid/receiver-android/blob/master/supported-smartphones.md).
+
 ## Screenshots
 
 <img src="assets/screenshots/IMG_9743.PNG" height="400" />
