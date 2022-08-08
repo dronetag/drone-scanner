@@ -204,7 +204,7 @@ class AircraftDetailHeader extends StatelessWidget {
       TextSpan(
         style: const TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
         ),
         children: [
           if (messagePackList.last.basicIdMessage != null &&
@@ -242,6 +242,9 @@ class AircraftDetailHeader extends StatelessWidget {
 
     return Text.rich(
       TextSpan(
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+        ),
         children: [
           if (messagePackList.last.operatorIDValid() &&
               countryCode != null &&

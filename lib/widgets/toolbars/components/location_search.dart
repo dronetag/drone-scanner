@@ -86,7 +86,11 @@ class _LocationSearchState extends State<LocationSearch> {
                 location,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 14, color: Colors.white),
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               leading: const Icon(
                 Icons.search,

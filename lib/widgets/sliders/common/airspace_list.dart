@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
-import 'package:http/http.dart';
 
 import '../../../../utils/utils.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
@@ -72,7 +71,7 @@ class AirspaceList extends StatelessWidget {
                       },
                       separatorBuilder: (context, _) {
                         return Divider(
-                          color: AppColors.droneScannerLightGray,
+                          color: AppColors.lightGray,
                         );
                       },
                     ),

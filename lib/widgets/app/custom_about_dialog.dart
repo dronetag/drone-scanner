@@ -19,6 +19,13 @@ class CustomAboutDialog extends StatelessWidget {
     const borderRadius = 15.0;
     const legalese = '© Dronetag s.r.o., 2022';
     final buildText = 'build ${packageInfo!.buildNumber}';
+    late final String versionText;
+
+    if (packageInfo == null) {
+      versionText = 'unknown';
+    } else {
+      versionText = 'v${packageInfo!.version}';
+    }
     final width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
@@ -65,7 +72,7 @@ class CustomAboutDialog extends StatelessWidget {
                       'Drone Scanner',
                       textScaleFactor: 1.6,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
@@ -80,9 +87,9 @@ class CustomAboutDialog extends StatelessWidget {
                         top: 3,
                       ),
                       child: Text(
-                        packageInfo?.version ?? 'unknown',
+                        versionText,
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           color: Color(0xFF0084DC),
                         ),
                         textAlign: TextAlign.center,

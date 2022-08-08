@@ -14,12 +14,15 @@ class RefreshingText extends StatefulWidget {
   final MessagePack pack;
   final double scaleFactor;
   final bool short;
+  final FontWeight fontWeight;
+
   const RefreshingText({
     Key? key,
     required this.pack,
     this.leadingText,
     this.scaleFactor = 0.9,
     this.short = false,
+    this.fontWeight = FontWeight.normal,
   }) : super(key: key);
 
   @override
@@ -67,14 +70,18 @@ class _RefreshingTextState extends State<RefreshingText> {
           return Text(
             text,
             textScaleFactor: widget.scaleFactor,
-            style: const TextStyle(color: AppColors.red),
+            style: TextStyle(
+              color: AppColors.red,
+              fontWeight: widget.fontWeight,
+            ),
           );
         } else {
           return Text(
             text,
             textScaleFactor: widget.scaleFactor,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.detailFieldColor,
+              fontWeight: widget.fontWeight,
             ),
           );
         }

@@ -16,7 +16,7 @@ class AircraftCardTitle extends StatelessWidget {
     return Text.rich(
       TextSpan(
         style: const TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
         ),
         children: [
           if (uasId.startsWith('1596') == true)

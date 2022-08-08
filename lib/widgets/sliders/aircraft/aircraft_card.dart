@@ -67,6 +67,9 @@ class AircraftCard extends StatelessWidget {
             // Operator ID row
             Text.rich(
               TextSpan(
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
                 children: [
                   if (countryCode != null &&
                       flag != null &&
@@ -115,6 +118,7 @@ class AircraftCard extends StatelessWidget {
           Text(
             aircraftText,
             style: TextStyle(
+              fontWeight: FontWeight.w700,
               color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
             ),
             textScaleFactor: 0.7,
@@ -155,6 +159,7 @@ class AircraftCard extends StatelessWidget {
                 standardText,
                 style: const TextStyle(
                   fontSize: 10,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -164,8 +169,16 @@ class AircraftCard extends StatelessWidget {
                 ? "${rssi ?? "?"} dBm"
                 : "${rssi ?? "?"} dBm",
             textScaleFactor: 0.7,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          RefreshingText(pack: messagePack, scaleFactor: 0.7, short: true),
+          RefreshingText(
+            pack: messagePack,
+            scaleFactor: 0.7,
+            short: true,
+            fontWeight: FontWeight.w600,
+          ),
         ],
       ),
     );
