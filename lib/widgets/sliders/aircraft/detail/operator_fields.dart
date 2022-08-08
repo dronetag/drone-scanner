@@ -75,30 +75,46 @@ class OperatorFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'Location',
-            fieldText: '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
-                '${systemMessage.operatorLongitude.toStringAsFixed(4)}',
+            headlineText: 'Distance from me',
+            fieldText: distanceText,
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconCenterToLoc(
-              onPressedCallback: () {
-                context.read<MapCubit>().centerToLocDouble(
-                      systemMessage.operatorLatitude,
-                      systemMessage.operatorLongitude,
-                    );
-                context
-                    .read<SlidersCubit>()
-                    .panelController
-                    .animatePanelToSnapPoint();
-              },
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Location',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.droneScannerDetailFieldHeaderColor,
+                    ),
+                  ),
+                  Text(
+                    '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
+                    '${systemMessage.operatorLongitude.toStringAsFixed(4)}',
+                    style: const TextStyle(
+                      color: AppColors.droneScannerDetailFieldColor,
+                    ),
+                  ),
+                ],
+              ),
+              IconCenterToLoc(
+                onPressedCallback: () {
+                  context.read<MapCubit>().centerToLocDouble(
+                        systemMessage.operatorLatitude,
+                        systemMessage.operatorLongitude,
+                      );
+                  context
+                      .read<SlidersCubit>()
+                      .panelController
+                      .animatePanelToSnapPoint();
+                },
+              ),
+            ],
           ),
         ],
-      ),
-      AircraftDetailField(
-        headlineText: 'Distance from me',
-        fieldText: distanceText,
       ),
       AircraftDetailRow(
         children: [

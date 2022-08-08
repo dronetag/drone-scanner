@@ -101,36 +101,52 @@ class LocationFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'Location',
-            fieldText: loc != null
-                ? '${loc.latitude?.toStringAsFixed(4)}, '
-                    '${loc.longitude?.toStringAsFixed(4)}'
-                : 'Unknown',
+            headlineText: 'Distance from me',
+            fieldText: distanceText,
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconCenterToLoc(
-              onPressedCallback: () {
-                if (loc != null &&
-                    loc.latitude != null &&
-                    loc.longitude != null) {
-                  context.read<MapCubit>().centerToLocDouble(
-                        loc.latitude!,
-                        loc.longitude!,
-                      );
-                }
-                context
-                    .read<SlidersCubit>()
-                    .panelController
-                    .animatePanelToSnapPoint();
-              },
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Location',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.droneScannerDetailFieldHeaderColor,
+                    ),
+                  ),
+                  Text(
+                    loc != null
+                        ? '${loc.latitude?.toStringAsFixed(4)}, '
+                            '${loc.longitude?.toStringAsFixed(4)}'
+                        : 'Unknown',
+                    style: const TextStyle(
+                      color: AppColors.droneScannerDetailFieldColor,
+                    ),
+                  ),
+                ],
+              ),
+              IconCenterToLoc(
+                onPressedCallback: () {
+                  if (loc != null &&
+                      loc.latitude != null &&
+                      loc.longitude != null) {
+                    context.read<MapCubit>().centerToLocDouble(
+                          loc.latitude!,
+                          loc.longitude!,
+                        );
+                  }
+                  context
+                      .read<SlidersCubit>()
+                      .panelController
+                      .animatePanelToSnapPoint();
+                },
+              ),
+            ],
           ),
         ],
-      ),
-      AircraftDetailField(
-        headlineText: 'Distance from me',
-        fieldText: distanceText,
       ),
       AircraftDetailRow(
         children: [
