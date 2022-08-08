@@ -16,6 +16,6 @@
 ## Screenshots
 
 <p float="middle">
-<img src="assets/screenshots/IMG_9743.PNG" height="400" />
-<img src="assets/screenshots/IMG_9744.PNG" height="400" />
+<img src="../assets/screenshots/IMG_9743.PNG" height="400" />
+<img src="../assets/screenshots/IMG_9744.PNG" height="400" />
 </p>
