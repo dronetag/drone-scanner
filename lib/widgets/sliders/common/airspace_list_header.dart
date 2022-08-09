@@ -29,7 +29,7 @@ class AirspaceListHeader extends StatelessWidget {
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = isLandscape ? height / 6 : height / 12;
     chevron.context = context;
-    chevron.color = AppColors.droneScannerLightGray;
+    chevron.color = AppColors.lightGray;
     if (chevron.direction != ChevronDirection.none) {
       chevron.direction = context.watch<SlidersCubit>().state.sliderMaximized
           ? ChevronDirection.downwards

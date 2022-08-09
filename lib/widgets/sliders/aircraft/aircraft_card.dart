@@ -125,9 +125,7 @@ class AircraftCard extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: isAirborne
-                ? AppColors.droneScannerHighlightBlue
-                : AppColors.dark,
+            color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
           ),
           const SizedBox(
             height: 2,
@@ -135,9 +133,7 @@ class AircraftCard extends StatelessWidget {
           Text(
             aircraftText,
             style: TextStyle(
-              color: isAirborne
-                  ? AppColors.droneScannerHighlightBlue
-                  : AppColors.dark,
+              color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
             ),
             textScaleFactor: 0.7,
           ),

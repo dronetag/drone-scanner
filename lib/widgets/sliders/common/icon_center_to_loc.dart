@@ -14,7 +14,7 @@ class IconCenterToLoc extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 2),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.droneScannerHighlightBlue,
+        color: AppColors.highlightBlue,
       ),
       height: Sizes.iconSize,
       width: Sizes.iconSize,

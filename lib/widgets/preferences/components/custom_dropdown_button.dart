@@ -20,7 +20,7 @@ class CustomDropdownButton extends StatelessWidget {
       value: value,
       icon: const Icon(
         Icons.arrow_downward,
-        color: AppColors.droneScannerDarkGray,
+        color: AppColors.darkGray,
       ),
       elevation: 16,
       onChanged: valueChangedCallback,

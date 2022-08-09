@@ -37,7 +37,7 @@ class ShowcaseStartWidget extends StatelessWidget {
                   textScaleFactor: 1.5,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: AppColors.droneScannerPurple,
+                    color: AppColors.purple,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -58,7 +58,7 @@ class ShowcaseStartWidget extends StatelessWidget {
             onPressed: startCallback,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
-                AppColors.droneScannerBlue,
+                AppColors.blue,
               ),
             ),
             child: const Text('Start Tutorial'),
@@ -76,7 +76,7 @@ class ShowcaseStartWidget extends StatelessWidget {
             child: const Text(
               'Skip',
               style: TextStyle(
-                color: AppColors.droneScannerBlue,
+                color: AppColors.blue,
               ),
             ),
           ),

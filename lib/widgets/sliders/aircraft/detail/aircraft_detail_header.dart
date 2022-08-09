@@ -41,7 +41,7 @@ class AircraftDetailHeader extends StatelessWidget {
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = isLandscape ? height / 6 : height / 12;
     chevron.context = context;
-    chevron.color = AppColors.droneScannerDetailButtonsColor;
+    chevron.color = AppColors.detailButtonsColor;
     if (chevron.direction != ChevronDirection.none) {
       chevron.direction = context.watch<SlidersCubit>().state.sliderMaximized
           ? ChevronDirection.downwards
@@ -49,7 +49,7 @@ class AircraftDetailHeader extends StatelessWidget {
     }
     return Container(
       decoration: const BoxDecoration(
-        color: AppColors.droneScannerDetailHeaderColor,
+        color: AppColors.detailHeaderColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
@@ -102,7 +102,7 @@ class AircraftDetailHeader extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.droneScannerDetailButtonsColor,
+            color: AppColors.detailButtonsColor,
           ),
           margin: const EdgeInsets.symmetric(vertical: 5),
           height: headerHeight / 5 * 4,
@@ -146,7 +146,7 @@ class AircraftDetailHeader extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 5),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.droneScannerDetailButtonsColor,
+              color: AppColors.detailButtonsColor,
             ),
             height: headerHeight / 5 * 4,
             width: headerHeight / 5 * 3,

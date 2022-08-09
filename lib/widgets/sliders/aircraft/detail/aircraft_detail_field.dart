@@ -23,7 +23,7 @@ class AircraftDetailField extends StatelessWidget {
           headlineText,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: AppColors.droneScannerDetailFieldHeaderColor,
+            color: AppColors.detailFieldHeaderColor,
           ),
         ),
         if (child != null) child!,
@@ -31,7 +31,7 @@ class AircraftDetailField extends StatelessWidget {
           Text(
             fieldText!,
             style: const TextStyle(
-              color: AppColors.droneScannerDetailFieldColor,
+              color: AppColors.detailFieldColor,
             ),
           ),
       ],

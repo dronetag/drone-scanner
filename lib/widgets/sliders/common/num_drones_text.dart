@@ -18,7 +18,7 @@ class NumDronesText extends StatelessWidget {
         Container(
           alignment: Alignment.center,
           decoration: const BoxDecoration(
-            color: AppColors.droneScannerDarkGray,
+            color: AppColors.darkGray,
             borderRadius: BorderRadius.all(
               Radius.circular(5),
             ),

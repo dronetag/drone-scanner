@@ -47,7 +47,7 @@ class LocationFields {
                         ? Icons.flight_takeoff
                         : Icons.flight_land,
                     color: loc.status == pigeon.AircraftStatus.Airborne
-                        ? AppColors.droneScannerHighlightBlue
+                        ? AppColors.highlightBlue
                         : AppColors.dark,
                   ),
                   const SizedBox(
@@ -57,8 +57,8 @@ class LocationFields {
                     loc.status.toString().replaceAll('AircraftStatus.', ''),
                     style: TextStyle(
                       color: loc.status == pigeon.AircraftStatus.Airborne
-                          ? AppColors.droneScannerHighlightBlue
-                          : AppColors.droneScannerDetailFieldColor,
+                          ? AppColors.highlightBlue
+                          : AppColors.detailFieldColor,
                     ),
                   ),
                 ],
@@ -82,7 +82,7 @@ class LocationFields {
                 Text(
                   directionAsString(loc?.direction),
                   style: const TextStyle(
-                    color: AppColors.droneScannerDetailFieldColor,
+                    color: AppColors.detailFieldColor,
                   ),
                 ),
               ],

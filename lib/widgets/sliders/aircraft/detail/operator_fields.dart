@@ -42,7 +42,7 @@ class OperatorFields {
                     ),
                   TextSpan(
                     style: const TextStyle(
-                      color: AppColors.droneScannerDetailFieldColor,
+                      color: AppColors.detailFieldColor,
                     ),
                     text: opMessage != null
                         ? opMessage.operatorId
