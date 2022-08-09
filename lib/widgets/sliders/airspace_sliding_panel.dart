@@ -32,6 +32,13 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
   Chevron chevron = Chevron();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        context.read<SlidersCubit>().panelController.animatePanelToSnapPoint());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final sliderMaximized = context.watch<SlidersCubit>().state.sliderMaximized;
