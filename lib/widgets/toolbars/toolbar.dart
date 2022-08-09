@@ -44,49 +44,54 @@ class _ToolbarState extends State<Toolbar> {
       ),
       padding: EdgeInsets.symmetric(horizontal: Sizes.toolbarMargin),
       height: Sizes.toolbarHeight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Expanded(
-            flex: 2,
-            // source: https://www.fluttercampus.com/guide/254/google-map-autocomplete-place-search-flutter/
-            child: LocationSearch(),
-          ),
-          Expanded(
-            flex: 1,
-            child: ShowcaseItem(
-              showcaseKey: context.read<ShowcaseCubit>().scanningStateKey,
-              description:
-                  context.read<ShowcaseCubit>().scanningStateDescription,
-              title: 'Map Toolbar',
-              child: const ScanningStateIcons(),
+      child: ShowcaseItem(
+        showcaseKey: context.read<ShowcaseCubit>().searchKey,
+        description: context.read<ShowcaseCubit>().searchDescription,
+        title: 'Map Toolbar',
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              flex: 2,
+              // source: https://www.fluttercampus.com/guide/254/google-map-autocomplete-place-search-flutter/
+              child: LocationSearch(),
             ),
-          ),
-          ShowcaseItem(
-            showcaseKey: context.read<ShowcaseCubit>().showInfoKey,
-            description: context.read<ShowcaseCubit>().showInfoDescription,
-            title: 'Map Toolbar',
-            child: RawMaterialButton(
-              onPressed: () {
-                displayToolbarMenu(context).then(
-                  (value) {
-                    if (value != null) handleAction(context, value);
-                  },
-                );
-              },
-              elevation: 0,
-              padding: const EdgeInsets.all(0),
-              constraints: const BoxConstraints(),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              fillColor: Colors.transparent,
-              child: const Icon(
-                Icons.more_horiz,
-                color: Colors.white,
-                size: Sizes.iconSize,
+            Expanded(
+              flex: 1,
+              child: ShowcaseItem(
+                showcaseKey: context.read<ShowcaseCubit>().scanningStateKey,
+                description:
+                    context.read<ShowcaseCubit>().scanningStateDescription,
+                title: 'Map Toolbar',
+                child: const ScanningStateIcons(),
               ),
             ),
-          ),
-        ],
+            ShowcaseItem(
+              showcaseKey: context.read<ShowcaseCubit>().showInfoKey,
+              description: context.read<ShowcaseCubit>().showInfoDescription,
+              title: 'Map Toolbar',
+              child: RawMaterialButton(
+                onPressed: () {
+                  displayToolbarMenu(context).then(
+                    (value) {
+                      if (value != null) handleAction(context, value);
+                    },
+                  );
+                },
+                elevation: 0,
+                padding: const EdgeInsets.all(0),
+                constraints: const BoxConstraints(),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                fillColor: Colors.transparent,
+                child: const Icon(
+                  Icons.more_horiz,
+                  color: Colors.white,
+                  size: Sizes.iconSize,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

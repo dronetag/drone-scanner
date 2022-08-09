@@ -10,5 +10,5 @@ class Sizes {
   static const textIconSize = 20.0;
   static const mapContentMargin = 10.0;
   static const toolbarMargin = 15.0;
-  static const showcaseMargin = 15.0;
+  static const showcaseMargin = 20.0;
 }

@@ -114,7 +114,7 @@ class LocationFields {
                     'Location',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.droneScannerDetailFieldHeaderColor,
+                      color: AppColors.detailFieldHeaderColor,
                     ),
                   ),
                   Text(
@@ -123,7 +123,7 @@ class LocationFields {
                             '${loc.longitude?.toStringAsFixed(4)}'
                         : 'Unknown',
                     style: const TextStyle(
-                      color: AppColors.droneScannerDetailFieldColor,
+                      color: AppColors.detailFieldColor,
                     ),
                   ),
                 ],

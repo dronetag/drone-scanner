@@ -56,7 +56,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   final String scanningStateDescription =
       'Icons show which technology is currently used for scanning.\nTap to '
       'start and stop scans.';
-  final String searchDescription = 'Use the bar to search for locations.';
+  final String searchDescription = 'Use the search to search for locations.';
   final String mapDescription =
       'Pan, zoom and rotate map with touch gestures, tap on aircraft or zone '
       'to highlight.';

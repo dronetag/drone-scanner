@@ -94,13 +94,13 @@ class OperatorFields {
                     'Location',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.droneScannerDetailFieldHeaderColor,
+                      color: AppColors.detailFieldHeaderColor,
                     ),
                   ),
                   Text(
                     locationText,
                     style: const TextStyle(
-                      color: AppColors.droneScannerDetailFieldColor,
+                      color: AppColors.detailFieldColor,
                     ),
                   ),
                 ],

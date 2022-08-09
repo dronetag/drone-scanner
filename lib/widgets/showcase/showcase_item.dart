@@ -37,7 +37,7 @@ class ShowcaseItem extends StatelessWidget {
       title: title,
       titleTextStyle: TextStyle(
         color: textColor ?? AppColors.blue,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
         fontSize: 23,
         height: 2,
       ),
@@ -45,7 +45,7 @@ class ShowcaseItem extends StatelessWidget {
         color: textColor ?? Colors.black,
       ),
       contentPadding: const EdgeInsets.all(
-        Sizes.showcaseMargin,
+        20,
       ),
       showcaseBackgroundColor: backgroundColor ?? Colors.white,
       child: child,

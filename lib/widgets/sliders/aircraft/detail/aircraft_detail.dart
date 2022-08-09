@@ -102,7 +102,6 @@ class AircraftDetail extends StatelessWidget {
     return [
       ...ConnectionFields.buildConnectionFields(context, messagePackList),
       ...BasicFields.buildBasicFields(context, messagePackList),
-      ...LocationFields.buildLocationFields(context, loc),
       if (context.watch<ShowcaseCubit>().state.showcaseActive)
         ShowcaseItem(
           //padding: EdgeInsets.only(top: -headerHeight),
@@ -112,6 +111,7 @@ class AircraftDetail extends StatelessWidget {
           title: 'Aircraft Detail',
           child: Container(),
         ),
+      ...LocationFields.buildLocationFields(context, loc),
       ...OperatorFields.buildOperatorFields(
         context,
         messagePackList.last.systemDataMessage,

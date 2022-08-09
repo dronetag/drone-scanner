@@ -70,34 +70,29 @@ class _LocationSearchState extends State<LocationSearch> {
     if (!context.watch<MapCubit>().state.droppedPin) {
       location = 'Search Locations';
     }
-    return ShowcaseItem(
-      showcaseKey: context.read<ShowcaseCubit>().searchKey,
-      description: context.read<ShowcaseCubit>().searchDescription,
-      title: 'Map Toolbar',
-      child: InkWell(
-        onTap: onTapHandle,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: Center(
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              minLeadingWidth: 0,
-              title: Text(
-                location,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              leading: const Icon(
-                Icons.search,
+    return InkWell(
+      onTap: onTapHandle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0),
+        child: Center(
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            minLeadingWidth: 0,
+            title: Text(
+              location,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 14,
                 color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
-              dense: true,
             ),
+            leading: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            dense: true,
           ),
         ),
       ),
