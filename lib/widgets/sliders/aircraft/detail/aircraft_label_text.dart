@@ -56,7 +56,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
           'Label',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: AppColors.droneScannerDetailFieldHeaderColor,
+            color: AppColors.detailFieldHeaderColor,
           ),
         ),
         const SizedBox(
@@ -81,7 +81,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
               margin: const EdgeInsets.symmetric(vertical: 2),
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.droneScannerHighlightBlue,
+                color: AppColors.highlightBlue,
               ),
               height: Sizes.iconSize,
               width: Sizes.iconSize,
@@ -102,7 +102,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
               margin: const EdgeInsets.symmetric(vertical: 2),
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.droneScannerHighlightBlue,
+                color: AppColors.highlightBlue,
               ),
               height: Sizes.iconSize,
               width: Sizes.iconSize,
