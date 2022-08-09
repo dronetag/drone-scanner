@@ -17,22 +17,46 @@ enum AircraftAction {
 }
 
 Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
+  final labelStyle = TextStyle(
+    fontSize: 16,
+  );
   return showMenu<AircraftAction>(
     context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
     items: [
       PopupMenuItem(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         value: AircraftAction.mapLock,
         child: Text(
           context.read<MapCubit>().state.lockOnPoint ? 'Unock Map' : 'Lock Map',
+          style: labelStyle,
         ),
       ),
-      const PopupMenuItem(
+      PopupMenuItem(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         value: AircraftAction.share,
-        child: Text('Export Data'),
+        child: Text(
+          'Export Data',
+          style: labelStyle,
+        ),
       ),
-      const PopupMenuItem(
+      PopupMenuItem(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         value: AircraftAction.delete,
-        child: Text('Delete'),
+        child: Text(
+          'Delete',
+          style: labelStyle,
+        ),
       ),
     ],
     position: RelativeRect.fromLTRB(
