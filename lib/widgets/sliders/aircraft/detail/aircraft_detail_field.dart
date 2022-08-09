@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../constants/colors.dart';
 
+// field consists of headline, text element or child element
+// if both are null. e.g. in case that no data are present for field,
+// default text is used
 class AircraftDetailField extends StatelessWidget {
   final String headlineText;
   final String? fieldText;
@@ -16,6 +19,7 @@ class AircraftDetailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final text = fieldText ?? 'Unknown';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,9 +31,9 @@ class AircraftDetailField extends StatelessWidget {
           ),
         ),
         if (child != null) child!,
-        if (fieldText != null)
+        if (child == null)
           Text(
-            fieldText!,
+            text,
             style: const TextStyle(
               color: AppColors.detailFieldColor,
             ),

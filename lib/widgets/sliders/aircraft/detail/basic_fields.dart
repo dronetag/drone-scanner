@@ -25,20 +25,18 @@ class BasicFields {
     return [
       const Headline(text: 'AIRCRAFT'),
       if (isLandscape) const SizedBox(),
-      if (messagePackList.last.basicIdMessage?.idType != null)
-        AircraftDetailRow(
-          children: [
-            AircraftDetailField(
-              headlineText: 'UA ID Type',
-              fieldText: idTypeLabel,
-            ),
-            if (messagePackList.last.basicIdMessage?.uaType != null)
-              AircraftDetailField(
-                headlineText: 'UA Type',
-                fieldText: uaTypeLabel,
-              ),
-          ],
-        ),
+      AircraftDetailRow(
+        children: [
+          AircraftDetailField(
+            headlineText: 'UA ID Type',
+            fieldText: idTypeLabel,
+          ),
+          AircraftDetailField(
+            headlineText: 'UA Type',
+            fieldText: uaTypeLabel,
+          ),
+        ],
+      ),
       AircraftDetailRow(
         children: [
           Row(
@@ -91,17 +89,9 @@ class BasicFields {
       ),
       if (messagePackList.last.selfIdMessage != null &&
           messagePackList.last.selfIdMessage?.operationDescription != null)
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text('Operation Description:'),
-        ),
-      if (messagePackList.last.selfIdMessage != null &&
-          messagePackList.last.selfIdMessage?.operationDescription != null)
-        Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            messagePackList.last.selfIdMessage!.operationDescription,
-          ),
+        AircraftDetailField(
+          headlineText: 'Operation Description',
+          fieldText: messagePackList.last.selfIdMessage!.operationDescription,
         ),
     ];
   }

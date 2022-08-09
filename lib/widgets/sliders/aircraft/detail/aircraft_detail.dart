@@ -112,14 +112,13 @@ class AircraftDetail extends StatelessWidget {
           title: 'Aircraft Detail',
           child: Container(),
         ),
-      if (messagePackList.last.systemDataValid())
-        ...OperatorFields.buildOperatorFields(
-          context,
-          messagePackList.last.systemDataMessage!,
-          messagePackList.last.operatorIDValid()
-              ? messagePackList.last.operatorIdMessage!
-              : null,
-        ),
+      ...OperatorFields.buildOperatorFields(
+        context,
+        messagePackList.last.systemDataMessage,
+        messagePackList.last.operatorIDValid()
+            ? messagePackList.last.operatorIdMessage!
+            : null,
+      ),
     ];
   }
 }

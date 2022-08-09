@@ -15,15 +15,17 @@ import 'aircraft_detail_row.dart';
 class OperatorFields {
   static List<Widget> buildOperatorFields(
     BuildContext context,
-    pigeon.SystemDataMessage systemMessage,
+    pigeon.SystemDataMessage? systemMessage,
     pigeon.OperatorIdMessage? opMessage,
   ) {
     final countryCode = opMessage?.operatorId.substring(0, 2);
     double? distanceFromMe;
     late final String distanceText;
-    if (context.read<StandardsCubit>().state.locationEnabled) {
+    final systemDataValid = systemMessage != null;
+    if (context.read<StandardsCubit>().state.locationEnabled &&
+        systemDataValid) {
       distanceFromMe = calculateDistance(
-        systemMessage.operatorLatitude,
+        systemMessage!.operatorLatitude,
         systemMessage.operatorLongitude,
         context.read<MapCubit>().state.userLocation.latitude,
         context.read<MapCubit>().state.userLocation.longitude,
@@ -36,6 +38,10 @@ class OperatorFields {
     } else {
       distanceText = 'Unknown';
     }
+    final locationText = systemMessage != null
+        ? '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
+            '${systemMessage.operatorLongitude.toStringAsFixed(4)}'
+        : 'Unknown';
 
     Image? flag;
     if (countryCode != null) flag = getFlag(countryCode);
@@ -92,26 +98,26 @@ class OperatorFields {
                     ),
                   ),
                   Text(
-                    '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
-                    '${systemMessage.operatorLongitude.toStringAsFixed(4)}',
+                    locationText,
                     style: const TextStyle(
                       color: AppColors.droneScannerDetailFieldColor,
                     ),
                   ),
                 ],
               ),
-              IconCenterToLoc(
-                onPressedCallback: () {
-                  context.read<MapCubit>().centerToLocDouble(
-                        systemMessage.operatorLatitude,
-                        systemMessage.operatorLongitude,
-                      );
-                  context
-                      .read<SlidersCubit>()
-                      .panelController
-                      .animatePanelToSnapPoint();
-                },
-              ),
+              if (systemDataValid)
+                IconCenterToLoc(
+                  onPressedCallback: () {
+                    context.read<MapCubit>().centerToLocDouble(
+                          systemMessage!.operatorLatitude,
+                          systemMessage.operatorLongitude,
+                        );
+                    context
+                        .read<SlidersCubit>()
+                        .panelController
+                        .animatePanelToSnapPoint();
+                  },
+                ),
             ],
           ),
         ],
@@ -120,13 +126,17 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Op. Location Type',
-            fieldText: systemMessage.operatorLocationType
-                .toString()
-                .replaceAll('OperatorLocationType.', ''),
+            fieldText: systemDataValid
+                ? systemMessage!.operatorLocationType
+                    .toString()
+                    .replaceAll('OperatorLocationType.', '')
+                : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Altitude',
-            fieldText: '${systemMessage.operatorAltitudeGeo.toString()}  m',
+            fieldText: systemDataValid
+                ? '${systemMessage!.operatorAltitudeGeo.toString()}  m'
+                : 'Unknown',
           ),
         ],
       ),
@@ -134,11 +144,15 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Area Radius',
-            fieldText: '${systemMessage.areaRadius.toString()}  m',
+            fieldText: systemDataValid
+                ? '${systemMessage!.areaRadius.toString()}  m'
+                : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Count',
-            fieldText: systemMessage.areaCount.toString(),
+            fieldText: systemDataValid
+                ? systemMessage!.areaCount.toString()
+                : 'Unknown',
           ),
         ],
       ),
@@ -146,11 +160,15 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Area Ceiling',
-            fieldText: '${systemMessage.areaCeiling.toString()}  m',
+            fieldText: systemDataValid
+                ? '${systemMessage!.areaCeiling.toString()}  m'
+                : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Floor',
-            fieldText: '${systemMessage.areaFloor.toString()} m',
+            fieldText: systemDataValid
+                ? '${systemMessage!.areaFloor.toString()} m'
+                : 'Unknown',
           ),
         ],
       ),
@@ -158,15 +176,19 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Category',
-            fieldText: systemMessage.category
-                .toString()
-                .replaceAll('AircraftCategory.', ''),
+            fieldText: systemDataValid
+                ? systemMessage!.category
+                    .toString()
+                    .replaceAll('AircraftCategory.', '')
+                : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Class',
-            fieldText: systemMessage.classValue
-                .toString()
-                .replaceAll('AircraftClass.', ''),
+            fieldText: systemDataValid
+                ? systemMessage!.classValue
+                    .toString()
+                    .replaceAll('AircraftClass.', '')
+                : 'Unknown',
           ),
         ],
       ),
