@@ -146,13 +146,6 @@ class AppTheme {
         height: 1.2,
         fontWeight: FontWeight.normal,
         color: AppColors.lightGray,
-<<<<<<< HEAD
-=======
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: Sizes.double,
-        vertical: Sizes.standard,
->>>>>>> c9938b5 (chore: remove unused dark theme)
       ),
       border: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.lightGray),
