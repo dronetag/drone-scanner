@@ -34,7 +34,9 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
         ),
         value: AircraftAction.mapLock,
         child: Text(
-          context.read<MapCubit>().state.lockOnPoint ? 'Unock Map' : 'Lock Map',
+          context.read<MapCubit>().state.lockOnPoint
+              ? 'Unfollow'
+              : 'Follow aircraft',
           style: labelStyle,
         ),
       ),

@@ -253,14 +253,12 @@ class AircraftDetailHeader extends StatelessWidget {
               child: flag,
               alignment: PlaceholderAlignment.middle,
             ),
-          TextSpan(
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-            text: messagePackList.last.operatorIDValid()
-                ? messagePackList.last.operatorIdMessage?.operatorId
-                : 'Unknown Operator ID',
-          ),
+          if (messagePackList.last.operatorIDValid())
+            TextSpan(
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+                text: messagePackList.last.operatorIdMessage?.operatorId),
         ],
       ),
     );

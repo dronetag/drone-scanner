@@ -28,6 +28,39 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
       ),
     ),
     items: [
+      PopupMenuItem(
+        value: ToolbarMenuAction.toggleBT,
+        padding: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+        child: StatefulBuilder(
+          builder: (context, setState) => Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Checkbox(
+                value:
+                    context.watch<OpendroneIdCubit>().state.isScanningBluetooth,
+                visualDensity: VisualDensity.compact,
+                onChanged: (value) {
+                  context
+                      .read<OpendroneIdCubit>()
+                      .setBtUsed(btUsed: value!)
+                      .then((value) => setState);
+                  late final String snackBarText;
+                  if (value) {
+                    snackBarText = 'Bluetooth Scanning Started.';
+                  } else {
+                    snackBarText = 'Bluetooth Scanning Stopped.';
+                  }
+                  showSnackBar(context, snackBarText);
+                },
+              ),
+              Text(
+                'Enable Bluetooth',
+                style: labelStyle,
+              ),
+            ],
+          ),
+        ),
+      ),
       if (context.read<StandardsCubit>().state.androidSystem)
         PopupMenuItem(
           padding: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
@@ -65,39 +98,6 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
             ),
           ),
         ),
-      PopupMenuItem(
-        value: ToolbarMenuAction.toggleBT,
-        padding: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
-        child: StatefulBuilder(
-          builder: (context, setState) => Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Checkbox(
-                value:
-                    context.watch<OpendroneIdCubit>().state.isScanningBluetooth,
-                visualDensity: VisualDensity.compact,
-                onChanged: (value) {
-                  context
-                      .read<OpendroneIdCubit>()
-                      .setBtUsed(btUsed: value!)
-                      .then((value) => setState);
-                  late final String snackBarText;
-                  if (value) {
-                    snackBarText = 'Bluetooth Scanning Started.';
-                  } else {
-                    snackBarText = 'Bluetooth Scanning Stopped.';
-                  }
-                  showSnackBar(context, snackBarText);
-                },
-              ),
-              Text(
-                'Enable Bluetooth',
-                style: labelStyle,
-              ),
-            ],
-          ),
-        ),
-      ),
       const PopupMenuDivider(),
       PopupMenuItem(
         padding: EdgeInsets.symmetric(

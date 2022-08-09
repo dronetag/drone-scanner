@@ -109,8 +109,8 @@ class ConnectionFields {
             label: 'Last Seen',
           ),
           AircraftDetailField(
-            headlineText: 'Received',
-            fieldText: '${messagePackList.length} messages',
+            headlineText: '# Messages',
+            fieldText: '${messagePackList.length}',
           ),
         ],
       ),

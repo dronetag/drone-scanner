@@ -68,9 +68,7 @@ class OperatorFields {
                     style: const TextStyle(
                       color: AppColors.detailFieldColor,
                     ),
-                    text: opMessage != null
-                        ? opMessage.operatorId
-                        : 'Unknown Operator ID',
+                    text: opMessage != null ? opMessage.operatorId : 'Unknown',
                   ),
                 ],
               ),
