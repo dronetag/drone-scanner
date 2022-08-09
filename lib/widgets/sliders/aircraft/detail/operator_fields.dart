@@ -125,17 +125,17 @@ class OperatorFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'Op. Location Type',
+            headlineText: 'Altitude',
+            fieldText: systemDataValid
+                ? '${systemMessage!.operatorAltitudeGeo.toString()}  m'
+                : 'Unknown',
+          ),
+          AircraftDetailField(
+            headlineText: 'Location Type',
             fieldText: systemDataValid
                 ? systemMessage!.operatorLocationType
                     .toString()
                     .replaceAll('OperatorLocationType.', '')
-                : 'Unknown',
-          ),
-          AircraftDetailField(
-            headlineText: 'Altitude',
-            fieldText: systemDataValid
-                ? '${systemMessage!.operatorAltitudeGeo.toString()}  m'
                 : 'Unknown',
           ),
         ],

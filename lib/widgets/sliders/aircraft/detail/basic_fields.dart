@@ -71,7 +71,7 @@ class BasicFields {
                         ),
                       ),
                       const TextSpan(
-                        text: 'Dronetag Mini',
+                        text: 'Dronetag',
                       ),
                     ],
                   ),
