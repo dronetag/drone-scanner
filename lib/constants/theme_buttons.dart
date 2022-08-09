@@ -11,7 +11,7 @@ class ButtonsAppTheme {
   static const defaultElevation = 0.0;
 
   static const buttonElevation = 5.0;
-  static final buttonShadowColor = AppColors.gray.withOpacity(0.33);
+  static final buttonShadowColor = AppColors.lightGray.withOpacity(0.33);
 
   // -- Styles definitions
 
@@ -33,7 +33,8 @@ class ButtonsAppTheme {
 
   /// Default button style (gray with white text, outlined when disabled)
   static final defaultStyle = baseStyle.copyWith(
-    backgroundColor: _resolveWithDisabled(AppColors.gray, Colors.transparent),
+    backgroundColor:
+        _resolveWithDisabled(AppColors.lightGray, Colors.transparent),
     foregroundColor: _resolveWithDisabled(Colors.white, AppColors.lightGray),
     side: _resolveWithDisabled(
       BorderSide.none,
@@ -49,14 +50,13 @@ class ButtonsAppTheme {
 
   /// Primary button style (primary color with glowy elevation)
   static final primaryStyle = defaultStyle.copyWith(
-    backgroundColor:
-        _resolveWithDisabled(AppColors.dronetagBlue, Colors.transparent),
+    backgroundColor: _resolveWithDisabled(AppColors.blue, Colors.transparent),
     foregroundColor: _resolveWithDisabled(Colors.white, AppColors.lightGray),
     side: _resolveWithDisabled(
       BorderSide.none,
       const BorderSide(color: AppColors.lightGray, width: 2.0),
     ),
-    shadowColor: MaterialStateProperty.all(AppColors.primaryGlow),
+    shadowColor: MaterialStateProperty.all(AppColors.lightGray),
     elevation: _resolveWithDisabled(8.0, 0),
   );
 
@@ -64,10 +64,9 @@ class ButtonsAppTheme {
   static final lightStyle = defaultStyle.copyWith(
     backgroundColor: _resolveWithDisabled(Colors.white, Colors.transparent),
     foregroundColor: _resolveWithDisabled(AppColors.dark, AppColors.lightGray),
-    overlayColor:
-        MaterialStateProperty.all(AppColors.dronetagBlue.withOpacity(0.1)),
+    overlayColor: MaterialStateProperty.all(AppColors.blue.withOpacity(0.1)),
     elevation: _resolveWithDisabled(buttonElevation, 0),
-    shadowColor: MaterialStateProperty.all(buttonShadowColor),
+    shadowColor: MaterialStateProperty.all(AppColors.lightGray),
   );
 
   static final largeStyle = baseStyle.copyWith(
@@ -104,12 +103,12 @@ class ButtonsAppTheme {
       ),
     ),
     foregroundColor: MaterialStateProperty.all(
-      AppColors.gray,
+      AppColors.lightGray,
     ),
   );
 
   static final negativeStyle = baseStyle.copyWith(
-    backgroundColor: MaterialStateProperty.all(AppColors.negative),
+    backgroundColor: MaterialStateProperty.all(AppColors.red),
     foregroundColor: MaterialStateProperty.all(Colors.white),
   );
 
@@ -117,8 +116,7 @@ class ButtonsAppTheme {
       negativeStyle.merge(withoutPaddingStyle);
 
   static final primaryTextStyle = textButtonStyle.copyWith(
-    foregroundColor:
-        _resolveWithDisabled(AppColors.dronetagBlue, AppColors.lightGray),
+    foregroundColor: _resolveWithDisabled(AppColors.blue, AppColors.lightGray),
     textStyle: MaterialStateProperty.all(
       AppTheme.lightTheme.textTheme.bodyText1!.copyWith(
         fontWeight: FontWeight.w700,
@@ -128,7 +126,7 @@ class ButtonsAppTheme {
 
   static final primaryDestructiveTextStyle = textButtonStyle.copyWith(
     foregroundColor: _resolveWithDisabled(
-      AppColors.negative,
+      AppColors.red,
       AppColors.lightGray,
     ),
   );
