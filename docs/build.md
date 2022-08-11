@@ -7,10 +7,14 @@
 - [SlidingUpPanel](https://pub.dev/packages/sliding_up_panel)
 - [Flutter Bloc](https://pub.dev/packages/flutter_bloc) - business logic components
 - [Permission Handler](https://pub.dev/packages/permission_handler) - managing system permissions
+- [csv](https://pub.dev/packages/csv) - for exporting aircraft data in csv format
 
 ## Google Maps
 
-The application uses [https://mapsplatform.google.com](Google Maps Platform). In order for it to work, you need to obtain your [https://developers.google.com/maps/documentation/javascript/get-api-key](API key). In Google Maps API console, allow android and ios API.
+The application uses [Google Maps Platform](https://cloud.google.com/maps-platform/). In order for it to work, you need to obtain your API key. In [Google Developers Console](https://console.cloud.google.com/), enable API for each platform. To enable Google Maps for Android, select "Maps SDK for Android" in the "Additional APIs" section, then select "ENABLE". To enable Google Maps for iOS, select "Maps SDK for iOS" in the "Additional APIs" section, then select "ENABLE".
+
+For more details, see [Getting started with Google Maps Platform](https://developers.google.com/maps/gmp-get-started).
+
 
 In the project folder, duplicate files *android/app/src/main/AndroidManifest.example.xml * and *ios/Runner/AppDelegate.example.swift*, remove the *.example* suffix. Paste your key to both files. Then create a file *google_map_api.json* in *assets/config*, see example file to see the required structure.
 
