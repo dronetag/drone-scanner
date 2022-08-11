@@ -7,6 +7,7 @@ import '../../../constants/sizes.dart';
 import '../../app/custom_about_dialog.dart';
 import '../../app/dialogs.dart';
 import '../../preferences/preferences_page.dart';
+import 'custom_popup_menu_divider.dart';
 
 enum ToolbarMenuAction {
   toggleBT,
@@ -98,7 +99,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
             ),
           ),
         ),
-      const PopupMenuDivider(),
+      const CustomPopupMenuDivider(),
       PopupMenuItem(
         padding: EdgeInsets.symmetric(
           horizontal: 20,
