@@ -1,8 +1,12 @@
 
 ## Dependencies
 
-- GoogleMaps [pub.dev]() - used for map underlay
-- ShowcaseView
+- [Google Maps](https://pub.dev/packages/google_maps_flutter) - used for map underlay
+- [Google Maps Places](https://pub.dev/packages/flutter_google_places_hoc081098) - searching for locations
+- [ShowcaseView](https://pub.dev/packages/showcaseview) - application tutorial showcasing it's features
+- [SlidingUpPanel](https://pub.dev/packages/sliding_up_panel)
+- [Flutter Bloc](https://pub.dev/packages/flutter_bloc) - business logic components
+- [Permission Handler](https://pub.dev/packages/permission_handler) - managing system permissions
 
 ## Google Maps
 
