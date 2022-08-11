@@ -95,22 +95,22 @@ class PreferencesPage extends StatelessWidget {
     StandardsState state,
   ) {
     const positiveIcon = Icon(
-      Icons.done,
+      Icons.done_sharp,
       color: AppColors.green,
     );
     const negativeIcon = Icon(
-      Icons.error,
+      Icons.close_sharp,
       color: AppColors.red,
     );
     final width = MediaQuery.of(context).size.width;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final btLegacyText = state.btLegacy ? 'Fully Supported' : 'Not Supported';
+    final btLegacyText = state.btLegacy ? 'Fully supported' : 'Not supported';
     final btExtendedText =
-        state.btExtended ? 'Partially Supported' : 'Not Supported';
+        state.btExtended ? 'Partially supported' : 'Not supported';
     final wifiBeaconText =
-        state.wifiBeacon ? 'Fully Supported' : 'Not Supported';
-    final wifiNanText = state.wifiNaN ? 'Fully Supported' : 'Not Supported';
+        state.wifiBeacon ? 'Fully supported' : 'Not supported';
+    final wifiNanText = state.wifiNaN ? 'Fully supported' : 'Not supported';
     final maxAdvDataLenText = state.maxAdvDataLen.toString();
     final buttonStyle = ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
@@ -174,7 +174,7 @@ class PreferencesPage extends StatelessWidget {
                     'Warning: Support claimed by manufactur does not fully '
                     'guarantee that Bluetooth Extended actualy will work.',
                 child: Icon(
-                  Icons.system_security_update_warning,
+                  Icons.error_outline,
                   color: AppColors.orange,
                 ),
               )
@@ -257,7 +257,7 @@ class PreferencesPage extends StatelessWidget {
               onPressed: AppSettings.openAppSettings,
               style: buttonStyle,
               child: const Text(
-                'Open App Settings',
+                'Open app settings',
                 textAlign: TextAlign.center,
               ),
             ),
@@ -270,7 +270,7 @@ class PreferencesPage extends StatelessWidget {
             onPressed: AppSettings.openDeviceSettings,
             style: buttonStyle,
             child: const Text(
-              'Open Phone Settings',
+              'Open phone settings',
               textAlign: TextAlign.center,
             ),
           ),
@@ -371,7 +371,7 @@ class PreferencesPage extends StatelessWidget {
             onPressed: () {
               context.read<AircraftCubit>().exportPacksToCSV(save: false);
             },
-            child: const Text('Export All Data'),
+            child: const Text('Export all data'),
           ),
         ),
       ),
@@ -384,7 +384,7 @@ class PreferencesPage extends StatelessWidget {
               Navigator.pop(context);
               context.read<ShowcaseCubit>().restartShowcase();
             },
-            child: const Text('Replay Showcase'),
+            child: const Text('Replay showcase'),
           ),
         ),
       ),
