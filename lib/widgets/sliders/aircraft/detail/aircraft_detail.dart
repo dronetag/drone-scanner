@@ -7,6 +7,7 @@ import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/standards_cubit.dart';
+import '../../../../constants/sizes.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import 'basic_fields.dart';
@@ -40,7 +41,6 @@ class AircraftDetail extends StatelessWidget {
       context.read<SlidersCubit>().setShowDroneDetail(show: false);
       return Container();
     }
-    final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final maxSliderHeight = maxSliderSize(
       height: height,
@@ -50,47 +50,51 @@ class AircraftDetail extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = isLandscape ? height / 6 : height / 12;
+    final minSliderHeight = isLandscape
+        ? height / Sizes.toolbarMinSizeRatioLandscape
+        : height / Sizes.toolbarMinSizeRatioPortrait;
+    final snapHeight =
+        minSliderHeight + (maxSliderHeight - minSliderHeight) * 0.3;
+    final contentHeight = context.watch<SlidersCubit>().isAtSnapPoint()
+        ? snapHeight - headerHeight
+        : maxSliderHeight - headerHeight;
     final dataChildren = buildChildren(context, messagePackList);
     return Padding(
       padding: EdgeInsets.only(
         top: 0,
-        left: width / 20,
-        right: width / 20,
+        left: Sizes.detailMargin,
+        right: Sizes.detailMargin,
       ),
-      child:
-          //title: buildTitle(context, messagePackList),
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? GridView.builder(
-                  padding: EdgeInsets.only(top: headerHeight),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5,
-                    mainAxisExtent: 50,
+      child: MediaQuery.of(context).orientation == Orientation.landscape
+          ? GridView.builder(
+              padding: EdgeInsets.only(top: headerHeight),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 5,
+                mainAxisExtent: 50,
+              ),
+              shrinkWrap: true,
+              itemCount: dataChildren.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.all(2),
+                  child: dataChildren[index],
+                );
+              },
+            )
+          : Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: headerHeight),
+                  height: contentHeight,
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: dataChildren.length,
+                    itemBuilder: (context, index) => dataChildren[index],
                   ),
-                  shrinkWrap: true,
-                  itemCount: dataChildren.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.all(2),
-                      child: dataChildren[index],
-                    );
-                  },
-                )
-              : Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: headerHeight),
-                      height: context.watch<SlidersCubit>().isAtSnapPoint()
-                          ? maxSliderHeight * 0.3 - headerHeight
-                          : maxSliderHeight - headerHeight,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: dataChildren.length,
-                        itemBuilder: (context, index) => dataChildren[index],
-                      ),
-                    ),
-                  ],
                 ),
+              ],
+            ),
     );
   }
 

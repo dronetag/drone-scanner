@@ -8,6 +8,7 @@ class Sizes {
   static const toolbarHeight = 50.0;
   static const iconSize = 25.0;
   static const textIconSize = 20.0;
+  static const detailMargin = 20.0;
   static const mapContentMargin = 10.0;
   static const toolbarMargin = 15.0;
   static const showcaseMargin = 20.0;

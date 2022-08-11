@@ -59,6 +59,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
             return Container();
           }
         }
+        // use orientation builder to rebuild widget when orientation changes
         return OrientationBuilder(
           builder: (context, orientation) {
             return SlidingUpPanel(

@@ -30,14 +30,23 @@ class AirspaceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 6 : height / 12;
     final maxSliderHeight = maxSliderSize(
       height: height,
       statusBarHeight: MediaQuery.of(context).viewPadding.top,
       androidSystem: context.read<StandardsCubit>().state.androidSystem,
     );
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    final headerHeight = isLandscape ? height / 6 : height / 12;
+    final minSliderHeight = isLandscape
+        ? height / Sizes.toolbarMinSizeRatioLandscape
+        : height / Sizes.toolbarMinSizeRatioPortrait;
+    final snapHeight =
+        minSliderHeight + (maxSliderHeight - minSliderHeight) * 0.3;
+    final contentHeight = context.watch<SlidersCubit>().isAtSnapPoint()
+        ? snapHeight - headerHeight
+        : maxSliderHeight - headerHeight;
+
     final children = buildListChildren(context);
     return ShowcaseItem(
       showcaseKey: context.read<ShowcaseCubit>().droneListKey,
@@ -58,9 +67,7 @@ class AirspaceList extends StatelessWidget {
                     margin: EdgeInsets.only(top: headerHeight),
                     padding: const EdgeInsets.symmetric(
                         horizontal: Sizes.mapContentMargin),
-                    height: context.watch<SlidersCubit>().isAtSnapPoint()
-                        ? (maxSliderHeight) * 0.3 - headerHeight
-                        : maxSliderHeight - headerHeight,
+                    height: contentHeight,
                     child: ListView.separated(
                       padding: EdgeInsets.zero,
                       itemCount: children.length,

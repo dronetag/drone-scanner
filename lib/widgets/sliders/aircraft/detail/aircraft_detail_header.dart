@@ -65,7 +65,7 @@ class AircraftDetailHeader extends StatelessWidget {
               painter: chevron,
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 5),
-                width: headerHeight / 5 * 3,
+                width: width / 8,
                 height: headerHeight / 15,
               ),
             ),
@@ -255,10 +255,11 @@ class AircraftDetailHeader extends StatelessWidget {
             ),
           if (messagePackList.last.operatorIDValid())
             TextSpan(
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-                text: messagePackList.last.operatorIdMessage?.operatorId),
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+              text: messagePackList.last.operatorIdMessage?.operatorId,
+            ),
         ],
       ),
     );

@@ -81,7 +81,7 @@ class AircraftCard extends StatelessWidget {
                   TextSpan(
                     text: messagePack.operatorIDValid()
                         ? ' ${messagePack.operatorIdMessage?.operatorId}'
-                        : 'Unknown',
+                        : 'Unknown Operator ID',
                   ),
                 ],
               ),
