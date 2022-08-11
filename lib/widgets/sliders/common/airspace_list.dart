@@ -103,77 +103,81 @@ class AirspaceList extends StatelessWidget {
       aircraft = state
           .packHistoryByDistance(context.watch<MapCubit>().state.userLocation);
     }
-    return [
-      if (filterValue == FilterValue.aircraft || filterValue == FilterValue.all)
-        ...aircraft.values
-            .where((element) => element.isNotEmpty)
-            .map(
-              (value) => GestureDetector(
-                child: context.read<ShowcaseCubit>().state.showcaseActive
-                    ? ShowcaseItem(
-                        showcaseKey:
-                            context.read<ShowcaseCubit>().droneListItemKey,
-                        description: context
-                            .read<ShowcaseCubit>()
-                            .droneListItemDescription,
-                        title: 'List Panel',
-                        opacity: 0,
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        textColor: Colors.white,
-                        child: AircraftCard(
-                          messagePack: value.last,
-                        ),
-                      )
-                    : AircraftCard(
-                        messagePack: value.last,
-                      ),
-                onTap: () {
-                  context
-                      .read<SelectedAircraftCubit>()
-                      .selectAircraft(value.last.macAddress);
-                  context.read<SelectedZoneCubit>().unselectZone();
-                  if (value.last.locationMessage != null &&
-                      value.last.locationMessage?.latitude != null &&
-                      value.last.locationMessage?.longitude != null) {
-                    context.read<MapCubit>().centerToLocDouble(
-                          value.last.locationMessage!.latitude!,
-                          value.last.locationMessage!.longitude!,
-                        );
-                  }
-                  context.read<SlidersCubit>().setShowDroneDetail(show: true);
-                },
-              ),
-            )
-            .toList(),
-      if (filterValue == FilterValue.zones || filterValue == FilterValue.all)
-        ...context
-            .watch<ZonesCubit>()
-            .state
-            .zones
-            .map(
-              (z) => Column(
-                children: [
-                  GestureDetector(
-                    child: ZoneCard(
-                      zone: z,
-                    ),
-                    onTap: () {
-                      context.read<SelectedZoneCubit>().selectZone(z);
-                      context.read<SelectedAircraftCubit>().unselectAircraft();
-                      context.read<MapCubit>().centerToLocDouble(
-                            z.coordinates.first.latitude,
-                            z.coordinates.first.longitude,
-                          );
-                      context
-                          .read<SlidersCubit>()
-                          .setShowDroneDetail(show: true);
-                    },
+    if (context.read<ShowcaseCubit>().state.showcaseActive) {
+      return [
+        ShowcaseItem(
+          showcaseKey: context.read<ShowcaseCubit>().droneListItemKey,
+          description: context.read<ShowcaseCubit>().droneListItemDescription,
+          title: 'List Panel',
+          opacity: 0,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          textColor: Colors.white,
+          child: AircraftCard(
+            messagePack: aircraft.values.first.last,
+          ),
+        )
+      ];
+    } else {
+      return [
+        if (filterValue == FilterValue.aircraft ||
+            filterValue == FilterValue.all)
+          ...aircraft.values
+              .where((element) => element.isNotEmpty)
+              .map(
+                (value) => GestureDetector(
+                  child: AircraftCard(
+                    messagePack: value.last,
                   ),
-                  Divider(color: Theme.of(context).colorScheme.secondary),
-                ],
-              ),
-            )
-            .toList(),
-    ];
+                  onTap: () {
+                    context
+                        .read<SelectedAircraftCubit>()
+                        .selectAircraft(value.last.macAddress);
+                    context.read<SelectedZoneCubit>().unselectZone();
+                    if (value.last.locationMessage != null &&
+                        value.last.locationMessage?.latitude != null &&
+                        value.last.locationMessage?.longitude != null) {
+                      context.read<MapCubit>().centerToLocDouble(
+                            value.last.locationMessage!.latitude!,
+                            value.last.locationMessage!.longitude!,
+                          );
+                    }
+                    context.read<SlidersCubit>().setShowDroneDetail(show: true);
+                  },
+                ),
+              )
+              .toList(),
+        if (filterValue == FilterValue.zones || filterValue == FilterValue.all)
+          ...context
+              .watch<ZonesCubit>()
+              .state
+              .zones
+              .map(
+                (z) => Column(
+                  children: [
+                    GestureDetector(
+                      child: ZoneCard(
+                        zone: z,
+                      ),
+                      onTap: () {
+                        context.read<SelectedZoneCubit>().selectZone(z);
+                        context
+                            .read<SelectedAircraftCubit>()
+                            .unselectAircraft();
+                        context.read<MapCubit>().centerToLocDouble(
+                              z.coordinates.first.latitude,
+                              z.coordinates.first.longitude,
+                            );
+                        context
+                            .read<SlidersCubit>()
+                            .setShowDroneDetail(show: true);
+                      },
+                    ),
+                    Divider(color: Theme.of(context).colorScheme.secondary),
+                  ],
+                ),
+              )
+              .toList(),
+      ];
+    }
   }
 }
