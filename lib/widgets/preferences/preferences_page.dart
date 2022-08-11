@@ -18,6 +18,8 @@ import 'components/custom_dropdown_button.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
 
+import '../../utils/drone_scanner_icon_icons.dart';
+
 class PreferencesPage extends StatelessWidget {
   const PreferencesPage({Key? key}) : super(key: key);
 
@@ -75,9 +77,7 @@ class PreferencesPage extends StatelessWidget {
                           )
                         : ListView.builder(
                             padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) => Padding(
-                                padding: EdgeInsets.only(bottom: 8),
-                                child: itemList[index]),
+                            itemBuilder: (context, index) => itemList[index],
                             itemCount: itemList.length,
                           ),
                   ),
@@ -95,11 +95,11 @@ class PreferencesPage extends StatelessWidget {
     StandardsState state,
   ) {
     const positiveIcon = Icon(
-      Icons.done_sharp,
+      DroneScannerIcon.done,
       color: AppColors.green,
     );
     const negativeIcon = Icon(
-      Icons.close_sharp,
+      DroneScannerIcon.close,
       color: AppColors.red,
     );
     final width = MediaQuery.of(context).size.width;
@@ -117,6 +117,7 @@ class PreferencesPage extends StatelessWidget {
         AppColors.preferencesButtonColor,
       ),
     );
+    final itemPadding = EdgeInsets.only(bottom: 8);
     return [
       Align(
         alignment: Alignment.centerLeft,
@@ -125,7 +126,7 @@ class PreferencesPage extends StatelessWidget {
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
-            Icons.arrow_back,
+            DroneScannerIcon.arrow_back,
             size: Sizes.iconSize,
           ),
         ),
@@ -133,7 +134,7 @@ class PreferencesPage extends StatelessWidget {
       const Align(
         alignment: Alignment.centerLeft,
         child: Padding(
-          padding: EdgeInsets.only(bottom: 10.0),
+          padding: EdgeInsets.only(bottom: 15.0),
           child: Text(
             'Preferences',
             textScaleFactor: 2,
@@ -157,11 +158,14 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
-      PreferencesField(
-        label: 'Bluetooth 4 Legacy',
-        icon: state.btLegacy ? positiveIcon : negativeIcon,
-        color: state.btLegacy ? AppColors.green : AppColors.red,
-        text: btLegacyText,
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Bluetooth 4 Legacy',
+          icon: state.btLegacy ? positiveIcon : negativeIcon,
+          color: state.btLegacy ? AppColors.green : AppColors.red,
+          text: btLegacyText,
+        ),
       ),
       PreferencesField(
         label: 'Bluetooth 5 Extended',
@@ -184,7 +188,7 @@ class PreferencesPage extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0, top: 2),
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: RichText(
               textScaleFactor: 0.75,
               text: TextSpan(
@@ -202,11 +206,14 @@ class PreferencesPage extends StatelessWidget {
             ),
           ),
         ),
-      PreferencesField(
-        label: 'Wi-Fi Beacon',
-        text: wifiBeaconText,
-        icon: state.wifiBeacon ? positiveIcon : negativeIcon,
-        color: state.wifiBeacon ? AppColors.green : AppColors.red,
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Wi-Fi Beacon',
+          text: wifiBeaconText,
+          icon: state.wifiBeacon ? positiveIcon : negativeIcon,
+          color: state.wifiBeacon ? AppColors.green : AppColors.red,
+        ),
       ),
       PreferencesField(
         label: 'Wi-Fi NaN',
@@ -230,28 +237,38 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
-      PreferencesField(
-        label: 'Wi-Fi',
-        text: state.androidSystem ? 'Granted' : 'Not Granted',
-        color: state.androidSystem ? AppColors.green : AppColors.red,
-        icon: state.androidSystem ? positiveIcon : negativeIcon,
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Wi-Fi',
+          text: state.androidSystem ? 'Granted' : 'Not Granted',
+          color: state.androidSystem ? AppColors.green : AppColors.red,
+          icon: state.androidSystem ? positiveIcon : negativeIcon,
+        ),
       ),
-      PreferencesField(
-        label: 'Location',
-        text: state.locationEnabled ? 'Granted' : 'Not Granted',
-        color: state.locationEnabled ? AppColors.green : AppColors.red,
-        icon: state.locationEnabled ? positiveIcon : negativeIcon,
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Location',
+          text: state.locationEnabled ? 'Granted' : 'Not Granted',
+          color: state.locationEnabled ? AppColors.green : AppColors.red,
+          icon: state.locationEnabled ? positiveIcon : negativeIcon,
+        ),
       ),
-      PreferencesField(
-        label: 'Bluetooth',
-        text: state.btEnabled ? 'Granted' : 'Not Granted',
-        color: state.btEnabled ? AppColors.green : AppColors.red,
-        icon: state.btEnabled ? positiveIcon : negativeIcon,
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Bluetooth',
+          text: state.btEnabled ? 'Granted' : 'Not Granted',
+          color: state.btEnabled ? AppColors.green : AppColors.red,
+          icon: state.btEnabled ? positiveIcon : negativeIcon,
+        ),
       ),
       if (isLandscape) const SizedBox(),
       if (state.androidSystem)
         Align(
-          child: SizedBox(
+          child: Container(
+            padding: itemPadding,
             width: width / 2,
             child: ElevatedButton(
               onPressed: AppSettings.openAppSettings,
@@ -264,7 +281,8 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       Align(
-        child: SizedBox(
+        child: Container(
+          padding: itemPadding,
           width: width / 2,
           child: ElevatedButton(
             onPressed: AppSettings.openDeviceSettings,
@@ -290,62 +308,76 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
-      const PreferencesFieldWithDescription(
-        label: 'Clean automatically:',
-        description:
-            'Aircrafts inactive for chosen time will be\nautomatically cleared',
-        child: CleanPacksCheckbox(),
+      Padding(
+        padding: itemPadding,
+        child: const PreferencesFieldWithDescription(
+          label: 'Clean automatically:',
+          description:
+              'Aircrafts inactive for chosen time will be\nautomatically cleared',
+          child: CleanPacksCheckbox(),
+        ),
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('Time to clean:'),
-          SizedBox(
-            width: width / 3,
-            child: SpinBox(
-              spacing: 1,
-              min: 10,
-              max: 1000.0,
-              value:
-                  context.watch<AircraftCubit>().state.cleanTimeSec.toDouble(),
-              step: 5,
-              onChanged: (v) => context.read<AircraftCubit>().setcleanTimeSec(
-                    v.toInt(),
+      Padding(
+        padding: itemPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Time to clean:'),
+            SizedBox(
+              width: width / 3,
+              child: SpinBox(
+                spacing: 1,
+                min: 10,
+                max: 1000.0,
+                value: context
+                    .watch<AircraftCubit>()
+                    .state
+                    .cleanTimeSec
+                    .toDouble(),
+                step: 5,
+                onChanged: (v) => context.read<AircraftCubit>().setcleanTimeSec(
+                      v.toInt(),
+                    ),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.only(
+                    top: 5,
                   ),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.only(
-                  top: 5,
-                ),
-                constraints: BoxConstraints(
-                  maxHeight: 40,
+                  constraints: BoxConstraints(
+                    maxHeight: 40,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      PreferencesFieldWithDescription(
-        label: 'List field preference:',
-        description: 'Choose which information your prefer\nto see in the list '
-            'of aircrafts',
-        child: CustomDropdownButton(
-          value:
-              context.watch<SlidersCubit>().state.listFieldPreferenceString(),
-          valueChangedCallback: (newValue) {
-            if (newValue != null) {
-              context.read<SlidersCubit>().setListFieldPreference(newValue);
-            }
-          },
-          items: const [
-            'Distance',
-            'Location',
-            'Speed',
           ],
         ),
       ),
+      Padding(
+        padding: itemPadding / 2,
+        child: PreferencesFieldWithDescription(
+          label: 'List field preference:',
+          description:
+              'Choose which information your prefer\nto see in the list '
+              'of aircrafts',
+          child: CustomDropdownButton(
+            value:
+                context.watch<SlidersCubit>().state.listFieldPreferenceString(),
+            valueChangedCallback: (newValue) {
+              if (newValue != null) {
+                context.read<SlidersCubit>().setListFieldPreference(newValue);
+              }
+            },
+            items: const [
+              'Distance',
+              'Location',
+              'Speed',
+            ],
+          ),
+        ),
+      ),
       Align(
-        child: SizedBox(
+        child: Container(
+          padding: itemPadding / 2,
           width: width / 2,
           child: ElevatedButton(
             style: buttonStyle,
@@ -364,7 +396,8 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       Align(
-        child: SizedBox(
+        child: Container(
+          padding: itemPadding / 2,
           width: width / 2,
           child: ElevatedButton(
             style: buttonStyle,
@@ -376,7 +409,8 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       Align(
-        child: SizedBox(
+        child: Container(
+          padding: itemPadding / 2,
           width: width / 2,
           child: ElevatedButton(
             style: buttonStyle,
