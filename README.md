@@ -11,8 +11,8 @@ For more in-depth description, refer to documentation folder.
 
 ## Documentation Contents
 
-* [Application Features](./docs/features.md)
-    * Description of application features and UI
+* [Application Features and Regulatory Compliance](./docs/features.md)
+    * Description of application features and explanations of Remote ID regulations 
 * [Code Architecture](./docs/architecture.md)
     * Declares the directory structure and overall architecture
 * [Project Setup and Building](./docs/build.md)
