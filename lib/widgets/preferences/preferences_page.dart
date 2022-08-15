@@ -329,11 +329,11 @@ class PreferencesPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Time to clean:'),
+            const Text('Time to clean (sec):'),
             SizedBox(
               width: width / 3,
               child: SpinBox(
-                spacing: 1,
+                spacing: 0,
                 min: 10,
                 max: 1000.0,
                 value: context
@@ -345,8 +345,15 @@ class PreferencesPage extends StatelessWidget {
                 onChanged: (v) => context.read<AircraftCubit>().setcleanTimeSec(
                       v.toInt(),
                     ),
+                iconColor:
+                    MaterialStateProperty.all(AppColors.droneScannerDarkGray),
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
                   contentPadding: EdgeInsets.only(
                     top: 5,
                   ),

@@ -167,7 +167,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       : super(AircraftState(
           packHistory: <String, List<MessagePack>>{},
           cleanOldPacks: false,
-          cleanTimeSec: 100,
+          cleanTimeSec: 60,
           aircraftLabels: <String, String>{},
         )) {
     fetchSavedLabels();
@@ -184,7 +184,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     }
     final cleanPacksSec = preferences.getInt('cleanTimeSec');
     if (cleanPacksSec == null) {
-      emit(state.copyWith(cleanTimeSec: 100));
+      emit(state.copyWith(cleanTimeSec: 60));
     } else {
       emit(state.copyWith(cleanTimeSec: cleanPacksSec));
     }
