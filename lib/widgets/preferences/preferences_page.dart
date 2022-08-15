@@ -60,16 +60,18 @@ class PreferencesPage extends StatelessWidget {
                     child: isLandscape
                         ? GridView.builder(
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               crossAxisSpacing: 10,
-                              mainAxisExtent: 35,
+                              mainAxisExtent:
+                                  MediaQuery.of(context).size.height / 6,
                             ),
                             shrinkWrap: true,
                             itemCount: itemList.length,
                             itemBuilder: (context, index) {
                               return Container(
-                                margin: const EdgeInsets.all(2),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 2),
                                 child: itemList[index],
                               );
                             },
@@ -130,6 +132,7 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
+      if (isLandscape) const SizedBox(),
       const Align(
         alignment: Alignment.centerLeft,
         child: Padding(
@@ -166,24 +169,27 @@ class PreferencesPage extends StatelessWidget {
           text: btLegacyText,
         ),
       ),
-      PreferencesField(
-        label: 'Bluetooth 5 Extended',
-        color: state.btExtended ? AppColors.orange : AppColors.red,
-        text: btExtendedText,
-        icon: state.btExtended
-            ? const Tooltip(
-                triggerMode: TooltipTriggerMode.tap,
-                message:
-                    'Warning: Support claimed by manufactur does not fully '
-                    'guarantee that Bluetooth Extended actualy will work.',
-                child: Icon(
-                  Icons.error_outline,
-                  color: AppColors.orange,
-                ),
-              )
-            : negativeIcon,
+      Padding(
+        padding: isLandscape ? itemPadding : EdgeInsets.zero,
+        child: PreferencesField(
+          label: 'Bluetooth 5 Extended',
+          color: state.btExtended ? AppColors.orange : AppColors.red,
+          text: btExtendedText,
+          icon: state.btExtended
+              ? const Tooltip(
+                  triggerMode: TooltipTriggerMode.tap,
+                  message:
+                      'Warning: Support claimed by manufactur does not fully '
+                      'guarantee that Bluetooth Extended actualy will work.',
+                  child: Icon(
+                    Icons.error_outline,
+                    color: AppColors.orange,
+                  ),
+                )
+              : negativeIcon,
+        ),
       ),
-      if (state.androidSystem)
+      if (!isLandscape && state.androidSystem)
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
@@ -214,13 +220,15 @@ class PreferencesPage extends StatelessWidget {
           color: state.wifiBeacon ? AppColors.green : AppColors.red,
         ),
       ),
-      PreferencesField(
-        label: 'Wi-Fi NaN',
-        text: wifiNanText,
-        color: state.wifiNaN ? AppColors.green : AppColors.red,
-        icon: state.wifiNaN ? positiveIcon : negativeIcon,
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Wi-Fi NaN',
+          text: wifiNanText,
+          color: state.wifiNaN ? AppColors.green : AppColors.red,
+          icon: state.wifiNaN ? positiveIcon : negativeIcon,
+        ),
       ),
-      if (isLandscape) const SizedBox(),
       const Headline(
         text: 'Permissions',
         child: Tooltip(
@@ -374,6 +382,7 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
+      if (isLandscape) const SizedBox(),
       Align(
         child: Container(
           padding: itemPadding / 2,
