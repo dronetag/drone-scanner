@@ -335,16 +335,18 @@ class PreferencesPage extends StatelessWidget {
               child: SpinBox(
                 spacing: 0,
                 min: 10,
-                max: 1000.0,
+                max: 600,
                 value: context
                     .watch<AircraftCubit>()
                     .state
                     .cleanTimeSec
                     .toDouble(),
                 step: 5,
-                onChanged: (v) => context.read<AircraftCubit>().setcleanTimeSec(
-                      v.toInt(),
-                    ),
+                onChanged: (v) {
+                  if (v < 10) v = 10;
+                  if (v > 600) v = 600;
+                  context.read<AircraftCubit>().setcleanTimeSec(v.toInt());
+                },
                 iconColor:
                     MaterialStateProperty.all(AppColors.droneScannerDarkGray),
                 decoration: const InputDecoration(
