@@ -49,13 +49,13 @@ class PreferencesPage extends StatelessWidget {
                         ? EdgeInsets.only(
                             top: MediaQuery.of(context).viewPadding.top,
                             bottom: 5,
-                            left: Sizes.mapContentMargin,
-                            right: Sizes.mapContentMargin,
+                            left: Sizes.preferencesMargin,
+                            right: Sizes.preferencesMargin,
                           )
                         : EdgeInsets.only(
                             top: MediaQuery.of(context).viewPadding.top,
-                            left: Sizes.mapContentMargin,
-                            right: Sizes.mapContentMargin,
+                            left: Sizes.preferencesMargin,
+                            right: Sizes.preferencesMargin,
                           ),
                     child: isLandscape
                         ? GridView.builder(
@@ -333,7 +333,6 @@ class PreferencesPage extends StatelessWidget {
             SizedBox(
               width: width / 3,
               child: SpinBox(
-                spacing: 0,
                 min: 10,
                 max: 600,
                 value: context
@@ -347,8 +346,9 @@ class PreferencesPage extends StatelessWidget {
                   if (v > 600) v = 600;
                   context.read<AircraftCubit>().setcleanTimeSec(v.toInt());
                 },
-                iconColor:
-                    MaterialStateProperty.all(AppColors.droneScannerDarkGray),
+                iconColor: MaterialStateProperty.all(
+                  AppColors.preferencesButtonColor,
+                ),
                 decoration: const InputDecoration(
                   fillColor: Colors.white,
                   border: InputBorder.none,

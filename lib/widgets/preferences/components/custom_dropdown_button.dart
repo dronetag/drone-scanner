@@ -20,6 +20,7 @@ class CustomDropdownButton extends StatelessWidget {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: value,
+        isDense: true,
         icon: RotatedBox(
           quarterTurns: 3,
           child: const Icon(
