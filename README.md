@@ -16,7 +16,7 @@ For a more in-depth description, refer to the [documentation](./docs/) folder.
 * [Code Architecture](./docs/architecture.md)
     * Declares the directory structure and overall architecture
 * [Project Setup and Building](./docs/build.md)
-    * Instructions on how to setup and build the project, information about used dependencies
+    * Instructions on how to set up and build the project, information about used dependencies
     
 ## Other resources
 
