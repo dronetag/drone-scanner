@@ -33,8 +33,8 @@ Useful resources for any Flutter developer
 ## Screenshots
 
 <p float="middle">
-<img src="/assets/screenshots/detail.jpg" height="400" />
 <img src="/assets/screenshots/map_page.jpg" height="400" />
+<img src="/assets/screenshots/detail.jpg" height="400" />
 </p>
 
 <p float="middle">
