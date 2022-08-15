@@ -29,8 +29,8 @@ class DroneScannerIcon {
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData close =
       IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData error_outline =
+  static const IconData errorOutline =
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData arrow_back =
+  static const IconData arrowBack =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

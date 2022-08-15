@@ -125,7 +125,7 @@ class PreferencesPage extends StatelessWidget {
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
-            DroneScannerIcon.arrow_back,
+            DroneScannerIcon.arrowBack,
             size: Sizes.iconSize,
           ),
         ),
