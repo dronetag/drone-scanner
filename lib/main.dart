@@ -12,6 +12,7 @@ import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
 import 'services/location_service.dart';
 import 'utils/google_api_key_reader.dart';
+import 'utils/uasid_prefix_reader.dart';
 import 'widgets/app/app.dart';
 
 void main() async {
@@ -19,6 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize Google services
   await GoogleApiKeyReader.initialize();
+  await UASIDPrefixReader.initialize();
   final locationService = LocationService();
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();

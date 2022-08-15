@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import '../../constants/colors.dart';
-import '../../constants/sizes.dart';
 
 class ShowcaseItem extends StatelessWidget {
   final String title;

@@ -10,6 +10,7 @@ import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
+import '../../utils/drone_scanner_icon_icons.dart';
 import '../app/dialogs.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/common/headline.dart';
@@ -17,8 +18,6 @@ import 'components/clean_packs_checkbox.dart';
 import 'components/custom_dropdown_button.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
-
-import '../../utils/drone_scanner_icon_icons.dart';
 
 class PreferencesPage extends StatelessWidget {
   const PreferencesPage({Key? key}) : super(key: key);

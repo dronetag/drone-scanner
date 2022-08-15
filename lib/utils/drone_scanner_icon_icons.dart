@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/DroneScannerIcon.ttf
 ///
-/// 
+///
 /// * Material Design Icons, Copyright (C) Google, Inc
 ///         Author:    Google
 ///         License:   Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
@@ -25,8 +25,12 @@ class DroneScannerIcon {
   static const _kFontFam = 'DroneScannerIcon';
   static const String? _kFontPkg = null;
 
-  static const IconData done = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData close = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData error_outline = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData arrow_back = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData done =
+      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData close =
+      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData error_outline =
+      IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData arrow_back =
+      IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

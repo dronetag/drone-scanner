@@ -6,10 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 
 import '../../../bloc/map/map_cubit.dart';
-import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../utils/google_api_key_reader.dart';
-import '../../showcase/showcase_item.dart';
 
 class LocationSearch extends StatefulWidget {
   const LocationSearch({Key? key}) : super(key: key);

@@ -10,6 +10,7 @@ import '../../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
+import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import '../../common/chevron.dart';
@@ -200,6 +201,15 @@ class AircraftDetailHeader extends StatelessWidget {
   }
 
   Widget buildTitle(BuildContext context, List<MessagePack> messagePackList) {
+    String? manufacturer;
+    Image? logo;
+    if (messagePackList.isNotEmpty &&
+        messagePackList.last.basicIdMessage != null) {
+      manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
+          messagePackList.last.basicIdMessage!.uasId);
+      logo =
+          getManufacturerLogo(manufacturer: manufacturer, color: Colors.white);
+    }
     return Text.rich(
       TextSpan(
         style: const TextStyle(
@@ -207,18 +217,10 @@ class AircraftDetailHeader extends StatelessWidget {
           fontWeight: FontWeight.w700,
         ),
         children: [
-          if (messagePackList.last.basicIdMessage != null &&
-              messagePackList.last.basicIdMessage?.uasId.startsWith('1596') ==
-                  true)
+          if (manufacturer != null && logo != null)
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
-              child: Image.asset(
-                'assets/images/dronetag.png',
-                height: 18,
-                width: 24,
-                alignment: Alignment.topCenter,
-                color: Colors.white,
-              ),
+              child: logo,
             ),
           TextSpan(
             text:

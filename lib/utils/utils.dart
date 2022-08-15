@@ -158,3 +158,19 @@ Image? getFlag(String countryCode) {
   }
   return flag;
 }
+
+Image? getManufacturerLogo({String? manufacturer, Color color = Colors.black}) {
+  if (manufacturer == null) return null;
+  String? path;
+  if (manufacturer == 'Dronetag') path = 'assets/images/dronetag.png';
+  if (manufacturer == 'DJI') path = 'assets/images/dji_logo.png';
+
+  if (path == null) return null;
+  return Image.asset(
+    path,
+    height: 16,
+    width: 24,
+    alignment: Alignment.topRight,
+    color: color,
+  );
+}
