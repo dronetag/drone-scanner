@@ -70,7 +70,7 @@ class _ToolbarState extends State<Toolbar> {
               showcaseKey: context.read<ShowcaseCubit>().showInfoKey,
               description: context.read<ShowcaseCubit>().showInfoDescription,
               title: 'Map Toolbar',
-              child: RawMaterialButton(
+              child: IconButton(
                 onPressed: () {
                   displayToolbarMenu(context).then(
                     (value) {
@@ -78,12 +78,9 @@ class _ToolbarState extends State<Toolbar> {
                     },
                   );
                 },
-                elevation: 0,
                 padding: const EdgeInsets.all(0),
                 constraints: const BoxConstraints(),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                fillColor: Colors.transparent,
-                child: const Icon(
+                icon: const Icon(
                   Icons.more_horiz,
                   color: Colors.white,
                   size: Sizes.iconSize,
