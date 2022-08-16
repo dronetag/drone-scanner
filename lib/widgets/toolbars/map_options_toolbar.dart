@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
@@ -88,6 +89,9 @@ class MapOptionsToolbar extends StatelessWidget {
                             .read<SlidersCubit>()
                             .setShowDroneDetail(show: false);
                         context.read<AircraftCubit>().clear();
+                        context
+                            .read<SelectedAircraftCubit>()
+                            .unselectAircraft();
                         showSnackBar(
                           context,
                           'All the gathered aircraft data were deleted.',

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -384,6 +385,7 @@ class PreferencesPage extends StatelessWidget {
                 () {
                   context.read<SlidersCubit>().setShowDroneDetail(show: false);
                   context.read<AircraftCubit>().clear();
+                  context.read<SelectedAircraftCubit>().unselectAircraft();
                 },
               );
             },
