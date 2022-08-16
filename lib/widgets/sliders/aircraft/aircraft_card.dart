@@ -148,13 +148,19 @@ class AircraftCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(
-                source == pigeon.MessageSource.BluetoothLegacy ||
-                        source == pigeon.MessageSource.BluetoothLongRange
-                    ? Icons.bluetooth
-                    : Icons.wifi,
-                size: Sizes.iconSize / 3 * 2,
-              ),
+              if (source == pigeon.MessageSource.BluetoothLegacy ||
+                  source == pigeon.MessageSource.BluetoothLongRange)
+                Icon(
+                  Icons.bluetooth,
+                  size: Sizes.iconSize / 3 * 2,
+                ),
+              if (source == pigeon.MessageSource.WifiBeacon ||
+                  source == pigeon.MessageSource.WifiNaN)
+                Image.asset(
+                  'assets/images/wifi_icon.png',
+                  width: Sizes.iconSize / 3 * 2,
+                  height: Sizes.iconSize / 3 * 2,
+                ),
               Text(
                 standardText,
                 style: const TextStyle(
