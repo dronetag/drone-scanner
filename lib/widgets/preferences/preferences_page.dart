@@ -121,6 +121,9 @@ class PreferencesPage extends StatelessWidget {
       ),
     );
     final itemPadding = EdgeInsets.only(bottom: 10);
+    final tooltipMargin =
+        EdgeInsets.symmetric(horizontal: Sizes.preferencesMargin);
+    final tooltipPadding = EdgeInsets.all(5);
     return [
       Align(
         alignment: Alignment.centerLeft,
@@ -147,14 +150,16 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
-      const Headline(
+      Headline(
         text: 'Standards',
         child: Tooltip(
+          padding: tooltipPadding,
+          margin: tooltipMargin,
           triggerMode: TooltipTriggerMode.tap,
           message: 'Each phone may support different standards which the '
               'application attemps to use. See which standards are supported '
               'on your device.',
-          child: Icon(
+          child: const Icon(
             Icons.help_outline,
             color: AppColors.lightGray,
             size: Sizes.textIconSize,
@@ -178,12 +183,14 @@ class PreferencesPage extends StatelessWidget {
           color: state.btExtended ? AppColors.orange : AppColors.red,
           text: btExtendedText,
           icon: state.btExtended
-              ? const Tooltip(
+              ? Tooltip(
                   triggerMode: TooltipTriggerMode.tap,
+                  padding: tooltipPadding,
+                  margin: tooltipMargin,
                   message:
-                      'Warning: Support claimed by manufactur does not fully '
-                      'guarantee that Bluetooth Extended actualy will work.',
-                  child: Icon(
+                      'Warning: Support claimed by manufacturer does not fully '
+                      'guarantee that Bluetooth Extended will actually work.',
+                  child: const Icon(
                     Icons.error_outline,
                     color: AppColors.orange,
                   ),
@@ -231,14 +238,16 @@ class PreferencesPage extends StatelessWidget {
           icon: state.wifiNaN ? positiveIcon : negativeIcon,
         ),
       ),
-      const Headline(
+      Headline(
         text: 'Permissions',
         child: Tooltip(
           triggerMode: TooltipTriggerMode.tap,
+          padding: tooltipPadding,
+          margin: tooltipMargin,
           message:
-              'See what permissions are currently granted with possibility '
+              'See what permissions are currently granted with anpossibility '
               'to change them from the system settings.',
-          child: Icon(
+          child: const Icon(
             Icons.help_outline,
             color: AppColors.lightGray,
             size: Sizes.textIconSize,
@@ -303,13 +312,15 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
-      const Headline(
+      Headline(
         text: 'Data Preferences',
         child: Tooltip(
           triggerMode: TooltipTriggerMode.tap,
+          padding: tooltipPadding,
+          margin: tooltipMargin,
           message: 'The application can delete old records after certain time '
               'passes after the last message from device is received.',
-          child: Icon(
+          child: const Icon(
             Icons.help_outline,
             color: AppColors.lightGray,
             size: Sizes.textIconSize,
