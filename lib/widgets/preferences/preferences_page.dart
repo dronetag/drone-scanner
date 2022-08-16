@@ -1,7 +1,6 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
@@ -16,6 +15,7 @@ import '../showcase/showcase_item.dart';
 import '../sliders/common/headline.dart';
 import 'components/clean_packs_checkbox.dart';
 import 'components/custom_dropdown_button.dart';
+import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
 
@@ -343,41 +343,7 @@ class PreferencesPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Expiration time (sec):'),
-            SizedBox(
-              width: width / 3,
-              child: SpinBox(
-                min: 10,
-                max: 600,
-                value: context
-                    .watch<AircraftCubit>()
-                    .state
-                    .cleanTimeSec
-                    .toDouble(),
-                step: 5,
-                onChanged: (v) {
-                  if (v < 10) v = 10;
-                  if (v > 600) v = 600;
-                  context.read<AircraftCubit>().setcleanTimeSec(v.toInt());
-                },
-                iconColor: MaterialStateProperty.all(
-                  AppColors.preferencesButtonColor,
-                ),
-                decoration: const InputDecoration(
-                  fillColor: Colors.white,
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.only(
-                    top: 5,
-                  ),
-                  constraints: BoxConstraints(
-                    maxHeight: 40,
-                  ),
-                ),
-              ),
-            ),
+            CustomSpinBox(),
           ],
         ),
       ),
