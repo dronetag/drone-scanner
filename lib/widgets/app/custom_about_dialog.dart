@@ -16,7 +16,7 @@ class CustomAboutDialog extends StatelessWidget {
         AppColors.preferencesButtonColor,
       ),
     );
-    const borderRadius = 15.0;
+    const borderRadius = 20.0;
     const legalese = '© Dronetag s.r.o., 2022';
     final buildText = 'build ${packageInfo!.buildNumber}';
     late final String versionText;
@@ -39,7 +39,7 @@ class CustomAboutDialog extends StatelessWidget {
       ),
       margin: EdgeInsets.symmetric(
         horizontal: Sizes.mapContentMargin * 2,
-        vertical: MediaQuery.of(context).size.height / 4,
+        vertical: MediaQuery.of(context).size.height / 5,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -60,7 +60,9 @@ class CustomAboutDialog extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(Sizes.mapContentMargin),
+                padding: const EdgeInsets.all(
+                  Sizes.aboutDialogMargin,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -123,10 +125,10 @@ class CustomAboutDialog extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(
-                  Sizes.mapContentMargin,
+                  Sizes.aboutDialogMargin,
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
                       width: width / 2,
@@ -157,6 +159,7 @@ class CustomAboutDialog extends StatelessWidget {
                         child: const Text('Send diagnostics logs'),
                       ),
                     ),
+                    Spacer(),
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Column(
@@ -164,7 +167,13 @@ class CustomAboutDialog extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              const Text('Developed by '),
+                              const Text(
+                                'Developed by ',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                               Image.asset(
                                 'assets/images/dronetag_logo.png',
                                 width: width / 5,
