@@ -68,6 +68,7 @@ class PreferencesPage extends StatelessWidget {
                             ),
                             shrinkWrap: true,
                             itemCount: itemList.length,
+                            physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Container(
                                 margin:
@@ -80,6 +81,7 @@ class PreferencesPage extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             itemBuilder: (context, index) => itemList[index],
                             itemCount: itemList.length,
+                            physics: BouncingScrollPhysics(),
                           ),
                   ),
                 ),
@@ -118,7 +120,7 @@ class PreferencesPage extends StatelessWidget {
         AppColors.preferencesButtonColor,
       ),
     );
-    final itemPadding = EdgeInsets.only(bottom: 8);
+    final itemPadding = EdgeInsets.only(bottom: 10);
     return [
       Align(
         alignment: Alignment.centerLeft,
@@ -193,7 +195,7 @@ class PreferencesPage extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: itemPadding,
             child: RichText(
               textScaleFactor: 0.75,
               text: TextSpan(
@@ -329,7 +331,7 @@ class PreferencesPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Time to clean (sec):'),
+            const Text('Expiration time (sec):'),
             SizedBox(
               width: width / 3,
               child: SpinBox(

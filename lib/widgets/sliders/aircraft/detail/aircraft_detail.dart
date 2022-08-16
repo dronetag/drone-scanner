@@ -74,6 +74,7 @@ class AircraftDetail extends StatelessWidget {
                 mainAxisExtent: 50,
               ),
               shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
               itemCount: dataChildren.length,
               itemBuilder: (context, index) {
                 return Container(
@@ -88,6 +89,7 @@ class AircraftDetail extends StatelessWidget {
                   margin: EdgeInsets.only(top: headerHeight),
                   height: contentHeight,
                   child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.zero,
                     itemCount: dataChildren.length,
                     itemBuilder: (context, index) => dataChildren[index],
