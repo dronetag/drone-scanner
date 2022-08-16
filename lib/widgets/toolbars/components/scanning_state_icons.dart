@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
@@ -51,12 +53,26 @@ class ScanningStateIcons extends StatelessWidget {
               constraints: const BoxConstraints(),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               shape: const CircleBorder(),
-              child: Icon(
-                state.isScanningBluetooth
-                    ? Icons.bluetooth
-                    : Icons.bluetooth_disabled,
-                color: Colors.white,
-                size: Sizes.iconSize,
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Icon(
+                    Icons.bluetooth,
+                    color: state.isScanningBluetooth
+                        ? Colors.white
+                        : AppColors.iconDisabledColor,
+                    size: Sizes.iconSize,
+                  ),
+                  if (!state.isScanningBluetooth)
+                    Transform.rotate(
+                      angle: -math.pi / 4,
+                      child: Container(
+                        width: Sizes.iconSize / 8,
+                        height: Sizes.iconSize + 3,
+                        color: Colors.white,
+                      ),
+                    ),
+                ],
               ),
             );
           },
@@ -86,10 +102,27 @@ class ScanningStateIcons extends StatelessWidget {
                 constraints: const BoxConstraints(),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 shape: const CircleBorder(),
-                child: Icon(
-                  state.isScanningWifi ? Icons.wifi : Icons.wifi_off,
-                  color: Colors.white,
-                  size: Sizes.iconSize,
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/wifi_icon.png',
+                      width: Sizes.iconSize,
+                      height: Sizes.iconSize,
+                      color: state.isScanningWifi
+                          ? Colors.white
+                          : AppColors.iconDisabledColor,
+                    ),
+                    if (!state.isScanningWifi)
+                      Transform.rotate(
+                        angle: -math.pi / 4,
+                        child: Container(
+                          width: Sizes.iconSize / 8,
+                          height: Sizes.iconSize + 3,
+                          color: Colors.white,
+                        ),
+                      ),
+                  ],
                 ),
               );
             },
