@@ -50,47 +50,44 @@ class AircraftCard extends StatelessWidget {
         ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
 
-    return Opacity(
-      opacity: isAirborne ? 1.0 : 0.75,
-      child: ListTile(
-        minLeadingWidth: 0,
-        contentPadding: EdgeInsets.zero,
-        leading: buildLeading(context),
-        trailing: buildTrailing(context),
-        title: AircraftCardTitle(
-          uasId: uasIdText,
-          givenLabel: givenLabel,
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Operator ID row
-            Text.rich(
-              TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-                children: [
-                  if (countryCode != null &&
-                      flag != null &&
-                      messagePack.operatorIDValid())
-                    WidgetSpan(
-                      child: flag,
-                      alignment: PlaceholderAlignment.middle,
-                    ),
-                  TextSpan(
-                    text: messagePack.operatorIDValid()
-                        ? ' ${messagePack.operatorIdMessage?.operatorId}'
-                        : 'Unknown Operator ID',
-                  ),
-                ],
+    return ListTile(
+      minLeadingWidth: 0,
+      contentPadding: EdgeInsets.zero,
+      leading: buildLeading(context),
+      trailing: buildTrailing(context),
+      title: AircraftCardTitle(
+        uasId: uasIdText,
+        givenLabel: givenLabel,
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Operator ID row
+          Text.rich(
+            TextSpan(
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
               ),
+              children: [
+                if (countryCode != null &&
+                    flag != null &&
+                    messagePack.operatorIDValid())
+                  WidgetSpan(
+                    child: flag,
+                    alignment: PlaceholderAlignment.middle,
+                  ),
+                TextSpan(
+                  text: messagePack.operatorIDValid()
+                      ? ' ${messagePack.operatorIdMessage?.operatorId}'
+                      : 'Unknown Operator ID',
+                ),
+              ],
             ),
-            AircraftCardCustomText(
-              messagePack: messagePack,
-            ),
-          ],
-        ),
+          ),
+          AircraftCardCustomText(
+            messagePack: messagePack,
+          ),
+        ],
       ),
     );
   }

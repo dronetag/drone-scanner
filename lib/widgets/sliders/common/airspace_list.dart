@@ -74,7 +74,10 @@ class AirspaceList extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return children[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: children[index],
+                        );
                       },
                       separatorBuilder: (context, _) {
                         return Divider(
