@@ -110,6 +110,7 @@ class AircraftCard extends StatelessWidget {
         children: [
           Icon(
             icon,
+            size: Sizes.cardIconSize,
             color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
           ),
           const SizedBox(

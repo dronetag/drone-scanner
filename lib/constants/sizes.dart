@@ -6,6 +6,7 @@ class Sizes {
   static const toolbarMinSizeRatioLandscape = 12;
   static const panelBorderRadius = 10.0;
   static const toolbarHeight = 50.0;
+  static const cardIconSize = 32.0;
   static const iconSize = 25.0;
   static const textIconSize = 20.0;
   static const detailMargin = 20.0;
