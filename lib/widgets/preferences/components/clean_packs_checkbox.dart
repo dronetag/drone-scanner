@@ -22,10 +22,10 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
       width: 40,
       child: Switch(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        inactiveThumbColor: AppColors.preferencesButtonColor,
         activeColor: AppColors.highlightBlue,
-        trackColor: MaterialStateProperty.all<Color>(AppColors.lightGray),
-        thumbColor: MaterialStateProperty.all<Color>(
-          AppColors.preferencesButtonColor,
+        trackColor: MaterialStateProperty.all<Color>(
+          AppColors.lightGray,
         ),
         value: _cleanPacks,
         onChanged: (c) {

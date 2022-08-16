@@ -107,6 +107,7 @@ class ConnectionFields {
           AircraftRefresingField(
             pack: messagePackList.last,
             label: 'Last Seen',
+            showExpiryWarning: true,
           ),
           AircraftDetailField(
             headlineText: '# Messages',

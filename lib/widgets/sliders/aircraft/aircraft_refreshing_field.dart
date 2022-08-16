@@ -7,11 +7,13 @@ import '../common/refreshing_text.dart';
 class AircraftRefresingField extends StatelessWidget {
   final String label;
   final MessagePack pack;
+  final bool showExpiryWarning;
 
   const AircraftRefresingField({
     Key? key,
     required this.pack,
     required this.label,
+    this.showExpiryWarning = false,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class AircraftRefresingField extends StatelessWidget {
         ),
         RefreshingText(
           pack: pack,
+          showExpiryWarning: showExpiryWarning,
         ),
       ],
     );

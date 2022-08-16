@@ -177,6 +177,7 @@ class AircraftCard extends StatelessWidget {
             pack: messagePack,
             scaleFactor: 0.7,
             short: true,
+            showExpiryWarning: true,
             fontWeight: FontWeight.w600,
           ),
         ],
