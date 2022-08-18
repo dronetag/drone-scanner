@@ -32,10 +32,11 @@ Useful resources for any Flutter developer
 
 ## Screenshots
 
-<p float="middle">
-<img src="/assets/screenshots/map_page.jpg" height="400" />
-<img src="/assets/screenshots/detail.jpg" height="400" />
-</p>
+
+| Map View       | Aircraft Detail           |
+| ------------- |:-------------:|
+|![s](/assets/screenshots/map_page.jpg)    | ![s](/assets/screenshots/detail.jpg) |
+
 
 <p float="middle">
 <img src="/assets/screenshots/app-usage.gif"/>
