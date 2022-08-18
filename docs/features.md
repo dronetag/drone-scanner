@@ -45,5 +45,5 @@ The most recent information that we were able to find says that UAS that would o
 
 ## Supported smartphones
 
-- the ability of a phone to receive Bluetooth 5 Extended Advertisements must be proven experimentally. A list of smartphones that have been tested for receiving Remote ID signals is available [here](https://github.com/opendroneid/receiver-android/blob/master/supported-smartphones.md).
+- the ability of a phone to receive Bluetooth 5 Extended Advertisements must be proven experimentally. A list of smartphones that have been tested for receiving Remote ID signals is available [here](https://github.com/opendroneid/receiver-android/blob/master/supported-smartphones.md). Please contribute to the list if you have any valuable information.
 
