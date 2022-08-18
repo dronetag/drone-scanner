@@ -9,6 +9,11 @@
 - Easy export of collected data
 - Continuously updated to reflect the latest EU & US regulations
 
+### Platform limitations
+- on the iOS, application scans for Remote ID advertisements just using the Bluetooth 4. Currently, there is no API that would enable us to implement scanning using Wi-Fi.
+-  CoreBluetooth API on iOS does not provide MAC address of device that broadcasts data, MAC field is thus hidden on the iOS
+-  on the Android, Wi-Fi NaN scans do not provide the MAC address of device, if your device broadcasts using Wi-Fi NaN and some other technology, the records will not be grouped together
+
 ## Regulatory compliance
 
 The application is compliant with the latest regulations in the drone industry.
