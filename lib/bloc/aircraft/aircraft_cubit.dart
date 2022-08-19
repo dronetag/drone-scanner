@@ -191,20 +191,17 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   // labels are stored locally on device,
   Future<void> fetchSavedLabels() async {
-    await storage.ready.then(
-      (ready) {
-        if (ready) {
-          var labels = storage.getItem('labels');
-          if (labels == null) {
-            return;
-          }
-          final labelsMap = <String, String>{};
-          (json.decode(labels as String) as Map<String, dynamic>)
-              .forEach((key, value) => labelsMap[key] = value as String);
-          emit(state.copyWith(aircraftLabels: labelsMap));
-        }
-      },
-    );
+    final ready = await storage.ready;
+    if (ready) {
+      var labels = storage.getItem('labels');
+      if (labels == null) {
+        return;
+      }
+      final labelsMap = <String, String>{};
+      (json.decode(labels as String) as Map<String, dynamic>)
+          .forEach((key, value) => labelsMap[key] = value as String);
+      emit(state.copyWith(aircraftLabels: labelsMap));
+    }
   }
 
   // labels are stored locally on device,
