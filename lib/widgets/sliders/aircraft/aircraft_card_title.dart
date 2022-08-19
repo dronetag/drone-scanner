@@ -13,46 +13,29 @@ class AircraftCardTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (givenLabel == null) {
-      return Text.rich(
-        TextSpan(
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-          children: [
-            if (uasId.startsWith('1596') == true)
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Image.asset('assets/images/dronetag.png',
-                    height: 16,
-                    width: 24,
-                    alignment: Alignment.topRight,
-                    color: Colors.black),
-              ),
-            TextSpan(
-              text: ' $uasId',
-            ),
-          ],
+    return Text.rich(
+      TextSpan(
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
         ),
-      );
-    } else {
-      return Text.rich(
-        TextSpan(
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-          children: [
+        children: [
+          if (uasId.startsWith('1596') == true)
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
-              child: Icon(Icons.label_outline,
-                  size: Sizes.textIconSize, color: Colors.black),
+              child: givenLabel == null
+                  ? Image.asset('assets/images/dronetag.png',
+                      height: 16,
+                      width: 24,
+                      alignment: Alignment.topRight,
+                      color: Colors.black)
+                  : Icon(Icons.label_outline,
+                      size: Sizes.textIconSize, color: Colors.black),
             ),
-            TextSpan(
-              text: ' $givenLabel',
-            ),
-          ],
-        ),
-      );
-    }
+          TextSpan(
+            text: givenLabel == null ? ' $uasId' : ' $givenLabel',
+          ),
+        ],
+      ),
+    );
   }
 }

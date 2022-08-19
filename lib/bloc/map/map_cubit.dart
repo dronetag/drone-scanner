@@ -275,13 +275,10 @@ class MapCubit extends Cubit<GMapState> {
                   } else {
                     markerHue = gmap.BitmapDescriptor.hueBlue;
                   }
-                  var haslocation = true;
-                  if (e.isEmpty ||
+                  var haslocation = !(e.isEmpty ||
                       e.last.locationMessage == null ||
                       e.last.locationMessage?.latitude == null ||
-                      e.last.locationMessage?.longitude == null) {
-                    haslocation = false;
-                  }
+                      e.last.locationMessage?.longitude == null);
                   final uasIdText = e.last.basicIdMessage != null
                       ? e.last.basicIdMessage?.uasId
                       : 'Unknown UAS ID';
