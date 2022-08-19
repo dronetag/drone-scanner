@@ -147,15 +147,15 @@ String getAltitudeAsString(double? altitude) {
 Image? getFlag(String countryCode) {
   Image? flag;
 
-  try {
-    flag = Image.network(
-      'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
-      width: 24,
-      height: 12,
-    );
-  } on Exception {
-    flag = null;
-  }
+  flag = Image.network(
+    'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
+    width: 24,
+    height: 12,
+    errorBuilder: (context, exception, stackTrace) {
+      return Container();
+    },
+  );
+
   return flag;
 }
 
