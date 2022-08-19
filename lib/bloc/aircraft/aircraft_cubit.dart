@@ -20,7 +20,8 @@ class AircraftState {
   final Map<String, List<MessagePack>> _packHistory;
   final bool cleanOldPacks;
   final int cleanTimeSec;
-
+  // map of aircraft labels given by user
+  // keys are aircraft mac adresses, values are labels
   final Map<String, String> aircraftLabels;
 
   Map<String, List<MessagePack>> packHistory() {
@@ -189,7 +190,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     }
   }
 
-  // labels are stored locally on device,
+  //Retrieves the labels stored persistently locally on the device
   Future<void> fetchSavedLabels() async {
     final ready = await storage.ready;
     if (ready) {
@@ -204,7 +205,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     }
   }
 
-  // labels are stored locally on device,
+  // Stores the label persistently locally on the device
   Future<void> addAircraftLabel(String mac, String label) async {
     var labels = state.aircraftLabels;
     labels[mac] = label;
@@ -212,6 +213,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     await _saveLabels();
   }
 
+  // deletes locally stored label for aircraft with given mac
   Future<void> deleteAircraftLabel(String mac) async {
     var labels = state.aircraftLabels;
     labels.remove(mac);
