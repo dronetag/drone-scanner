@@ -19,11 +19,10 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
   Widget build(BuildContext context) {
     _cleanPacks = context.read<AircraftCubit>().state.cleanOldPacks;
     return Switch(
-      activeColor: AppColors.droneScannerHighlightBlue,
-      trackColor:
-          MaterialStateProperty.all<Color>(AppColors.droneScannerLightGray),
+      activeColor: AppColors.highlightBlue,
+      trackColor: MaterialStateProperty.all<Color>(AppColors.lightGray),
       thumbColor: MaterialStateProperty.all<Color>(
-        AppColors.droneScannerPreferencesButtonColor,
+        AppColors.preferencesButtonColor,
       ),
       value: _cleanPacks,
       onChanged: (c) {

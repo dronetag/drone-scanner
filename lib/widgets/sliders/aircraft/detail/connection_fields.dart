@@ -59,7 +59,7 @@ class ConnectionFields {
                 Text(
                   sourceText,
                   style: const TextStyle(
-                    color: AppColors.droneScannerDetailFieldColor,
+                    color: AppColors.detailFieldColor,
                   ),
                 ),
               ],
@@ -72,7 +72,7 @@ class ConnectionFields {
               children: [
                 const Icon(
                   Icons.signal_cellular_alt,
-                  color: AppColors.droneScannerHighlightBlue,
+                  color: AppColors.highlightBlue,
                   size: Sizes.iconSize / 3 * 2,
                 ),
                 const SizedBox(
@@ -81,7 +81,7 @@ class ConnectionFields {
                 Text(
                   '${messagePackList.last.lastMessageRssi} dBm',
                   style: const TextStyle(
-                    color: AppColors.droneScannerDetailFieldColor,
+                    color: AppColors.detailFieldColor,
                   ),
                 ),
               ],

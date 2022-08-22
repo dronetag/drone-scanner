@@ -13,7 +13,7 @@ class CustomAboutDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final buttonStyle = ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
-        AppColors.droneScannerPreferencesButtonColor,
+        AppColors.preferencesButtonColor,
       ),
     );
     const borderRadius = 15.0;

@@ -18,13 +18,12 @@ dependencies:
   flutter_opendroneid:
     path: ../flutter-opendroneid
   sprintf: "^6.0.0"
-  flutter_google_places_hoc081098: ^1.1.0
+  flutter_google_places_hoc081098: 1.1.0
   google_api_headers: ^1.1.1
   google_maps_webservice: ^0.0.20-nullsafety.5
   google_maps_flutter: ^2.1.1
   sliding_up_panel: ^2.0.0+1
   location: ^4.2.0
-  latlng: ^0.1.0
   http: any
   permission_handler: ^9.2.0
   flutter_spinbox: ^0.8.0
@@ -35,25 +34,15 @@ dependencies:
   f_logs: ^2.0.0 
   timer_builder: ^2.0.0
   csv: ^5.0.1
-  app_settings: 4.1.3
+  app_settings: ^4.1.3
   share_plus: ^4.0.3
   flutter_bloc: ^8.0.1
   package_info: ^2.0.2
-  effective_dart: ^1.3.1
-  pedantic: ^1.11.0
-  localstorage: ^4.0.0+1
-
-  # does not support android v2 embedding, should not be used
-  #downloads_path_provider: ^0.1.0
-
-  cupertino_icons: ^1.0.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^1.0.0
-
   flutter_launcher_icons: ^0.9.2
+  dependency_validator: ^3.0.0
+  pedantic: ^1.11.0
 
 flutter_icons:
   android: true

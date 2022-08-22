@@ -89,11 +89,11 @@ class PreferencesPage extends StatelessWidget {
   ) {
     const positiveIcon = Icon(
       Icons.done,
-      color: AppColors.droneScannerGreen,
+      color: AppColors.green,
     );
     const negativeIcon = Icon(
       Icons.error,
-      color: AppColors.droneScannerRed,
+      color: AppColors.red,
     );
     final width = MediaQuery.of(context).size.width;
     final isLandscape =
@@ -107,7 +107,7 @@ class PreferencesPage extends StatelessWidget {
     final maxAdvDataLenText = state.maxAdvDataLen.toString();
     final buttonStyle = ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
-        AppColors.droneScannerPreferencesButtonColor,
+        AppColors.preferencesButtonColor,
       ),
     );
     return [
@@ -143,7 +143,7 @@ class PreferencesPage extends StatelessWidget {
               'on your device.',
           child: Icon(
             Icons.help_outline,
-            color: AppColors.droneScannerLightGray,
+            color: AppColors.lightGray,
             size: Sizes.textIconSize,
           ),
         ),
@@ -152,16 +152,12 @@ class PreferencesPage extends StatelessWidget {
       PreferencesField(
         label: 'Bluetooth 4 Legacy',
         icon: state.btLegacy ? positiveIcon : negativeIcon,
-        color: state.btLegacy
-            ? AppColors.droneScannerGreen
-            : AppColors.droneScannerRed,
+        color: state.btLegacy ? AppColors.green : AppColors.red,
         text: btLegacyText,
       ),
       PreferencesField(
         label: 'Bluetooth 5 Extended',
-        color: state.btExtended
-            ? AppColors.droneScannerOrange
-            : AppColors.droneScannerRed,
+        color: state.btExtended ? AppColors.orange : AppColors.red,
         text: btExtendedText,
         icon: state.btExtended
             ? const Tooltip(
@@ -171,7 +167,7 @@ class PreferencesPage extends StatelessWidget {
                     'guarantee that Bluetooth Extended actualy will work.',
                 child: Icon(
                   Icons.system_security_update_warning,
-                  color: AppColors.droneScannerOrange,
+                  color: AppColors.orange,
                 ),
               )
             : negativeIcon,
@@ -184,7 +180,7 @@ class PreferencesPage extends StatelessWidget {
             child: RichText(
               textScaleFactor: 0.75,
               text: TextSpan(
-                style: const TextStyle(color: AppColors.droneScannerLightGray),
+                style: const TextStyle(color: AppColors.lightGray),
                 children: <TextSpan>[
                   const TextSpan(text: 'Max. ad. data length is '),
                   TextSpan(
@@ -202,16 +198,12 @@ class PreferencesPage extends StatelessWidget {
         label: 'Wi-Fi Beacon',
         text: wifiBeaconText,
         icon: state.wifiBeacon ? positiveIcon : negativeIcon,
-        color: state.wifiBeacon
-            ? AppColors.droneScannerGreen
-            : AppColors.droneScannerRed,
+        color: state.wifiBeacon ? AppColors.green : AppColors.red,
       ),
       PreferencesField(
         label: 'Wi-Fi NaN',
         text: wifiNanText,
-        color: state.wifiNaN
-            ? AppColors.droneScannerGreen
-            : AppColors.droneScannerRed,
+        color: state.wifiNaN ? AppColors.green : AppColors.red,
         icon: state.wifiNaN ? positiveIcon : negativeIcon,
       ),
       if (isLandscape) const SizedBox(),
@@ -224,7 +216,7 @@ class PreferencesPage extends StatelessWidget {
               'to change them from the system settings.',
           child: Icon(
             Icons.help_outline,
-            color: AppColors.droneScannerLightGray,
+            color: AppColors.lightGray,
             size: Sizes.textIconSize,
           ),
         ),
@@ -233,25 +225,19 @@ class PreferencesPage extends StatelessWidget {
       PreferencesField(
         label: 'Wi-Fi:',
         text: state.androidSystem ? 'Granted' : 'Not Granted',
-        color: state.androidSystem
-            ? AppColors.droneScannerGreen
-            : AppColors.droneScannerRed,
+        color: state.androidSystem ? AppColors.green : AppColors.red,
         icon: state.androidSystem ? positiveIcon : negativeIcon,
       ),
       PreferencesField(
         label: 'Location:',
         text: state.locationEnabled ? 'Granted' : 'Not Granted',
-        color: state.locationEnabled
-            ? AppColors.droneScannerGreen
-            : AppColors.droneScannerRed,
+        color: state.locationEnabled ? AppColors.green : AppColors.red,
         icon: state.locationEnabled ? positiveIcon : negativeIcon,
       ),
       PreferencesField(
         label: 'Bluetooth:',
         text: state.btEnabled ? 'Granted' : 'Not Granted',
-        color: state.btEnabled
-            ? AppColors.droneScannerGreen
-            : AppColors.droneScannerRed,
+        color: state.btEnabled ? AppColors.green : AppColors.red,
         icon: state.btEnabled ? positiveIcon : negativeIcon,
       ),
       if (isLandscape) const SizedBox(),
@@ -289,7 +275,7 @@ class PreferencesPage extends StatelessWidget {
               'passes after the last message from device is received.',
           child: Icon(
             Icons.help_outline,
-            color: AppColors.droneScannerLightGray,
+            color: AppColors.lightGray,
             size: Sizes.textIconSize,
           ),
         ),

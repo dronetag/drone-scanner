@@ -58,7 +58,7 @@ class BasicFields {
                 Text.rich(
                   TextSpan(
                     style: const TextStyle(
-                      color: AppColors.droneScannerLightGray,
+                      color: AppColors.lightGray,
                     ),
                     children: [
                       WidgetSpan(
@@ -68,7 +68,7 @@ class BasicFields {
                           height: 16,
                           width: 24,
                           alignment: Alignment.topCenter,
-                          color: AppColors.droneScannerLightGray,
+                          color: AppColors.lightGray,
                         ),
                       ),
                       const TextSpan(

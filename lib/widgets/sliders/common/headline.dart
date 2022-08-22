@@ -17,7 +17,7 @@ class Headline extends StatelessWidget {
             text.toUpperCase(),
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.droneScannerLightGray,
+              color: AppColors.lightGray,
             ),
           ),
           if (child != null)
@@ -29,8 +29,10 @@ class Headline extends StatelessWidget {
             width: 20,
           ),
           const Expanded(
-            child:
-                Divider(thickness: 2, color: AppColors.droneScannerLightGray),
+            child: Divider(
+              thickness: 2,
+              color: AppColors.lightGray,
+            ),
           ),
         ],
       ),

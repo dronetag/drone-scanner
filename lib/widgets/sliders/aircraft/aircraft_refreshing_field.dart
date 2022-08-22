@@ -23,7 +23,7 @@ class AircraftRefresingField extends StatelessWidget {
           label,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: AppColors.droneScannerDetailFieldHeaderColor,
+            color: AppColors.detailFieldHeaderColor,
           ),
         ),
         RefreshingText(

@@ -33,7 +33,7 @@ class MapOptionsToolbar extends StatelessWidget {
           title: 'Map Options',
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.droneScannerLightGray.withOpacity(0.5),
+              color: AppColors.lightGray.withOpacity(0.5),
               borderRadius: const BorderRadius.all(
                 Radius.circular(Sizes.panelBorderRadius),
               ),

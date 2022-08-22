@@ -10,38 +10,19 @@ class AppTheme {
 
   // Light Color Scheme
   static const lightColorScheme = ColorScheme(
-    primary: AppColors.dronetagBlue,
-    primaryContainer: AppColors.dronetagNavy,
+    primary: AppColors.blue,
+    primaryContainer: AppColors.highlightBlue,
     secondary: Color.fromARGB(255, 22, 24, 25),
-    secondaryContainer: AppColors.dronetagNavy,
+    secondaryContainer: AppColors.highlightBlue,
     surface: Colors.white,
     background: Colors.white,
-    error: AppColors.negative,
+    error: AppColors.red,
     onPrimary: AppColors.dark,
     onSecondary: Colors.white,
     onSurface: AppColors.dark,
     onBackground: AppColors.dark,
     onError: Colors.white,
     brightness: Brightness.light,
-  );
-
-  static final defaultBarrierColor = AppColors.gray.withOpacity(0.5);
-
-  // Dark Color Scheme
-  static const darkColorScheme = ColorScheme(
-    background: Colors.white,
-    brightness: Brightness.dark,
-    error: AppColors.negative,
-    onBackground: Colors.white,
-    onError: AppColors.negative,
-    onPrimary: Colors.white,
-    onSecondary: Colors.white,
-    onSurface: Colors.white,
-    primary: AppColors.dronetagBlue,
-    primaryContainer: AppColors.dronetagNavy,
-    secondary: AppColors.gray,
-    secondaryContainer: AppColors.dronetagNavy,
-    surface: AppColors.veryDark,
   );
 
   // Light UI Theme
@@ -53,10 +34,10 @@ class AppTheme {
     // Colors
     primaryColor: lightColorScheme.primary,
     backgroundColor: lightColorScheme.background,
-    shadowColor: AppColors.gray.withOpacity(0.33),
+    shadowColor: AppColors.darkGray.withOpacity(0.33),
     canvasColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
-    disabledColor: AppColors.veryLightGray,
+    disabledColor: AppColors.lightGray,
 
     // Typography
     fontFamily: 'TitilliumWeb',
@@ -107,7 +88,7 @@ class AppTheme {
         fontSize: 15,
         height: 1.3,
         fontWeight: FontWeight.w500,
-        color: AppColors.gray,
+        color: AppColors.lightGray,
       ),
       button: TextStyle(
         fontSize: 15,
@@ -130,13 +111,13 @@ class AppTheme {
         fontSize: 13,
         height: 1.3,
         fontWeight: FontWeight.w500,
-        color: AppColors.gray,
+        color: AppColors.lightGray,
       ),
       overline: TextStyle(
         fontSize: 13,
         height: 1.3,
         fontWeight: FontWeight.w500,
-        color: AppColors.gray,
+        color: AppColors.lightGray,
         letterSpacing: 1.05,
       ),
     ),
@@ -152,7 +133,7 @@ class AppTheme {
     // Inputs
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.veryLightGray.withOpacity(0.25),
+      fillColor: AppColors.lightGray.withOpacity(0.25),
       labelStyle: const TextStyle(
         fontSize: 15,
         height: 1.2,
@@ -164,11 +145,7 @@ class AppTheme {
         fontSize: 13,
         height: 1.2,
         fontWeight: FontWeight.normal,
-        color: AppColors.gray,
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: Sizes.double,
-        vertical: Sizes.standard,
+        color: AppColors.lightGray,
       ),
       border: const UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.lightGray),
@@ -177,14 +154,14 @@ class AppTheme {
         ),
       ),
       enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: AppColors.gray),
+        borderSide: BorderSide(color: AppColors.lightGray),
       ),
     ),
 
     // Sliders
     sliderTheme: const SliderThemeData(
-      activeTrackColor: AppColors.gray,
-      inactiveTrackColor: AppColors.gray,
+      activeTrackColor: AppColors.lightGray,
+      inactiveTrackColor: AppColors.lightGray,
       thumbColor: Colors.white,
       disabledActiveTrackColor: AppColors.lightGray,
       disabledInactiveTrackColor: AppColors.lightGray,
@@ -199,18 +176,6 @@ class AppTheme {
       elevation: defaultElevation,
       margin: const EdgeInsets.symmetric(vertical: Sizes.half),
     ),
-  );
-
-  static final darkTheme = lightTheme.copyWith(
-    brightness: Brightness.dark,
-    colorScheme: darkColorScheme,
-    primaryColor: darkColorScheme.primary,
-    backgroundColor: darkColorScheme.background,
-    cardColor: AppColors.veryDark,
-    shadowColor: Colors.black,
-    canvasColor: AppColors.veryDark,
-    scaffoldBackgroundColor: AppColors.veryDark,
-    disabledColor: AppColors.veryLightGray,
   );
 
   static SystemUiOverlayStyle getDefaultSystemUIOverlay(BuildContext context) {
@@ -232,7 +197,7 @@ class AppTheme {
   static const monospacedSubtitleTextStyle = TextStyle(
     fontFamily: 'RobotoMono',
     fontSize: 12.0,
-    color: AppColors.gray,
+    color: AppColors.lightGray,
   );
 
   static final captionLinkTextStyle = lightTheme.textTheme.caption!.copyWith(

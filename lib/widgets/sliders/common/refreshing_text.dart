@@ -67,14 +67,14 @@ class _RefreshingTextState extends State<RefreshingText> {
           return Text(
             text,
             textScaleFactor: widget.scaleFactor,
-            style: const TextStyle(color: AppColors.droneScannerRed),
+            style: const TextStyle(color: AppColors.red),
           );
         } else {
           return Text(
             text,
             textScaleFactor: widget.scaleFactor,
             style: const TextStyle(
-              color: AppColors.droneScannerDetailFieldColor,
+              color: AppColors.detailFieldColor,
             ),
           );
         }

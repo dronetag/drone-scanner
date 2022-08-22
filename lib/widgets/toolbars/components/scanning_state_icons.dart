@@ -41,7 +41,7 @@ class ScanningStateIcons extends StatelessWidget {
                     showSnackBar(
                       context,
                       snackBarText,
-                      textColor: AppColors.droneScannerRed,
+                      textColor: AppColors.red,
                     );
                   }
                 });
