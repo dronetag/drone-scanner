@@ -48,12 +48,12 @@ Useful resources for any Flutter developer
 
 | Map View       | Aircraft Detail           |
 | ------------- |:-------------:|
-|![s](/assets/screenshots/map_page.jpg)    | ![s](/assets/screenshots/detail.jpg) |
+|<img src="/assets/screenshots/map_page.jpg" width="200"/>| <img src="/assets/screenshots/detail.jpg" width="200"/> |
 
+| Animated GIF      |
+| ------------- |
+|<img src="/assets/screenshots/app-usage.gif" width="200"/>|
 
-<p float="middle">
-<img src="/assets/screenshots/app-usage.gif"/>
-</p>
 
 ---
 
