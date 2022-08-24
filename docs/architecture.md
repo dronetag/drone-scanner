@@ -7,7 +7,6 @@ The project hierarchy is described here.
 * 📂 `assets` – directory containing configuration files for Google Maps, application images, icons, and fonts.
 * 📂 `docs` – project documentation.
 * 📂 `lib` – source codes.
-* 📂 `widgets` – Folder with source code of Flutter widgets, organized in features.
 
 All sources are present in the 📂 `lib` folder It has the following structure.
 
