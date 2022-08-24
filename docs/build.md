@@ -11,17 +11,6 @@ Here is a list of the significant dependencies and their role in this project.
 - [Share Plus](https://pub.dev/packages/share_plus) - sharing exported CSV using native share dialog
 - [Shared Preferences](https://pub.dev/packages/shared_preferences) - persistent storage to save user settings
 
-## Google Maps
-
-The application uses [Google Maps Platform](https://cloud.google.com/maps-platform/). In order for it to work, you need to obtain your API key. In [Google Developers Console](https://console.cloud.google.com/), enable API for each platform. To enable Google Maps for Android, select "Maps SDK for Android" in the "Additional APIs" section, then select "ENABLE". To enable Google Maps for iOS, select "Maps SDK for iOS" in the "Additional APIs" section, then select "ENABLE".
-
-For more details, see [Getting started with Google Maps Platform](https://developers.google.com/maps/gmp-get-started).
-
-
-In the project folder, duplicate files *android/app/src/main/AndroidManifest.example.xml* and *ios/Runner/AppDelegate.example.swift*, remove the *.example* suffix. Paste your key to both files. Then create a file *google_map_api.json* in *assets/config*, see the example file to see the required structure.
-
-The files which contain Google Maps API are added to .gitignore, so your key will not be accidentally committed.
-
 ## Configuration Steps
 1. Cloning the repository:
 
