@@ -24,10 +24,9 @@ For a more in-depth description, refer to the [documentation](./docs/) folder.
 
 ## Google Maps
 
-The application uses [Google Maps Platform](https://cloud.google.com/maps-platform/). In order for it to work, you need to obtain your API key. In [Google Developers Console](https://console.cloud.google.com/), enable API for each platform. To enable Google Maps for Android, select "Maps SDK for Android" in the "Additional APIs" section, then select "ENABLE". To enable Google Maps for iOS, select "Maps SDK for iOS" in the "Additional APIs" section, then select "ENABLE".
+The application uses [Google Maps Platform](https://cloud.google.com/maps-platform/). In order for it to work, you need to [obtain your API key](https://developers.google.com/maps/documentation/maps-static/get-api-key). API keys are managed in a [Google Developers Console](https://console.cloud.google.com/). After you create the key, you will also need to enable API for each platform. To enable Google Maps for Android, select "Maps SDK for Android" in the "Additional APIs" section, then select "ENABLE". To enable Google Maps for iOS, select "Maps SDK for iOS" in the "Additional APIs" section, then select "ENABLE".
 
 For more details, see [Getting started with Google Maps Platform](https://developers.google.com/maps/gmp-get-started).
-
 
 In the project folder, duplicate files *android/app/src/main/AndroidManifest.example.xml* and *ios/Runner/AppDelegate.example.swift*, remove the *.example* suffix. Paste your key to both files. Then create a file *google_map_api.json* in *assets/config*, see the example file to see the required structure.
 
