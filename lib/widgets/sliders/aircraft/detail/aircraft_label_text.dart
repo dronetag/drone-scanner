@@ -116,7 +116,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
                 onPressed: () {
                   showAlertDialog(
                     context,
-                    'Would you really like to delete aircraft label?',
+                    'Are you sure you want to delete the aircraft label?',
                     deleteLabelCallback,
                   );
                 },
