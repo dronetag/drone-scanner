@@ -62,7 +62,7 @@ void handleAction(BuildContext context, AircraftAction action) {
     case AircraftAction.delete:
       showAlertDialog(
         context,
-        'Would you really like to delete aircraft data?',
+        'Are you sure you want to delete aircraft data?',
         () {
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
           context.read<AircraftCubit>().deletePack(selectedMac);

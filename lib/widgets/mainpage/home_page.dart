@@ -36,7 +36,7 @@ class MyHomePage extends StatelessWidget {
                 right: false,
                 child: Scaffold(
                   // ensure the keyboard does not move the content up
-                  resizeToAvoidBottomInset: false,
+                  resizeToAvoidBottomInset: true,
                   body: HomeBody(),
                 ),
               ),

@@ -346,7 +346,7 @@ class PreferencesPage extends StatelessWidget {
             onPressed: () {
               showAlertDialog(
                 context,
-                'Would you really like to delete all gathered data?',
+                'Are you sure you want to delete all gathered data?',
                 () {
                   context.read<SlidersCubit>().setShowDroneDetail(show: false);
                   context.read<AircraftCubit>().clear();

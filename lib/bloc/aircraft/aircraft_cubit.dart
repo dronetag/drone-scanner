@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:csv/csv.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
@@ -18,6 +20,9 @@ class AircraftState {
   final Map<String, List<MessagePack>> _packHistory;
   final bool cleanOldPacks;
   final int cleanTimeSec;
+  // map of aircraft labels given by user
+  // keys are aircraft mac adresses, values are labels
+  final Map<String, String> aircraftLabels;
 
   Map<String, List<MessagePack>> packHistory() {
     return _packHistory;
@@ -84,27 +89,33 @@ class AircraftState {
     );
   }
 
-  AircraftState({
-    required Map<String, List<MessagePack>> packHistory,
-    required this.cleanOldPacks,
-    required this.cleanTimeSec,
-  }) : _packHistory = packHistory;
+  AircraftState(
+      {required Map<String, List<MessagePack>> packHistory,
+      required this.cleanOldPacks,
+      required this.cleanTimeSec,
+      required this.aircraftLabels})
+      : _packHistory = packHistory;
 
   AircraftState copyWith({
     Map<String, List<MessagePack>>? packHistory,
     bool? cleanOldPacks,
     int? cleanTimeSec,
+    Map<String, String>? aircraftLabels,
   }) =>
       AircraftState(
         packHistory: packHistory ?? _packHistory,
         cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
         cleanTimeSec: cleanTimeSec ?? this.cleanTimeSec,
+        aircraftLabels: aircraftLabels ?? this.aircraftLabels,
       );
 }
 
 class AircraftCubit extends Cubit<AircraftState> {
   final Map<String, Timer> _expiryTimers = {};
   AircraftState? stateMemento;
+  // storage for user-given labels
+  final LocalStorage storage = LocalStorage('dronescanner');
+
   // data for showcase
   final List<MessagePack> _packs = [
     MessagePack(
@@ -153,13 +164,14 @@ class AircraftCubit extends Cubit<AircraftState> {
   ];
 
   AircraftCubit()
-      : super(
-          AircraftState(
-            packHistory: <String, List<MessagePack>>{},
-            cleanOldPacks: false,
-            cleanTimeSec: 100,
-          ),
-        );
+      : super(AircraftState(
+          packHistory: <String, List<MessagePack>>{},
+          cleanOldPacks: false,
+          cleanTimeSec: 100,
+          aircraftLabels: <String, String>{},
+        )) {
+    fetchSavedLabels();
+  }
 
   // load persistently saved settings
   Future<void> fetchSavedSettings() async {
@@ -176,6 +188,46 @@ class AircraftCubit extends Cubit<AircraftState> {
     } else {
       emit(state.copyWith(cleanTimeSec: cleanPacksSec));
     }
+  }
+
+  //Retrieves the labels stored persistently locally on the device
+  Future<void> fetchSavedLabels() async {
+    final ready = await storage.ready;
+    if (ready) {
+      var labels = storage.getItem('labels');
+      if (labels == null) {
+        return;
+      }
+      final labelsMap = <String, String>{};
+      (json.decode(labels as String) as Map<String, dynamic>)
+          .forEach((key, value) => labelsMap[key] = value as String);
+      emit(state.copyWith(aircraftLabels: labelsMap));
+    }
+  }
+
+  // Stores the label persistently locally on the device
+  Future<void> addAircraftLabel(String mac, String label) async {
+    var labels = state.aircraftLabels;
+    labels[mac] = label;
+    emit(state.copyWith(aircraftLabels: labels));
+    await _saveLabels();
+  }
+
+  // deletes locally stored label for aircraft with given mac
+  Future<void> deleteAircraftLabel(String mac) async {
+    var labels = state.aircraftLabels;
+    labels.remove(mac);
+    emit(state.copyWith(aircraftLabels: labels));
+    await _saveLabels();
+  }
+
+  String? getAircraftLabel(String mac) {
+    return state.aircraftLabels[mac];
+  }
+
+  Future<void> _saveLabels() async {
+    await storage.setItem('labels', json.encode(state.aircraftLabels));
+    await fetchSavedLabels();
   }
 
   Future<void> setCleanOldPacks({required bool clean}) async {

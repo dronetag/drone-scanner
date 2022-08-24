@@ -5,6 +5,7 @@ import '../../../../constants/colors.dart';
 import '../../common/headline.dart';
 import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
+import 'aircraft_label_text.dart';
 
 class BasicFields {
   static List<Widget> buildBasicFields(
@@ -78,6 +79,13 @@ class BasicFields {
                   ),
                 ),
             ],
+          ),
+        ],
+      ),
+      AircraftDetailRow(
+        children: [
+          AircraftLabelText(
+            aircraftMac: messagePackList.last.macAddress,
           ),
         ],
       ),
