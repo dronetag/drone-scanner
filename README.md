@@ -19,6 +19,8 @@ For a more in-depth description, refer to the [documentation](./docs/) folder.
     * Declares the directory structure and overall architecture
 * [Project Setup and Building](./docs/build.md)
     * Instructions on how to set up and build the project, information about used dependencies
+* [Resources](./docs/resources.md)
+    * Resources for developers
 
 ## Google Maps
 
@@ -30,14 +32,6 @@ For more details, see [Getting started with Google Maps Platform](https://develo
 In the project folder, duplicate files *android/app/src/main/AndroidManifest.example.xml* and *ios/Runner/AppDelegate.example.swift*, remove the *.example* suffix. Paste your key to both files. Then create a file *google_map_api.json* in *assets/config*, see the example file to see the required structure.
 
 The files which contain Google Maps API are added to .gitignore, so your key will not be accidentally committed.
-    
-## Other resources
-
-Useful resources for any Flutter developer
-
-* [Official Flutter Documentation](https://flutter.dev/docs)
-* [DartPad](https://dartpad.dev) – sketch ideas quickly or share your code
-* [Dronetag Devs](https://devs.dronetag.cz) – more links for all Dronetag devs
 
 > 💡 _This README is a work-in-progress and will be soon updated with all necessary information about the application architecture, ways to build the project, and ways to contribute to this project._
 
