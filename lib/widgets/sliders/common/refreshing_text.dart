@@ -16,6 +16,7 @@ class RefreshingText extends StatefulWidget {
   final bool short;
   final FontWeight fontWeight;
   final bool showExpiryWarning;
+  final Color textColor;
 
   const RefreshingText({
     Key? key,
@@ -25,6 +26,7 @@ class RefreshingText extends StatefulWidget {
     this.short = false,
     this.showExpiryWarning = false,
     this.fontWeight = FontWeight.normal,
+    this.textColor = AppColors.detailFieldColor,
   }) : super(key: key);
 
   @override
@@ -74,7 +76,7 @@ class _RefreshingTextState extends State<RefreshingText> {
           style: TextStyle(
             color: expiresSoon && widget.showExpiryWarning
                 ? AppColors.red
-                : AppColors.detailFieldColor,
+                : widget.textColor,
             fontWeight: widget.fontWeight,
           ),
         );

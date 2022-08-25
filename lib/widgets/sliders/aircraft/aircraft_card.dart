@@ -62,55 +62,61 @@ class AircraftCard extends StatelessWidget {
         givenLabel: givenLabel,
 =======
       horizontalTitleGap: 0,
-      minVerticalPadding: 2,
-      title: Text.rich(
-        TextSpan(
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 16.0,
-          ),
-          children: [
-            if (manufacturer != null && logo != null)
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: logo,
+      minVerticalPadding: 4,
+      title: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Text.rich(
+          TextSpan(
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 16.0,
+            ),
+            children: [
+              if (manufacturer != null && logo != null)
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: logo,
+                ),
+              TextSpan(
+                text: '$uasIdText',
               ),
-            TextSpan(
-              text: '$uasIdText',
+            ],
+          ),
+        ),
+      ),
+      subtitle: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Operator ID row
+            Text.rich(
+              TextSpan(
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+                children: [
+                  if (countryCode != null &&
+                      flag != null &&
+                      messagePack.operatorIDValid())
+                    WidgetSpan(
+                      child: flag,
+                      alignment: PlaceholderAlignment.middle,
+                    ),
+                  TextSpan(
+                    text: messagePack.operatorIDValid()
+                        ? ' ${messagePack.operatorIdMessage?.operatorId}'
+                        : 'Unknown Operator ID',
+                  ),
+                ],
+              ),
+            ),
+            AircraftCardCustomText(
+              messagePack: messagePack,
             ),
           ],
         ),
 >>>>>>> 8489784 (fix: make flags circular)
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Operator ID row
-          Text.rich(
-            TextSpan(
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-              children: [
-                if (countryCode != null &&
-                    flag != null &&
-                    messagePack.operatorIDValid())
-                  WidgetSpan(
-                    child: flag,
-                    alignment: PlaceholderAlignment.middle,
-                  ),
-                TextSpan(
-                  text: messagePack.operatorIDValid()
-                      ? ' ${messagePack.operatorIdMessage?.operatorId}'
-                      : 'Unknown Operator ID',
-                ),
-              ],
-            ),
-          ),
-          AircraftCardCustomText(
-            messagePack: messagePack,
-          ),
-        ],
       ),
     );
   }
@@ -119,32 +125,37 @@ class AircraftCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isAirborne =
         messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
-    final icon = isAirborne ? Icons.flight_takeoff : Icons.flight_land;
+    final icon = Image.asset(
+      isAirborne
+          ? 'assets/images/plane_airborne.png'
+          : 'assets/images/plane_grounded.png',
+      width: Sizes.cardIconSize,
+      height: Sizes.cardIconSize,
+    );
     final aircraftText = messagePack.locationMessage == null ||
             messagePack.locationMessage!.status == pigeon.AircraftStatus.Ground
         ? 'Grounded'
-        : '${messagePack.locationMessage!.height.toString()} m';
+        : '${messagePack.locationMessage!.height.toString()}m AGL';
     return SizedBox(
       width: width / 6,
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            size: Sizes.cardIconSize,
-            color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          Text(
-            aircraftText,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 12.0,
-              color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Wrap(
+          children: [
+            Padding(padding: EdgeInsets.only(left: 6.0), child: icon),
+            const SizedBox(
+              height: 2,
             ),
-          ),
-        ],
+            Text(
+              aircraftText,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 12.0,
+                color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -159,9 +170,9 @@ class AircraftCard extends StatelessWidget {
     final source = messagePack.getPackSource();
     final standardText = getSourceShortcut(source);
     final width = MediaQuery.of(context).size.width;
-
+    final iconSize = Sizes.iconSize / 3 * 2;
     return SizedBox(
-      width: width / 6,
+      width: width / 7,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -173,20 +184,23 @@ class AircraftCard extends StatelessWidget {
                   source == pigeon.MessageSource.BluetoothLongRange)
                 Icon(
                   Icons.bluetooth,
-                  size: Sizes.iconSize / 3 * 2,
+                  size: iconSize,
+                  color: AppColors.slate,
                 ),
               if (source == pigeon.MessageSource.WifiBeacon ||
                   source == pigeon.MessageSource.WifiNaN)
                 Image.asset(
                   'assets/images/wifi_icon.png',
-                  width: Sizes.iconSize / 3 * 2,
-                  height: Sizes.iconSize / 3 * 2,
+                  color: AppColors.slate,
+                  width: iconSize,
+                  height: iconSize,
                 ),
               Text(
                 standardText,
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
+                  color: AppColors.slate,
                 ),
               ),
             ],
@@ -198,6 +212,7 @@ class AircraftCard extends StatelessWidget {
             textScaleFactor: 0.7,
             style: TextStyle(
               fontWeight: FontWeight.w600,
+              color: AppColors.slate,
             ),
           ),
           RefreshingText(
@@ -206,6 +221,7 @@ class AircraftCard extends StatelessWidget {
             short: true,
             showExpiryWarning: true,
             fontWeight: FontWeight.w600,
+            textColor: AppColors.slate,
           ),
         ],
       ),
