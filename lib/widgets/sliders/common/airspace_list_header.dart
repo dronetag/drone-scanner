@@ -5,6 +5,7 @@ import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
 import '../../preferences/components/custom_dropdown_button.dart';
 import '../../showcase/showcase_item.dart';
 import 'chevron.dart';
@@ -52,7 +53,7 @@ class AirspaceListHeader extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 5.0),
+            padding: const EdgeInsets.only(top: 10.0),
             child: CustomPaint(
               painter: chevron,
               child: Container(
@@ -65,21 +66,43 @@ class AirspaceListHeader extends StatelessWidget {
           if (context.read<SlidersCubit>().panelController.isAttached &&
               !context.read<SlidersCubit>().panelController.isPanelClosed)
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const NumDronesText(),
-                  // filtering is not used, uncomment when zones are implemented
-                  /*
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 0),
-                    child: Row(
+              child: Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const NumDronesText(),
+                    // filtering is not used, uncomment when zones are implemented
+                    /*
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: Row(
+                        children: [
+                          const SizedBox(),
+                          if (context.watch<SlidersCubit>().state.filterValue !=
+                              FilterValue.zones)
+                            const Text(
+                              'Show',
+                              textScaleFactor: 0.9,
+                              style: labelStyle,
+                            ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          if (context.read<SlidersCubit>().state.filterValue !=
+                              FilterValue.zones)
+                            buildFilterCombo(context),
+                        ],
+                      ),
+                    ),*/
+                    Row(
                       children: [
                         const SizedBox(),
                         if (context.watch<SlidersCubit>().state.filterValue !=
                             FilterValue.zones)
                           const Text(
-                            'Show',
+                            'Sort by',
                             textScaleFactor: 0.9,
                             style: labelStyle,
                           ),
@@ -88,38 +111,20 @@ class AirspaceListHeader extends StatelessWidget {
                         ),
                         if (context.read<SlidersCubit>().state.filterValue !=
                             FilterValue.zones)
-                          buildFilterCombo(context),
+                          buildSortCombo(context),
                       ],
                     ),
-                  ),*/
-                  Row(
-                    children: [
-                      const SizedBox(),
-                      if (context.watch<SlidersCubit>().state.filterValue !=
-                          FilterValue.zones)
-                        const Text(
-                          'Sort by',
-                          textScaleFactor: 0.9,
-                          style: labelStyle,
-                        ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      if (context.read<SlidersCubit>().state.filterValue !=
-                          FilterValue.zones)
-                        buildSortCombo(context),
-                    ],
-                  ),
 
-                  /*const SizedBox(
-                    width: 10,
-                  ),
-                  if (context.read<SlidersCubit>().state.filterValue ==
-                      FilterValue.zones)
-                    SizedBox(
-                      width: width / 3,
-                    ),*/
-                ],
+                    /*const SizedBox(
+                      width: 10,
+                    ),
+                    if (context.read<SlidersCubit>().state.filterValue ==
+                        FilterValue.zones)
+                      SizedBox(
+                        width: width / 3,
+                      ),*/
+                  ],
+                ),
               ),
             ),
         ],
