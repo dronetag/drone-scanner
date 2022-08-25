@@ -40,7 +40,7 @@ class AircraftDetailHeader extends StatelessWidget {
         : [];
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 6 : height / 12;
+    final headerHeight = isLandscape ? height / 5 : height / 10;
     chevron.context = context;
     chevron.color = AppColors.detailButtonsColor;
     if (chevron.direction != ChevronDirection.none) {
@@ -49,6 +49,7 @@ class AircraftDetailHeader extends StatelessWidget {
           : ChevronDirection.upwards;
     }
     return Container(
+      padding: EdgeInsets.only(bottom: 8),
       decoration: const BoxDecoration(
         color: AppColors.detailHeaderColor,
         borderRadius: BorderRadius.only(
@@ -61,7 +62,7 @@ class AircraftDetailHeader extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 5.0),
+            padding: const EdgeInsets.only(top: 5.0, bottom: 8),
             child: CustomPaint(
               painter: chevron,
               child: Container(
@@ -91,85 +92,84 @@ class AircraftDetailHeader extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 6 : height / 12;
+    final headerHeight = isLandscape ? height / 5 : height / 10;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const SizedBox(
-          width: 10,
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.detailButtonsColor,
-          ),
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          height: headerHeight / 5 * 4,
-          width: headerHeight / 5 * 3,
-          child: IconButton(
-            padding: const EdgeInsets.all(2),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-              size: Sizes.iconSize,
-            ),
-            onPressed: () {
-              // on tap to map, unfocus other widgets and unselect aircraft
-              context.read<SlidersCubit>().setShowDroneDetail(show: false);
-              context.read<SelectedZoneCubit>().unselectZone();
-              context.read<SelectedAircraftCubit>().unselectAircraft();
-            },
-          ),
-        ),
-        const SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildTitle(context, messagePackList),
-              buildSubtitle(context, messagePackList),
-            ],
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        ShowcaseItem(
-          title: 'Aircraft Detail',
-          showcaseKey: context.read<ShowcaseCubit>().droneDetailMoreKey,
-          description: context.read<ShowcaseCubit>().droneDetailMoreDescription,
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 5),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.detailButtonsColor,
             ),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             height: headerHeight / 5 * 4,
             width: headerHeight / 5 * 3,
             child: IconButton(
               padding: const EdgeInsets.all(2),
               icon: const Icon(
-                Icons.more_horiz,
+                Icons.arrow_back,
                 color: Colors.white,
-                size: Sizes.iconSize,
+                size: Sizes.detailIconSize,
               ),
               onPressed: () {
-                displayAircraftActionMenu(context).then(
-                  (value) => handleAction(context, value!),
-                );
+                // on tap to map, unfocus other widgets and unselect aircraft
+                context.read<SlidersCubit>().setShowDroneDetail(show: false);
+                context.read<SelectedZoneCubit>().unselectZone();
+                context.read<SelectedAircraftCubit>().unselectAircraft();
               },
             ),
           ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-      ],
+          const SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: messagePackList.last.operatorIDValid()
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
+              children: [
+                buildTitle(context, messagePackList),
+                if (messagePackList.last.operatorIDValid())
+                  buildSubtitle(context, messagePackList),
+              ],
+            ),
+          ),
+          ShowcaseItem(
+            title: 'Aircraft Detail',
+            showcaseKey: context.read<ShowcaseCubit>().droneDetailMoreKey,
+            description:
+                context.read<ShowcaseCubit>().droneDetailMoreDescription,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.detailButtonsColor,
+              ),
+              height: headerHeight / 5 * 4,
+              width: headerHeight / 5 * 3,
+              child: IconButton(
+                padding: const EdgeInsets.all(2),
+                icon: const Icon(
+                  Icons.more_horiz,
+                  color: Colors.white,
+                  size: Sizes.detailIconSize,
+                ),
+                onPressed: () {
+                  displayAircraftActionMenu(context).then(
+                    (value) => handleAction(context, value!),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

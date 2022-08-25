@@ -52,6 +52,8 @@ class AircraftCard extends StatelessWidget {
 
     return ListTile(
       minLeadingWidth: 0,
+      horizontalTitleGap: 0,
+      minVerticalPadding: 2,
       contentPadding: EdgeInsets.zero,
       leading: buildLeading(context),
       trailing: buildTrailing(context),
@@ -102,7 +104,7 @@ class AircraftCard extends StatelessWidget {
         ? 'Grounded'
         : '${messagePack.locationMessage!.height.toString()} m';
     return SizedBox(
-      width: width / 8,
+      width: width / 6,
       child: Column(
         children: [
           Icon(
@@ -117,9 +119,9 @@ class AircraftCard extends StatelessWidget {
             aircraftText,
             style: TextStyle(
               fontWeight: FontWeight.w700,
+              fontSize: 12.0,
               color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
             ),
-            textScaleFactor: 0.7,
           ),
         ],
       ),
