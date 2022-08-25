@@ -23,8 +23,8 @@ class _ToolbarState extends State<Toolbar> {
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).viewPadding.top;
     const borderRadius = Radius.circular(Sizes.panelBorderRadius);
-    final toolbarColor =
-        colors.AppColors.darkGray.withOpacity(colors.AppColors.toolbarOpacity);
+    final toolbarColor = colors.AppColors.toolbarColor
+        .withOpacity(colors.AppColors.toolbarOpacity);
     return Container(
       decoration: BoxDecoration(
         boxShadow: const <BoxShadow>[
