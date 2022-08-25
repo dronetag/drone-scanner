@@ -16,6 +16,26 @@ enum ToolbarMenuAction {
   openAbout,
 }
 
+void showBtSnackBar(BuildContext context, {required bool started}) {
+  late final String snackBarText;
+  if (started) {
+    snackBarText = 'Bluetooth Scanning Started.';
+  } else {
+    snackBarText = 'Bluetooth Scanning Stopped.';
+  }
+  showSnackBar(context, snackBarText);
+}
+
+void showWifiSnackBar(BuildContext context, {required bool started}) {
+  late final String snackBarText;
+  if (started) {
+    snackBarText = 'Wi-Fi Scanning Started.';
+  } else {
+    snackBarText = 'Wi-Fi Scanning Stopped.';
+  }
+  showSnackBar(context, snackBarText);
+}
+
 Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
   final labelStyle = TextStyle(
     fontSize: 16,
@@ -45,18 +65,25 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
                       .read<OpendroneIdCubit>()
                       .setBtUsed(btUsed: value!)
                       .then((value) => setState);
-                  late final String snackBarText;
-                  if (value) {
-                    snackBarText = 'Bluetooth Scanning Started.';
-                  } else {
-                    snackBarText = 'Bluetooth Scanning Stopped.';
-                  }
-                  showSnackBar(context, snackBarText);
+                  showBtSnackBar(context, started: value);
                 },
               ),
-              Text(
-                'Enable Bluetooth',
-                style: labelStyle,
+              GestureDetector(
+                onTap: () {
+                  final value = context
+                      .read<OpendroneIdCubit>()
+                      .state
+                      .isScanningBluetooth;
+                  context
+                      .read<OpendroneIdCubit>()
+                      .setBtUsed(btUsed: !value)
+                      .then((value) => setState);
+                  showBtSnackBar(context, started: !value);
+                },
+                child: Text(
+                  'Enable Bluetooth',
+                  style: labelStyle,
+                ),
               ),
             ],
           ),
@@ -82,18 +109,23 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
                             () {},
                           ),
                         );
-                    late final String snackBarText;
-                    if (value) {
-                      snackBarText = 'Wi-Fi Scanning Started.';
-                    } else {
-                      snackBarText = 'Wi-Fi Scanning Stopped.';
-                    }
-                    showSnackBar(context, snackBarText);
+                    showWifiSnackBar(context, started: value);
                   },
                 ),
-                Text(
-                  'Enable Wi-Fi',
-                  style: labelStyle,
+                GestureDetector(
+                  onTap: (() {
+                    final value =
+                        context.read<OpendroneIdCubit>().state.isScanningWifi;
+                    context
+                        .read<OpendroneIdCubit>()
+                        .setWifiUsed(wifiUsed: !value)
+                        .then((value) => setState);
+                    showWifiSnackBar(context, started: !value);
+                  }),
+                  child: Text(
+                    'Enable Wi-Fi',
+                    style: labelStyle,
+                  ),
                 ),
               ],
             ),
