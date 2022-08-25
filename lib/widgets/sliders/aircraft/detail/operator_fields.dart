@@ -43,7 +43,7 @@ class OperatorFields {
             '${systemMessage.operatorLongitude.toStringAsFixed(4)}'
         : 'Unknown';
 
-    Image? flag;
+    Widget? flag;
     if (countryCode != null) flag = getFlag(countryCode);
 
     final isLandscape =
@@ -68,7 +68,9 @@ class OperatorFields {
                     style: const TextStyle(
                       color: AppColors.detailFieldColor,
                     ),
-                    text: opMessage != null ? opMessage.operatorId : 'Unknown',
+                    text: opMessage != null
+                        ? ' ${opMessage.operatorId}'
+                        : 'Unknown',
                   ),
                 ],
               ),

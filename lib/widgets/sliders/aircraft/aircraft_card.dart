@@ -24,6 +24,7 @@ class AircraftCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final countryCode =
         messagePack.operatorIdMessage?.operatorId.substring(0, 2);
+<<<<<<< HEAD
     final isAirborne =
         messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
 
@@ -31,16 +32,14 @@ class AircraftCard extends StatelessWidget {
         context.read<AircraftCubit>().getAircraftLabel(messagePack.macAddress);
 
     Image? flag;
+=======
+    Widget? flag;
+>>>>>>> 8489784 (fix: make flags circular)
     if (messagePack.operatorIDValid() &&
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable) {
       try {
-        flag = Image.network(
-          'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
-          width: 24,
-          height: 12,
-          alignment: Alignment.centerLeft,
-        );
+        flag = getFlag(countryCode);
       } on Exception {
         flag = null;
       }
@@ -57,9 +56,31 @@ class AircraftCard extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: buildLeading(context),
       trailing: buildTrailing(context),
+<<<<<<< HEAD
       title: AircraftCardTitle(
         uasId: uasIdText,
         givenLabel: givenLabel,
+=======
+      horizontalTitleGap: 0,
+      minVerticalPadding: 2,
+      title: Text.rich(
+        TextSpan(
+          style: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+          ),
+          children: [
+            if (manufacturer != null && logo != null)
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: logo,
+              ),
+            TextSpan(
+              text: '$uasIdText',
+            ),
+          ],
+        ),
+>>>>>>> 8489784 (fix: make flags circular)
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

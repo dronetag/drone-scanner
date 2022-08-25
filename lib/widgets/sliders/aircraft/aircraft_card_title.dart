@@ -24,6 +24,7 @@ class AircraftCardTitle extends StatelessWidget {
       TextSpan(
         style: const TextStyle(
           fontWeight: FontWeight.w700,
+          fontSize: 16.0,
         ),
         children: [
           if (givenLabel == null && manufacturer != null && logo != null)

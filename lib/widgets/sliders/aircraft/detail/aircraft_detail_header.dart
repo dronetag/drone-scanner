@@ -237,7 +237,7 @@ class AircraftDetailHeader extends StatelessWidget {
   ) {
     final countryCode =
         messagePackList.last.operatorIdMessage?.operatorId.substring(0, 2);
-    Image? flag;
+    Widget? flag;
     if (messagePackList.last.operatorIDValid() && countryCode != null) {
       flag = getFlag(countryCode);
     }
@@ -260,7 +260,7 @@ class AircraftDetailHeader extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.white,
               ),
-              text: messagePackList.last.operatorIdMessage?.operatorId,
+              text: ' ${messagePackList.last.operatorIdMessage?.operatorId}',
             ),
         ],
       ),

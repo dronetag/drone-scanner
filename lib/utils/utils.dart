@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../constants/colors.dart';
+
 double maxSliderSize({
   required double height,
   required double statusBarHeight,
@@ -144,17 +146,21 @@ String getAltitudeAsString(double? altitude) {
   return sprintf('%3.1f m', [altitude]);
 }
 
-Image? getFlag(String countryCode) {
-  Image? flag;
-
-  flag = Image.network(
-    'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
-    width: 24,
-    height: 12,
-    errorBuilder: (context, exception, stackTrace) {
-      return Container();
-    },
-  );
+Widget? getFlag(String countryCode) {
+  final size = 16.0;
+  Widget? flag;
+  flag = Container(
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.transparent,
+      ),
+      width: size,
+      height: size,
+      child: CircleAvatar(
+        backgroundImage: NetworkImage(
+          'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
+        ),
+      ));
 
   return flag;
 }
@@ -170,7 +176,7 @@ Image? getManufacturerLogo({String? manufacturer, Color color = Colors.black}) {
     path,
     height: 16,
     width: 24,
-    alignment: Alignment.topRight,
+    alignment: Alignment.centerLeft,
     color: color,
   );
 }
