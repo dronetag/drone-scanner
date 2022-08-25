@@ -39,6 +39,7 @@ class AirspaceListHeader extends StatelessWidget {
     const labelStyle = TextStyle(
       fontWeight: FontWeight.w600,
       color: AppColors.lightGray,
+      fontSize: 16.0,
     );
     return Container(
       decoration: const BoxDecoration(
@@ -53,7 +54,7 @@ class AirspaceListHeader extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10.0),
+            padding: const EdgeInsets.only(top: 5.0),
             child: CustomPaint(
               painter: chevron,
               child: Container(
@@ -65,16 +66,15 @@ class AirspaceListHeader extends StatelessWidget {
           ),
           if (context.read<SlidersCubit>().panelController.isAttached &&
               !context.read<SlidersCubit>().panelController.isPanelClosed)
-            Expanded(
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const NumDronesText(),
-                    // filtering is not used, uncomment when zones are implemented
-                    /*
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.mapContentMargin, vertical: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const NumDronesText(),
+                  // filtering is not used, uncomment when zones are implemented
+                  /*
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: Row(
@@ -96,26 +96,25 @@ class AirspaceListHeader extends StatelessWidget {
                         ],
                       ),
                     ),*/
-                    Row(
-                      children: [
-                        const SizedBox(),
-                        if (context.watch<SlidersCubit>().state.filterValue !=
-                            FilterValue.zones)
-                          const Text(
-                            'Sort by',
-                            textScaleFactor: 0.9,
-                            style: labelStyle,
-                          ),
-                        const SizedBox(
-                          width: 5,
+                  Row(
+                    children: [
+                      const SizedBox(),
+                      if (context.watch<SlidersCubit>().state.filterValue !=
+                          FilterValue.zones)
+                        const Text(
+                          'Sort by',
+                          style: labelStyle,
                         ),
-                        if (context.read<SlidersCubit>().state.filterValue !=
-                            FilterValue.zones)
-                          buildSortCombo(context),
-                      ],
-                    ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      if (context.read<SlidersCubit>().state.filterValue !=
+                          FilterValue.zones)
+                        buildSortCombo(context),
+                    ],
+                  ),
 
-                    /*const SizedBox(
+                  /*const SizedBox(
                       width: 10,
                     ),
                     if (context.read<SlidersCubit>().state.filterValue ==
@@ -123,8 +122,7 @@ class AirspaceListHeader extends StatelessWidget {
                       SizedBox(
                         width: width / 3,
                       ),*/
-                  ],
-                ),
+                ],
               ),
             ),
         ],

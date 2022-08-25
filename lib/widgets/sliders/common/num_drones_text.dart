@@ -27,10 +27,10 @@ class NumDronesText extends StatelessWidget {
           height: 20,
           child: Text(
             numPacks.toString(),
-            textScaleFactor: 0.9,
             textAlign: TextAlign.end,
             style: const TextStyle(
               color: Colors.white,
+              fontSize: 16.0,
             ),
           ),
         ),
