@@ -104,7 +104,7 @@ class PreferencesPage extends StatelessWidget {
     );
     const negativeIcon = Icon(
       DroneScannerIcon.close,
-      color: AppColors.red,
+      color: AppColors.redIcon,
     );
     final width = MediaQuery.of(context).size.width;
     final isLandscape =
