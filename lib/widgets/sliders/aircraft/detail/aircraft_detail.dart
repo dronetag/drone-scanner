@@ -49,7 +49,7 @@ class AircraftDetail extends StatelessWidget {
     );
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 5 : height / 10;
+    final headerHeight = calcHeaderHeight(context);
     final minSliderHeight = isLandscape
         ? height / Sizes.toolbarMinSizeRatioLandscape
         : height / Sizes.toolbarMinSizeRatioPortrait;

@@ -24,7 +24,6 @@ class AircraftDetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final screenCubit = context.read<ScreenCubit>();
     final zoneItem = context.watch<SelectedZoneCubit>().state.selectedZone;
@@ -40,9 +39,7 @@ class AircraftDetailHeader extends StatelessWidget {
               selectedMac,
             )!
         : [];
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 5 : height / 10;
+    final headerHeight = calcHeaderHeight(context);
     chevron.context = context;
     chevron.color = AppColors.detailButtonsColor;
     if (chevron.direction != ChevronDirection.none) {
@@ -102,7 +99,7 @@ class AircraftDetailHeader extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 5 : height / 10;
+    final headerHeight = calcHeaderHeight(context);
     final screenCubit = context.read<ScreenCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
@@ -134,7 +131,7 @@ class AircraftDetailHeader extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: screenCubit.scaleWidth * 20,
+            width: screenCubit.scaleWidth * 15,
           ),
           Expanded(
             flex: 3,

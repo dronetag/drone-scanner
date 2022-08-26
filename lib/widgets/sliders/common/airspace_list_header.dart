@@ -7,6 +7,7 @@ import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../utils/utils.dart';
 import '../../preferences/components/custom_dropdown_button.dart';
 import '../../showcase/showcase_item.dart';
 import 'chevron.dart';
@@ -29,7 +30,7 @@ class AirspaceListHeader extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 5 : height / 10;
+    final headerHeight = calcHeaderHeight(context);
     chevron.context = context;
     chevron.color = AppColors.lightGray;
     if (chevron.direction != ChevronDirection.none) {

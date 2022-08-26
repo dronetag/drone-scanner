@@ -76,9 +76,13 @@ class ScreenCubit extends Cubit<ScreenState> {
   double get bottomBarHeight => state.bottomBarHeight;
 
   /// The ratio of the actual dp to the design draft px
-  double get scaleWidth => state.screenWidth / state.uiWidthPx;
+  double get scaleWidth => (state.screenWidth / state.uiWidthPx) < 1
+      ? state.screenWidth / state.uiWidthPx
+      : 1;
 
-  double get scaleHeight => state.screenHeight / state.uiHeightPx;
+  double get scaleHeight => (state.screenHeight / state.uiHeightPx) < 1
+      ? state.screenHeight / state.uiHeightPx
+      : 1;
 
   double get scaleText => scaleWidth;
 

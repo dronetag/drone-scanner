@@ -18,6 +18,13 @@ double maxSliderSize({
   }
 }
 
+double calcHeaderHeight(BuildContext context) {
+  final height = MediaQuery.of(context).size.height;
+  final isLandscape =
+      MediaQuery.of(context).orientation == Orientation.landscape;
+  return isLandscape ? height / 5 : height / 9;
+}
+
 double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   const p = 0.017453292519943295;
   const c = math.cos;
@@ -152,7 +159,7 @@ Widget? getFlag(String countryCode) {
   flag = Container(
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.transparent,
+        color: Colors.white,
       ),
       width: size,
       height: size,

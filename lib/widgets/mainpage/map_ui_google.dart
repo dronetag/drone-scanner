@@ -76,7 +76,6 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
 
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-
     final googleMap = GoogleMap(
       onTap: selItemMac != null || selZone != null || droppedPin
           ? (_) {
@@ -111,7 +110,8 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
       polygons: polygons,
       polylines: polylines,
     );
-
+    final optBottom = isLandscape ? height / 5 * 2 : height / 3 * 2;
+    print('mapp tool bottom: ' + optBottom.toString());
     return Stack(
       children: [
         GestureDetector(
@@ -132,11 +132,6 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
                 }
               : null,
           child: googleMap,
-        ),
-        Positioned(
-          bottom: isLandscape ? height / 5 * 2 : height / 3 * 2,
-          right: Sizes.mapContentMargin,
-          child: const MapOptionsToolbar(),
         ),
         if (context.watch<ShowcaseCubit>().state.showcaseActive)
           const Align(
