@@ -31,7 +31,7 @@ class ScreenState {
 
 class ScreenCubit extends Cubit<ScreenState> {
   static const defaultWidth = 1080.0;
-  static const defaultHeight = 1920.0;
+  static const defaultHeight = 2265.0;
 
   ScreenCubit(
       {double width = defaultWidth,

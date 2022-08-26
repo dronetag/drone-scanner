@@ -5,6 +5,7 @@ import 'bloc/aircraft/aircraft_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
 import 'bloc/map/map_cubit.dart';
 import 'bloc/opendroneid_cubit.dart';
+import 'bloc/screen_cubit.dart';
 import 'bloc/showcase_cubit.dart';
 import 'bloc/sliders_cubit.dart';
 import 'bloc/standards_cubit.dart';
@@ -30,6 +31,10 @@ void main() async {
       providers: [
         BlocProvider<StandardsCubit>(
           create: (context) => StandardsCubit(),
+          lazy: false,
+        ),
+        BlocProvider<ScreenCubit>(
+          create: (context) => ScreenCubit(),
           lazy: false,
         ),
         BlocProvider<SlidersCubit>(

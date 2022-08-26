@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/map/map_cubit.dart';
+import '../../../bloc/screen_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../constants/colors.dart';
@@ -36,6 +37,8 @@ class AirspaceListHeader extends StatelessWidget {
           ? ChevronDirection.downwards
           : ChevronDirection.upwards;
     }
+    final screenCubit = context.read<ScreenCubit>();
+
     const labelStyle = TextStyle(
       fontWeight: FontWeight.w600,
       color: AppColors.lightGray,
@@ -54,11 +57,12 @@ class AirspaceListHeader extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 5.0),
+            padding: EdgeInsets.only(top: screenCubit.scaleHeight * 5.0),
             child: CustomPaint(
               painter: chevron,
               child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
+                margin:
+                    EdgeInsets.symmetric(vertical: screenCubit.scaleHeight * 5),
                 width: width / 8,
                 height: headerHeight / 15,
               ),
@@ -68,7 +72,9 @@ class AirspaceListHeader extends StatelessWidget {
               !context.read<SlidersCubit>().panelController.isPanelClosed)
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: Sizes.mapContentMargin, vertical: 10.0),
+                horizontal: Sizes.mapContentMargin,
+                vertical: screenCubit.scaleHeight * 10.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

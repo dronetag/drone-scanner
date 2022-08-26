@@ -4,6 +4,7 @@ import 'package:flutter_opendroneid/models/message_pack.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
+import '../../../../bloc/screen_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/zones/selected_zone_cubit.dart';
@@ -25,6 +26,7 @@ class AircraftDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final screenCubit = context.read<ScreenCubit>();
     final zoneItem = context.watch<SelectedZoneCubit>().state.selectedZone;
     final selectedMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
@@ -49,7 +51,7 @@ class AircraftDetailHeader extends StatelessWidget {
           : ChevronDirection.upwards;
     }
     return Container(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: screenCubit.scaleHeight * 8),
       decoration: const BoxDecoration(
         color: AppColors.detailHeaderColor,
         borderRadius: BorderRadius.only(
@@ -62,11 +64,19 @@ class AircraftDetailHeader extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 5.0, bottom: 8),
+            padding: EdgeInsets.only(
+              top: screenCubit.scaleHeight * 5.0,
+              bottom: screenCubit.scaleHeight < 0.4
+                  ? 0
+                  : screenCubit.scaleHeight * 8,
+            ),
             child: CustomPaint(
               painter: chevron,
               child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
+                margin: EdgeInsets.symmetric(
+                    vertical: screenCubit.scaleHeight < 0.4
+                        ? 0
+                        : screenCubit.scaleHeight * 5),
                 width: width / 8,
                 height: headerHeight / 15,
               ),
@@ -93,7 +103,7 @@ class AircraftDetailHeader extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = isLandscape ? height / 5 : height / 10;
-
+    final screenCubit = context.read<ScreenCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
       child: Row(
@@ -105,11 +115,11 @@ class AircraftDetailHeader extends StatelessWidget {
               shape: BoxShape.circle,
               color: AppColors.detailButtonsColor,
             ),
-            margin: const EdgeInsets.symmetric(vertical: 5),
+            margin: EdgeInsets.symmetric(vertical: screenCubit.scaleHeight * 5),
             height: headerHeight / 5 * 4,
             width: headerHeight / 5 * 3,
             child: IconButton(
-              padding: const EdgeInsets.all(2),
+              padding: EdgeInsets.all(screenCubit.scaleHeight * 2),
               icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
@@ -123,8 +133,8 @@ class AircraftDetailHeader extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(
-            width: 20,
+          SizedBox(
+            width: screenCubit.scaleWidth * 20,
           ),
           Expanded(
             flex: 3,
@@ -146,7 +156,8 @@ class AircraftDetailHeader extends StatelessWidget {
             description:
                 context.read<ShowcaseCubit>().droneDetailMoreDescription,
             child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 5),
+              margin:
+                  EdgeInsets.symmetric(vertical: 5 * screenCubit.scaleHeight),
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.detailButtonsColor,
@@ -154,7 +165,10 @@ class AircraftDetailHeader extends StatelessWidget {
               height: headerHeight / 5 * 4,
               width: headerHeight / 5 * 3,
               child: IconButton(
-                padding: const EdgeInsets.all(2),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenCubit.scaleWidth * 2,
+                  vertical: screenCubit.scaleHeight * 2,
+                ),
                 icon: const Icon(
                   Icons.more_horiz,
                   color: Colors.white,
