@@ -19,20 +19,23 @@ class PreferencesFieldWithDescription extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-            ),
-            Text(
-              description,
-              textScaleFactor: 0.8,
-              style: const TextStyle(
-                color: AppColors.lightGray,
+        Container(
+          width: MediaQuery.of(context).size.width / 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
               ),
-            ),
-          ],
+              Text(
+                description,
+                textScaleFactor: 0.8,
+                style: const TextStyle(
+                  color: AppColors.lightGray,
+                ),
+              ),
+            ],
+          ),
         ),
         child,
       ],

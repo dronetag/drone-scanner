@@ -352,8 +352,7 @@ class PreferencesPage extends StatelessWidget {
         padding: itemPadding / 2,
         child: PreferencesFieldWithDescription(
           label: 'List field preference:',
-          description:
-              'Choose which information your prefer\nto see in the list '
+          description: 'Choose which information you prefer to see in the list '
               'of aircrafts',
           child: CustomDropdownButton(
             value:
