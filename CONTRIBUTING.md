@@ -1,7 +1,7 @@
 # Contribution Guidelines
 
 - check whether your suggestion was not already submitted by someone else
-- we use [stable mainline branching model](https://www.bitsnbites.eu/a-stable-mainline-branching-model-for-git/)
+- we use [stable mainline branching model](https://www.bitsnbites.eu/a-stable-mainline-branching-model-for-git/) with squashing instead of merge commits
 - [Fork](https://help.github.com/articles/fork-a-repo) the [repository](https://github.com/dronetag/drone-scanner) on GitHub.
 - [Create a branch](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository) for your changes.
 - [Commit your code](http://git-scm.com/book/en/Git-Basics-Recording-Changes-to-the-Repository) for each logical change
