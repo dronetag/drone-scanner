@@ -16,11 +16,16 @@ class PreferencesFieldWithDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width / 2,
+          width: isLandscape
+              ? MediaQuery.of(context).size.width / 16 * 5
+              : MediaQuery.of(context).size.width / 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

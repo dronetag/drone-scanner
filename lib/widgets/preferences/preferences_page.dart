@@ -65,7 +65,7 @@ class PreferencesPage extends StatelessWidget {
                               crossAxisCount: 2,
                               crossAxisSpacing: 10,
                               mainAxisExtent:
-                                  MediaQuery.of(context).size.height / 6,
+                                  MediaQuery.of(context).size.height / 5.5,
                             ),
                             shrinkWrap: true,
                             itemCount: itemList.length,
@@ -334,7 +334,7 @@ class PreferencesPage extends StatelessWidget {
         child: const PreferencesFieldWithDescription(
           label: 'Clean automatically:',
           description:
-              'Aircrafts inactive for chosen time will be\nautomatically cleared',
+              'Aircrafts inactive for chosen time will be automatically cleared',
           child: CleanPacksCheckbox(),
         ),
       ),

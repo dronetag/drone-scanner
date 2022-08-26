@@ -132,6 +132,9 @@ class AircraftCard extends StatelessWidget {
       width: Sizes.cardIconSize,
       height: Sizes.cardIconSize,
     );
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final aircraftText = messagePack.locationMessage == null ||
             messagePack.locationMessage!.status == pigeon.AircraftStatus.Ground
         ? 'Grounded'
@@ -141,6 +144,7 @@ class AircraftCard extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Wrap(
+          direction: isLandscape ? Axis.vertical : Axis.horizontal,
           children: [
             Padding(padding: EdgeInsets.only(left: 6.0), child: icon),
             const SizedBox(

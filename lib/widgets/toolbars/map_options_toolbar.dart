@@ -25,7 +25,9 @@ class MapOptionsToolbar extends StatelessWidget {
     final toolbarHeight = isLandscape
         ? MediaQuery.of(context).size.height / 3
         : MediaQuery.of(context).size.height / 6;
-    final toolbarWidth = MediaQuery.of(context).size.width / 8;
+    final toolbarWidth = isLandscape
+        ? MediaQuery.of(context).size.width / 12
+        : MediaQuery.of(context).size.width / 8;
     return BlocBuilder<StandardsCubit, StandardsState>(
       builder: (context, state) {
         return ShowcaseItem(
