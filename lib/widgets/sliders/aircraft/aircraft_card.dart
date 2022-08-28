@@ -58,36 +58,33 @@ class AircraftCard extends StatelessWidget {
         uasId: uasIdText,
         givenLabel: givenLabel,
       ),
-      subtitle: Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Operator ID row
-            Text.rich(
-              TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-                children: [
-                  if (countryCode != null &&
-                      flag != null &&
-                      messagePack.operatorIDValid())
-                    WidgetSpan(
-                      child: flag,
-                      alignment: PlaceholderAlignment.middle,
-                    ),
-                  TextSpan(
-                    text: opIdText,
-                  ),
-                ],
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Operator ID row
+          Text.rich(
+            TextSpan(
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
               ),
+              children: [
+                if (countryCode != null &&
+                    flag != null &&
+                    messagePack.operatorIDValid())
+                  WidgetSpan(
+                    child: flag,
+                    alignment: PlaceholderAlignment.middle,
+                  ),
+                TextSpan(
+                  text: opIdText,
+                ),
+              ],
             ),
-            AircraftCardCustomText(
-              messagePack: messagePack,
-            ),
-          ],
-        ),
+          ),
+          AircraftCardCustomText(
+            messagePack: messagePack,
+          ),
+        ],
       ),
     );
   }
