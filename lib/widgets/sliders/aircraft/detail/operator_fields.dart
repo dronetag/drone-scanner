@@ -44,7 +44,15 @@ class OperatorFields {
         : 'Unknown';
 
     Widget? flag;
-    if (countryCode != null) flag = getFlag(countryCode);
+    if (countryCode != null &&
+        context.read<StandardsCubit>().state.internetAvailable) {
+      flag = getFlag(countryCode);
+    }
+    final opIdText = opMessage != null
+        ? flag == null
+            ? opMessage.operatorId
+            : ' ${opMessage.operatorId}'
+        : 'Unknown';
 
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -55,7 +63,6 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Operator ID',
-            //fieldText: opMessage.operatorId,
             child: Text.rich(
               TextSpan(
                 children: [
@@ -68,9 +75,7 @@ class OperatorFields {
                     style: const TextStyle(
                       color: AppColors.detailFieldColor,
                     ),
-                    text: opMessage != null
-                        ? ' ${opMessage.operatorId}'
-                        : 'Unknown',
+                    text: opIdText,
                   ),
                 ],
               ),

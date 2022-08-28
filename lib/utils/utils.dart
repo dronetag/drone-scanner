@@ -1,10 +1,9 @@
+import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
-
-import '../constants/colors.dart';
 
 double maxSliderSize({
   required double height,
@@ -156,6 +155,14 @@ String getAltitudeAsString(double? altitude) {
 Widget? getFlag(String countryCode) {
   final size = 16.0;
   Widget? flag;
+  NetworkImage? image;
+  try {
+    image = NetworkImage(
+      'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
+    );
+  } catch (_) {
+    return null;
+  }
   flag = Container(
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
@@ -163,11 +170,7 @@ Widget? getFlag(String countryCode) {
       ),
       width: size,
       height: size,
-      child: CircleAvatar(
-        backgroundImage: NetworkImage(
-          'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
-        ),
-      ));
+      child: CircleAvatar(backgroundImage: image));
 
   return flag;
 }

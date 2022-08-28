@@ -24,30 +24,28 @@ class AircraftCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final countryCode =
         messagePack.operatorIdMessage?.operatorId.substring(0, 2);
-<<<<<<< HEAD
-    final isAirborne =
-        messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
 
     final givenLabel =
         context.read<AircraftCubit>().getAircraftLabel(messagePack.macAddress);
 
-    Image? flag;
-=======
     Widget? flag;
->>>>>>> 8489784 (fix: make flags circular)
-    if (messagePack.operatorIDValid() &&
+
+    if (context.read<StandardsCubit>().state.internetAvailable &&
+        messagePack.operatorIDValid() &&
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable) {
-      try {
-        flag = getFlag(countryCode);
-      } on Exception {
-        flag = null;
-      }
+      flag = getFlag(countryCode);
     }
     final uasIdText = messagePack.basicIdMessage != null &&
             messagePack.basicIdMessage?.uasId != ''
         ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
+
+    final opIdText = messagePack.operatorIDValid()
+        ? flag == null
+            ? messagePack.operatorIdMessage?.operatorId
+            : ' ${messagePack.operatorIdMessage?.operatorId}'
+        : 'Unknown Operator ID';
 
     return ListTile(
       minLeadingWidth: 0,
@@ -56,33 +54,9 @@ class AircraftCard extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: buildLeading(context),
       trailing: buildTrailing(context),
-<<<<<<< HEAD
       title: AircraftCardTitle(
         uasId: uasIdText,
         givenLabel: givenLabel,
-=======
-      horizontalTitleGap: 0,
-      minVerticalPadding: 4,
-      title: Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: Text.rich(
-          TextSpan(
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 16.0,
-            ),
-            children: [
-              if (manufacturer != null && logo != null)
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: logo,
-                ),
-              TextSpan(
-                text: '$uasIdText',
-              ),
-            ],
-          ),
-        ),
       ),
       subtitle: Padding(
         padding: EdgeInsets.only(left: 10),
@@ -104,9 +78,7 @@ class AircraftCard extends StatelessWidget {
                       alignment: PlaceholderAlignment.middle,
                     ),
                   TextSpan(
-                    text: messagePack.operatorIDValid()
-                        ? ' ${messagePack.operatorIdMessage?.operatorId}'
-                        : 'Unknown Operator ID',
+                    text: opIdText,
                   ),
                 ],
               ),
@@ -116,7 +88,6 @@ class AircraftCard extends StatelessWidget {
             ),
           ],
         ),
->>>>>>> 8489784 (fix: make flags circular)
       ),
     );
   }

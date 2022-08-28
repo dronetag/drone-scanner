@@ -7,6 +7,7 @@ import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/screen_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
+import '../../../../bloc/standards_cubit.dart';
 import '../../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
@@ -58,22 +59,21 @@ class AircraftDetailHeader extends StatelessWidget {
       ),
       height: headerHeight,
       width: width,
-      child: Column(
+      child: Wrap(
+        alignment: WrapAlignment.center,
         children: [
           Padding(
             padding: EdgeInsets.only(
-              top: screenCubit.scaleHeight * 5.0,
-              bottom: screenCubit.scaleHeight < 0.4
-                  ? 0
-                  : screenCubit.scaleHeight * 8,
+              top: headerHeight / 25,
+              bottom: screenCubit.scaleHeight < 0.4 ? 0 : headerHeight / 20,
             ),
             child: CustomPaint(
               painter: chevron,
               child: Container(
                 margin: EdgeInsets.symmetric(
-                    vertical: screenCubit.scaleHeight < 0.4
-                        ? 0
-                        : screenCubit.scaleHeight * 5),
+                  vertical:
+                      screenCubit.scaleHeight < 0.4 ? 0 : headerHeight / 20,
+                ),
                 width: width / 8,
                 height: headerHeight / 15,
               ),
@@ -81,11 +81,9 @@ class AircraftDetailHeader extends StatelessWidget {
           ),
           if (context.read<SlidersCubit>().panelController.isAttached &&
               !context.read<SlidersCubit>().panelController.isPanelClosed)
-            Expanded(
-              child: messagePackList.isNotEmpty
-                  ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
-                  : Container(),
-            ),
+            messagePackList.isNotEmpty
+                ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
+                : Container(),
         ],
       ),
     );
@@ -104,15 +102,15 @@ class AircraftDetailHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.detailButtonsColor,
             ),
-            margin: EdgeInsets.symmetric(vertical: screenCubit.scaleHeight * 5),
+            margin: EdgeInsets.symmetric(
+              vertical: headerHeight / 20,
+            ),
             height: headerHeight / 5 * 4,
             width: headerHeight / 5 * 3,
             child: IconButton(
@@ -249,10 +247,16 @@ class AircraftDetailHeader extends StatelessWidget {
     final countryCode =
         messagePackList.last.operatorIdMessage?.operatorId.substring(0, 2);
     Widget? flag;
-    if (messagePackList.last.operatorIDValid() && countryCode != null) {
+    if (context.read<StandardsCubit>().state.internetAvailable &&
+        messagePackList.last.operatorIDValid() &&
+        countryCode != null) {
       flag = getFlag(countryCode);
     }
-
+    final opIdText = messagePackList.last.operatorIDValid()
+        ? flag == null
+            ? messagePackList.last.operatorIdMessage?.operatorId
+            : ' ${messagePackList.last.operatorIdMessage?.operatorId}'
+        : '';
     return Text.rich(
       TextSpan(
         style: const TextStyle(
@@ -271,7 +275,7 @@ class AircraftDetailHeader extends StatelessWidget {
               style: const TextStyle(
                 color: Colors.white,
               ),
-              text: ' ${messagePackList.last.operatorIdMessage?.operatorId}',
+              text: opIdText,
             ),
         ],
       ),
