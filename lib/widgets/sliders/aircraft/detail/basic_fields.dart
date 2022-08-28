@@ -95,6 +95,7 @@ class BasicFields {
           headlineText: 'Operation Description',
           fieldText: messagePackList.last.selfIdMessage!.operationDescription,
         ),
+      if (isLandscape) const SizedBox(),
     ];
   }
 }

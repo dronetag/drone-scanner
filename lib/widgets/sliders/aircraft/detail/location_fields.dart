@@ -104,11 +104,12 @@ class LocationFields {
             headlineText: 'Distance from me',
             fieldText: distanceText,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Wrap(
+                direction: Axis.vertical,
+                alignment: WrapAlignment.start,
                 children: [
                   Text(
                     'Location',
