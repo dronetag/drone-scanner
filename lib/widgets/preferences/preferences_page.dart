@@ -342,9 +342,10 @@ class PreferencesPage extends StatelessWidget {
         padding: itemPadding,
         child: Wrap(
           alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             const Text('Expiration time (sec):'),
-            CustomSpinBox(),
+            Container(width: width / 3, child: CustomSpinBox()),
           ],
         ),
       ),

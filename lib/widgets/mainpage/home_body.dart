@@ -9,6 +9,7 @@ import '../../constants/sizes.dart';
 import '../../utils/utils.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/airspace_sliding_panel.dart';
+import '../toolbars/map_options_toolbar.dart';
 import '../toolbars/toolbar.dart';
 import 'map_ui_google.dart';
 
@@ -37,6 +38,13 @@ class HomeBody extends StatelessWidget {
           padding: EdgeInsets.only(bottom: height / 3),
           child: const Toolbar(),
         ),
+        Positioned(
+            top: Sizes.toolbarHeight +
+                MediaQuery.of(context).viewPadding.top +
+                Sizes.mapContentMargin +
+                context.read<ScreenCubit>().scaleHeight * 25,
+            right: Sizes.mapContentMargin,
+            child: MapOptionsToolbar()),
         AirspaceSlidingPanel(
           maxSize: maxSliderSize(
             height: height,
