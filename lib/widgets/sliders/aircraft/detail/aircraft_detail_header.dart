@@ -95,6 +95,7 @@ class AircraftDetailHeader extends StatelessWidget {
     ZoneItem? zoneItem,
   ) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = calcHeaderHeight(context);
@@ -111,8 +112,8 @@ class AircraftDetailHeader extends StatelessWidget {
             margin: EdgeInsets.symmetric(
               vertical: headerHeight / 20,
             ),
-            height: headerHeight / 5 * 4,
-            width: headerHeight / 5 * 3,
+            height: headerHeight / 5 * 3,
+            width: width / 9,
             child: IconButton(
               padding: EdgeInsets.all(screenCubit.scaleHeight * 2),
               icon: const Icon(
@@ -129,7 +130,7 @@ class AircraftDetailHeader extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: screenCubit.scaleWidth * 15,
+            width: screenCubit.scaleWidth * 20,
           ),
           Expanded(
             flex: 3,
@@ -157,8 +158,8 @@ class AircraftDetailHeader extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: AppColors.detailButtonsColor,
               ),
-              height: headerHeight / 5 * 4,
-              width: headerHeight / 5 * 3,
+              height: headerHeight / 5 * 3,
+              width: width / 9,
               child: IconButton(
                 padding: EdgeInsets.symmetric(
                   horizontal: screenCubit.scaleWidth * 2,
