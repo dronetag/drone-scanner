@@ -38,6 +38,7 @@ dependencies:
   share_plus: ^4.0.3
   flutter_bloc: ^8.0.1
   package_info: ^2.0.2
+  localstorage: ^4.0.0+1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.2
