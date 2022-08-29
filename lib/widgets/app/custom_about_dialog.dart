@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/screen_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import 'app.dart';
@@ -19,6 +21,7 @@ class CustomAboutDialog extends StatelessWidget {
     const borderRadius = 20.0;
     const legalese = '© Dronetag s.r.o., 2022';
     final buildText = 'build ${packageInfo!.buildNumber}';
+    final screenCubit = context.read<ScreenCubit>();
     late final String versionText;
 
     if (packageInfo == null) {
@@ -60,8 +63,9 @@ class CustomAboutDialog extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(
-                  Sizes.aboutDialogMargin,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.aboutDialogMargin,
+                  vertical: Sizes.aboutDialogMargin * screenCubit.scaleHeight,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -83,10 +87,10 @@ class CustomAboutDialog extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5.0),
                       ),
-                      padding: const EdgeInsets.only(
+                      padding: EdgeInsets.only(
                         left: 10,
                         right: 10,
-                        top: 3,
+                        top: 3.0 * screenCubit.scaleHeight,
                       ),
                       child: Text(
                         versionText,
@@ -98,9 +102,9 @@ class CustomAboutDialog extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 5,
-                        vertical: 2,
+                        vertical: 2 * context.read<ScreenCubit>().scaleHeight,
                       ),
                       child: Text(
                         buildText,
@@ -148,7 +152,10 @@ class CustomAboutDialog extends StatelessWidget {
                             applicationLegalese: legalese,
                           );
                         },
-                        child: const Text('View 3rd-party licenses'),
+                        child: const Text(
+                          'View 3rd-party licenses',
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                     Spacer(),
