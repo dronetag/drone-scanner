@@ -151,14 +151,6 @@ class CustomAboutDialog extends StatelessWidget {
                         child: const Text('View 3rd-party licenses'),
                       ),
                     ),
-                    SizedBox(
-                      width: width / 2,
-                      child: ElevatedButton(
-                        style: buttonStyle,
-                        onPressed: () {},
-                        child: const Text('Send diagnostics logs'),
-                      ),
-                    ),
                     Spacer(),
                     Align(
                       alignment: Alignment.bottomLeft,
