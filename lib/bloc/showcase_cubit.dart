@@ -58,13 +58,13 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       'start and stop scans.';
   final String searchDescription = 'Use the search to search for locations.';
   final String mapDescription =
-      'Pan, zoom and rotate map with touch gestures, tap on aircraft or zone '
+      'Pan, zoom and rotate the map with touch gestures, tap on aircraft or zone '
       'to highlight.';
   final String mapToolbarDescription =
-      'Use the map toolbar to center on your position, change zoom or switch '
+      'Use the map toolbar to center on your position, change the zoom or switch '
       'to satellite map';
   final String droneDetailPanelDescription =
-      'After tap on item on list or selecting aircraft from map, see '
+      'After tapping on an item on a list or selecting aircraft from the map, see '
       'detailed Aircraft information.\nAll the data acquired will be shown '
       'here.';
   final String droneDetailMoreDescription =
@@ -74,14 +74,13 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       'Detected aircraft and zones are displayed in a list. Slide panel '
       'upwards to maximize.';
   final String droneListFilterDescription =
-      'Use filter to show aircraft, zones or both.';
+      'Use the filter to show aircraft, zones, or both.';
   final String droneListSortDescription =
       'Sort aircraft according to last update time or distance from you.';
   final String droneListItemDescription =
-      'Card shows basic aircaft information. Tap for details.';
+      'Card shows basic aircraft information. Tap for details.';
   final String lastDescription =
-      'Your can replay this showcase from the About page. Enjoy!';
-
+      'You can replay this showcase from the About page. Enjoy!';
   ShowcaseCubit()
       : super(
           ShowcaseState(showcaseActive: false, showcaseAlreadyPlayed: false),
