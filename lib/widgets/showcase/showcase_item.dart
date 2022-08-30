@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/screen_cubit.dart';
 import '../../constants/colors.dart';
 
 class ShowcaseItem extends StatelessWidget {
@@ -43,8 +45,9 @@ class ShowcaseItem extends StatelessWidget {
       descTextStyle: TextStyle(
         color: textColor ?? Colors.black,
       ),
-      contentPadding: const EdgeInsets.all(
-        20,
+      contentPadding: EdgeInsets.symmetric(
+        vertical: 20 * context.read<ScreenCubit>().scaleHeight,
+        horizontal: 20 * context.read<ScreenCubit>().scaleWidth,
       ),
       showcaseBackgroundColor: backgroundColor ?? Colors.white,
       child: child,
