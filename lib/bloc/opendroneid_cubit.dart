@@ -109,6 +109,9 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   Future<void> setBtUsed({required bool btUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
+    // cancel wifi subscription to avoid receiving events
+    // until restart is complete
+    await wifiStateListener?.cancel();
     // turning on bt, if wifi was active, restart scans
     if (btUsed) {
       if (state.usedTechnologies != UsedTechnologies.Wifi) {
@@ -135,13 +138,19 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     }
     emit(state.copyWith(usedTechnologies: usedT));
     if (restart) {
-      unawaited(start());
+      await start();
     }
+    wifiStateListener = FlutterOpenDroneId.wifiState.listen(
+      (scanning) => wifiStateCallback(
+        isScanning: scanning,
+      ),
+    );
   }
 
   Future<void> setWifiUsed({required bool wifiUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
+    await btStateListener?.cancel();
     // turning on Wifi, if bt was active, restart scans
     if (wifiUsed) {
       if (state.usedTechnologies != UsedTechnologies.Bluetooth) {
@@ -168,7 +177,8 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     }
     emit(state.copyWith(usedTechnologies: usedT));
     if (restart) {
-      unawaited(start());
+      await start();
     }
+    btStateListener = FlutterOpenDroneId.bluetoothState.listen(btStateCallback);
   }
 }
