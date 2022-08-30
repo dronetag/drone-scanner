@@ -94,10 +94,7 @@ class AircraftDetailHeader extends StatelessWidget {
     List<MessagePack> messagePackList,
     ZoneItem? zoneItem,
   ) {
-    final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = calcHeaderHeight(context);
     final screenCubit = context.read<ScreenCubit>();
     return Padding(

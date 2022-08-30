@@ -26,10 +26,7 @@ class AirspaceListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = calcHeaderHeight(context);
     chevron.context = context;
     chevron.color = AppColors.lightGray;
