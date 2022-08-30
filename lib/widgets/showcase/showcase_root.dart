@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
+import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import 'showcase_start_widget.dart';
 
@@ -15,7 +16,9 @@ class ShowcaseRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 100.0),
+      padding: EdgeInsets.only(
+        top: 100.0 * context.read<ScreenCubit>().scaleHeight,
+      ),
       child: Showcase.withWidget(
         shapeBorder: const CircleBorder(),
         width: MediaQuery.of(context).size.width,
@@ -34,9 +37,10 @@ class ShowcaseRoot extends StatelessWidget {
           },
         ),
         key: context.read<ShowcaseCubit>().rootKey,
-        child: const SizedBox(
+        child: Container(
           width: 1,
           height: 1,
+          color: Colors.black45.withOpacity(0.75),
         ),
       ),
     );

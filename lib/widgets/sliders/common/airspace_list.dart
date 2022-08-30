@@ -106,7 +106,8 @@ class AirspaceList extends StatelessWidget {
       aircraft = state
           .packHistoryByDistance(context.watch<MapCubit>().state.userLocation);
     }
-    if (context.read<ShowcaseCubit>().state.showcaseActive) {
+    if (context.read<ShowcaseCubit>().state.showcaseActive &&
+        aircraft.isNotEmpty) {
       return [
         ShowcaseItem(
           showcaseKey: context.read<ShowcaseCubit>().droneListItemKey,

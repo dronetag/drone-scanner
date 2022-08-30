@@ -59,44 +59,53 @@ class AircraftDetail extends StatelessWidget {
         ? snapHeight - headerHeight
         : maxSliderHeight - headerHeight;
     final dataChildren = buildChildren(context, messagePackList);
-    return Padding(
-      padding: EdgeInsets.only(
-        top: 0,
-        left: Sizes.detailMargin,
-        right: Sizes.detailMargin,
-      ),
-      child: MediaQuery.of(context).orientation == Orientation.landscape
-          ? GridView.builder(
-              padding: EdgeInsets.only(top: headerHeight),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 5,
-                mainAxisExtent: 50,
-              ),
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              itemCount: dataChildren.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.all(2),
-                  child: dataChildren[index],
-                );
-              },
-            )
-          : Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: headerHeight),
-                  height: contentHeight,
-                  child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    itemCount: dataChildren.length,
-                    itemBuilder: (context, index) => dataChildren[index],
-                  ),
+    return ShowcaseItem(
+      showcaseKey: context.read<ShowcaseCubit>().droneDetailPanelKey,
+      description: context.read<ShowcaseCubit>().droneDetailPanelDescription,
+      title: 'Aircraft Detail',
+      padding: EdgeInsets.only(bottom: -height / 2),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      textColor: Colors.white,
+      opacity: 0,
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 0,
+          left: Sizes.detailMargin,
+          right: Sizes.detailMargin,
+        ),
+        child: MediaQuery.of(context).orientation == Orientation.landscape
+            ? GridView.builder(
+                padding: EdgeInsets.only(top: headerHeight),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 5,
+                  mainAxisExtent: 50,
                 ),
-              ],
-            ),
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                itemCount: dataChildren.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.all(2),
+                    child: dataChildren[index],
+                  );
+                },
+              )
+            : Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: headerHeight),
+                    height: contentHeight,
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemCount: dataChildren.length,
+                      itemBuilder: (context, index) => dataChildren[index],
+                    ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 
@@ -108,15 +117,6 @@ class AircraftDetail extends StatelessWidget {
     return [
       ...ConnectionFields.buildConnectionFields(context, messagePackList),
       ...BasicFields.buildBasicFields(context, messagePackList),
-      if (context.watch<ShowcaseCubit>().state.showcaseActive)
-        ShowcaseItem(
-          //padding: EdgeInsets.only(top: -headerHeight),
-          showcaseKey: context.read<ShowcaseCubit>().droneDetailPanelKey,
-          description:
-              context.read<ShowcaseCubit>().droneDetailPanelDescription,
-          title: 'Aircraft Detail',
-          child: Container(),
-        ),
       ...LocationFields.buildLocationFields(context, loc),
       ...OperatorFields.buildOperatorFields(
         context,
