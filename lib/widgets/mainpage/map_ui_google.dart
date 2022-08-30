@@ -141,14 +141,15 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
         Align(
           alignment: Alignment.topCenter,
           child: Padding(
-            padding: const EdgeInsets.only(top: 50.0),
+            padding: const EdgeInsets.only(top: 85.0),
             child: ShowcaseItem(
               showcaseKey: context.read<ShowcaseCubit>().lastKey,
               description: context.read<ShowcaseCubit>().lastDescription,
               title: "Tutorial End",
-              child: const SizedBox(
+              child: Container(
                 width: 1,
                 height: 1,
+                color: Colors.black45.withOpacity(0.75),
               ),
             ),
           ),

@@ -24,27 +24,28 @@ class HomeBody extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return Stack(
       children: <Widget>[
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: MapUIGoogle(
-            mapObjects:
-                context.read<MapCubit>().constructAirspaceMapObjects(context),
-          ),
-        ),
         ShowcaseItem(
           showcaseKey: context.read<ShowcaseCubit>().mapKey,
           description: context.read<ShowcaseCubit>().mapDescription,
           title: 'Map',
-          padding: EdgeInsets.only(bottom: height / 3),
-          child: const Toolbar(),
+          padding: EdgeInsets.only(bottom: -height / 3),
+          child: Container(
+            alignment: Alignment.bottomCenter,
+            child: MapUIGoogle(
+              mapObjects:
+                  context.read<MapCubit>().constructAirspaceMapObjects(context),
+            ),
+          ),
         ),
+        const Toolbar(),
         Positioned(
-            top: Sizes.toolbarHeight +
-                MediaQuery.of(context).viewPadding.top +
-                Sizes.mapContentMargin +
-                context.read<ScreenCubit>().scaleHeight * 25,
-            right: Sizes.mapContentMargin,
-            child: MapOptionsToolbar()),
+          top: Sizes.toolbarHeight +
+              MediaQuery.of(context).viewPadding.top +
+              Sizes.mapContentMargin +
+              context.read<ScreenCubit>().scaleHeight * 25,
+          right: Sizes.mapContentMargin,
+          child: MapOptionsToolbar(),
+        ),
         AirspaceSlidingPanel(
           maxSize: maxSliderSize(
             height: height,
