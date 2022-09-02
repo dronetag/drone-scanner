@@ -17,7 +17,7 @@ class ShowcaseRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: 100.0 * context.read<ScreenCubit>().scaleHeight,
+        top: 150.0 * context.read<ScreenCubit>().scaleHeight,
       ),
       child: Showcase.withWidget(
         shapeBorder: const CircleBorder(),
