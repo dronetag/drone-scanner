@@ -30,6 +30,17 @@ class AppTheme {
     // Color scheme
     colorScheme: lightColorScheme,
     brightness: Brightness.light,
+    appBarTheme: AppBarTheme(
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+      shadowColor: Colors.white,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
 
     // Colors
     primaryColor: lightColorScheme.primary,

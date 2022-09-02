@@ -134,28 +134,24 @@ class CustomAboutDialog extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: width / 2,
-                      child: ElevatedButton(
-                        style: buttonStyle,
-                        onPressed: () {
-                          showLicensePage(
-                            context: context,
-                            applicationName: 'Drone Scanner',
-                            applicationVersion:
-                                packageInfo?.version ?? 'unknown',
-                            applicationIcon: Image.asset(
-                              'assets/images/icon_transparent.png',
-                              width: 48,
-                              height: 64,
-                            ),
-                            applicationLegalese: legalese,
-                          );
-                        },
-                        child: const Text(
-                          'View 3rd-party licenses',
-                          textAlign: TextAlign.center,
-                        ),
+                    ElevatedButton(
+                      style: buttonStyle,
+                      onPressed: () {
+                        showLicensePage(
+                          context: context,
+                          applicationName: 'Drone Scanner',
+                          applicationVersion: packageInfo?.version ?? 'unknown',
+                          applicationIcon: Image.asset(
+                            'assets/images/icon.png',
+                            width: 48,
+                            height: 64,
+                          ),
+                          applicationLegalese: legalese,
+                        );
+                      },
+                      child: const Text(
+                        'View 3rd-party licenses',
+                        textAlign: TextAlign.center,
                       ),
                     ),
                     Spacer(),
