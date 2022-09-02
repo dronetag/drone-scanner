@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/screen_cubit.dart';
-import '../../bloc/showcase_cubit.dart';
-import '../../constants/colors.dart';
 import 'showcase_widget.dart';
 
 class ShowcaseItem extends StatelessWidget {

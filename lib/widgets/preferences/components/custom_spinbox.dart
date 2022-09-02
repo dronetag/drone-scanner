@@ -18,7 +18,6 @@ class CustomSpinBox extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () {
-            print('pres');
             final current = context.read<AircraftCubit>().state.cleanTimeSec;
             if (current - step >= minVal) {
               context.read<AircraftCubit>().setcleanTimeSec(current - step);
