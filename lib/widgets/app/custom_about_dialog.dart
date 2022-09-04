@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/screen_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import 'app.dart';
@@ -16,9 +18,17 @@ class CustomAboutDialog extends StatelessWidget {
         AppColors.preferencesButtonColor,
       ),
     );
-    const borderRadius = 15.0;
+    const borderRadius = 20.0;
     const legalese = '© Dronetag s.r.o., 2022';
     final buildText = 'build ${packageInfo!.buildNumber}';
+    final screenCubit = context.read<ScreenCubit>();
+    late final String versionText;
+
+    if (packageInfo == null) {
+      versionText = 'unknown';
+    } else {
+      versionText = 'v${packageInfo!.version}';
+    }
     final width = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
@@ -32,7 +42,7 @@ class CustomAboutDialog extends StatelessWidget {
       ),
       margin: EdgeInsets.symmetric(
         horizontal: Sizes.mapContentMargin * 2,
-        vertical: MediaQuery.of(context).size.height / 4,
+        vertical: MediaQuery.of(context).size.height / 5,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -53,7 +63,10 @@ class CustomAboutDialog extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(Sizes.mapContentMargin),
+                padding: EdgeInsets.symmetric(
+                  horizontal: Sizes.aboutDialogMargin,
+                  vertical: Sizes.aboutDialogMargin * screenCubit.scaleHeight,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -65,7 +78,7 @@ class CustomAboutDialog extends StatelessWidget {
                       'Drone Scanner',
                       textScaleFactor: 1.6,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
@@ -74,24 +87,24 @@ class CustomAboutDialog extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5.0),
                       ),
-                      padding: const EdgeInsets.only(
+                      padding: EdgeInsets.only(
                         left: 10,
                         right: 10,
-                        top: 3,
+                        top: 3.0 * screenCubit.scaleHeight,
                       ),
                       child: Text(
-                        packageInfo?.version ?? 'unknown',
+                        versionText,
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           color: Color(0xFF0084DC),
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 5,
-                        vertical: 2,
+                        vertical: 2 * context.read<ScreenCubit>().scaleHeight,
                       ),
                       child: Text(
                         buildText,
@@ -116,40 +129,32 @@ class CustomAboutDialog extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(
-                  Sizes.mapContentMargin,
+                  Sizes.aboutDialogMargin,
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: width / 2,
-                      child: ElevatedButton(
-                        style: buttonStyle,
-                        onPressed: () {
-                          showLicensePage(
-                            context: context,
-                            applicationName: 'Drone Scanner',
-                            applicationVersion:
-                                packageInfo?.version ?? 'unknown',
-                            applicationIcon: Image.asset(
-                              'assets/images/icon_transparent.png',
-                              width: 48,
-                              height: 64,
-                            ),
-                            applicationLegalese: legalese,
-                          );
-                        },
-                        child: const Text('View 3rd-party licenses'),
+                    ElevatedButton(
+                      style: buttonStyle,
+                      onPressed: () {
+                        showLicensePage(
+                          context: context,
+                          applicationName: 'Drone Scanner',
+                          applicationVersion: packageInfo?.version ?? 'unknown',
+                          applicationIcon: Image.asset(
+                            'assets/images/icon.png',
+                            width: 48,
+                            height: 64,
+                          ),
+                          applicationLegalese: legalese,
+                        );
+                      },
+                      child: const Text(
+                        'View 3rd-party licenses',
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(
-                      width: width / 2,
-                      child: ElevatedButton(
-                        style: buttonStyle,
-                        onPressed: () {},
-                        child: const Text('Send diagnostics logs'),
-                      ),
-                    ),
+                    Spacer(),
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Column(
@@ -157,7 +162,13 @@ class CustomAboutDialog extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              const Text('Developed by '),
+                              const Text(
+                                'Developed by ',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                               Image.asset(
                                 'assets/images/dronetag_logo.png',
                                 width: width / 5,

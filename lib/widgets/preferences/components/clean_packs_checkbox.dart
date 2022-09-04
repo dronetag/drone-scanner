@@ -18,19 +18,23 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
   @override
   Widget build(BuildContext context) {
     _cleanPacks = context.read<AircraftCubit>().state.cleanOldPacks;
-    return Switch(
-      activeColor: AppColors.highlightBlue,
-      trackColor: MaterialStateProperty.all<Color>(AppColors.lightGray),
-      thumbColor: MaterialStateProperty.all<Color>(
-        AppColors.preferencesButtonColor,
+    return SizedBox(
+      width: 40,
+      child: Switch(
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        inactiveThumbColor: AppColors.preferencesButtonColor,
+        activeColor: AppColors.highlightBlue,
+        trackColor: MaterialStateProperty.all<Color>(
+          AppColors.lightGray,
+        ),
+        value: _cleanPacks,
+        onChanged: (c) {
+          setState(() {
+            _cleanPacks = c;
+            context.read<AircraftCubit>().setCleanOldPacks(clean: c);
+          });
+        },
       ),
-      value: _cleanPacks,
-      onChanged: (c) {
-        setState(() {
-          _cleanPacks = c;
-          context.read<AircraftCubit>().setCleanOldPacks(clean: c);
-        });
-      },
     );
   }
 }

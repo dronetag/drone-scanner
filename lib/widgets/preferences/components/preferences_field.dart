@@ -19,21 +19,29 @@ class PreferencesField extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width,
-      child: Row(
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
         children: [
           Text(
             label,
-          ),
-          const Spacer(),
-          icon,
-          const SizedBox(
-            width: 5,
-          ),
-          Text(
-            text,
             style: TextStyle(
-              color: color,
+              fontWeight: FontWeight.w400,
             ),
+          ),
+          Wrap(
+            children: [
+              icon,
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                text,
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
         ],
       ),

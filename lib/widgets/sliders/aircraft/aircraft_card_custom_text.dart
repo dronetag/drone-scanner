@@ -48,7 +48,7 @@ class AircraftCardCustomText extends StatelessWidget {
       } else {
         final latText = loc.latitude!.toStringAsFixed(6);
         final longText = loc.longitude!.toStringAsFixed(6);
-        text = '$latText, $longText}';
+        text = '$latText, $longText';
       }
     } else if (preference == ListFieldPreference.speed) {
       if (loc == null ||

@@ -23,21 +23,25 @@ class NumDronesText extends StatelessWidget {
               Radius.circular(5),
             ),
           ),
-          padding: const EdgeInsets.only(
-            top: 2,
-          ),
-          width: 20,
-          height: 20,
+          width: 23,
+          height: 23,
           child: Text(
             numPacks.toString(),
-            textScaleFactor: 0.9,
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 16.0,
             ),
           ),
         ),
-        Text(numPacksText),
+        SizedBox(
+          width: 5.0,
+        ),
+        Text(
+          numPacksText,
+          textScaleFactor: 0.9,
+        ),
       ],
     );
   }

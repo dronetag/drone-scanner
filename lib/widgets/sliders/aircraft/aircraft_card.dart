@@ -24,71 +24,67 @@ class AircraftCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final countryCode =
         messagePack.operatorIdMessage?.operatorId.substring(0, 2);
-    final isAirborne =
-        messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
 
     final givenLabel =
         context.read<AircraftCubit>().getAircraftLabel(messagePack.macAddress);
 
-    Image? flag;
-    if (messagePack.operatorIDValid() &&
+    Widget? flag;
+
+    if (context.read<StandardsCubit>().state.internetAvailable &&
+        messagePack.operatorIDValid() &&
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable) {
-      try {
-        flag = Image.network(
-          'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
-          width: 24,
-          height: 12,
-          alignment: Alignment.centerLeft,
-        );
-      } on Exception {
-        flag = null;
-      }
+      flag = getFlag(countryCode);
     }
     final uasIdText = messagePack.basicIdMessage != null &&
             messagePack.basicIdMessage?.uasId != ''
         ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
 
-    return Opacity(
-      opacity: isAirborne ? 1.0 : 0.75,
-      child: ListTile(
-        minLeadingWidth: 0,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
-        leading: buildLeading(context),
-        trailing: buildTrailing(context),
-        title: AircraftCardTitle(
-          uasId: uasIdText,
-          givenLabel: givenLabel,
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Operator ID row
-            Text.rich(
-              TextSpan(
-                children: [
-                  if (countryCode != null &&
-                      flag != null &&
-                      messagePack.operatorIDValid())
-                    WidgetSpan(
-                      child: flag,
-                      alignment: PlaceholderAlignment.middle,
-                    ),
-                  TextSpan(
-                    text: messagePack.operatorIDValid()
-                        ? ' ${messagePack.operatorIdMessage?.operatorId}'
-                        : 'Unknown Operator ID',
-                  ),
-                ],
+    final opIdText = messagePack.operatorIDValid()
+        ? flag == null
+            ? messagePack.operatorIdMessage?.operatorId
+            : ' ${messagePack.operatorIdMessage?.operatorId}'
+        : 'Unknown Operator ID';
+
+    return ListTile(
+      minLeadingWidth: 0,
+      horizontalTitleGap: 0,
+      minVerticalPadding: 2,
+      contentPadding: EdgeInsets.zero,
+      leading: buildLeading(context),
+      trailing: buildTrailing(context),
+      title: AircraftCardTitle(
+        uasId: uasIdText,
+        givenLabel: givenLabel,
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Operator ID row
+          Text.rich(
+            TextSpan(
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
               ),
+              children: [
+                if (countryCode != null &&
+                    flag != null &&
+                    messagePack.operatorIDValid())
+                  WidgetSpan(
+                    child: flag,
+                    alignment: PlaceholderAlignment.middle,
+                  ),
+                TextSpan(
+                  text: opIdText,
+                ),
+              ],
             ),
-            AircraftCardCustomText(
-              messagePack: messagePack,
-            ),
-          ],
-        ),
+          ),
+          AircraftCardCustomText(
+            messagePack: messagePack,
+          ),
+        ],
       ),
     );
   }
@@ -97,30 +93,41 @@ class AircraftCard extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final isAirborne =
         messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
-    final icon = isAirborne ? Icons.flight_takeoff : Icons.flight_land;
+    final icon = Image.asset(
+      isAirborne
+          ? 'assets/images/plane_airborne.png'
+          : 'assets/images/plane_grounded.png',
+      width: Sizes.cardIconSize,
+      height: Sizes.cardIconSize,
+    );
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final aircraftText = messagePack.locationMessage == null ||
             messagePack.locationMessage!.status == pigeon.AircraftStatus.Ground
         ? 'Grounded'
-        : '${messagePack.locationMessage!.height.toString()} m';
+        : '${messagePack.locationMessage!.height.toString()}m AGL';
     return SizedBox(
-      width: width / 8,
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          Text(
-            aircraftText,
-            style: TextStyle(
-              color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
+      width: width / 6,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Wrap(
+          direction: isLandscape ? Axis.vertical : Axis.horizontal,
+          children: [
+            Padding(padding: EdgeInsets.only(left: 6.0), child: icon),
+            const SizedBox(
+              height: 2,
             ),
-            textScaleFactor: 0.7,
-          ),
-        ],
+            Text(
+              aircraftText,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 12.0,
+                color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -135,9 +142,9 @@ class AircraftCard extends StatelessWidget {
     final source = messagePack.getPackSource();
     final standardText = getSourceShortcut(source);
     final width = MediaQuery.of(context).size.width;
-
+    final iconSize = Sizes.iconSize / 3 * 2;
     return SizedBox(
-      width: width / 6,
+      width: width / 7,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -145,17 +152,27 @@ class AircraftCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Icon(
-                source == pigeon.MessageSource.BluetoothLegacy ||
-                        source == pigeon.MessageSource.BluetoothLongRange
-                    ? Icons.bluetooth
-                    : Icons.wifi,
-                size: Sizes.iconSize / 3 * 2,
-              ),
+              if (source == pigeon.MessageSource.BluetoothLegacy ||
+                  source == pigeon.MessageSource.BluetoothLongRange)
+                Icon(
+                  Icons.bluetooth,
+                  size: iconSize,
+                  color: AppColors.slate,
+                ),
+              if (source == pigeon.MessageSource.WifiBeacon ||
+                  source == pigeon.MessageSource.WifiNaN)
+                Image.asset(
+                  'assets/images/wifi_icon.png',
+                  color: AppColors.slate,
+                  width: iconSize,
+                  height: iconSize,
+                ),
               Text(
                 standardText,
                 style: const TextStyle(
                   fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.slate,
                 ),
               ),
             ],
@@ -165,8 +182,19 @@ class AircraftCard extends StatelessWidget {
                 ? "${rssi ?? "?"} dBm"
                 : "${rssi ?? "?"} dBm",
             textScaleFactor: 0.7,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: AppColors.slate,
+            ),
           ),
-          RefreshingText(pack: messagePack, scaleFactor: 0.7, short: true),
+          RefreshingText(
+            pack: messagePack,
+            scaleFactor: 0.7,
+            short: true,
+            showExpiryWarning: true,
+            fontWeight: FontWeight.w600,
+            textColor: AppColors.slate,
+          ),
         ],
       ),
     );

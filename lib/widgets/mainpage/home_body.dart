@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/map/map_cubit.dart';
+import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/standards_cubit.dart';
 import '../../constants/sizes.dart';
 import '../../utils/utils.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/airspace_sliding_panel.dart';
+import '../toolbars/map_options_toolbar.dart';
 import '../toolbars/toolbar.dart';
 import 'map_ui_google.dart';
 
@@ -20,22 +22,29 @@ class HomeBody extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final height = MediaQuery.of(context).size.height;
-
     return Stack(
       children: <Widget>[
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: MapUIGoogle(
-            mapObjects:
-                context.read<MapCubit>().constructAirspaceMapObjects(context),
-          ),
-        ),
         ShowcaseItem(
           showcaseKey: context.read<ShowcaseCubit>().mapKey,
           description: context.read<ShowcaseCubit>().mapDescription,
           title: 'Map',
-          padding: EdgeInsets.only(bottom: height / 3),
-          child: const Toolbar(),
+          padding: EdgeInsets.only(bottom: -height / 3),
+          child: Container(
+            alignment: Alignment.bottomCenter,
+            child: MapUIGoogle(
+              mapObjects:
+                  context.read<MapCubit>().constructAirspaceMapObjects(context),
+            ),
+          ),
+        ),
+        const Toolbar(),
+        Positioned(
+          top: Sizes.toolbarHeight +
+              MediaQuery.of(context).viewPadding.top +
+              Sizes.mapContentMargin +
+              context.read<ScreenCubit>().scaleHeight * 25,
+          right: Sizes.mapContentMargin,
+          child: MapOptionsToolbar(),
         ),
         AirspaceSlidingPanel(
           maxSize: maxSliderSize(

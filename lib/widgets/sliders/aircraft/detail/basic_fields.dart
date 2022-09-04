@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
 import '../../../../constants/colors.dart';
+import '../../../../utils/uasid_prefix_reader.dart';
+import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
 import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
@@ -16,7 +18,15 @@ class BasicFields {
         MediaQuery.of(context).orientation == Orientation.landscape;
     final idTypeString = messagePackList.last.basicIdMessage?.idType.toString();
     final uaTypeString = messagePackList.last.basicIdMessage?.uaType.toString();
-
+    String? manufacturer;
+    Image? logo;
+    if (messagePackList.isNotEmpty &&
+        messagePackList.last.basicIdMessage != null) {
+      manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
+          messagePackList.last.basicIdMessage!.uasId);
+      logo = getManufacturerLogo(
+          manufacturer: manufacturer, color: AppColors.lightGray);
+    }
     final idTypeLabel =
         idTypeString?.replaceAll('IdType.', '').replaceAll('_', ' ');
     final uaTypeLabel =
@@ -25,20 +35,18 @@ class BasicFields {
     return [
       const Headline(text: 'AIRCRAFT'),
       if (isLandscape) const SizedBox(),
-      if (messagePackList.last.basicIdMessage?.idType != null)
-        AircraftDetailRow(
-          children: [
-            AircraftDetailField(
-              headlineText: 'UA ID Type',
-              fieldText: idTypeLabel,
-            ),
-            if (messagePackList.last.basicIdMessage?.uaType != null)
-              AircraftDetailField(
-                headlineText: 'UA Type',
-                fieldText: uaTypeLabel,
-              ),
-          ],
-        ),
+      AircraftDetailRow(
+        children: [
+          AircraftDetailField(
+            headlineText: 'UA ID Type',
+            fieldText: idTypeLabel,
+          ),
+          AircraftDetailField(
+            headlineText: 'UA Type',
+            fieldText: uaTypeLabel,
+          ),
+        ],
+      ),
       AircraftDetailRow(
         children: [
           Row(
@@ -53,9 +61,7 @@ class BasicFields {
               const SizedBox(
                 width: 10,
               ),
-              if (messagePackList.last.basicIdMessage?.uasId
-                      .startsWith('1596') ==
-                  true)
+              if (logo != null && manufacturer != null)
                 Text.rich(
                   TextSpan(
                     style: const TextStyle(
@@ -64,16 +70,10 @@ class BasicFields {
                     children: [
                       WidgetSpan(
                         alignment: PlaceholderAlignment.middle,
-                        child: Image.asset(
-                          'assets/images/dronetag.png',
-                          height: 16,
-                          width: 24,
-                          alignment: Alignment.topCenter,
-                          color: AppColors.lightGray,
-                        ),
+                        child: logo,
                       ),
-                      const TextSpan(
-                        text: 'Dronetag Mini',
+                      TextSpan(
+                        text: manufacturer,
                       ),
                     ],
                   ),
@@ -91,18 +91,11 @@ class BasicFields {
       ),
       if (messagePackList.last.selfIdMessage != null &&
           messagePackList.last.selfIdMessage?.operationDescription != null)
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text('Operation Description:'),
+        AircraftDetailField(
+          headlineText: 'Operation Description',
+          fieldText: messagePackList.last.selfIdMessage!.operationDescription,
         ),
-      if (messagePackList.last.selfIdMessage != null &&
-          messagePackList.last.selfIdMessage?.operationDescription != null)
-        Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            messagePackList.last.selfIdMessage!.operationDescription,
-          ),
-        ),
+      if (isLandscape) const SizedBox(),
     ];
   }
 }

@@ -16,6 +16,13 @@ double maxSliderSize({
   }
 }
 
+double calcHeaderHeight(BuildContext context) {
+  final height = MediaQuery.of(context).size.height;
+  final isLandscape =
+      MediaQuery.of(context).orientation == Orientation.landscape;
+  return isLandscape ? height / 5 : height / 9;
+}
+
 double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   const p = 0.017453292519943295;
   const c = math.cos;
@@ -144,17 +151,41 @@ String getAltitudeAsString(double? altitude) {
   return sprintf('%3.1f m', [altitude]);
 }
 
-Image? getFlag(String countryCode) {
-  Image? flag;
-
+Widget? getFlag(String countryCode) {
+  final size = 16.0;
+  Widget? flag;
+  NetworkImage? image;
   try {
-    flag = Image.network(
+    image = NetworkImage(
       'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
-      width: 24,
-      height: 12,
     );
-  } on Exception {
-    flag = null;
+  } catch (_) {
+    return null;
   }
+  flag = Container(
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+      width: size,
+      height: size,
+      child: CircleAvatar(backgroundImage: image));
+
   return flag;
+}
+
+Image? getManufacturerLogo({String? manufacturer, Color color = Colors.black}) {
+  if (manufacturer == null) return null;
+  String? path;
+  if (manufacturer == 'Dronetag') path = 'assets/images/dronetag.png';
+  if (manufacturer == 'DJI') path = 'assets/images/dji_logo.png';
+
+  if (path == null) return null;
+  return Image.asset(
+    path,
+    height: 16,
+    width: 24,
+    alignment: Alignment.centerLeft,
+    color: color,
+  );
 }

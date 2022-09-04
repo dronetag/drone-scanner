@@ -11,10 +11,8 @@ import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
 import '../../bloc/zones/selected_zone_cubit.dart';
-import '../../constants/sizes.dart';
 import '../showcase/showcase_item.dart';
 import '../showcase/showcase_root.dart';
-import '../toolbars/map_options_toolbar.dart';
 
 class MapUIGoogle extends StatefulWidget {
   final List<dynamic> mapObjects;
@@ -74,9 +72,6 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
     final polylines = widget.mapObjects.whereType<Polyline>().toSet();
     final circles = widget.mapObjects.whereType<Circle>().toSet();
 
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
     final googleMap = GoogleMap(
       onTap: selItemMac != null || selZone != null || droppedPin
           ? (_) {
@@ -111,7 +106,6 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
       polygons: polygons,
       polylines: polylines,
     );
-
     return Stack(
       children: [
         GestureDetector(
@@ -133,11 +127,6 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
               : null,
           child: googleMap,
         ),
-        Positioned(
-          bottom: isLandscape ? height / 5 * 2 : height / 3 * 2,
-          right: Sizes.mapContentMargin,
-          child: const MapOptionsToolbar(),
-        ),
         if (context.watch<ShowcaseCubit>().state.showcaseActive)
           const Align(
             alignment: Alignment.topCenter,
@@ -146,14 +135,15 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
         Align(
           alignment: Alignment.topCenter,
           child: Padding(
-            padding: const EdgeInsets.only(top: 50.0),
+            padding: const EdgeInsets.only(top: 85.0),
             child: ShowcaseItem(
               showcaseKey: context.read<ShowcaseCubit>().lastKey,
               description: context.read<ShowcaseCubit>().lastDescription,
               title: "Tutorial End",
-              child: const SizedBox(
+              child: Container(
                 width: 1,
                 height: 1,
+                color: Colors.black45.withOpacity(0.75),
               ),
             ),
           ),

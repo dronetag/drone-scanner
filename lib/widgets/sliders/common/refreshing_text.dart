@@ -14,12 +14,19 @@ class RefreshingText extends StatefulWidget {
   final MessagePack pack;
   final double scaleFactor;
   final bool short;
+  final FontWeight fontWeight;
+  final bool showExpiryWarning;
+  final Color textColor;
+
   const RefreshingText({
     Key? key,
     required this.pack,
     this.leadingText,
     this.scaleFactor = 0.9,
     this.short = false,
+    this.showExpiryWarning = false,
+    this.fontWeight = FontWeight.normal,
+    this.textColor = AppColors.detailFieldColor,
   }) : super(key: key);
 
   @override
@@ -58,26 +65,21 @@ class _RefreshingTextState extends State<RefreshingText> {
           text = min >= 1 ? minText : secText;
           text += ' ago';
         }
-        if (expiresSoon && !widget.short) {
+        if (widget.showExpiryWarning && expiresSoon && !widget.short) {
           final expiryTime =
               context.watch<AircraftCubit>().state.cleanTimeSec - packAge;
-          text += ', Expires in ${expiryTime.toStringAsFixed(0)} sec';
+          text += '\nExpires in ${expiryTime.toStringAsFixed(0)} sec';
         }
-        if (expiresSoon) {
-          return Text(
-            text,
-            textScaleFactor: widget.scaleFactor,
-            style: const TextStyle(color: AppColors.red),
-          );
-        } else {
-          return Text(
-            text,
-            textScaleFactor: widget.scaleFactor,
-            style: const TextStyle(
-              color: AppColors.detailFieldColor,
-            ),
-          );
-        }
+        return Text(
+          text,
+          textScaleFactor: widget.scaleFactor,
+          style: TextStyle(
+            color: expiresSoon && widget.showExpiryWarning
+                ? AppColors.red
+                : widget.textColor,
+            fontWeight: widget.fontWeight,
+          ),
+        );
       },
     );
   }

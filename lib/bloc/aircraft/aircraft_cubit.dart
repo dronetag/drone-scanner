@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +19,7 @@ import '../../utils/utils.dart';
 class AircraftState {
   final Map<String, List<MessagePack>> _packHistory;
   final bool cleanOldPacks;
-  final int cleanTimeSec;
+  final double cleanTimeSec;
   // map of aircraft labels given by user
   // keys are aircraft mac adresses, values are labels
   final Map<String, String> aircraftLabels;
@@ -99,7 +99,7 @@ class AircraftState {
   AircraftState copyWith({
     Map<String, List<MessagePack>>? packHistory,
     bool? cleanOldPacks,
-    int? cleanTimeSec,
+    double? cleanTimeSec,
     Map<String, String>? aircraftLabels,
   }) =>
       AircraftState(
@@ -167,7 +167,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       : super(AircraftState(
           packHistory: <String, List<MessagePack>>{},
           cleanOldPacks: false,
-          cleanTimeSec: 100,
+          cleanTimeSec: 60.0,
           aircraftLabels: <String, String>{},
         )) {
     fetchSavedLabels();
@@ -182,9 +182,9 @@ class AircraftCubit extends Cubit<AircraftState> {
     } else {
       emit(state.copyWith(cleanOldPacks: cleanPacks));
     }
-    final cleanPacksSec = preferences.getInt('cleanTimeSec');
+    final cleanPacksSec = preferences.getDouble('cleanTimeSec');
     if (cleanPacksSec == null) {
-      emit(state.copyWith(cleanTimeSec: 100));
+      emit(state.copyWith(cleanTimeSec: 60));
     } else {
       emit(state.copyWith(cleanTimeSec: cleanPacksSec));
     }
@@ -247,10 +247,10 @@ class AircraftCubit extends Cubit<AircraftState> {
     emit(state.copyWith(cleanOldPacks: clean));
   }
 
-  Future<void> setcleanTimeSec(int s) async {
+  Future<void> setcleanTimeSec(double s) async {
     // persistently save this setting
     final preferences = await SharedPreferences.getInstance();
-    await preferences.setInt('cleanTimeSec', s);
+    await preferences.setDouble('cleanTimeSec', s);
     emit(state.copyWith(cleanTimeSec: s));
     if (!state.cleanOldPacks) return;
     resetExpiryTimers();
@@ -276,8 +276,9 @@ class AircraftCubit extends Cubit<AircraftState> {
       if (_expiryTimers[key] != null) {
         _expiryTimers[key]?.cancel();
       }
-      _expiryTimers[key] =
-          Timer(Duration(seconds: state.cleanTimeSec - packAgeSec.toInt()), () {
+      _expiryTimers[key] = Timer(
+          Duration(seconds: state.cleanTimeSec.toInt() - packAgeSec.toInt()),
+          () {
         // remove if packs expire
         deletePack(key);
       });
@@ -315,7 +316,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       }
       if (state.cleanOldPacks) {
         _expiryTimers[pack.macAddress] = Timer(
-          Duration(seconds: state.cleanTimeSec),
+          Duration(seconds: state.cleanTimeSec.toInt()),
           () {
             // remove if packs expire
             deletePack(pack.macAddress);

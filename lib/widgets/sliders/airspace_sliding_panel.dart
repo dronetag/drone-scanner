@@ -32,6 +32,13 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
   Chevron chevron = Chevron();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        context.read<SlidersCubit>().panelController.animatePanelToSnapPoint());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final sliderMaximized = context.watch<SlidersCubit>().state.sliderMaximized;
@@ -52,6 +59,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
             return Container();
           }
         }
+        // use orientation builder to rebuild widget when orientation changes
         return OrientationBuilder(
           builder: (context, orientation) {
             return SlidingUpPanel(

@@ -23,8 +23,8 @@ class _ToolbarState extends State<Toolbar> {
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).viewPadding.top;
     const borderRadius = Radius.circular(Sizes.panelBorderRadius);
-    final toolbarColor =
-        colors.AppColors.darkGray.withOpacity(colors.AppColors.toolbarOpacity);
+    final toolbarColor = colors.AppColors.toolbarColor
+        .withOpacity(colors.AppColors.toolbarOpacity);
     return Container(
       decoration: BoxDecoration(
         boxShadow: const <BoxShadow>[
@@ -42,55 +42,53 @@ class _ToolbarState extends State<Toolbar> {
         vertical: statusBarHeight + Sizes.mapContentMargin,
         horizontal: Sizes.mapContentMargin,
       ),
+      padding: EdgeInsets.symmetric(horizontal: Sizes.toolbarMargin),
       height: Sizes.toolbarHeight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(
-            width: 10,
-          ),
-          const Expanded(
-            flex: 2,
-            // source: https://www.fluttercampus.com/guide/254/google-map-autocomplete-place-search-flutter/
-            child: LocationSearch(),
-          ),
-          ShowcaseItem(
-            showcaseKey: context.read<ShowcaseCubit>().scanningStateKey,
-            description: context.read<ShowcaseCubit>().scanningStateDescription,
-            title: 'Map Toolbar',
-            child: const ScanningStateIcons(),
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          ShowcaseItem(
-            showcaseKey: context.read<ShowcaseCubit>().showInfoKey,
-            description: context.read<ShowcaseCubit>().showInfoDescription,
-            title: 'Map Toolbar',
-            child: RawMaterialButton(
-              onPressed: () {
-                displayToolbarMenu(context).then(
-                  (value) {
-                    if (value != null) handleAction(context, value);
-                  },
-                );
-              },
-              elevation: 0,
-              padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              fillColor: Colors.transparent,
-              child: const Icon(
-                Icons.more_horiz,
-                color: Colors.white,
-                size: Sizes.iconSize,
+      child: ShowcaseItem(
+        showcaseKey: context.read<ShowcaseCubit>().searchKey,
+        description: context.read<ShowcaseCubit>().searchDescription,
+        title: 'Map Toolbar',
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              flex: 2,
+              // source: https://www.fluttercampus.com/guide/254/google-map-autocomplete-place-search-flutter/
+              child: LocationSearch(),
+            ),
+            Expanded(
+              flex: 1,
+              child: ShowcaseItem(
+                showcaseKey: context.read<ShowcaseCubit>().scanningStateKey,
+                description:
+                    context.read<ShowcaseCubit>().scanningStateDescription,
+                title: 'Map Toolbar',
+                child: const ScanningStateIcons(),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-        ],
+            ShowcaseItem(
+              showcaseKey: context.read<ShowcaseCubit>().showInfoKey,
+              description: context.read<ShowcaseCubit>().showInfoDescription,
+              title: 'Map Toolbar',
+              child: IconButton(
+                onPressed: () {
+                  displayToolbarMenu(context).then(
+                    (value) {
+                      if (value != null) handleAction(context, value);
+                    },
+                  );
+                },
+                padding: const EdgeInsets.all(0),
+                constraints: const BoxConstraints(),
+                icon: const Icon(
+                  Icons.more_horiz,
+                  color: Colors.white,
+                  size: Sizes.iconSize,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-import '../../constants/colors.dart';
-import '../../constants/sizes.dart';
+import 'showcase_widget.dart';
 
 class ShowcaseItem extends StatelessWidget {
   final String title;
   final String description;
   final GlobalKey showcaseKey;
   final Widget child;
-
   final double? opacity;
   final EdgeInsets? padding;
   final Color? backgroundColor;
@@ -29,25 +27,19 @@ class ShowcaseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Showcase(
+    return Showcase.withWidget(
       key: showcaseKey,
+      width: MediaQuery.of(context).size.width - 20,
+      height: 0,
       overlayOpacity: opacity ?? 0.75,
       overlayPadding: padding ?? EdgeInsets.zero,
-      description: description,
-      title: title,
-      titleTextStyle: TextStyle(
-        color: textColor ?? AppColors.blue,
-        fontWeight: FontWeight.bold,
-        fontSize: 23,
-        height: 2,
+      container: ShowcaseWidget(
+        heading: title,
+        text: description,
+        overlayPadding: padding ?? EdgeInsets.zero,
+        textColor: textColor,
+        backgroundColor: backgroundColor ?? Colors.white,
       ),
-      descTextStyle: TextStyle(
-        color: textColor ?? Colors.black,
-      ),
-      contentPadding: const EdgeInsets.all(
-        Sizes.showcaseMargin,
-      ),
-      showcaseBackgroundColor: backgroundColor ?? Colors.white,
       child: child,
     );
   }

@@ -4,12 +4,15 @@ import 'package:flutter_opendroneid/models/message_pack.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
+import '../../../../bloc/screen_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
+import '../../../../bloc/standards_cubit.dart';
 import '../../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
+import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import '../../common/chevron.dart';
@@ -22,8 +25,8 @@ class AircraftDetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final screenCubit = context.read<ScreenCubit>();
     final zoneItem = context.watch<SelectedZoneCubit>().state.selectedZone;
     final selectedMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
@@ -37,9 +40,7 @@ class AircraftDetailHeader extends StatelessWidget {
               selectedMac,
             )!
         : [];
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 6 : height / 12;
+    final headerHeight = calcHeaderHeight(context);
     chevron.context = context;
     chevron.color = AppColors.detailButtonsColor;
     if (chevron.direction != ChevronDirection.none) {
@@ -48,6 +49,7 @@ class AircraftDetailHeader extends StatelessWidget {
           : ChevronDirection.upwards;
     }
     return Container(
+      padding: EdgeInsets.only(bottom: screenCubit.scaleHeight * 8),
       decoration: const BoxDecoration(
         color: AppColors.detailHeaderColor,
         borderRadius: BorderRadius.only(
@@ -57,26 +59,31 @@ class AircraftDetailHeader extends StatelessWidget {
       ),
       height: headerHeight,
       width: width,
-      child: Column(
+      child: Wrap(
+        alignment: WrapAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 5.0),
+            padding: EdgeInsets.only(
+              top: headerHeight / 25,
+              bottom: screenCubit.scaleHeight < 0.4 ? 0 : headerHeight / 20,
+            ),
             child: CustomPaint(
               painter: chevron,
               child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                width: headerHeight / 5 * 3,
+                margin: EdgeInsets.symmetric(
+                  vertical:
+                      screenCubit.scaleHeight < 0.4 ? 0 : headerHeight / 20,
+                ),
+                width: width / 8,
                 height: headerHeight / 15,
               ),
             ),
           ),
           if (context.read<SlidersCubit>().panelController.isAttached &&
               !context.read<SlidersCubit>().panelController.isPanelClosed)
-            Expanded(
-              child: messagePackList.isNotEmpty
-                  ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
-                  : Container(),
-            ),
+            messagePackList.isNotEmpty
+                ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
+                : Container(),
         ],
       ),
     );
@@ -87,88 +94,89 @@ class AircraftDetailHeader extends StatelessWidget {
     List<MessagePack> messagePackList,
     ZoneItem? zoneItem,
   ) {
-    final height = MediaQuery.of(context).size.height;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final headerHeight = isLandscape ? height / 6 : height / 12;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const SizedBox(
-          width: 10,
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.detailButtonsColor,
-          ),
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          height: headerHeight / 5 * 4,
-          width: headerHeight / 5 * 3,
-          child: IconButton(
-            padding: const EdgeInsets.all(2),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-              size: Sizes.iconSize,
-            ),
-            onPressed: () {
-              // on tap to map, unfocus other widgets and unselect aircraft
-              context.read<SlidersCubit>().setShowDroneDetail(show: false);
-              context.read<SelectedZoneCubit>().unselectZone();
-              context.read<SelectedAircraftCubit>().unselectAircraft();
-            },
-          ),
-        ),
-        const SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          flex: 3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildTitle(context, messagePackList),
-              buildSubtitle(context, messagePackList),
-            ],
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        ShowcaseItem(
-          title: 'Aircraft Detail',
-          showcaseKey: context.read<ShowcaseCubit>().droneDetailMoreKey,
-          description: context.read<ShowcaseCubit>().droneDetailMoreDescription,
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 5),
+    final width = MediaQuery.of(context).size.width;
+    final headerHeight = calcHeaderHeight(context);
+    final screenCubit = context.read<ScreenCubit>();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+      child: Row(
+        children: [
+          Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.detailButtonsColor,
             ),
-            height: headerHeight / 5 * 4,
-            width: headerHeight / 5 * 3,
+            margin: EdgeInsets.symmetric(
+              vertical: headerHeight / 20,
+            ),
+            height: headerHeight / 5 * 3,
+            width: width / 9,
             child: IconButton(
-              padding: const EdgeInsets.all(2),
+              padding: EdgeInsets.all(screenCubit.scaleHeight * 2),
               icon: const Icon(
-                Icons.more_horiz,
+                Icons.arrow_back,
                 color: Colors.white,
-                size: Sizes.iconSize,
+                size: Sizes.detailIconSize,
               ),
               onPressed: () {
-                displayAircraftActionMenu(context).then(
-                  (value) => handleAction(context, value!),
-                );
+                // on tap to map, unfocus other widgets and unselect aircraft
+                context.read<SlidersCubit>().setShowDroneDetail(show: false);
+                context.read<SelectedZoneCubit>().unselectZone();
+                context.read<SelectedAircraftCubit>().unselectAircraft();
               },
             ),
           ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-      ],
+          SizedBox(
+            width: screenCubit.scaleWidth * 20,
+          ),
+          Expanded(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: messagePackList.last.operatorIDValid()
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
+              children: [
+                buildTitle(context, messagePackList),
+                if (messagePackList.last.operatorIDValid())
+                  buildSubtitle(context, messagePackList),
+              ],
+            ),
+          ),
+          ShowcaseItem(
+            title: 'Aircraft Detail',
+            showcaseKey: context.read<ShowcaseCubit>().droneDetailMoreKey,
+            description:
+                context.read<ShowcaseCubit>().droneDetailMoreDescription,
+            child: Container(
+              margin:
+                  EdgeInsets.symmetric(vertical: 5 * screenCubit.scaleHeight),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.detailButtonsColor,
+              ),
+              height: headerHeight / 5 * 3,
+              width: width / 9,
+              child: IconButton(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenCubit.scaleWidth * 2,
+                  vertical: screenCubit.scaleHeight * 2,
+                ),
+                icon: const Icon(
+                  Icons.more_horiz,
+                  color: Colors.white,
+                  size: Sizes.detailIconSize,
+                ),
+                onPressed: () {
+                  displayAircraftActionMenu(context).then(
+                    (value) => handleAction(context, value!),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -200,25 +208,26 @@ class AircraftDetailHeader extends StatelessWidget {
   }
 
   Widget buildTitle(BuildContext context, List<MessagePack> messagePackList) {
+    String? manufacturer;
+    Image? logo;
+    if (messagePackList.isNotEmpty &&
+        messagePackList.last.basicIdMessage != null) {
+      manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
+          messagePackList.last.basicIdMessage!.uasId);
+      logo =
+          getManufacturerLogo(manufacturer: manufacturer, color: Colors.white);
+    }
     return Text.rich(
       TextSpan(
         style: const TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
         ),
         children: [
-          if (messagePackList.last.basicIdMessage != null &&
-              messagePackList.last.basicIdMessage?.uasId.startsWith('1596') ==
-                  true)
+          if (manufacturer != null && logo != null)
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
-              child: Image.asset(
-                'assets/images/dronetag.png',
-                height: 18,
-                width: 24,
-                alignment: Alignment.topCenter,
-                color: Colors.white,
-              ),
+              child: logo,
             ),
           TextSpan(
             text:
@@ -235,13 +244,22 @@ class AircraftDetailHeader extends StatelessWidget {
   ) {
     final countryCode =
         messagePackList.last.operatorIdMessage?.operatorId.substring(0, 2);
-    Image? flag;
-    if (messagePackList.last.operatorIDValid() && countryCode != null) {
+    Widget? flag;
+    if (context.read<StandardsCubit>().state.internetAvailable &&
+        messagePackList.last.operatorIDValid() &&
+        countryCode != null) {
       flag = getFlag(countryCode);
     }
-
+    final opIdText = messagePackList.last.operatorIDValid()
+        ? flag == null
+            ? messagePackList.last.operatorIdMessage?.operatorId
+            : ' ${messagePackList.last.operatorIdMessage?.operatorId}'
+        : '';
     return Text.rich(
       TextSpan(
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+        ),
         children: [
           if (messagePackList.last.operatorIDValid() &&
               countryCode != null &&
@@ -250,14 +268,13 @@ class AircraftDetailHeader extends StatelessWidget {
               child: flag,
               alignment: PlaceholderAlignment.middle,
             ),
-          TextSpan(
-            style: const TextStyle(
-              color: Colors.white,
+          if (messagePackList.last.operatorIDValid())
+            TextSpan(
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+              text: opIdText,
             ),
-            text: messagePackList.last.operatorIDValid()
-                ? messagePackList.last.operatorIdMessage?.operatorId
-                : 'Unknown Operator ID',
-          ),
         ],
       ),
     );

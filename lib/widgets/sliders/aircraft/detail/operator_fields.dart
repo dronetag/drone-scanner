@@ -4,6 +4,7 @@ import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
+import '../../../../bloc/standards_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
@@ -14,13 +15,44 @@ import 'aircraft_detail_row.dart';
 class OperatorFields {
   static List<Widget> buildOperatorFields(
     BuildContext context,
-    pigeon.SystemDataMessage systemMessage,
+    pigeon.SystemDataMessage? systemMessage,
     pigeon.OperatorIdMessage? opMessage,
   ) {
     final countryCode = opMessage?.operatorId.substring(0, 2);
+    double? distanceFromMe;
+    late final String distanceText;
+    final systemDataValid = systemMessage != null;
+    if (context.read<StandardsCubit>().state.locationEnabled &&
+        systemDataValid) {
+      distanceFromMe = calculateDistance(
+        systemMessage!.operatorLatitude,
+        systemMessage.operatorLongitude,
+        context.read<MapCubit>().state.userLocation.latitude,
+        context.read<MapCubit>().state.userLocation.longitude,
+      );
+      if (distanceFromMe > 1) {
+        distanceText = '${distanceFromMe.toStringAsFixed(3)} km';
+      } else {
+        distanceText = '${(distanceFromMe * 1000).toStringAsFixed(1)} m';
+      }
+    } else {
+      distanceText = 'Unknown';
+    }
+    final locationText = systemMessage != null
+        ? '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
+            '${systemMessage.operatorLongitude.toStringAsFixed(4)}'
+        : 'Unknown';
 
-    Image? flag;
-    if (countryCode != null) flag = getFlag(countryCode);
+    Widget? flag;
+    if (countryCode != null &&
+        context.read<StandardsCubit>().state.internetAvailable) {
+      flag = getFlag(countryCode);
+    }
+    final opIdText = opMessage != null
+        ? flag == null
+            ? opMessage.operatorId
+            : ' ${opMessage.operatorId}'
+        : 'Unknown';
 
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -31,7 +63,6 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Operator ID',
-            //fieldText: opMessage.operatorId,
             child: Text.rich(
               TextSpan(
                 children: [
@@ -44,9 +75,7 @@ class OperatorFields {
                     style: const TextStyle(
                       color: AppColors.detailFieldColor,
                     ),
-                    text: opMessage != null
-                        ? opMessage.operatorId
-                        : 'Unknown Operator ID',
+                    text: opIdText,
                   ),
                 ],
               ),
@@ -57,38 +86,62 @@ class OperatorFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'Location',
-            fieldText: '${systemMessage.operatorLatitude.toStringAsFixed(3)}, '
-                '${systemMessage.operatorLongitude.toStringAsFixed(3)}',
+            headlineText: 'Distance from me',
+            fieldText: distanceText,
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconCenterToLoc(
-              onPressedCallback: () {
-                context.read<MapCubit>().centerToLocDouble(
-                      systemMessage.operatorLatitude,
-                      systemMessage.operatorLongitude,
-                    );
-                context
-                    .read<SlidersCubit>()
-                    .panelController
-                    .animatePanelToSnapPoint();
-              },
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Location',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.detailFieldHeaderColor,
+                    ),
+                  ),
+                  Text(
+                    locationText,
+                    style: const TextStyle(
+                      color: AppColors.detailFieldColor,
+                    ),
+                  ),
+                ],
+              ),
+              if (systemDataValid)
+                IconCenterToLoc(
+                  onPressedCallback: () {
+                    context.read<MapCubit>().centerToLocDouble(
+                          systemMessage!.operatorLatitude,
+                          systemMessage.operatorLongitude,
+                        );
+                    context
+                        .read<SlidersCubit>()
+                        .panelController
+                        .animatePanelToSnapPoint();
+                  },
+                ),
+            ],
           ),
         ],
       ),
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'Op. Location Type',
-            fieldText: systemMessage.operatorLocationType
-                .toString()
-                .replaceAll('OperatorLocationType.', ''),
+            headlineText: 'Altitude',
+            fieldText: systemDataValid
+                ? '${systemMessage!.operatorAltitudeGeo.toString()}  m'
+                : 'Unknown',
           ),
           AircraftDetailField(
-            headlineText: 'Altitude',
-            fieldText: '${systemMessage.operatorAltitudeGeo.toString()}  m',
+            headlineText: 'Location Type',
+            fieldText: systemDataValid
+                ? systemMessage!.operatorLocationType
+                    .toString()
+                    .replaceAll('OperatorLocationType.', '')
+                : 'Unknown',
           ),
         ],
       ),
@@ -96,11 +149,15 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Area Radius',
-            fieldText: '${systemMessage.areaRadius.toString()}  m',
+            fieldText: systemDataValid
+                ? '${systemMessage!.areaRadius.toString()}  m'
+                : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Count',
-            fieldText: systemMessage.areaCount.toString(),
+            fieldText: systemDataValid
+                ? systemMessage!.areaCount.toString()
+                : 'Unknown',
           ),
         ],
       ),
@@ -108,11 +165,15 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Area Ceiling',
-            fieldText: '${systemMessage.areaCeiling.toString()}  m',
+            fieldText: systemDataValid
+                ? '${systemMessage!.areaCeiling.toString()}  m'
+                : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Floor',
-            fieldText: '${systemMessage.areaFloor.toString()} m',
+            fieldText: systemDataValid
+                ? '${systemMessage!.areaFloor.toString()} m'
+                : 'Unknown',
           ),
         ],
       ),
@@ -120,15 +181,19 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Category',
-            fieldText: systemMessage.category
-                .toString()
-                .replaceAll('AircraftCategory.', ''),
+            fieldText: systemDataValid
+                ? systemMessage!.category
+                    .toString()
+                    .replaceAll('AircraftCategory.', '')
+                : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Class',
-            fieldText: systemMessage.classValue
-                .toString()
-                .replaceAll('AircraftClass.', ''),
+            fieldText: systemDataValid
+                ? systemMessage!.classValue
+                    .toString()
+                    .replaceAll('AircraftClass.', '')
+                : 'Unknown',
           ),
         ],
       ),
