@@ -39,6 +39,7 @@ dependencies:
   package_info: ^2.0.2
   localstorage: ^4.0.0+1
   sentry_flutter: ^6.9.1
+  rxdart: ^0.27.5
 
 dev_dependencies:
   dependency_validator: ^3.0.0
