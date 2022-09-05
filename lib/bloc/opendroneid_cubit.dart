@@ -66,12 +66,20 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   }
 
   void btStateCallback(BluetoothState btstate) {
+    // refresh ui just when state changes
+    if ((btstate == BluetoothState.PoweredOn) == state.isScanningBluetooth) {
+      return;
+    }
     emit(
       state.copyWith(isScanningBluetooth: btstate == BluetoothState.PoweredOn),
     );
   }
 
   void wifiStateCallback({required bool isScanning}) {
+    // refresh ui just when state changes
+    if (isScanning == state.isScanningWifi) {
+      return;
+    }
     emit(
       state.copyWith(isScanningWifi: isScanning),
     );
