@@ -15,7 +15,6 @@ import '../showcase/showcase_item.dart';
 import '../showcase/showcase_root.dart';
 
 class MapUIGoogle extends StatefulWidget {
-  final List<dynamic> mapObjects;
   bool get _compassEnabled => true;
   bool get _mapToolbarEnabled => false;
   CameraTargetBounds get _cameraTargetBounds => CameraTargetBounds.unbounded;
@@ -31,7 +30,7 @@ class MapUIGoogle extends StatefulWidget {
   bool get _myTrafficEnabled => false;
   bool get _myLocationButtonEnabled => false;
 
-  const MapUIGoogle({required this.mapObjects, Key? key}) : super(key: key);
+  const MapUIGoogle({Key? key}) : super(key: key);
 
   @override
   State<MapUIGoogle> createState() => _MapUIGoogleState();
@@ -61,16 +60,18 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final mapObjects =
+        context.read<MapCubit>().constructAirspaceMapObjects(context);
     final height = MediaQuery.of(context).size.height;
     final selZone = context.watch<SelectedZoneCubit>().state.selectedZone;
     final selItemMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     final droppedPin = context.watch<MapCubit>().state.droppedPin;
 
-    final markers = widget.mapObjects.whereType<Marker>().toSet();
-    final polygons = widget.mapObjects.whereType<Polygon>().toSet();
-    final polylines = widget.mapObjects.whereType<Polyline>().toSet();
-    final circles = widget.mapObjects.whereType<Circle>().toSet();
+    final markers = mapObjects.whereType<Marker>().toSet();
+    final polygons = mapObjects.whereType<Polygon>().toSet();
+    final polylines = mapObjects.whereType<Polyline>().toSet();
+    final circles = mapObjects.whereType<Circle>().toSet();
 
     final googleMap = GoogleMap(
       onTap: selItemMac != null || selZone != null || droppedPin

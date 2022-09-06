@@ -31,10 +31,7 @@ class HomeBody extends StatelessWidget {
           padding: EdgeInsets.only(bottom: -height / 3),
           child: Container(
             alignment: Alignment.bottomCenter,
-            child: MapUIGoogle(
-              mapObjects:
-                  context.read<MapCubit>().constructAirspaceMapObjects(context),
-            ),
+            child: const MapUIGoogle(),
           ),
         ),
         const Toolbar(),
