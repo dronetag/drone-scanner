@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'aircraft/aircraft_cubit.dart';
 import 'aircraft/selected_aircraft_cubit.dart';
@@ -101,7 +102,9 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
 
   Future<void> start() async {
     if (state.usedTechnologies == UsedTechnologies.None) return;
-    listener = FlutterOpenDroneId.allMessages.listen(scanCallback);
+    listener = FlutterOpenDroneId.allMessages
+        .debounceTime(Duration(milliseconds: 100))
+        .listen(scanCallback);
     unawaited(FlutterOpenDroneId.startScan(state.usedTechnologies));
   }
 
@@ -119,7 +122,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     var usedT = state.usedTechnologies;
     // cancel wifi subscription to avoid receiving events
     // until restart is complete
-    await wifiStateListener?.cancel();
+    wifiStateListener?.pause();
     // turning on bt, if wifi was active, restart scans
     if (btUsed) {
       if (state.usedTechnologies != UsedTechnologies.Wifi) {
@@ -144,21 +147,17 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
         usedT = UsedTechnologies.None;
       }
     }
+    wifiStateListener?.resume();
     emit(state.copyWith(usedTechnologies: usedT));
     if (restart) {
       await start();
     }
-    wifiStateListener = FlutterOpenDroneId.wifiState.listen(
-      (scanning) => wifiStateCallback(
-        isScanning: scanning,
-      ),
-    );
   }
 
   Future<void> setWifiUsed({required bool wifiUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
-    await btStateListener?.cancel();
+    btStateListener?.pause();
     // turning on Wifi, if bt was active, restart scans
     if (wifiUsed) {
       if (state.usedTechnologies != UsedTechnologies.Bluetooth) {
@@ -184,9 +183,9 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
       }
     }
     emit(state.copyWith(usedTechnologies: usedT));
+    btStateListener?.resume();
     if (restart) {
       await start();
     }
-    btStateListener = FlutterOpenDroneId.bluetoothState.listen(btStateCallback);
   }
 }
