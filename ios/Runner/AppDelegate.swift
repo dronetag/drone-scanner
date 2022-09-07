@@ -21,7 +21,7 @@ import GoogleMaps
     }
 
     GMSServices.provideAPIKey(googleMapsKey as! String)
-    GeneratedPluginRegistrant.register(withRegistry: self)
+    GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
