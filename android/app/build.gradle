@@ -46,8 +46,8 @@ android {
         applicationId "cz.dronetag.dronescanner"
         minSdkVersion 21
         targetSdkVersion 32
-        versionName '0.1.0'
-        versionCode 1
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
     }
 
     buildTypes {
