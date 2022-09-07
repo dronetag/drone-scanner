@@ -58,14 +58,14 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       'start and stop scans.';
   final String searchDescription = 'Use the search to search for locations.';
   final String mapDescription =
-      'Pan, zoom and rotate the map with touch gestures, tap on aircraft or zone '
-      'to highlight.';
+      'Pan, zoom and rotate the map with touch gestures, tap on aircraft or '
+      'zone to highlight.';
   final String mapToolbarDescription =
-      'Use the map toolbar to center on your position, change the zoom or switch '
-      'to satellite map';
+      'Use the map toolbar to center on your position, change the zoom or '
+      'switch to satellite map';
   final String droneDetailPanelDescription =
-      'After tapping on an item on a list or selecting aircraft from the map, see '
-      'detailed Aircraft information.\nAll the data acquired will be shown '
+      'After tapping on an item on a list or selecting aircraft from the map, '
+      'see detailed Aircraft information.\nAll the data acquired will be shown '
       'here.';
   final String droneDetailMoreDescription =
       'More options are accessible in the menu. Export, share, delete data or '

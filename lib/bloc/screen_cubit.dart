@@ -13,7 +13,8 @@ class ScreenState {
   double bottomBarHeight;
   double textScaleFactor;
 
-  /// allowFontScaling Specifies whether fonts should scale to respect Text Size accessibility settings. The default is false.
+  /// allowFontScaling Specifies whether fonts should scale to respect
+  /// Text Size accessibility settings. The default is false.
   bool allowFontScaling;
 
   ScreenState({
@@ -92,9 +93,10 @@ class ScreenCubit extends Cubit<ScreenState> {
   num setWidth(num width) => width * scaleWidth;
 
   /// Highly adaptable to the device according to UI Design
-  /// It is recommended to use this method to achieve a high degree of adaptation
-  /// when it is found that one screen in the UI design
-  /// does not match the current style effect, or if there is a difference in shape.
+  /// It is recommended to use this method to achieve a high degree of
+  /// adaptation when it is found that one screen in the UI design
+  /// does not match the current style effect, or if there is a difference
+  /// in shape.
   num setHeight(num height) => height * scaleHeight;
 
   ///Font size adaptation method

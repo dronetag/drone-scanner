@@ -333,8 +333,8 @@ class PreferencesPage extends StatelessWidget {
         padding: itemPadding,
         child: const PreferencesFieldWithDescription(
           label: 'Clean automatically:',
-          description:
-              'Aircrafts inactive for chosen time will be automatically cleared',
+          description: 'Aircrafts inactive for chosen time '
+              'will be automatically cleared',
           child: CleanPacksCheckbox(),
         ),
       ),
