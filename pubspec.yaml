@@ -24,7 +24,7 @@ dependencies:
   google_maps_flutter: ^2.1.1
   sliding_up_panel: ^2.0.0+1
   location: ^4.2.0
-  http: any
+  http: ^0.13.4
   permission_handler: ^9.2.0
   flutter_spinbox: ^0.8.0
   path_provider: ^2.0.9
