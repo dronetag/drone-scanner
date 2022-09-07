@@ -41,15 +41,8 @@ dependencies:
   localstorage: ^4.0.0+1
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.9.2
   dependency_validator: ^3.0.0
   pedantic: ^1.11.0
-
-flutter_icons:
-  android: true
-  ios: true
-  remove_alpha_ios: true
-  image_path: "assets/images/icon.png"
 
 # The following section is specific to Flutter.
 flutter:
