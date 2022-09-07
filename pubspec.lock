@@ -212,10 +212,10 @@ packages:
   flutter_opendroneid:
     dependency: "direct main"
     description:
-      path: "../flutter-opendroneid"
-      relative: true
-    source: path
-    version: "0.3.0"
+      name: flutter_opendroneid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -886,4 +886,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.17.0 <3.0.0"
-  flutter: ">=3.0.4"
+  flutter: ">=3.0.5"
