@@ -63,6 +63,7 @@ class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // rebuild home page when showcase active changes
+    context.read<ScreenCubit>().initScreen();
     context.watch<ShowcaseCubit>().state.showcaseActive;
     context.read<ShowcaseCubit>().displayShowcase().then((status) {
       if (status) {
