@@ -20,14 +20,36 @@ class ScreenState {
   ScreenState({
     required this.uiWidthPx,
     required this.uiHeightPx,
-    required this.screenWidth,
-    required this.screenHeight,
-    required this.pixelRatio,
-    required this.statusBarHeight,
-    required this.bottomBarHeight,
-    required this.textScaleFactor,
     required this.allowFontScaling,
+    this.screenWidth = 0,
+    this.screenHeight = 0,
+    this.pixelRatio = 0,
+    this.statusBarHeight = 0,
+    this.bottomBarHeight = 0,
+    this.textScaleFactor = 0,
   });
+
+  ScreenState copyWith({
+    double? uiWidthPx,
+    double? uiHeightPx,
+    double? screenWidth,
+    double? screenHeight,
+    double? pixelRatio,
+    double? statusBarHeight,
+    double? bottomBarHeight,
+    double? textScaleFactor,
+    bool? allowFontScaling,
+  }) =>
+      ScreenState(
+          uiWidthPx: uiWidthPx ?? this.uiHeightPx,
+          uiHeightPx: uiHeightPx ?? this.uiHeightPx,
+          screenWidth: screenWidth ?? this.screenWidth,
+          screenHeight: screenHeight ?? this.screenHeight,
+          pixelRatio: pixelRatio ?? this.pixelRatio,
+          statusBarHeight: statusBarHeight ?? this.statusBarHeight,
+          bottomBarHeight: bottomBarHeight ?? this.bottomBarHeight,
+          textScaleFactor: textScaleFactor ?? this.textScaleFactor,
+          allowFontScaling: allowFontScaling ?? this.allowFontScaling);
 }
 
 class ScreenCubit extends Cubit<ScreenState> {
@@ -38,19 +60,22 @@ class ScreenCubit extends Cubit<ScreenState> {
       {double width = defaultWidth,
       double height = defaultHeight,
       bool allowFontScaling = false})
-      : super(
-          ScreenState(
-            uiWidthPx: width,
-            uiHeightPx: height,
-            allowFontScaling: allowFontScaling,
-            pixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
-            screenWidth: WidgetsBinding.instance.window.physicalSize.width,
-            screenHeight: WidgetsBinding.instance.window.physicalSize.height,
-            statusBarHeight: WidgetsBinding.instance.window.padding.top,
-            bottomBarHeight: WidgetsBinding.instance.window.padding.bottom,
-            textScaleFactor: WidgetsBinding.instance.window.textScaleFactor,
-          ),
-        );
+      : super(ScreenState(
+          uiWidthPx: width,
+          uiHeightPx: height,
+          allowFontScaling: allowFontScaling,
+        ));
+
+  void initScreen() {
+    emit(state.copyWith(
+      pixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
+      screenWidth: WidgetsBinding.instance.window.physicalSize.width,
+      screenHeight: WidgetsBinding.instance.window.physicalSize.height,
+      statusBarHeight: WidgetsBinding.instance.window.padding.top,
+      bottomBarHeight: WidgetsBinding.instance.window.padding.bottom,
+      textScaleFactor: WidgetsBinding.instance.window.textScaleFactor,
+    ));
+  }
 
   /// The number of font pixels for each logical pixel.
   double get textScaleFactor => state.textScaleFactor;
