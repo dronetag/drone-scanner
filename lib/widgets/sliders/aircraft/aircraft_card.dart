@@ -22,8 +22,11 @@ class AircraftCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final countryCode =
-        messagePack.operatorIdMessage?.operatorId.substring(0, 2);
+    String? countryCode;
+    if (messagePack.operatorIdMessage != null &&
+        messagePack.operatorIdMessage!.operatorId.length >= 2) {
+      countryCode = messagePack.operatorIdMessage!.operatorId.substring(0, 2);
+    }
 
     final givenLabel =
         context.read<AircraftCubit>().getAircraftLabel(messagePack.macAddress);
