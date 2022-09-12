@@ -189,3 +189,9 @@ Image? getManufacturerLogo({String? manufacturer, Color color = Colors.black}) {
     color: color,
   );
 }
+
+String? getCountryCode(String operatorId) {
+  if (operatorId.length >= 2) {
+    return operatorId.substring(0, 2);
+  }
+}

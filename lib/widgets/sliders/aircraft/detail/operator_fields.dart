@@ -19,8 +19,8 @@ class OperatorFields {
     pigeon.OperatorIdMessage? opMessage,
   ) {
     String? countryCode;
-    if (opMessage != null && opMessage.operatorId.length >= 2) {
-      countryCode = opMessage.operatorId.substring(0, 2);
+    if (opMessage != null) {
+      countryCode = getCountryCode(opMessage.operatorId);
     }
     double? distanceFromMe;
     late final String distanceText;

@@ -23,9 +23,8 @@ class AircraftCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? countryCode;
-    if (messagePack.operatorIdMessage != null &&
-        messagePack.operatorIdMessage!.operatorId.length >= 2) {
-      countryCode = messagePack.operatorIdMessage!.operatorId.substring(0, 2);
+    if (messagePack.operatorIdMessage != null) {
+      countryCode = getCountryCode(messagePack.operatorIdMessage!.operatorId);
     }
 
     final givenLabel =

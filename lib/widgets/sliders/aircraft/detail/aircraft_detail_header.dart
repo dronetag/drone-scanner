@@ -242,13 +242,10 @@ class AircraftDetailHeader extends StatelessWidget {
     BuildContext context,
     List<MessagePack> messagePackList,
   ) {
-    //final countryCode =
-    //  messagePackList.last.operatorIdMessage?.operatorId.substring(0, 2);
     String? countryCode;
-    if (messagePackList.last.operatorIdMessage != null &&
-        messagePackList.last.operatorIdMessage!.operatorId.length >= 2) {
+    if (messagePackList.last.operatorIdMessage != null) {
       countryCode =
-          messagePackList.last.operatorIdMessage!.operatorId.substring(0, 2);
+          getCountryCode(messagePackList.last.operatorIdMessage!.operatorId);
     }
     Widget? flag;
     if (context.read<StandardsCubit>().state.internetAvailable &&
