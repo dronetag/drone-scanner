@@ -18,7 +18,10 @@ class OperatorFields {
     pigeon.SystemDataMessage? systemMessage,
     pigeon.OperatorIdMessage? opMessage,
   ) {
-    final countryCode = opMessage?.operatorId.substring(0, 2);
+    String? countryCode;
+    if (opMessage != null) {
+      countryCode = getCountryCode(opMessage.operatorId);
+    }
     double? distanceFromMe;
     late final String distanceText;
     final systemDataValid = systemMessage != null;
