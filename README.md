@@ -11,6 +11,13 @@ The application is inspired by [OpenDroneID Android receiver application](https:
 
 For a more in-depth description, refer to the [documentation](./docs/) folder.
 
+### Download the application from application stores
+
+<div>
+<a href='https://play.google.com/store/apps/details?id=cz.dronetag.dronescanner' target='_blank'><img alt='Get it on Google Play' src='assets/images/google_play.png' height='48px'/></a>
+<a href='https://apps.apple.com/app/drone-scanner/id1644548782' target='_blank'><img alt='Get it on the App Store' src='assets/images/app_store.png' height='48px'/></a>
+</div>
+
 ## Documentation Contents
 
 * [Application Features and Regulatory Compliance](./docs/features.md)
