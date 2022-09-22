@@ -31,22 +31,17 @@ const bool kDebugMode = !kReleaseMode && !kProfileMode;
 /// Runs app with Sentry monitoring (only for production environment)
 void runAppWithSentry(void Function() appRunner) async {
   await runZonedGuarded(() async {
-    if (!kDebugMode) {
-      if (sentryDsn == '') {
-        print('There is no Sentry DSN specified!');
-        appRunner();
-      }
-      await SentryFlutter.init(
-        (options) {
-          options.dsn = sentryDsn;
-          options.debug = kDebugMode;
-        },
-        appRunner: appRunner,
-      );
-    } else {
-      print('Sentry not enabled (only allowed in release environments)');
+    if (sentryDsn == '') {
+      print('There is no Sentry DSN specified!');
       appRunner();
     }
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = sentryDsn;
+        options.debug = kDebugMode;
+      },
+      appRunner: appRunner,
+    );
   }, (exception, trace) async {
     print('Unhandled error occurred: $exception $trace');
     await Sentry.captureException(exception, stackTrace: trace);
