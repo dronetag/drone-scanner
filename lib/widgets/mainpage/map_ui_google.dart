@@ -106,6 +106,8 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
       markers: markers,
       polygons: polygons,
       polylines: polylines,
+      onCameraIdle: _cameraMovementEnded,
+      onCameraMoveStarted: _cameraMovementStarted,
     );
     return Stack(
       children: [
@@ -171,6 +173,14 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
   // ignore: use_setters_to_change_properties
   void _updateCameraPosition(CameraPosition position) {
     context.read<MapCubit>().position = position;
+  }
+
+  void _cameraMovementStarted() {
+    context.read<MapCubit>().setCameraMoving(moving: true);
+  }
+
+  void _cameraMovementEnded() {
+    context.read<MapCubit>().setCameraMoving(moving: false);
   }
 
   Future<void> onMapCreated(GoogleMapController controller) async {

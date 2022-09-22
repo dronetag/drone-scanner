@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/map/map_cubit.dart';
 import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/standards_cubit.dart';
