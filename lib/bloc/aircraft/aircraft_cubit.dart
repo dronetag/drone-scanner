@@ -344,7 +344,6 @@ class AircraftCubit extends Cubit<AircraftState> {
           },
         );
       }
-      //sortPacksByLastUpdate();
     } on Exception {
       rethrow;
     }

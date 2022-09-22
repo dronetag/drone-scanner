@@ -197,7 +197,7 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
       // Even the hack with getVisibleRegion doesn't help sometimes
       await Future.delayed(const Duration(milliseconds: 100));
     } on MissingPluginException {
-      // Piece of shit Google Maps library sometimes throws this randomly
+      // Google Maps library sometimes throws this randomly
       // https://github.com/flutter/flutter/issues/43785
       await _waitForMapReady(controller);
     }
