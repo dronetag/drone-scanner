@@ -38,6 +38,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   package_info: ^2.0.2
   localstorage: ^4.0.0+1
+  sentry_flutter: ^6.9.1
 
 dev_dependencies:
   dependency_validator: ^3.0.0
