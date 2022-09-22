@@ -19,9 +19,8 @@ import 'utils/google_api_key_reader.dart';
 import 'utils/uasid_prefix_reader.dart';
 import 'widgets/app/app.dart';
 
-final sentryDsn = String.fromEnvironment(
+const sentryDsn = String.fromEnvironment(
   'SENTRY_DSN',
-  // replace with dsn after dronesanner project is created in sentry
   defaultValue: '',
 );
 
@@ -34,7 +33,8 @@ void runAppWithSentry(void Function() appRunner) async {
   await runZonedGuarded(() async {
     if (!kDebugMode) {
       if (sentryDsn == '') {
-        throw Exception('There is no Sentry DSN specified!');
+        print('There is no Sentry DSN specified!');
+        appRunner();
       }
       await SentryFlutter.init(
         (options) {
