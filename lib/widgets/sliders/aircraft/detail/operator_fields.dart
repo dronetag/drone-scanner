@@ -146,8 +146,9 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Altitude',
-            fieldText: systemDataValid
-                ? '${systemMessage!.operatorAltitudeGeo.toString()}  m'
+            fieldText: systemDataValid &&
+                    systemMessage!.operatorAltitudeGeo.toInt() != INV_ALT
+                ? '${systemMessage.operatorAltitudeGeo.toString()}  m'
                 : 'Unknown',
           ),
           AircraftDetailField(
