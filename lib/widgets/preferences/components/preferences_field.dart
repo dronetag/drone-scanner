@@ -29,6 +29,7 @@ class PreferencesField extends StatelessWidget {
             ),
           ),
           Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               icon,
               const SizedBox(
