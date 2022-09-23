@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
+import 'package:vector_math/vector_math.dart';
 
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
@@ -89,13 +90,16 @@ class LocationFields {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Transform.rotate(
-                  angle: loc?.direction ?? 0,
-                  child: const Icon(
-                    Icons.navigation_sharp,
-                    size: 20,
+                if (loc != null &&
+                    loc.direction != null &&
+                    loc.direction != INV_DIR)
+                  Transform.rotate(
+                    angle: radians(loc.direction!),
+                    child: const Icon(
+                      Icons.navigation_sharp,
+                      size: 20,
+                    ),
                   ),
-                ),
                 const SizedBox(
                   width: 10,
                 ),

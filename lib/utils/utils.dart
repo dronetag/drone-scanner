@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -139,7 +140,7 @@ String timeAccuracyToString(double? acc) {
 
 String directionAsString(double? direction) {
   if (direction == null) return 'Unknown';
-  if (direction != 361) {
+  if (direction != INV_DIR) {
     return sprintf('%3.0f °', [direction]);
   } else {
     return 'Unknown';
