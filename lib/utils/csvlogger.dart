@@ -34,7 +34,7 @@ List<List<dynamic>> createCSV(List<MessagePack> list) {
       row.add(loc.speedHorizontal ?? '');
       row.add(loc.speedVertical ?? '');
       row.add(loc.latitude ?? '');
-      row.add(loc.latitude ?? '');
+      row.add(loc.longitude ?? '');
       row.add(loc.altitudePressure ?? '');
       row.add(loc.altitudeGeodetic ?? '');
       row.add(loc.height ?? '');

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/map/map_cubit.dart';
 import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -31,10 +30,7 @@ class HomeBody extends StatelessWidget {
           padding: EdgeInsets.only(bottom: -height / 3),
           child: Container(
             alignment: Alignment.bottomCenter,
-            child: MapUIGoogle(
-              mapObjects:
-                  context.read<MapCubit>().constructAirspaceMapObjects(context),
-            ),
+            child: const MapUIGoogle(),
           ),
         ),
         const Toolbar(),

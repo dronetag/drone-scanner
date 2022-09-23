@@ -75,11 +75,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
       if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: true);
       if (!mounted) return;
-      await context.read<OpendroneIdCubit>().isBtTurnedOn().then(
-        (value) {
-          if (value) context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
-        },
-      );
+      final btTurnedOn = await context.read<OpendroneIdCubit>().isBtTurnedOn();
+
+      if (btTurnedOn) {
+        await context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
+      }
     } else {
       if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: false);
@@ -112,11 +112,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
       if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: true);
       if (!mounted) return;
-      await context.read<OpendroneIdCubit>().isBtTurnedOn().then(
-        (value) {
-          if (value) context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
-        },
-      );
+      final btTurnedOn = await context.read<OpendroneIdCubit>().isBtTurnedOn();
+      if (btTurnedOn) {
+        await context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
+      }
     } else {
       if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: false);

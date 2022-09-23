@@ -111,7 +111,9 @@ class AircraftState {
 }
 
 class AircraftCubit extends Cubit<AircraftState> {
+  Map<String, List<MessagePack>> packHistoryBuffer = {};
   final Map<String, Timer> _expiryTimers = {};
+  Timer? _refreshTimer;
   AircraftState? stateMemento;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
@@ -171,6 +173,24 @@ class AircraftCubit extends Cubit<AircraftState> {
           aircraftLabels: <String, String>{},
         )) {
     fetchSavedLabels();
+  }
+
+  // timer used to notify UI
+  void initEmitTimer({Duration duration = const Duration(milliseconds: 500)}) {
+    stopEmitTimer();
+    _refreshTimer = Timer.periodic(
+      duration,
+      (_) {
+        emit(state.copyWith(packHistory: packHistoryBuffer));
+      },
+    );
+  }
+
+  void stopEmitTimer() {
+    if (_refreshTimer != null) {
+      _refreshTimer!.cancel();
+      _refreshTimer = null;
+    }
   }
 
   // load persistently saved settings
@@ -258,10 +278,10 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   void resetExpiryTimers() {
     final toDelete = <String>[];
-    state.packHistory().forEach((key, value) {
-      if (state.packHistory()[key] == null ||
-          state.packHistory()[key]!.isEmpty ||
-          state.packHistory()[key]!.last.locationMessage == null) {
+    packHistoryBuffer.forEach((key, value) {
+      if (packHistoryBuffer[key] == null ||
+          packHistoryBuffer[key]!.isEmpty ||
+          packHistoryBuffer[key]!.last.locationMessage == null) {
         return;
       }
       final lastTStamp =
@@ -286,6 +306,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     for (final element in toDelete) {
       deletePack(element);
     }
+    emit(state.copyWith(packHistory: packHistoryBuffer));
   }
 
   MessagePack? findByMacAddress(String mac) {
@@ -305,7 +326,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       // set received time
       pack.locationMessage?.receivedTimestamp =
           DateTime.now().millisecondsSinceEpoch;
-      final data = state.packHistory();
+      final data = packHistoryBuffer;
       //
       if (!data.containsKey(pack.macAddress)) {
         data[pack.macAddress] = [pack];
@@ -323,8 +344,6 @@ class AircraftCubit extends Cubit<AircraftState> {
           },
         );
       }
-      //sortPacksByLastUpdate();
-      emit(state.copyWith(packHistory: data));
     } on Exception {
       rethrow;
     }
@@ -359,7 +378,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       _expiryTimers.remove(mac);
     }
 
-    final data = state.packHistory();
+    final data = packHistoryBuffer;
     data.removeWhere((key, _) => mac == key);
     emit(state.copyWith(packHistory: data));
   }

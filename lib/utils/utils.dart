@@ -194,4 +194,5 @@ String? getCountryCode(String operatorId) {
   if (operatorId.length >= 2) {
     return operatorId.substring(0, 2);
   }
+  return null;
 }
