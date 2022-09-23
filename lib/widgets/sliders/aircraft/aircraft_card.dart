@@ -180,9 +180,7 @@ class AircraftCard extends StatelessWidget {
             ],
           ),
           Text(
-            (loc == null || loc.latitude == null || loc.longitude == null)
-                ? "${rssi ?? "?"} dBm"
-                : "${rssi ?? "?"} dBm",
+            "${rssi ?? "?"} dBm",
             textScaleFactor: 0.7,
             style: TextStyle(
               fontWeight: FontWeight.w600,

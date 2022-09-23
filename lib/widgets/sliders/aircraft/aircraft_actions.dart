@@ -132,10 +132,7 @@ void handleAction(BuildContext context, AircraftAction action) {
         snackBarText = 'Map center lock on aircraft was disabled.';
       }
       // aircraft
-      if (messagePackList.isNotEmpty &&
-          messagePackList.last.locationMessage != null &&
-          messagePackList.last.locationMessage!.longitude != null &&
-          messagePackList.last.locationMessage!.latitude != null) {
+      if (messagePackList.isNotEmpty && messagePackList.last.locationValid()) {
         context.read<MapCubit>().toggleLockOnPoint();
         context.read<MapCubit>().centerToLocDouble(
               messagePackList.last.locationMessage!.latitude!,

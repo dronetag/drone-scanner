@@ -28,8 +28,7 @@ class AircraftCardCustomText extends StatelessWidget {
     if (preference == ListFieldPreference.distance) {
       if (context.read<StandardsCubit>().state.locationEnabled &&
           loc != null &&
-          loc.latitude != null &&
-          loc.longitude != null) {
+          messagePack.locationValid()) {
         distanceFromMe = calculateDistance(
           loc.latitude!,
           loc.longitude!,
@@ -43,7 +42,7 @@ class AircraftCardCustomText extends StatelessWidget {
         }
       }
     } else if (preference == ListFieldPreference.location) {
-      if (loc == null || loc.latitude == null || loc.longitude == null) {
+      if (loc == null || !messagePack.locationValid()) {
         return emptyText;
       } else {
         final latText = loc.latitude!.toStringAsFixed(6);
