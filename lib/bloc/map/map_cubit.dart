@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
@@ -70,7 +71,8 @@ class MapCubit extends Cubit<GMapState> {
   }
 
   Future<void>? centerToUser() {
-    if (state.userLocation.longitude == 0 && state.userLocation.latitude == 0) {
+    if (state.userLocation.longitude == INV_LAT &&
+        state.userLocation.latitude == INV_LON) {
       return Future.error('bad loc');
     }
     return controller?.getZoomLevel().then((currentZoomLevel) {
@@ -268,11 +270,7 @@ class MapCubit extends Cubit<GMapState> {
                 .packHistory()
                 .values
                 .where(
-                  (e) =>
-                      e.isNotEmpty &&
-                      e.last.locationMessage != null &&
-                      e.last.locationMessage?.latitude != null &&
-                      e.last.locationMessage?.longitude != null,
+                  (e) => e.isNotEmpty && e.last.locationValid(),
                 )
                 .map(
                 (e) {
@@ -285,10 +283,7 @@ class MapCubit extends Cubit<GMapState> {
                   } else {
                     markerHue = gmap.BitmapDescriptor.hueBlue;
                   }
-                  var haslocation = !(e.isEmpty ||
-                      e.last.locationMessage == null ||
-                      e.last.locationMessage?.latitude == null ||
-                      e.last.locationMessage?.longitude == null);
+                  var haslocation = (e.isNotEmpty && e.last.locationValid());
                   final uasIdText = e.last.basicIdMessage != null
                       ? e.last.basicIdMessage?.uasId
                       : 'Unknown UAS ID';
@@ -411,15 +406,7 @@ class MapCubit extends Cubit<GMapState> {
         }
       }
     }
-    final polylineData = filteredList
-        .where(
-      (e) =>
-          e.locationMessage != null &&
-          e.locationMessage!.latitude != null &&
-          e.locationMessage != null &&
-          e.locationMessage!.longitude != null,
-    )
-        .map(
+    final polylineData = filteredList.where((e) => e.locationValid()).map(
       (e) {
         return gmap.LatLng(
           e.locationMessage!.latitude!,

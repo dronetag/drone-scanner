@@ -61,12 +61,8 @@ class AircraftState {
       _packHistory.entries.toList()
         ..sort(
           (e1, e2) {
-            if (e1.value.last.locationMessage == null ||
-                e1.value.last.locationMessage?.latitude == null ||
-                e1.value.last.locationMessage?.longitude == null) return 0;
-            if (e2.value.last.locationMessage == null ||
-                e2.value.last.locationMessage?.latitude == null ||
-                e2.value.last.locationMessage?.longitude == null) return 0;
+            if (!e1.value.last.locationValid()) return 0;
+            if (!e2.value.last.locationValid()) return 0;
 
             final e1Dist = calculateDistance(
               e1.value.last.locationMessage!.latitude!,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
+import 'package:vector_math/vector_math.dart';
 
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
@@ -13,6 +15,18 @@ import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
 
 class LocationFields {
+  static bool locValid(pigeon.LocationMessage? loc) {
+    return loc != null &&
+        loc.latitude != null &&
+        loc.longitude != null &&
+        loc.latitude != INV_LAT &&
+        loc.longitude != INV_LON &&
+        loc.latitude! <= MAX_LAT &&
+        loc.longitude! <= MAX_LON &&
+        loc.latitude! >= MIN_LAT &&
+        loc.longitude! >= MIN_LON;
+  }
+
   static List<Widget> buildLocationFields(
     BuildContext context,
     pigeon.LocationMessage? loc,
@@ -21,8 +35,7 @@ class LocationFields {
     late final String distanceText;
     if (context.read<StandardsCubit>().state.locationEnabled &&
         loc != null &&
-        loc.latitude != null &&
-        loc.longitude != null) {
+        locValid(loc)) {
       distanceFromMe = calculateDistance(
         loc.latitude!,
         loc.longitude!,
@@ -77,13 +90,16 @@ class LocationFields {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Transform.rotate(
-                  angle: loc?.direction ?? 0,
-                  child: const Icon(
-                    Icons.navigation_sharp,
-                    size: 20,
+                if (loc != null &&
+                    loc.direction != null &&
+                    loc.direction != INV_DIR)
+                  Transform.rotate(
+                    angle: radians(loc.direction!),
+                    child: const Icon(
+                      Icons.navigation_sharp,
+                      size: 20,
+                    ),
                   ),
-                ),
                 const SizedBox(
                   width: 10,
                 ),
@@ -119,7 +135,7 @@ class LocationFields {
                     ),
                   ),
                   Text(
-                    loc != null
+                    loc != null && locValid(loc)
                         ? '${loc.latitude?.toStringAsFixed(4)}, '
                             '${loc.longitude?.toStringAsFixed(4)}'
                         : 'Unknown',
@@ -129,22 +145,21 @@ class LocationFields {
                   ),
                 ],
               ),
-              IconCenterToLoc(
-                onPressedCallback: () {
-                  if (loc != null &&
-                      loc.latitude != null &&
-                      loc.longitude != null) {
-                    context.read<MapCubit>().centerToLocDouble(
-                          loc.latitude!,
-                          loc.longitude!,
-                        );
-                  }
-                  context
-                      .read<SlidersCubit>()
-                      .panelController
-                      .animatePanelToSnapPoint();
-                },
-              ),
+              if (locValid(loc))
+                IconCenterToLoc(
+                  onPressedCallback: () {
+                    if (loc != null && locValid(loc)) {
+                      context.read<MapCubit>().centerToLocDouble(
+                            loc.latitude!,
+                            loc.longitude!,
+                          );
+                    }
+                    context
+                        .read<SlidersCubit>()
+                        .panelController
+                        .animatePanelToSnapPoint();
+                  },
+                ),
             ],
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
 import '../../../../bloc/map/map_cubit.dart';
@@ -13,6 +14,16 @@ import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
 
 class OperatorFields {
+  static bool locValid(pigeon.SystemDataMessage? sys) {
+    return sys != null &&
+        sys.operatorLatitude != INV_LAT &&
+        sys.operatorLongitude != INV_LON &&
+        sys.operatorLatitude <= MAX_LAT &&
+        sys.operatorLongitude <= MAX_LON &&
+        sys.operatorLatitude >= MIN_LAT &&
+        sys.operatorLongitude >= MIN_LON;
+  }
+
   static List<Widget> buildOperatorFields(
     BuildContext context,
     pigeon.SystemDataMessage? systemMessage,
@@ -26,7 +37,8 @@ class OperatorFields {
     late final String distanceText;
     final systemDataValid = systemMessage != null;
     if (context.read<StandardsCubit>().state.locationEnabled &&
-        systemDataValid) {
+        systemDataValid &&
+        locValid(systemMessage)) {
       distanceFromMe = calculateDistance(
         systemMessage!.operatorLatitude,
         systemMessage.operatorLongitude,
@@ -41,7 +53,7 @@ class OperatorFields {
     } else {
       distanceText = 'Unknown';
     }
-    final locationText = systemMessage != null
+    final locationText = systemMessage != null && locValid(systemMessage)
         ? '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
             '${systemMessage.operatorLongitude.toStringAsFixed(4)}'
         : 'Unknown';
@@ -113,7 +125,7 @@ class OperatorFields {
                   ),
                 ],
               ),
-              if (systemDataValid)
+              if (systemDataValid && locValid(systemMessage))
                 IconCenterToLoc(
                   onPressedCallback: () {
                     context.read<MapCubit>().centerToLocDouble(
@@ -134,8 +146,9 @@ class OperatorFields {
         children: [
           AircraftDetailField(
             headlineText: 'Altitude',
-            fieldText: systemDataValid
-                ? '${systemMessage!.operatorAltitudeGeo.toString()}  m'
+            fieldText: systemDataValid &&
+                    systemMessage!.operatorAltitudeGeo.toInt() != INV_ALT
+                ? '${systemMessage.operatorAltitudeGeo.toString()}  m'
                 : 'Unknown',
           ),
           AircraftDetailField(
