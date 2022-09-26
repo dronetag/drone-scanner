@@ -100,9 +100,12 @@ class LocationFields {
                       size: 20,
                     ),
                   ),
-                const SizedBox(
-                  width: 10,
-                ),
+                if (loc != null &&
+                    loc.direction != null &&
+                    loc.direction != INV_DIR)
+                  const SizedBox(
+                    width: 10,
+                  ),
                 Text(
                   directionAsString(loc?.direction),
                   style: const TextStyle(
