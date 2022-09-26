@@ -182,13 +182,13 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Area Ceiling',
             fieldText: systemDataValid
-                ? '${systemMessage!.areaCeiling.toString()}  m'
+                ? getAltitudeAsString(systemMessage!.areaCeiling)
                 : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Floor',
             fieldText: systemDataValid
-                ? '${systemMessage!.areaFloor.toString()} m'
+                ? getAltitudeAsString(systemMessage!.areaFloor)
                 : 'Unknown',
           ),
         ],
