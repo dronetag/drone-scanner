@@ -100,9 +100,12 @@ class LocationFields {
                       size: 20,
                     ),
                   ),
-                const SizedBox(
-                  width: 10,
-                ),
+                if (loc != null &&
+                    loc.direction != null &&
+                    loc.direction != INV_DIR)
+                  const SizedBox(
+                    width: 10,
+                  ),
                 Text(
                   directionAsString(loc?.direction),
                   style: const TextStyle(
@@ -169,7 +172,7 @@ class LocationFields {
           if (loc != null && loc.height != null)
             AircraftDetailField(
               headlineText: 'Height',
-              fieldText: '${loc.height} m',
+              fieldText: getAltitudeAsString(loc.height),
             ),
           if (loc != null && loc.heightType != null)
             AircraftDetailField(
@@ -193,15 +196,14 @@ class LocationFields {
       ),
       AircraftDetailRow(
         children: [
-          if (loc != null && loc.speedHorizontal != null)
+          if (loc != null)
             AircraftDetailField(
-              headlineText: 'Horizontal Speed',
-              fieldText: '${loc.speedHorizontal} m/s',
-            ),
-          if (loc != null && loc.speedVertical != null)
+                headlineText: 'Horizontal Speed',
+                fieldText: getSpeedHorAsString(loc.speedHorizontal)),
+          if (loc != null)
             AircraftDetailField(
               headlineText: 'Vertical Speed',
-              fieldText: '${loc.speedVertical} m/s',
+              fieldText: getSpeedVertAsString(loc.speedVertical),
             ),
         ],
       ),

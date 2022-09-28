@@ -148,8 +148,18 @@ String directionAsString(double? direction) {
 }
 
 String getAltitudeAsString(double? altitude) {
-  if (altitude == null || altitude == -1000) return 'Unknown';
+  if (altitude == null || altitude == INV_ALT) return 'Unknown';
   return sprintf('%3.1f m', [altitude]);
+}
+
+String getSpeedVertAsString(double? speed) {
+  if (speed == null || speed == INV_SPEED_V) return 'Unknown';
+  return sprintf('%3.2f m/s', [speed]);
+}
+
+String getSpeedHorAsString(double? speed) {
+  if (speed == null || speed == INV_SPEED_H) return 'Unknown';
+  return sprintf('%3.2f m/s', [speed]);
 }
 
 Widget? getFlag(String countryCode) {
