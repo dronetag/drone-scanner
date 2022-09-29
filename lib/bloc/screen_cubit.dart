@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenState {
   /// Size of the phone in UI Design , px
@@ -71,7 +72,15 @@ class ScreenCubit extends Cubit<ScreenState> {
           allowFontScaling: allowFontScaling,
         ));
 
-  void initScreen() {
+  void initScreen() async {
+    final preferences = await SharedPreferences.getInstance();
+    final screenSleepDisable = preferences.getBool('screenSleepDisable');
+    if (screenSleepDisable != null) {
+      emit(
+        state.copyWith(screenSleepDisabled: screenSleepDisable),
+      );
+    }
+
     emit(state.copyWith(
       pixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
       screenWidth: WidgetsBinding.instance.window.physicalSize.width,
@@ -141,7 +150,9 @@ class ScreenCubit extends Cubit<ScreenState> {
               ? (fontSize * scaleText)
               : ((fontSize * scaleText) / state.textScaleFactor));
 
-  void setScreenSleepDisabled({required bool screenSleepDisabled}) {
+  void setScreenSleepDisabled({required bool screenSleepDisabled}) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setBool('screenSleepDisable', screenSleepDisabled);
     emit(state.copyWith(screenSleepDisabled: screenSleepDisabled));
   }
 }
