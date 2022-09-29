@@ -17,6 +17,8 @@ class ScreenState {
   /// Text Size accessibility settings. The default is false.
   bool allowFontScaling;
 
+  bool screenSleepDisabled;
+
   ScreenState({
     required this.uiWidthPx,
     required this.uiHeightPx,
@@ -27,6 +29,7 @@ class ScreenState {
     this.statusBarHeight = 0,
     this.bottomBarHeight = 0,
     this.textScaleFactor = 0,
+    this.screenSleepDisabled = false,
   });
 
   ScreenState copyWith({
@@ -39,6 +42,7 @@ class ScreenState {
     double? bottomBarHeight,
     double? textScaleFactor,
     bool? allowFontScaling,
+    bool? screenSleepDisabled,
   }) =>
       ScreenState(
           uiWidthPx: uiWidthPx ?? this.uiHeightPx,
@@ -49,7 +53,8 @@ class ScreenState {
           statusBarHeight: statusBarHeight ?? this.statusBarHeight,
           bottomBarHeight: bottomBarHeight ?? this.bottomBarHeight,
           textScaleFactor: textScaleFactor ?? this.textScaleFactor,
-          allowFontScaling: allowFontScaling ?? this.allowFontScaling);
+          allowFontScaling: allowFontScaling ?? this.allowFontScaling,
+          screenSleepDisabled: screenSleepDisabled ?? this.screenSleepDisabled);
 }
 
 class ScreenCubit extends Cubit<ScreenState> {
@@ -135,4 +140,8 @@ class ScreenCubit extends Cubit<ScreenState> {
           : (allowFontScalingSelf
               ? (fontSize * scaleText)
               : ((fontSize * scaleText) / state.textScaleFactor));
+
+  void setScreenSleepDisabled({required bool screenSleepDisabled}) {
+    emit(state.copyWith(screenSleepDisabled: screenSleepDisabled));
+  }
 }
