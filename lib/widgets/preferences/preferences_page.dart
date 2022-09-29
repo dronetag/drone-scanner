@@ -19,6 +19,7 @@ import 'components/custom_dropdown_button.dart';
 import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
+import 'components/screen_sleep_checkbox.dart';
 
 class PreferencesPage extends StatelessWidget {
   const PreferencesPage({Key? key}) : super(key: key);
@@ -404,6 +405,17 @@ class PreferencesPage extends StatelessWidget {
             },
             child: const Text('Export all data'),
           ),
+        ),
+      ),
+      Headline(
+        text: 'Misc',
+      ),
+      Padding(
+        padding: itemPadding,
+        child: const PreferencesFieldWithDescription(
+          label: 'Prevent screen sleep:',
+          description: 'Your display will not turn of while using the app.',
+          child: ScreenSleepCheckbox(),
         ),
       ),
       Align(
