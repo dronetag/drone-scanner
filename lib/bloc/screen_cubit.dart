@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenState {
   /// Size of the phone in UI Design , px
@@ -17,6 +18,8 @@ class ScreenState {
   /// Text Size accessibility settings. The default is false.
   bool allowFontScaling;
 
+  bool screenSleepDisabled;
+
   ScreenState({
     required this.uiWidthPx,
     required this.uiHeightPx,
@@ -27,6 +30,7 @@ class ScreenState {
     this.statusBarHeight = 0,
     this.bottomBarHeight = 0,
     this.textScaleFactor = 0,
+    this.screenSleepDisabled = false,
   });
 
   ScreenState copyWith({
@@ -39,6 +43,7 @@ class ScreenState {
     double? bottomBarHeight,
     double? textScaleFactor,
     bool? allowFontScaling,
+    bool? screenSleepDisabled,
   }) =>
       ScreenState(
           uiWidthPx: uiWidthPx ?? this.uiHeightPx,
@@ -49,7 +54,8 @@ class ScreenState {
           statusBarHeight: statusBarHeight ?? this.statusBarHeight,
           bottomBarHeight: bottomBarHeight ?? this.bottomBarHeight,
           textScaleFactor: textScaleFactor ?? this.textScaleFactor,
-          allowFontScaling: allowFontScaling ?? this.allowFontScaling);
+          allowFontScaling: allowFontScaling ?? this.allowFontScaling,
+          screenSleepDisabled: screenSleepDisabled ?? this.screenSleepDisabled);
 }
 
 class ScreenCubit extends Cubit<ScreenState> {
@@ -66,7 +72,15 @@ class ScreenCubit extends Cubit<ScreenState> {
           allowFontScaling: allowFontScaling,
         ));
 
-  void initScreen() {
+  void initScreen() async {
+    final preferences = await SharedPreferences.getInstance();
+    final screenSleepDisable = preferences.getBool('screenSleepDisable');
+    if (screenSleepDisable != null) {
+      emit(
+        state.copyWith(screenSleepDisabled: screenSleepDisable),
+      );
+    }
+
     emit(state.copyWith(
       pixelRatio: WidgetsBinding.instance.window.devicePixelRatio,
       screenWidth: WidgetsBinding.instance.window.physicalSize.width,
@@ -135,4 +149,10 @@ class ScreenCubit extends Cubit<ScreenState> {
           : (allowFontScalingSelf
               ? (fontSize * scaleText)
               : ((fontSize * scaleText) / state.textScaleFactor));
+
+  void setScreenSleepDisabled({required bool screenSleepDisabled}) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setBool('screenSleepDisable', screenSleepDisabled);
+    emit(state.copyWith(screenSleepDisabled: screenSleepDisabled));
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
@@ -21,6 +22,9 @@ class HomeBody extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final height = MediaQuery.of(context).size.height;
+    // acc to doc, wakelock should not be used in main but in widgets build m
+    Wakelock.toggle(
+        enable: context.watch<ScreenCubit>().state.screenSleepDisabled);
     return Stack(
       children: <Widget>[
         ShowcaseItem(
