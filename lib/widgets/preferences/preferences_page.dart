@@ -414,7 +414,7 @@ class PreferencesPage extends StatelessWidget {
         padding: itemPadding,
         child: const PreferencesFieldWithDescription(
           label: 'Prevent screen sleep:',
-          description: 'Your display will not turn of while using the app.',
+          description: 'Your display will not turn off while using the app.',
           child: ScreenSleepCheckbox(),
         ),
       ),
