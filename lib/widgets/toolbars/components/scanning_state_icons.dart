@@ -30,8 +30,9 @@ class ScanningStateIcons extends StatelessWidget {
                     .isBtTurnedOn()
                     .then((turnedOn) {
                   if (turnedOn) {
-                    if (state.usedTechnologies == UsedTechnologies.Bluetooth ||
-                        state.usedTechnologies == UsedTechnologies.Both) {
+                    if (state.isScanningBluetooth &&
+                        (state.usedTechnologies == UsedTechnologies.Bluetooth ||
+                            state.usedTechnologies == UsedTechnologies.Both)) {
                       context.read<OpendroneIdCubit>().setBtUsed(btUsed: false);
                       snackBarText = 'Bluetooth Scanning Stopped.';
                     } else {
