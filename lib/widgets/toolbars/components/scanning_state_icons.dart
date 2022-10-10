@@ -30,8 +30,9 @@ class ScanningStateIcons extends StatelessWidget {
                     .isBtTurnedOn()
                     .then((turnedOn) {
                   if (turnedOn) {
-                    if (state.usedTechnologies == UsedTechnologies.Bluetooth ||
-                        state.usedTechnologies == UsedTechnologies.Both) {
+                    if (state.isScanningBluetooth &&
+                        (state.usedTechnologies == UsedTechnologies.Bluetooth ||
+                            state.usedTechnologies == UsedTechnologies.Both)) {
                       context.read<OpendroneIdCubit>().setBtUsed(btUsed: false);
                       snackBarText = 'Bluetooth Scanning Stopped.';
                     } else {
@@ -44,7 +45,6 @@ class ScanningStateIcons extends StatelessWidget {
                     showSnackBar(
                       context,
                       snackBarText,
-                      textColor: AppColors.red,
                     );
                   }
                 });
@@ -84,8 +84,9 @@ class ScanningStateIcons extends StatelessWidget {
               return RawMaterialButton(
                 onPressed: () {
                   late final String snackBarText;
-                  if (state.usedTechnologies == UsedTechnologies.Wifi ||
-                      state.usedTechnologies == UsedTechnologies.Both) {
+                  if (state.isScanningWifi &&
+                      (state.usedTechnologies == UsedTechnologies.Wifi ||
+                          state.usedTechnologies == UsedTechnologies.Both)) {
                     context
                         .read<OpendroneIdCubit>()
                         .setWifiUsed(wifiUsed: false);
