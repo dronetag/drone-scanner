@@ -84,6 +84,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   }
 
   void wifiStateCallback({required bool isScanning}) {
+    print('wifi state callback ' + isScanning.toString());
     // refresh ui just when state changes
     if (isScanning == state.isScanningWifi) {
       return;
@@ -116,6 +117,10 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
 
   Future<bool> isBtTurnedOn() async {
     return FlutterOpenDroneId.btTurnedOn;
+  }
+
+  Future<bool> isWifiTurnedOn() async {
+    return FlutterOpenDroneId.wifiTurnedOn;
   }
 
   Future<void> stop() async {

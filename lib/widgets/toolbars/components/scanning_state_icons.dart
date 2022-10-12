@@ -44,7 +44,6 @@ class ScanningStateIcons extends StatelessWidget {
                     showSnackBar(
                       context,
                       snackBarText,
-                      textColor: AppColors.red,
                     );
                   }
                 });
@@ -84,19 +83,33 @@ class ScanningStateIcons extends StatelessWidget {
               return RawMaterialButton(
                 onPressed: () {
                   late final String snackBarText;
-                  if (state.usedTechnologies == UsedTechnologies.Wifi ||
-                      state.usedTechnologies == UsedTechnologies.Both) {
-                    context
-                        .read<OpendroneIdCubit>()
-                        .setWifiUsed(wifiUsed: false);
-                    snackBarText = 'Wi-Fi Scanning Stopped.';
-                  } else {
-                    context
-                        .read<OpendroneIdCubit>()
-                        .setWifiUsed(wifiUsed: true);
-                    snackBarText = 'Wi-Fi Scanning Started.';
-                  }
-                  showSnackBar(context, snackBarText);
+                  context
+                      .read<OpendroneIdCubit>()
+                      .isWifiTurnedOn()
+                      .then((turnedOn) {
+                    if (turnedOn) {
+                      if (state.isScanningWifi &&
+                              state.usedTechnologies == UsedTechnologies.Wifi ||
+                          state.usedTechnologies == UsedTechnologies.Both) {
+                        context
+                            .read<OpendroneIdCubit>()
+                            .setWifiUsed(wifiUsed: false);
+                        snackBarText = 'Wi-Fi Scanning Stopped.';
+                      } else {
+                        context
+                            .read<OpendroneIdCubit>()
+                            .setWifiUsed(wifiUsed: true);
+                        snackBarText = 'Wi-Fi Scanning Started.';
+                      }
+                      showSnackBar(context, snackBarText);
+                    } else {
+                      snackBarText = 'Turn Wi-Fi on to start scanning.';
+                      showSnackBar(
+                        context,
+                        snackBarText,
+                      );
+                    }
+                  });
                 },
                 //padding: const EdgeInsets.all(8),
                 constraints: const BoxConstraints(),
