@@ -314,7 +314,8 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<void> clear() async {
-    emit(state.copyWith(packHistory: {}));
+    packHistoryBuffer = {};
+    emit(state.copyWith(packHistory: packHistoryBuffer));
   }
 
   Future<void> addPack(MessagePack pack) async {
