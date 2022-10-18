@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "31.0.0"
+    version: "47.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.0"
+    version: "4.7.0"
   app_settings:
     dependency: "direct main"
     description:
@@ -56,7 +56,7 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   charcode:
     dependency: transitive
     description:
@@ -71,13 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  cli_util:
-    dependency: transitive
-    description:
-      name: cli_util
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.5"
   clock:
     dependency: transitive
     description:
@@ -215,7 +208,7 @@ packages:
       name: flutter_opendroneid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.1"
+    version: "0.9.4"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -360,14 +353,14 @@ packages:
       name: material_color_utilities
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.4"
+    version: "0.1.5"
   meta:
     dependency: transitive
     description:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.0"
+    version: "1.8.0"
   mime:
     dependency: transitive
     description:
@@ -542,7 +535,7 @@ packages:
       name: pigeon
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.19"
+    version: "3.2.9"
   platform:
     dependency: transitive
     description:
@@ -941,5 +934,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.17.0 <3.0.0"
-  flutter: ">=3.0.5"
+  dart: ">=2.18.0 <3.0.0"
+  flutter: ">=3.3.0"

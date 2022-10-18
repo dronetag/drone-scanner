@@ -64,8 +64,12 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     );
   }
 
-  void initBtListener() => btStateListener =
-      FlutterOpenDroneId.bluetoothState.listen(btStateCallback);
+  void initBtListener() =>
+      btStateListener = FlutterOpenDroneId.bluetoothState.listen(
+        (scanning) => btStateCallback(
+          isScanning: scanning,
+        ),
+      );
 
   void cancelListener() {
     listener?.cancel();
@@ -73,13 +77,13 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     wifiStateListener?.cancel();
   }
 
-  void btStateCallback(BluetoothState btstate) {
+  void btStateCallback({required bool isScanning}) {
     // refresh ui just when state changes
-    if ((btstate == BluetoothState.PoweredOn) == state.isScanningBluetooth) {
+    if (isScanning == state.isScanningBluetooth) {
       return;
     }
     emit(
-      state.copyWith(isScanningBluetooth: btstate == BluetoothState.PoweredOn),
+      state.copyWith(isScanningBluetooth: isScanning),
     );
   }
 
@@ -116,6 +120,10 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
 
   Future<bool> isBtTurnedOn() async {
     return FlutterOpenDroneId.btTurnedOn;
+  }
+
+  Future<bool> isWifiTurnedOn() async {
+    return FlutterOpenDroneId.wifiTurnedOn;
   }
 
   Future<void> stop() async {
