@@ -4,6 +4,8 @@ class AircraftState {
   final Map<String, List<MessagePack>> _packHistory;
   final bool cleanOldPacks;
   final double cleanTimeSec;
+  final Map<String, Timer> expiryTimers;
+
   // map of aircraft labels given by user
   // keys are aircraft mac adresses, values are labels
   final Map<String, String> aircraftLabels;
@@ -74,6 +76,7 @@ class AircraftState {
     required this.cleanOldPacks,
     required this.cleanTimeSec,
     required this.aircraftLabels,
+    required this.expiryTimers,
   }) : _packHistory = packHistory;
 
   AircraftState copyWith({
@@ -81,11 +84,12 @@ class AircraftState {
     bool? cleanOldPacks,
     double? cleanTimeSec,
     Map<String, String>? aircraftLabels,
+    Map<String, Timer>? expiryTimers,
   }) =>
       AircraftState(
-        packHistory: packHistory ?? _packHistory,
-        cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
-        cleanTimeSec: cleanTimeSec ?? this.cleanTimeSec,
-        aircraftLabels: aircraftLabels ?? this.aircraftLabels,
-      );
+          packHistory: packHistory ?? _packHistory,
+          cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
+          cleanTimeSec: cleanTimeSec ?? this.cleanTimeSec,
+          aircraftLabels: aircraftLabels ?? this.aircraftLabels,
+          expiryTimers: expiryTimers ?? this.expiryTimers);
 }

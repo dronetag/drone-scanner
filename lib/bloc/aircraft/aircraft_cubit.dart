@@ -20,7 +20,6 @@ part 'aircraft_state.dart';
 
 class AircraftCubit extends Cubit<AircraftState> {
   Map<String, List<MessagePack>> packHistoryBuffer = {};
-  final Map<String, Timer> _expiryTimers = {};
   Timer? _refreshTimer;
   AircraftState? stateMemento;
   // storage for user-given labels
@@ -75,11 +74,11 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   AircraftCubit()
       : super(AircraftState(
-          packHistory: <String, List<MessagePack>>{},
-          cleanOldPacks: false,
-          cleanTimeSec: 60.0,
-          aircraftLabels: <String, String>{},
-        )) {
+            packHistory: <String, List<MessagePack>>{},
+            cleanOldPacks: false,
+            cleanTimeSec: 60.0,
+            aircraftLabels: <String, String>{},
+            expiryTimers: {})) {
     fetchSavedLabels();
   }
 
@@ -164,15 +163,17 @@ class AircraftCubit extends Cubit<AircraftState> {
     await preferences.setBool('cleanOldPacks', clean);
     // cancel or restart expiry timers
     if (!clean) {
-      _expiryTimers.forEach(
+      final timers = state.expiryTimers;
+      timers.forEach(
         (key, value) {
           value.cancel();
         },
       );
+      emit(state.copyWith(cleanOldPacks: clean, expiryTimers: timers));
     } else {
+      emit(state.copyWith(cleanOldPacks: clean));
       resetExpiryTimers();
     }
-    emit(state.copyWith(cleanOldPacks: clean));
   }
 
   Future<void> setcleanTimeSec(double s) async {
@@ -185,6 +186,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   void resetExpiryTimers() {
+    var timers = state.expiryTimers;
     final toDelete = <String>[];
     packHistoryBuffer.forEach((key, value) {
       if (packHistoryBuffer[key] == null ||
@@ -201,10 +203,10 @@ class AircraftCubit extends Cubit<AircraftState> {
         toDelete.add(key);
         return;
       }
-      if (_expiryTimers[key] != null) {
-        _expiryTimers[key]?.cancel();
+      if (timers[key] != null) {
+        timers[key]?.cancel();
       }
-      _expiryTimers[key] = Timer(
+      timers[key] = Timer(
           Duration(seconds: state.cleanTimeSec.toInt() - packAgeSec.toInt()),
           () {
         // remove if packs expire
@@ -214,7 +216,12 @@ class AircraftCubit extends Cubit<AircraftState> {
     for (final element in toDelete) {
       deletePack(element);
     }
-    emit(state.copyWith(packHistory: packHistoryBuffer));
+    emit(
+      state.copyWith(
+        packHistory: packHistoryBuffer,
+        expiryTimers: timers,
+      ),
+    );
   }
 
   MessagePack? findByMacAddress(String mac) {
@@ -242,16 +249,20 @@ class AircraftCubit extends Cubit<AircraftState> {
       } else {
         data[pack.macAddress]?.add(pack);
         // restart expiry timer
-        _expiryTimers[pack.macAddress]?.cancel();
+        final timers = state.expiryTimers;
+        timers[pack.macAddress]?.cancel();
+        emit(state.copyWith(expiryTimers: timers));
       }
       if (state.cleanOldPacks) {
-        _expiryTimers[pack.macAddress] = Timer(
+        final timers = state.expiryTimers;
+        timers[pack.macAddress] = Timer(
           Duration(seconds: state.cleanTimeSec.toInt()),
           () {
             // remove if packs expire
             deletePack(pack.macAddress);
           },
         );
+        emit(state.copyWith(expiryTimers: timers));
       }
     } on Exception {
       rethrow;
@@ -283,13 +294,16 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<void> deletePack(String mac) async {
-    if (_expiryTimers.containsKey(mac)) {
-      _expiryTimers.remove(mac);
+    final timers = state.expiryTimers;
+    if (timers.containsKey(mac)) {
+      timers.remove(mac);
     }
 
     final data = packHistoryBuffer;
     data.removeWhere((key, _) => mac == key);
-    emit(state.copyWith(packHistory: data));
+    emit(
+      state.copyWith(packHistory: data, expiryTimers: timers),
+    );
   }
 
   Future<void> exportPacksToCSV({required bool save}) async {
