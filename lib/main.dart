@@ -57,7 +57,7 @@ void main() async {
   final locationService = LocationService();
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
-  final aircraftCubit = AircraftCubit();
+  final aircraftCubit = AircraftBloc();
   runAppWithSentry(
     () => runApp(
       MultiBlocProvider(
@@ -90,7 +90,7 @@ void main() async {
             create: (context) => SelectedZoneCubit(),
             lazy: false,
           ),
-          BlocProvider<AircraftCubit>(
+          BlocProvider<AircraftBloc>(
             create: (context) => aircraftCubit,
             lazy: false,
           ),

@@ -39,7 +39,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   StreamSubscription? wifiStateListener;
   MapCubit mapCubit;
   SelectedAircraftCubit selectedAircraftCubit;
-  AircraftCubit aircraftCubit;
+  AircraftBloc aircraftCubit;
 
   OpendroneIdCubit({
     required this.mapCubit,

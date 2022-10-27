@@ -51,7 +51,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
           final selMac =
               context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
           final messagePackList = selMac != null
-              ? context.watch<AircraftCubit>().packsForDevice(selMac)
+              ? context.watch<AircraftBloc>().packsForDevice(selMac)
               : null;
           // empty or was deleted, return to list
           if (messagePackList == null || messagePackList.isEmpty) {

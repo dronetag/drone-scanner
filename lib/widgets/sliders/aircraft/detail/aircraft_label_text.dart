@@ -21,7 +21,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
 
   void deleteLabelCallback() {
     context
-        .read<AircraftCubit>()
+        .read<AircraftBloc>()
         .deleteAircraftLabel(
           widget.aircraftMac,
         )
@@ -32,7 +32,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
   }
 
   void submitCallback() {
-    context.read<AircraftCubit>().addAircraftLabel(
+    context.read<AircraftBloc>().addAircraftLabel(
           widget.aircraftMac,
           _controller.text,
         );
@@ -43,7 +43,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
   Widget build(BuildContext context) {
     if (!isInit) {
       final text =
-          context.read<AircraftCubit>().getAircraftLabel(widget.aircraftMac);
+          context.read<AircraftBloc>().getAircraftLabel(widget.aircraftMac);
       if (text != null) {
         _controller.text = text;
       }

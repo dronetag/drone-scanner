@@ -18,9 +18,9 @@ class CustomSpinBox extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () {
-            final current = context.read<AircraftCubit>().state.cleanTimeSec;
+            final current = context.read<AircraftBloc>().state.cleanTimeSec;
             if (current - step >= minVal) {
-              context.read<AircraftCubit>().setcleanTimeSec(current - step);
+              context.read<AircraftBloc>().setcleanTimeSec(current - step);
             }
           },
           icon: Icon(
@@ -38,13 +38,13 @@ class CustomSpinBox extends StatelessWidget {
               min: minVal,
               max: maxVal,
               value:
-                  context.watch<AircraftCubit>().state.cleanTimeSec.toDouble(),
+                  context.watch<AircraftBloc>().state.cleanTimeSec.toDouble(),
               step: step,
               showButtons: false,
               onChanged: (v) {
                 if (v < minVal) v = minVal;
                 if (v > maxVal) v = maxVal;
-                context.read<AircraftCubit>().setcleanTimeSec(v);
+                context.read<AircraftBloc>().setcleanTimeSec(v);
               },
               decoration: const InputDecoration(
                 fillColor: Colors.white,
@@ -61,9 +61,9 @@ class CustomSpinBox extends StatelessWidget {
         IconButton(
           constraints: BoxConstraints(),
           onPressed: () {
-            final current = context.read<AircraftCubit>().state.cleanTimeSec;
+            final current = context.read<AircraftBloc>().state.cleanTimeSec;
             if (current + step <= maxVal) {
-              context.read<AircraftCubit>().setcleanTimeSec(current + step);
+              context.read<AircraftBloc>().setcleanTimeSec(current + step);
             }
           },
           icon: Icon(

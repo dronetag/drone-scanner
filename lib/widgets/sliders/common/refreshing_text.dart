@@ -49,8 +49,8 @@ class _RefreshingTextState extends State<RefreshingText> {
                 .watch<ShowcaseCubit>()
                 .state
                 .showcaseActive &&
-            context.watch<AircraftCubit>().state.cleanOldPacks &&
-            ((context.watch<AircraftCubit>().state.cleanTimeSec - packAge) < 3);
+            context.watch<AircraftBloc>().state.cleanOldPacks &&
+            ((context.watch<AircraftBloc>().state.cleanTimeSec - packAge) < 3);
         final sec = (DateTime.now().millisecondsSinceEpoch - tstamp) / 1000;
         final min = (sec / 60).floor();
         final minText = min < 1 ? '' : '${min}m';
@@ -67,7 +67,7 @@ class _RefreshingTextState extends State<RefreshingText> {
         }
         if (widget.showExpiryWarning && expiresSoon && !widget.short) {
           final expiryTime =
-              context.watch<AircraftCubit>().state.cleanTimeSec - packAge;
+              context.watch<AircraftBloc>().state.cleanTimeSec - packAge;
           text += '\nExpires in ${expiryTime.toStringAsFixed(0)} sec';
         }
         return Text(

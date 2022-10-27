@@ -26,11 +26,11 @@ class AircraftDetail extends StatelessWidget {
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     if (selectedMac == null) return Container();
     final messagePackList =
-        context.watch<AircraftCubit>().packsForDevice(selectedMac) ?? [];
+        context.watch<AircraftBloc>().packsForDevice(selectedMac) ?? [];
     // empty or was deleted, return to list
     if (context.watch<SelectedAircraftCubit>().state.selectedAircraftMac ==
             null ||
-        context.watch<AircraftCubit>().packsForDevice(
+        context.watch<AircraftBloc>().packsForDevice(
                   context
                       .watch<SelectedAircraftCubit>()
                       .state

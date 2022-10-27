@@ -17,7 +17,7 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
   bool _cleanPacks = false;
   @override
   Widget build(BuildContext context) {
-    _cleanPacks = context.read<AircraftCubit>().state.cleanOldPacks;
+    _cleanPacks = context.read<AircraftBloc>().state.cleanOldPacks;
     return SizedBox(
       width: 40,
       child: Switch(
@@ -31,7 +31,7 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
         onChanged: (c) {
           setState(() {
             _cleanPacks = c;
-            context.read<AircraftCubit>().setCleanOldPacks(clean: c);
+            context.read<AircraftBloc>().setCleanOldPacks(clean: c);
           });
         },
       ),

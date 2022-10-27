@@ -96,7 +96,7 @@ class AirspaceList extends StatelessWidget {
   }
 
   List<Widget> buildListChildren(BuildContext context) {
-    final state = context.watch<AircraftCubit>().state;
+    final state = context.watch<AircraftBloc>().state;
     late final Map<String, List<MessagePack>> aircraft;
     if (sortValue == SortValue.uasid) {
       aircraft = state.packHistoryByUASID();

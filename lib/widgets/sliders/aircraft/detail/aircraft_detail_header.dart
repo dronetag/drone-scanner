@@ -32,11 +32,11 @@ class AircraftDetailHeader extends StatelessWidget {
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     // ignore: omit_local_variable_types
     final List<MessagePack> messagePackList = selectedMac != null &&
-            context.watch<AircraftCubit>().packsForDevice(
+            context.watch<AircraftBloc>().packsForDevice(
                       selectedMac,
                     ) !=
                 null
-        ? context.watch<AircraftCubit>().packsForDevice(
+        ? context.watch<AircraftBloc>().packsForDevice(
               selectedMac,
             )!
         : [];

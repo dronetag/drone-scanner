@@ -385,7 +385,7 @@ class PreferencesPage extends StatelessWidget {
                 'Are you sure you want to delete all gathered data?',
                 () {
                   context.read<SlidersCubit>().setShowDroneDetail(show: false);
-                  context.read<AircraftCubit>().clear();
+                  context.read<AircraftBloc>().clear();
                   context.read<SelectedAircraftCubit>().unselectAircraft();
                 },
               );
@@ -401,7 +401,7 @@ class PreferencesPage extends StatelessWidget {
           child: ElevatedButton(
             style: buttonStyle,
             onPressed: () {
-              context.read<AircraftCubit>().exportPacksToCSV(save: false);
+              context.read<AircraftBloc>().exportPacksToCSV(save: false);
             },
             child: const Text('Export all data'),
           ),

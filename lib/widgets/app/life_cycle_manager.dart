@@ -35,7 +35,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   void didChangeDependencies() {
     initPlatformState();
     context.read<StandardsCubit>().fetchAndSetStandards();
-    context.read<AircraftCubit>().fetchSavedSettings();
+    context.read<AircraftBloc>().fetchSavedSettings();
     context.read<SlidersCubit>().fetchAndSetPreference();
     super.didChangeDependencies();
   }

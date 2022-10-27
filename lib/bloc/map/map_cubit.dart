@@ -262,10 +262,10 @@ class MapCubit extends Cubit<GMapState> {
                 .state
                 .filterValue !=
             FilterValue.zones
-        ? context.watch<AircraftCubit>().state.packHistory().values.isEmpty
+        ? context.watch<AircraftBloc>().state.packHistory().values.isEmpty
             ? {}
             : context
-                .read<AircraftCubit>()
+                .read<AircraftBloc>()
                 .state
                 .packHistory()
                 .values
@@ -288,7 +288,7 @@ class MapCubit extends Cubit<GMapState> {
                       ? e.last.basicIdMessage?.uasId
                       : 'Unknown UAS ID';
                   final givenLabel = context
-                      .read<AircraftCubit>()
+                      .read<AircraftBloc>()
                       .getAircraftLabel(e.last.macAddress);
 
                   final infoWindowText = givenLabel ?? uasIdText;
@@ -334,14 +334,14 @@ class MapCubit extends Cubit<GMapState> {
         : {};
     // if sel drone has pilot location, show it with a marker
     if (selItemMac != null &&
-        context.read<AircraftCubit>().packsForDevice(selItemMac) != null &&
+        context.read<AircraftBloc>().packsForDevice(selItemMac) != null &&
         context
-            .read<AircraftCubit>()
+            .read<AircraftBloc>()
             .packsForDevice(selItemMac)!
             .last
             .systemDataValid()) {
       final systemData = context
-          .read<AircraftCubit>()
+          .read<AircraftBloc>()
           .packsForDevice(selItemMac)!
           .last
           .systemDataMessage;
@@ -390,7 +390,7 @@ class MapCubit extends Cubit<GMapState> {
     List<MessagePack>? selItemHistory;
     if (selItemMac == null) return {};
     selItemHistory =
-        context.read<AircraftCubit>().state.packHistory()[selItemMac];
+        context.read<AircraftBloc>().state.packHistory()[selItemMac];
     if (selItemHistory == null) return {};
     const maxPoints = 75;
     var filteredList = <MessagePack>[];

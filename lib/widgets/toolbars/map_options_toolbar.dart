@@ -90,7 +90,7 @@ class MapOptionsToolbar extends StatelessWidget {
                         context
                             .read<SlidersCubit>()
                             .setShowDroneDetail(show: false);
-                        context.read<AircraftCubit>().clear();
+                        context.read<AircraftBloc>().clear();
                         context
                             .read<SelectedAircraftCubit>()
                             .unselectAircraft();
