@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/opendroneid_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
@@ -35,7 +35,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   void didChangeDependencies() {
     initPlatformState();
     context.read<StandardsCubit>().fetchAndSetStandards();
-    context.read<AircraftBloc>().fetchSavedSettings();
+    context.read<AircraftExpirationCubit>().fetchSavedSettings();
     context.read<SlidersCubit>().fetchAndSetPreference();
     super.didChangeDependencies();
   }

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
-import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'aircraft/aircraft_cubit.dart';

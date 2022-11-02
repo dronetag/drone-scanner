@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'bloc/aircraft/aircraft_cubit.dart';
+import 'bloc/aircraft/aircraft_expiration_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
 import 'bloc/map/map_cubit.dart';
 import 'bloc/opendroneid_cubit.dart';
@@ -57,7 +58,8 @@ void main() async {
   final locationService = LocationService();
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
-  final aircraftCubit = AircraftBloc();
+  final aircraftExpirationCubit = AircraftExpirationCubit();
+  final aircraftCubit = AircraftBloc(aircraftExpirationCubit);
   runAppWithSentry(
     () => runApp(
       MultiBlocProvider(
@@ -92,6 +94,10 @@ void main() async {
           ),
           BlocProvider<AircraftBloc>(
             create: (context) => aircraftCubit,
+            lazy: false,
+          ),
+          BlocProvider<AircraftExpirationCubit>(
+            create: (context) => aircraftExpirationCubit,
             lazy: false,
           ),
           BlocProvider<SelectedAircraftCubit>(

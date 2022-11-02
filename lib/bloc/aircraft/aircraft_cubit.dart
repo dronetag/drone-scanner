@@ -11,26 +11,14 @@ import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '/utils/csvlogger.dart';
 import '../../utils/utils.dart';
+import 'aircraft_expiration_cubit.dart';
 
 part 'aircraft_state.dart';
 
 class AircraftEvent {}
-
-class AircraftCleanPacksUpdate extends AircraftEvent {
-  final bool? cleanOldPacks;
-  final double? cleanTimeSec;
-  final Map<String, Timer>? expiryTimers;
-
-  AircraftCleanPacksUpdate({
-    this.cleanOldPacks,
-    this.cleanTimeSec,
-    this.expiryTimers,
-  });
-}
 
 class AircraftLabelsUpdate extends AircraftEvent {
   final Map<String, String> labels;
@@ -54,6 +42,7 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
   Map<String, List<MessagePack>> packHistoryBuffer = {};
   Timer? _refreshTimer;
   AircraftState? stateMemento;
+  AircraftExpirationCubit expirationCubit;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
 
@@ -104,22 +93,21 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
     ),
   ];
 
-  AircraftBloc()
-      : super(AircraftState(
+  AircraftBloc(this.expirationCubit)
+      : super(
+          AircraftState(
             packHistory: <String, List<MessagePack>>{},
-            cleanOldPacks: false,
-            cleanTimeSec: 60.0,
             aircraftLabels: <String, String>{},
-            expiryTimers: {})) {
-    on<AircraftCleanPacksUpdate>(
+          ),
+        ) {
+    expirationCubit.setDeleteCallback(deletePack);
+    on<AircraftUpdate>(
       (event, emit) => emit(
         state.copyWith(
-            cleanOldPacks: event.cleanOldPacks ?? state.cleanOldPacks,
-            cleanTimeSec: event.cleanTimeSec ?? state.cleanTimeSec,
-            expiryTimers: event.expiryTimers ?? state.expiryTimers),
+          packHistory: event.packHistory,
+        ),
       ),
     );
-
     on<AircraftLabelsUpdate>(
       (event, emit) => emit(
         state.copyWith(
@@ -150,19 +138,6 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
       _refreshTimer!.cancel();
       _refreshTimer = null;
     }
-  }
-
-  // load persistently saved settings
-  Future<void> fetchSavedSettings() async {
-    final preferences = await SharedPreferences.getInstance();
-    final cleanPacks = preferences.getBool('cleanOldPacks') ?? false;
-    final cleanPacksSec = preferences.getDouble('cleanTimeSec') ?? 60;
-    add(
-      AircraftCleanPacksUpdate(
-        cleanOldPacks: cleanPacks,
-        cleanTimeSec: cleanPacksSec,
-      ),
-    );
   }
 
   //Retrieves the labels stored persistently locally on the device
@@ -205,82 +180,6 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
     await fetchSavedLabels();
   }
 
-  Future<void> setCleanOldPacks({required bool clean}) async {
-    // persistently save this settings
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setBool('cleanOldPacks', clean);
-    // cancel or restart expiry timers
-    if (!clean) {
-      final timers = state.expiryTimers;
-      timers.forEach(
-        (key, value) {
-          value.cancel();
-        },
-      );
-      add(AircraftCleanPacksUpdate(
-        cleanOldPacks: clean,
-        expiryTimers: timers,
-        cleanTimeSec: state.cleanTimeSec,
-      ));
-    } else {
-      add(AircraftCleanPacksUpdate(
-        cleanOldPacks: clean,
-        expiryTimers: state.expiryTimers,
-        cleanTimeSec: state.cleanTimeSec,
-      ));
-
-      resetExpiryTimers();
-    }
-  }
-
-  Future<void> setcleanTimeSec(double s) async {
-    // persistently save this setting
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setDouble('cleanTimeSec', s);
-    add(
-      AircraftCleanPacksUpdate(
-        cleanTimeSec: s,
-      ),
-    );
-    if (!state.cleanOldPacks) return;
-    resetExpiryTimers();
-  }
-
-  void resetExpiryTimers() {
-    var timers = state.expiryTimers;
-    final toDelete = <String>[];
-    packHistoryBuffer.forEach((key, value) {
-      if (packHistoryBuffer[key] == null ||
-          packHistoryBuffer[key]!.isEmpty ||
-          packHistoryBuffer[key]!.last.locationMessage == null) {
-        return;
-      }
-      final lastTStamp =
-          state.packHistory()[key]!.last.locationMessage!.receivedTimestamp;
-      final packAgeSec =
-          (DateTime.now().millisecondsSinceEpoch - lastTStamp) / 1000;
-      final duration = state.cleanTimeSec - packAgeSec.toInt();
-      if (duration <= 0) {
-        toDelete.add(key);
-        return;
-      }
-      if (timers[key] != null) {
-        timers[key]?.cancel();
-      }
-      timers[key] = Timer(
-          Duration(seconds: state.cleanTimeSec.toInt() - packAgeSec.toInt()),
-          () {
-        // remove if packs expire
-        deletePack(key);
-      });
-    });
-    for (final element in toDelete) {
-      deletePack(element);
-    }
-    add(AircraftUpdate(packHistoryBuffer));
-    add(AircraftCleanPacksUpdate(expiryTimers: timers));
-  }
-
   MessagePack? findByMacAddress(String mac) {
     return state.packHistory()[mac]?.last;
   }
@@ -304,35 +203,16 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
       pack.locationMessage?.receivedTimestamp =
           DateTime.now().millisecondsSinceEpoch;
       final data = packHistoryBuffer;
-      //
+      // new pack
       if (!data.containsKey(pack.macAddress)) {
         data[pack.macAddress] = [pack];
       } else {
+        // update of already seen aircraft
         data[pack.macAddress]?.add(pack);
         // restart expiry timer
-        final timers = state.expiryTimers;
-        timers[pack.macAddress]?.cancel();
-        add(
-          AircraftCleanPacksUpdate(
-            expiryTimers: timers,
-          ),
-        );
+        expirationCubit.restartTimer(pack.macAddress);
       }
-      if (state.cleanOldPacks) {
-        final timers = state.expiryTimers;
-        timers[pack.macAddress] = Timer(
-          Duration(seconds: state.cleanTimeSec.toInt()),
-          () {
-            // remove if packs expire
-            deletePack(pack.macAddress);
-          },
-        );
-        add(
-          AircraftCleanPacksUpdate(
-            expiryTimers: timers,
-          ),
-        );
-      }
+      expirationCubit.addTimer(pack.macAddress);
     } on Exception {
       rethrow;
     }
@@ -365,15 +245,11 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
   }
 
   Future<void> deletePack(String mac) async {
-    final timers = state.expiryTimers;
-    if (timers.containsKey(mac)) {
-      timers.remove(mac);
-    }
+    expirationCubit.removeTimer(mac);
 
     final data = packHistoryBuffer;
     data.removeWhere((key, _) => mac == key);
     add(AircraftUpdate(data));
-    add(AircraftCleanPacksUpdate(expiryTimers: timers));
   }
 
   Future<void> exportPacksToCSV({required bool save}) async {

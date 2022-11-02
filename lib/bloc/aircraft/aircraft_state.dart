@@ -2,10 +2,6 @@ part of 'aircraft_cubit.dart';
 
 class AircraftState {
   final Map<String, List<MessagePack>> _packHistory;
-  final bool cleanOldPacks;
-  final double cleanTimeSec;
-  final Map<String, Timer> expiryTimers;
-
   // map of aircraft labels given by user
   // keys are aircraft mac adresses, values are labels
   final Map<String, String> aircraftLabels;
@@ -73,23 +69,15 @@ class AircraftState {
 
   AircraftState({
     required Map<String, List<MessagePack>> packHistory,
-    required this.cleanOldPacks,
-    required this.cleanTimeSec,
     required this.aircraftLabels,
-    required this.expiryTimers,
   }) : _packHistory = packHistory;
 
   AircraftState copyWith({
     Map<String, List<MessagePack>>? packHistory,
-    bool? cleanOldPacks,
-    double? cleanTimeSec,
     Map<String, String>? aircraftLabels,
-    Map<String, Timer>? expiryTimers,
   }) =>
       AircraftState(
-          packHistory: packHistory ?? _packHistory,
-          cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
-          cleanTimeSec: cleanTimeSec ?? this.cleanTimeSec,
-          aircraftLabels: aircraftLabels ?? this.aircraftLabels,
-          expiryTimers: expiryTimers ?? this.expiryTimers);
+        packHistory: packHistory ?? _packHistory,
+        aircraftLabels: aircraftLabels ?? this.aircraftLabels,
+      );
 }
