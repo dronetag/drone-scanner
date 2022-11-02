@@ -81,3 +81,17 @@ class AircraftState {
         aircraftLabels: aircraftLabels ?? this.aircraftLabels,
       );
 }
+
+class AircraftStateUpdate extends AircraftState {
+  AircraftStateUpdate(
+      {required Map<String, List<MessagePack>> packHistory,
+      required Map<String, String> aircraftLabels})
+      : super(packHistory: packHistory, aircraftLabels: aircraftLabels);
+}
+
+class AircraftStateBuffering extends AircraftState {
+  AircraftStateBuffering(
+      {required Map<String, List<MessagePack>> packHistory,
+      required Map<String, String> aircraftLabels})
+      : super(packHistory: packHistory, aircraftLabels: aircraftLabels);
+}

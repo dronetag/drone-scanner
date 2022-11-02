@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show MissingPluginException;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
@@ -60,6 +61,15 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<AircraftBloc, AircraftState>(
+      buildWhen: (previous, current) {
+        return current is AircraftStateUpdate;
+      },
+      builder: (context, state) => buildMapStack(context),
+    );
+  }
+
+  Widget buildMapStack(BuildContext context) {
     final mapObjects =
         context.read<MapCubit>().constructAirspaceMapObjects(context);
     final height = MediaQuery.of(context).size.height;

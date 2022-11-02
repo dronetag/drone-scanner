@@ -262,7 +262,7 @@ class MapCubit extends Cubit<GMapState> {
                 .state
                 .filterValue !=
             FilterValue.zones
-        ? context.watch<AircraftBloc>().state.packHistory().values.isEmpty
+        ? context.read<AircraftBloc>().state.packHistory().values.isEmpty
             ? {}
             : context
                 .read<AircraftBloc>()
