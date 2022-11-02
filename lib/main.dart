@@ -59,7 +59,7 @@ void main() async {
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
-  final aircraftCubit = AircraftBloc(aircraftExpirationCubit);
+  final aircraftBloc = AircraftBloc(aircraftExpirationCubit);
   runAppWithSentry(
     () => runApp(
       MultiBlocProvider(
@@ -93,7 +93,7 @@ void main() async {
             lazy: false,
           ),
           BlocProvider<AircraftBloc>(
-            create: (context) => aircraftCubit,
+            create: (context) => aircraftBloc,
             lazy: false,
           ),
           BlocProvider<AircraftExpirationCubit>(
@@ -108,7 +108,7 @@ void main() async {
             create: (context) => OpendroneIdCubit(
               mapCubit: mapCubit,
               selectedAircraftCubit: selectedCubit,
-              aircraftCubit: aircraftCubit,
+              aircraftBloc: aircraftBloc,
             ),
             lazy: false,
           ),
