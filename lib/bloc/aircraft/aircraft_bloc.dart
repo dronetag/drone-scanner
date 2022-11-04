@@ -195,8 +195,8 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
       } else {
         // update of already seen aircraft
         data[pack.macAddress]?.add(pack);
-        // restart expiry timer
-        expirationCubit.restartTimer(pack.macAddress);
+        // remove old and start new expiry timer
+        expirationCubit.removeTimer(pack.macAddress);
       }
       expirationCubit.addTimer(pack.macAddress);
       add(AircraftBuffering(data));
