@@ -26,7 +26,6 @@ class MapCubit extends Cubit<GMapState> {
     zoom: 11.0,
   );
   List<VoidCallback> postLoadCallbacks = [];
-  List<dynamic> mapObjectsCache = [];
 
   MapCubit(LocationService locationService)
       : _locationService = locationService,
@@ -163,19 +162,15 @@ class MapCubit extends Cubit<GMapState> {
   }
 
   List<dynamic> constructAirspaceMapObjects(BuildContext context) {
-    if (state.cameraMoving) {
-      return mapObjectsCache;
-    }
     final selZone = context.watch<SelectedZoneCubit>().state.selectedZone;
     final selItemMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
-    mapObjectsCache = [
+    return [
       ...buildPolygonZones(context, selZone),
       ...buildMarkers(context, selItemMac),
       ...buildCircleZones(context, selZone),
       ...buildPolylines(context, selItemMac),
     ];
-    return mapObjectsCache;
   }
 
   Set<gmap.Polygon> buildPolygonZones(BuildContext context, ZoneItem? selZone) {

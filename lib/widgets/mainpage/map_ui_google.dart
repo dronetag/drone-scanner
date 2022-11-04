@@ -39,6 +39,7 @@ class MapUIGoogle extends StatefulWidget {
 
 class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
   late CameraPosition initialCameraPosition;
+  List<dynamic> mapObjects = [];
 
   @override
   void dispose() {
@@ -70,8 +71,11 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
   }
 
   Widget buildMapStack(BuildContext context) {
-    final mapObjects =
-        context.read<MapCubit>().constructAirspaceMapObjects(context);
+    // do not reload objects if camera is moving
+    if (!context.watch<MapCubit>().state.cameraMoving) {
+      mapObjects =
+          context.read<MapCubit>().constructAirspaceMapObjects(context);
+    }
     final height = MediaQuery.of(context).size.height;
     final selZone = context.watch<SelectedZoneCubit>().state.selectedZone;
     final selItemMac =
