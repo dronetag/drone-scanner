@@ -8,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import '../../constants/theme_map.dart';
 import '../../services/location_service.dart';
 import '../../utils/google_map_style_reader.dart';
-import '../aircraft/aircraft_cubit.dart';
+import '../aircraft/aircraft_bloc.dart';
 import '../aircraft/selected_aircraft_cubit.dart';
 import '../sliders_cubit.dart';
 import '../zones/selected_zone_cubit.dart';

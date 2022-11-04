@@ -5,7 +5,7 @@ import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'aircraft/aircraft_cubit.dart';
+import 'aircraft/aircraft_bloc.dart';
 import 'aircraft/selected_aircraft_cubit.dart';
 import 'map/map_cubit.dart';
 

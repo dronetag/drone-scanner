@@ -21,7 +21,6 @@ part 'aircraft_event.dart';
 
 class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
   Timer? _refreshTimer;
-  AircraftState? stateMemento;
   AircraftExpirationCubit expirationCubit;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
@@ -89,11 +88,11 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
       );
     });
     on<AircraftBuffering>((event, emit) {
-      print('CUBITS onBufferingEvent');
       emit(
         AircraftStateBuffering(
-            packHistory: event.packHistory,
-            aircraftLabels: state.aircraftLabels),
+          packHistory: event.packHistory,
+          aircraftLabels: state.aircraftLabels,
+        ),
       );
     });
     on<AircraftLabelsUpdate>(
@@ -200,8 +199,7 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
         expirationCubit.restartTimer(pack.macAddress);
       }
       expirationCubit.addTimer(pack.macAddress);
-      emit(AircraftStateBuffering(
-          packHistory: data, aircraftLabels: state.aircraftLabels));
+      add(AircraftBuffering(data));
     } on Exception {
       rethrow;
     }
@@ -332,11 +330,7 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
     }
   }
 
-  void cacheCurrentState() {
-    stateMemento = state.copyWith();
-  }
-
-  void applyCachedState() {
-    if (stateMemento != null) add(AircraftApplyState(stateMemento!));
+  void applyState(AircraftState state) {
+    add(AircraftApplyState(state));
   }
 }

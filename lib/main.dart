@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-import 'bloc/aircraft/aircraft_cubit.dart';
+import 'bloc/aircraft/aircraft_bloc.dart';
 import 'bloc/aircraft/aircraft_expiration_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
 import 'bloc/map/map_cubit.dart';

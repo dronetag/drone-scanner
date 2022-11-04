@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/aircraft_bloc.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';

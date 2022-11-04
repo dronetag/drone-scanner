@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
 import '../../../../utils/utils.dart';
-import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/aircraft/aircraft_bloc.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';

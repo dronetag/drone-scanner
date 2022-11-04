@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/aircraft_bloc.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/zones/selected_zone_cubit.dart';
