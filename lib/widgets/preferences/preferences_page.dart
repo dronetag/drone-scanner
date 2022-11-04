@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
@@ -19,6 +20,7 @@ import 'components/custom_dropdown_button.dart';
 import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
+import 'components/preferences_slider.dart';
 import 'components/screen_sleep_checkbox.dart';
 
 class PreferencesPage extends StatelessWidget {
@@ -332,11 +334,19 @@ class PreferencesPage extends StatelessWidget {
       if (isLandscape) const SizedBox(),
       Padding(
         padding: itemPadding,
-        child: const PreferencesFieldWithDescription(
+        child: PreferencesFieldWithDescription(
           label: 'Clean automatically:',
           description: 'Aircrafts inactive for chosen time '
               'will be automatically cleared',
-          child: CleanPacksCheckbox(),
+          child: PreferencesSlider(
+              getValue: () =>
+                  context.read<AircraftExpirationCubit>().state.cleanOldPacks,
+              setValue: (c) {
+                final packs = context.read<AircraftCubit>().state.packHistory();
+                context
+                    .read<AircraftExpirationCubit>()
+                    .setCleanOldPacks(packs, clean: c);
+              }),
         ),
       ),
       Padding(

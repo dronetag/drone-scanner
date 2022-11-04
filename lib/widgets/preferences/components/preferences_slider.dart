@@ -5,20 +5,24 @@ import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../../constants/colors.dart';
 
-class CleanPacksCheckbox extends StatefulWidget {
-  const CleanPacksCheckbox({
+class PreferencesSlider extends StatefulWidget {
+  final Function(bool c) setValue;
+  final bool Function() getValue;
+  const PreferencesSlider({
     Key? key,
+    required this.setValue,
+    required this.getValue,
   }) : super(key: key);
 
   @override
-  State<CleanPacksCheckbox> createState() => _CleanPacksCheckboxState();
+  State<PreferencesSlider> createState() => _CleanPacksCheckboxState();
 }
 
-class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
-  bool _cleanPacks = false;
+class _CleanPacksCheckboxState extends State<PreferencesSlider> {
+  bool _value = false;
   @override
   Widget build(BuildContext context) {
-    _cleanPacks = context.read<AircraftExpirationCubit>().state.cleanOldPacks;
+    _value = widget.getValue();
     return SizedBox(
       width: 40,
       child: Switch(
@@ -28,14 +32,11 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
         trackColor: MaterialStateProperty.all<Color>(
           AppColors.lightGray,
         ),
-        value: _cleanPacks,
+        value: _value,
         onChanged: (c) {
           setState(() {
-            _cleanPacks = c;
-            final packs = context.read<AircraftCubit>().state.packHistory();
-            context
-                .read<AircraftExpirationCubit>()
-                .setCleanOldPacks(packs, clean: c);
+            _value = c;
+            widget.setValue(c);
           });
         },
       ),
