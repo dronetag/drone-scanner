@@ -13,14 +13,15 @@ import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
 import '../app/dialogs.dart';
+import '../help/help_page.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/common/headline.dart';
-import 'components/clean_packs_checkbox.dart';
 import 'components/custom_dropdown_button.dart';
 import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
 import 'components/preferences_slider.dart';
+import 'components/scanning_status_field.dart';
 import 'components/screen_sleep_checkbox.dart';
 
 class PreferencesPage extends StatelessWidget {
@@ -154,6 +155,26 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
+      Headline(
+        text: 'Enabled Technologies',
+      ),
+      ScanningStatusField(),
+      GestureDetector(
+        onTap: (() => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HelpPage(),
+              ),
+            )),
+        child: Row(
+          children: [
+            Icon(
+              Icons.help_outline,
+            ),
+            Text('Why I cannot enable Wi-Fi on my iPhone?'),
+          ],
+        ),
+      ),
       Headline(
         text: 'Standards',
         child: Tooltip(
