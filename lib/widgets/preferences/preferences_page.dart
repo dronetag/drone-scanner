@@ -158,21 +158,39 @@ class PreferencesPage extends StatelessWidget {
       Headline(
         text: 'Enabled Technologies',
       ),
-      ScanningStatusField(),
-      GestureDetector(
-        onTap: (() => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HelpPage(),
+      Padding(
+        padding: itemPadding,
+        child: ScanningStatusField(),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: GestureDetector(
+          onTap: (() => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HelpPage(),
+                ),
+              )),
+          child: Row(
+            children: [
+              Icon(
+                Icons.help_outline,
+                color: AppColors.highlightBlue,
+                size: Sizes.textIconSize,
               ),
-            )),
-        child: Row(
-          children: [
-            Icon(
-              Icons.help_outline,
-            ),
-            Text('Why I cannot enable Wi-Fi on my iPhone?'),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Why I cannot enable Wi-Fi on my iPhone?',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.highlightBlue,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       Headline(

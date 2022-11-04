@@ -161,33 +161,48 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   bool showAnswer = false;
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+    final questionStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: AppColors.highlightBlue,
+    );
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          showAnswer = !showAnswer;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.start,
           children: [
-            IconButton(
-              padding: EdgeInsets.zero,
-              alignment: Alignment.centerLeft,
-              onPressed: () {
-                setState(() {
-                  showAnswer = !showAnswer;
-                });
-              },
-              icon: Icon(
-                Icons.arrow_back_ios_new,
-                size: Sizes.iconSize,
-              ),
+            Row(
+              children: [
+                Align(
+                  child: RotatedBox(
+                    quarterTurns: showAnswer ? 3 : 2,
+                    child: Icon(
+                      Icons.chevron_left,
+                      size: Sizes.iconSize,
+                      color: AppColors.highlightBlue,
+                    ),
+                  ),
+                ),
+                Text(
+                  widget.question.question,
+                  style: questionStyle,
+                ),
+              ],
             ),
-            Text(widget.question.question),
+            Visibility(
+              visible: showAnswer,
+              child: Text(widget.question.answer),
+            ),
           ],
         ),
-        Visibility(
-          visible: showAnswer,
-          child: Text(widget.question.answer),
-        ),
-      ],
+      ),
     );
   }
 }
