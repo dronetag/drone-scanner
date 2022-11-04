@@ -23,26 +23,26 @@ class HelpCubit extends Cubit<HelpState> {
     );
     try {
       final response = await http.get(url);
-      final loadedQuestions = <String>[];
-      final loadedAnswers = <String>[];
+      final loadedQuestions = <HelpQuestion>[];
+
       // map with string keys, value is another map
       final extractedData = (json.decode(response.body))['data'] as Map;
       final helpText = extractedData['excerpt'] as String;
       final helpSubtext = extractedData['text'] as String;
 
       final questionList = extractedData['displayed_questions'] as List;
-      for (var i = 0; i < 1; ++i) {
-        loadedQuestions.add(questionList[i]['question']['translations'][1]
-            ['question'] as String);
-        loadedAnswers.add(
-            questionList[i]['question']['translations'][1]['answer'] as String);
+      for (var i = 0; i < questionList.length; ++i) {
+        final question = questionList[i]['question']['translations'][1]
+            ['question'] as String;
+        final answer =
+            questionList[i]['question']['translations'][1]['answer'] as String;
+        loadedQuestions.add(HelpQuestion(question, answer));
       }
       emit(
         HelpStateLoaded(
           helpText: helpText,
           helpSubtext: helpSubtext,
           questions: loadedQuestions,
-          answers: loadedAnswers,
         ),
       );
     } catch (err) {
