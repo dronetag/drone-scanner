@@ -140,8 +140,10 @@ class AircraftExpirationCubit extends Cubit<AircraftExpirationState> {
   void removeTimer(String mac) {
     final timers = state.expiryTimers;
     if (timers.containsKey(mac)) {
+      timers[mac]!.cancel();
       timers.remove(mac);
     }
+
     emit(
       state.copyWith(expiryTimers: timers),
     );
