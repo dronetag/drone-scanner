@@ -27,7 +27,6 @@ class MapCubit extends Cubit<GMapState> {
   );
   List<VoidCallback> postLoadCallbacks = [];
   List<dynamic> mapObjectsCache = [];
-  bool _cameraMoving = false;
 
   MapCubit(LocationService locationService)
       : _locationService = locationService,
@@ -159,13 +158,12 @@ class MapCubit extends Cubit<GMapState> {
     );
   }
 
-  // ignore: use_setters_to_change_properties
   void setCameraMoving({required bool moving}) {
-    _cameraMoving = moving;
+    emit(state.copyWith(cameraMoving: moving));
   }
 
   List<dynamic> constructAirspaceMapObjects(BuildContext context) {
-    if (_cameraMoving) {
+    if (state.cameraMoving) {
       return mapObjectsCache;
     }
     final selZone = context.watch<SelectedZoneCubit>().state.selectedZone;

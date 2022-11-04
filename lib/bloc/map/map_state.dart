@@ -14,6 +14,7 @@ class GMapState {
   gmap.LatLng userLocation = const gmap.LatLng(0, 0);
   gmap.LatLng pinLocation = const gmap.LatLng(0, 0);
   gmap.MapType mapStyle = gmap.MapType.normal;
+  bool cameraMoving = false;
 
   GMapState({
     required this.isReady,
@@ -24,6 +25,7 @@ class GMapState {
     required this.userLocation,
     required this.pinLocation,
     required this.mapStyle,
+    required this.cameraMoving,
   });
 
   static GMapState get defaults => GMapState(
@@ -35,27 +37,28 @@ class GMapState {
         userLocation: const gmap.LatLng(0, 0),
         pinLocation: const gmap.LatLng(0, 0),
         mapStyle: gmap.MapType.normal,
+        cameraMoving: false,
       );
 
-  GMapState copyWith({
-    bool? isReady,
-    bool? userLocationValid,
-    bool? wasCenteredOnUser,
-    bool? lockOnPoint,
-    bool? droppedPin,
-    gmap.LatLng? centerLocation,
-    gmap.LatLng? userLocation,
-    gmap.LatLng? pinLocation,
-    gmap.MapType? mapStyle,
-  }) =>
+  GMapState copyWith(
+          {bool? isReady,
+          bool? userLocationValid,
+          bool? wasCenteredOnUser,
+          bool? lockOnPoint,
+          bool? droppedPin,
+          gmap.LatLng? centerLocation,
+          gmap.LatLng? userLocation,
+          gmap.LatLng? pinLocation,
+          gmap.MapType? mapStyle,
+          bool? cameraMoving}) =>
       GMapState(
-        isReady: isReady ?? this.isReady,
-        userLocationValid: userLocationValid ?? this.userLocationValid,
-        wasCenteredOnUser: wasCenteredOnUser ?? this.wasCenteredOnUser,
-        lockOnPoint: lockOnPoint ?? this.lockOnPoint,
-        droppedPin: droppedPin ?? this.droppedPin,
-        userLocation: userLocation ?? this.userLocation,
-        pinLocation: pinLocation ?? this.pinLocation,
-        mapStyle: mapStyle ?? this.mapStyle,
-      );
+          isReady: isReady ?? this.isReady,
+          userLocationValid: userLocationValid ?? this.userLocationValid,
+          wasCenteredOnUser: wasCenteredOnUser ?? this.wasCenteredOnUser,
+          lockOnPoint: lockOnPoint ?? this.lockOnPoint,
+          droppedPin: droppedPin ?? this.droppedPin,
+          userLocation: userLocation ?? this.userLocation,
+          pinLocation: pinLocation ?? this.pinLocation,
+          mapStyle: mapStyle ?? this.mapStyle,
+          cameraMoving: cameraMoving ?? this.cameraMoving);
 }
