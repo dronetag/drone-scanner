@@ -5,12 +5,15 @@ import '../../bloc/help/help_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
+import 'help_question_widget.dart';
 
 class HelpPage extends StatelessWidget {
-  const HelpPage({Key? key}) : super(key: key);
+  final int? highlightedQuestionIndex;
+  const HelpPage({Key? key, this.highlightedQuestionIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    context.read<HelpCubit>().fetchHelp();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: ColoredBox(
@@ -139,70 +142,15 @@ class HelpPage extends StatelessWidget {
     BuildContext context,
     HelpStateLoaded state,
   ) {
-    return state.questions
-        .map(
-          (e) => QuestionWidget(
-            question: e,
-          ),
-        )
-        .toList();
-  }
-}
-
-class QuestionWidget extends StatefulWidget {
-  final HelpQuestion question;
-
-  const QuestionWidget({Key? key, required this.question}) : super(key: key);
-  @override
-  _QuestionWidgetState createState() => _QuestionWidgetState();
-}
-
-class _QuestionWidgetState extends State<QuestionWidget> {
-  bool showAnswer = false;
-  @override
-  Widget build(BuildContext context) {
-    final questionStyle = TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-      color: AppColors.highlightBlue,
-    );
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          showAnswer = !showAnswer;
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.start,
-          children: [
-            Row(
-              children: [
-                Align(
-                  child: RotatedBox(
-                    quarterTurns: showAnswer ? 3 : 2,
-                    child: Icon(
-                      Icons.chevron_left,
-                      size: Sizes.iconSize,
-                      color: AppColors.highlightBlue,
-                    ),
-                  ),
-                ),
-                Text(
-                  widget.question.question,
-                  style: questionStyle,
-                ),
-              ],
-            ),
-            Visibility(
-              visible: showAnswer,
-              child: Text(widget.question.answer),
-            ),
-          ],
+    final res = <Widget>[];
+    for (var i = 0; i < state.questions.length; ++i) {
+      res.add(
+        HelpQuestionWidget(
+          question: state.questions[i],
+          showAnswer: i == highlightedQuestionIndex,
         ),
-      ),
-    );
+      );
+    }
+    return res;
   }
 }
