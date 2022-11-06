@@ -65,8 +65,26 @@ class HelpPage extends StatelessWidget {
     HelpStateLoaded state,
   ) {
     return [
-      Text(state.helpText),
-      Text(state.helpSubtext),
+      Padding(
+        padding: const EdgeInsets.only(bottom: Sizes.preferencesMargin),
+        child: Text(
+          state.helpText,
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: Sizes.preferencesMargin),
+        child: Text(
+          state.helpSubtext,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
       ...buildQuestions(context, state),
     ];
   }
