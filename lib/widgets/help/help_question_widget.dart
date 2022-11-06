@@ -34,33 +34,38 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
         });
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.start,
           children: [
             Row(
               children: [
-                Align(
-                  child: RotatedBox(
-                    quarterTurns: showAnswer ? 3 : 2,
-                    child: Icon(
-                      Icons.chevron_left,
-                      size: Sizes.iconSize,
-                      color: AppColors.highlightBlue,
-                    ),
+                RotatedBox(
+                  quarterTurns: showAnswer ? 1 : 0,
+                  child: Image.asset(
+                    'assets/images/chevron_right.png',
+                    width: 15,
+                    height: 15,
+                    color: AppColors.highlightBlue,
                   ),
                 ),
                 Flexible(
-                  child: Text(
-                    widget.question.question,
-                    style: questionStyle,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      widget.question.question,
+                      style: questionStyle,
+                    ),
                   ),
                 ),
               ],
             ),
-            Visibility(
-              visible: showAnswer,
-              child: Text(widget.question.answer),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Visibility(
+                visible: showAnswer,
+                child: Text(widget.question.answer),
+              ),
             ),
           ],
         ),
