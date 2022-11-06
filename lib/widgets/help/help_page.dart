@@ -105,20 +105,35 @@ class HelpPage extends StatelessWidget {
   Widget buildFailed(BuildContext context) {
     final itemList = [
       ...buildHeader(context),
-      Column(
-        children: [
-          Icon(
-            Icons.error,
-            color: AppColors.redIcon,
-          ),
-          Text('Failed to load help section.'),
-          ElevatedButton.icon(
-            icon: Icon(Icons.refresh),
-            label: Text('Retry'),
-            onPressed: context.read<HelpCubit>().fetchHelp,
-          )
-        ],
-      )
+      Container(
+        height: MediaQuery.of(context).size.height / 5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              Icons.error,
+              color: AppColors.redIcon,
+              size: 36,
+            ),
+            Text(
+              'Failed to load help section.',
+              style: TextStyle(fontSize: 18),
+            ),
+            ElevatedButton.icon(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  AppColors.preferencesButtonColor,
+                ),
+              ),
+              icon: Icon(
+                Icons.refresh,
+              ),
+              label: Text('Retry'),
+              onPressed: context.read<HelpCubit>().fetchHelp,
+            )
+          ],
+        ),
+      ),
     ];
     return ListView.builder(
       padding: EdgeInsets.zero,
