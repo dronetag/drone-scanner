@@ -94,75 +94,75 @@ class ScanningStatusField extends StatelessWidget {
           flex: 3,
           child: AbsorbPointer(
             absorbing: !wifiEnabled,
-            child: Container(
-              foregroundDecoration: BoxDecoration(
-                color: Colors.black,
-                backgroundBlendMode: BlendMode.lighten,
-              ),
-              decoration: decoration,
-              margin: EdgeInsets.only(left: 5),
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PreferencesSlider(
-                        getValue: () => odidState.isScanningWifi,
-                        setValue: (c) {
-                          late final String snackBarText;
-                          context
-                              .read<OpendroneIdCubit>()
-                              .isWifiTurnedOn()
-                              .then((turnedOn) {
-                            if (turnedOn) {
-                              if (odidState.isScanningWifi &&
-                                      odidState.usedTechnologies ==
-                                          UsedTechnologies.Wifi ||
-                                  odidState.usedTechnologies ==
-                                      UsedTechnologies.Both) {
-                                context
-                                    .read<OpendroneIdCubit>()
-                                    .setWifiUsed(wifiUsed: false);
-                                snackBarText = 'Wi-Fi Scanning Stopped.';
+            child: Opacity(
+              opacity: wifiEnabled ? 1 : 0.5,
+              child: Container(
+                decoration: decoration,
+                margin: EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PreferencesSlider(
+                          getValue: () => odidState.isScanningWifi,
+                          setValue: (c) {
+                            late final String snackBarText;
+                            context
+                                .read<OpendroneIdCubit>()
+                                .isWifiTurnedOn()
+                                .then((turnedOn) {
+                              if (turnedOn) {
+                                if (odidState.isScanningWifi &&
+                                        odidState.usedTechnologies ==
+                                            UsedTechnologies.Wifi ||
+                                    odidState.usedTechnologies ==
+                                        UsedTechnologies.Both) {
+                                  context
+                                      .read<OpendroneIdCubit>()
+                                      .setWifiUsed(wifiUsed: false);
+                                  snackBarText = 'Wi-Fi Scanning Stopped.';
+                                } else {
+                                  context
+                                      .read<OpendroneIdCubit>()
+                                      .setWifiUsed(wifiUsed: true);
+                                  snackBarText = 'Wi-Fi Scanning Started.';
+                                }
+                                showSnackBar(context, snackBarText);
                               } else {
-                                context
-                                    .read<OpendroneIdCubit>()
-                                    .setWifiUsed(wifiUsed: true);
-                                snackBarText = 'Wi-Fi Scanning Started.';
+                                snackBarText =
+                                    'Turn Wi-Fi on to start scanning.';
+                                showSnackBar(
+                                  context,
+                                  snackBarText,
+                                );
                               }
-                              showSnackBar(context, snackBarText);
-                            } else {
-                              snackBarText = 'Turn Wi-Fi on to start scanning.';
-                              showSnackBar(
-                                context,
-                                snackBarText,
-                              );
-                            }
-                          });
-                        },
-                      ),
-                      Image.asset(
-                        'assets/images/wifi_icon.png',
-                        width: Sizes.iconSize,
-                        height: Sizes.iconSize,
-                        color: AppColors.detailFieldHeaderColor,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Wi-Fi Beacon & NaN',
-                    style: textStyle,
-                  ),
-                ],
+                            });
+                          },
+                        ),
+                        Image.asset(
+                          'assets/images/wifi_icon.png',
+                          width: Sizes.iconSize,
+                          height: Sizes.iconSize,
+                          color: AppColors.detailFieldHeaderColor,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Wi-Fi Beacon & NaN',
+                      style: textStyle,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
