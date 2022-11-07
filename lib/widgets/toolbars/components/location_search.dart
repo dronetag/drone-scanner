@@ -27,6 +27,7 @@ class _LocationSearchState extends State<LocationSearch> {
       context: context,
       apiKey: googleApikey,
       types: [],
+      debounce: Duration(milliseconds: 1500),
       strictbounds: false,
     );
 
