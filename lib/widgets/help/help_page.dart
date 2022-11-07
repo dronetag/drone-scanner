@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../bloc/help/help_cubit.dart';
 import '../../constants/colors.dart';
@@ -52,11 +53,12 @@ class HelpPage extends StatelessWidget {
         state,
       ),
     ];
-    return ListView.builder(
+    return ScrollablePositionedList.builder(
       padding: EdgeInsets.zero,
       itemBuilder: (context, index) => itemList[index],
       itemCount: itemList.length,
       physics: BouncingScrollPhysics(),
+      initialScrollIndex: highlightedQuestionIndex ?? 0,
     );
   }
 
