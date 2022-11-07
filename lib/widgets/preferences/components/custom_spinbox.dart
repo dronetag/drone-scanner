@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 
-import '../../../bloc/aircraft/aircraft_bloc.dart';
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../../constants/colors.dart';
 
@@ -22,7 +22,7 @@ class CustomSpinBox extends StatelessWidget {
             final current =
                 context.read<AircraftExpirationCubit>().state.cleanTimeSec;
             if (current - step >= minVal) {
-              final packs = context.read<AircraftBloc>().state.packHistory();
+              final packs = context.read<AircraftCubit>().state.packHistory();
               context
                   .read<AircraftExpirationCubit>()
                   .setcleanTimeSec(current - step, packs);
@@ -52,7 +52,7 @@ class CustomSpinBox extends StatelessWidget {
               onChanged: (v) {
                 if (v < minVal) v = minVal;
                 if (v > maxVal) v = maxVal;
-                final packs = context.read<AircraftBloc>().state.packHistory();
+                final packs = context.read<AircraftCubit>().state.packHistory();
                 context.read<AircraftExpirationCubit>().setcleanTimeSec(
                       v,
                       packs,
@@ -76,7 +76,7 @@ class CustomSpinBox extends StatelessWidget {
             final current =
                 context.read<AircraftExpirationCubit>().state.cleanTimeSec;
             if (current + step <= maxVal) {
-              final packs = context.read<AircraftBloc>().state.packHistory();
+              final packs = context.read<AircraftCubit>().state.packHistory();
               context.read<AircraftExpirationCubit>().setcleanTimeSec(
                     current + step,
                     packs,

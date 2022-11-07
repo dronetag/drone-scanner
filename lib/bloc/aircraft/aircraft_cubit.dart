@@ -17,9 +17,8 @@ import '../../utils/utils.dart';
 import 'aircraft_expiration_cubit.dart';
 
 part 'aircraft_state.dart';
-part 'aircraft_event.dart';
 
-class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
+class AircraftCubit extends Cubit<AircraftState> {
   Timer? _refreshTimer;
   AircraftExpirationCubit expirationCubit;
   // storage for user-given labels
@@ -72,7 +71,7 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
     ),
   ];
 
-  AircraftBloc(this.expirationCubit)
+  AircraftCubit(this.expirationCubit)
       : super(
           AircraftState(
             packHistory: <String, List<MessagePack>>{},
@@ -80,32 +79,6 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
           ),
         ) {
     expirationCubit.setDeleteCallback(deletePack);
-    on<AircraftUpdate>((event, emit) {
-      emit(
-        AircraftStateUpdate(
-            packHistory: event.packHistory,
-            aircraftLabels: state.aircraftLabels),
-      );
-    });
-    on<AircraftBuffering>((event, emit) {
-      emit(
-        AircraftStateBuffering(
-          packHistory: event.packHistory,
-          aircraftLabels: state.aircraftLabels,
-        ),
-      );
-    });
-    on<AircraftLabelsUpdate>(
-      (event, emit) => emit(
-        state.copyWith(
-          aircraftLabels: event.labels,
-        ),
-      ),
-    );
-
-    on<AircraftApplyState>(
-      (event, emit) => emit(event.state),
-    );
     fetchSavedLabels();
   }
 
@@ -114,9 +87,16 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
     stopEmitTimer();
     _refreshTimer = Timer.periodic(
       duration,
-      (_) {
-        add(AircraftUpdate(state._packHistory));
-      },
+      aircraftUpdate,
+    );
+  }
+
+  void aircraftUpdate(_) {
+    emit(
+      AircraftStateUpdate(
+        packHistory: state.packHistory(),
+        aircraftLabels: state.aircraftLabels,
+      ),
     );
   }
 
@@ -138,7 +118,9 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
       final labelsMap = <String, String>{};
       (json.decode(labels as String) as Map<String, dynamic>)
           .forEach((key, value) => labelsMap[key] = value as String);
-      add(AircraftLabelsUpdate(labelsMap));
+      emit(
+        state.copyWith(aircraftLabels: labelsMap),
+      );
     }
   }
 
@@ -146,7 +128,9 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
   Future<void> addAircraftLabel(String mac, String label) async {
     var labels = state.aircraftLabels;
     labels[mac] = label;
-    add(AircraftLabelsUpdate(labels));
+    emit(
+      state.copyWith(aircraftLabels: labels),
+    );
     await _saveLabels();
   }
 
@@ -154,7 +138,9 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
   Future<void> deleteAircraftLabel(String mac) async {
     var labels = state.aircraftLabels;
     labels.remove(mac);
-    add(AircraftLabelsUpdate(labels));
+    emit(
+      state.copyWith(aircraftLabels: labels),
+    );
     await _saveLabels();
   }
 
@@ -176,10 +162,9 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
   }
 
   Future<void> clear() async {
-    add(
-      AircraftUpdate(
-        {},
-      ),
+    emit(
+      AircraftStateUpdate(
+          packHistory: {}, aircraftLabels: state.aircraftLabels),
     );
   }
 
@@ -199,7 +184,12 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
         expirationCubit.removeTimer(pack.macAddress);
       }
       expirationCubit.addTimer(pack.macAddress);
-      add(AircraftBuffering(data));
+      emit(
+        AircraftStateBuffering(
+          packHistory: data,
+          aircraftLabels: state.aircraftLabels,
+        ),
+      );
     } on Exception {
       rethrow;
     }
@@ -217,8 +207,9 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
     try {
       final data = state.packHistory();
       data[pack.macAddress] = [pack];
-      add(
-        AircraftUpdate(data),
+      emit(
+        AircraftStateUpdate(
+            packHistory: data, aircraftLabels: state.aircraftLabels),
       );
     } on Exception {
       rethrow;
@@ -236,7 +227,10 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
 
     final data = state._packHistory;
     data.removeWhere((key, _) => mac == key);
-    add(AircraftUpdate(data));
+    emit(
+      AircraftStateUpdate(
+          packHistory: data, aircraftLabels: state.aircraftLabels),
+    );
   }
 
   Future<void> exportPacksToCSV({required bool save}) async {
@@ -331,6 +325,6 @@ class AircraftBloc extends Bloc<AircraftEvent, AircraftState> {
   }
 
   void applyState(AircraftState state) {
-    add(AircraftApplyState(state));
+    emit(state);
   }
 }

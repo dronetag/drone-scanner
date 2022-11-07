@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/aircraft/aircraft_bloc.dart';
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../constants/colors.dart';
 
 class NumDronesText extends StatelessWidget {
@@ -11,7 +11,7 @@ class NumDronesText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final numPacks = context.watch<AircraftBloc>().state.packHistory().length;
+    final numPacks = context.watch<AircraftCubit>().state.packHistory().length;
     final numPacksText = numPacks == 1 ? ' drone around' : ' drones around';
     return Row(
       children: [

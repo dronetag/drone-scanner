@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-import '../../bloc/aircraft/aircraft_bloc.dart';
+import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
@@ -385,7 +385,7 @@ class PreferencesPage extends StatelessWidget {
                 'Are you sure you want to delete all gathered data?',
                 () {
                   context.read<SlidersCubit>().setShowDroneDetail(show: false);
-                  context.read<AircraftBloc>().clear();
+                  context.read<AircraftCubit>().clear();
                   context.read<SelectedAircraftCubit>().unselectAircraft();
                 },
               );
@@ -401,7 +401,7 @@ class PreferencesPage extends StatelessWidget {
           child: ElevatedButton(
             style: buttonStyle,
             onPressed: () {
-              context.read<AircraftBloc>().exportPacksToCSV(save: false);
+              context.read<AircraftCubit>().exportPacksToCSV(save: false);
             },
             child: const Text('Export all data'),
           ),

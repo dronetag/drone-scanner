@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/aircraft/aircraft_bloc.dart';
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
@@ -77,7 +77,7 @@ void handleAction(BuildContext context, AircraftAction action) {
   final selectedMac =
       context.read<SelectedAircraftCubit>().state.selectedAircraftMac;
   if (selectedMac == null) return;
-  final messagePackList = context.read<AircraftBloc>().packsForDevice(
+  final messagePackList = context.read<AircraftCubit>().packsForDevice(
         selectedMac,
       );
   if (messagePackList == null || messagePackList.isEmpty) {
@@ -91,7 +91,7 @@ void handleAction(BuildContext context, AircraftAction action) {
         'Are you sure you want to delete aircraft data?',
         () {
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
-          context.read<AircraftBloc>().deletePack(selectedMac);
+          context.read<AircraftCubit>().deletePack(selectedMac);
           context.read<SelectedAircraftCubit>().unselectAircraft();
           showSnackBar(
             context,
@@ -102,7 +102,7 @@ void handleAction(BuildContext context, AircraftAction action) {
       break;
     case AircraftAction.share:
       context
-          .read<AircraftBloc>()
+          .read<AircraftCubit>()
           .exportPackToCSV(mac: messagePackList.last.macAddress, save: false)
           .then(
         (value) {
@@ -114,7 +114,7 @@ void handleAction(BuildContext context, AircraftAction action) {
       break;
     case AircraftAction.export:
       context
-          .read<AircraftBloc>()
+          .read<AircraftCubit>()
           .exportPackToCSV(mac: messagePackList.last.macAddress, save: true)
           .then(
         (value) {

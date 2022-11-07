@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/aircraft/aircraft_bloc.dart';
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../../constants/colors.dart';
 
@@ -32,7 +32,7 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
         onChanged: (c) {
           setState(() {
             _cleanPacks = c;
-            final packs = context.read<AircraftBloc>().state.packHistory();
+            final packs = context.read<AircraftCubit>().state.packHistory();
             context
                 .read<AircraftExpirationCubit>()
                 .setCleanOldPacks(packs, clean: c);

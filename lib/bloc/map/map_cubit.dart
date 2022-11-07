@@ -8,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import '../../constants/theme_map.dart';
 import '../../services/location_service.dart';
 import '../../utils/google_map_style_reader.dart';
-import '../aircraft/aircraft_bloc.dart';
+import '../aircraft/aircraft_cubit.dart';
 import '../aircraft/selected_aircraft_cubit.dart';
 import '../sliders_cubit.dart';
 import '../zones/selected_zone_cubit.dart';
@@ -255,10 +255,10 @@ class MapCubit extends Cubit<GMapState> {
                 .state
                 .filterValue !=
             FilterValue.zones
-        ? context.read<AircraftBloc>().state.packHistory().values.isEmpty
+        ? context.read<AircraftCubit>().state.packHistory().values.isEmpty
             ? {}
             : context
-                .read<AircraftBloc>()
+                .read<AircraftCubit>()
                 .state
                 .packHistory()
                 .values
@@ -281,7 +281,7 @@ class MapCubit extends Cubit<GMapState> {
                       ? e.last.basicIdMessage?.uasId
                       : 'Unknown UAS ID';
                   final givenLabel = context
-                      .read<AircraftBloc>()
+                      .read<AircraftCubit>()
                       .getAircraftLabel(e.last.macAddress);
 
                   final infoWindowText = givenLabel ?? uasIdText;
@@ -327,14 +327,14 @@ class MapCubit extends Cubit<GMapState> {
         : {};
     // if sel drone has pilot location, show it with a marker
     if (selItemMac != null &&
-        context.read<AircraftBloc>().packsForDevice(selItemMac) != null &&
+        context.read<AircraftCubit>().packsForDevice(selItemMac) != null &&
         context
-            .read<AircraftBloc>()
+            .read<AircraftCubit>()
             .packsForDevice(selItemMac)!
             .last
             .systemDataValid()) {
       final systemData = context
-          .read<AircraftBloc>()
+          .read<AircraftCubit>()
           .packsForDevice(selItemMac)!
           .last
           .systemDataMessage;
@@ -383,7 +383,7 @@ class MapCubit extends Cubit<GMapState> {
     List<MessagePack>? selItemHistory;
     if (selItemMac == null) return {};
     selItemHistory =
-        context.read<AircraftBloc>().state.packHistory()[selItemMac];
+        context.read<AircraftCubit>().state.packHistory()[selItemMac];
     if (selItemHistory == null) return {};
     const maxPoints = 75;
     var filteredList = <MessagePack>[];

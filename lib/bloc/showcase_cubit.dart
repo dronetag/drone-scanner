@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import '../widgets/preferences/preferences_page.dart';
-import 'aircraft/aircraft_bloc.dart';
+import 'aircraft/aircraft_cubit.dart';
 import 'aircraft/selected_aircraft_cubit.dart';
 import 'opendroneid_cubit.dart';
 import 'sliders_cubit.dart';
@@ -134,11 +134,11 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     // if dismissing showcase, restart scans and recover state
     if (!active) {
       await context
-          .read<AircraftBloc>()
+          .read<AircraftCubit>()
           .removeShowcaseDummyPack()
           .then((value) {
         if (state.aircraftState != null) {
-          context.read<AircraftBloc>().applyState(state.aircraftState!);
+          context.read<AircraftCubit>().applyState(state.aircraftState!);
         }
         context.read<OpendroneIdCubit>().start();
       });
@@ -150,18 +150,18 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     // if showcasing, add dumy data
     context.read<OpendroneIdCubit>().stop().then((value) {
       context
-          .read<AircraftBloc>()
+          .read<AircraftCubit>()
           .clear()
           .then((value) => _startShowcaseRoutine(context));
       emit(state.copyWith(
           showcaseActive: true,
-          aircraftState: context.read<AircraftBloc>().state));
+          aircraftState: context.read<AircraftCubit>().state));
     });
   }
 
   void _startShowcaseRoutine(BuildContext context) {
     context.read<SlidersCubit>().setShowDroneDetail(show: false);
-    context.read<AircraftBloc>().addShowcaseDummyPack();
+    context.read<AircraftCubit>().addShowcaseDummyPack();
     context.read<SlidersCubit>().panelController.animatePanelToSnapPoint();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => ShowCaseWidget.of(context).startShowCase(keys),
@@ -169,9 +169,9 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   }
 
   void onShowcaseFinish(BuildContext context) {
-    context.read<AircraftBloc>().removeShowcaseDummyPack();
+    context.read<AircraftCubit>().removeShowcaseDummyPack();
     if (state.aircraftState != null) {
-      context.read<AircraftBloc>().applyState(state.aircraftState!);
+      context.read<AircraftCubit>().applyState(state.aircraftState!);
     }
     context.read<OpendroneIdCubit>().start();
     emit(state.copyWith(showcaseActive: false));
@@ -199,7 +199,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     if (key == droneDetailPanelKey) {
       context
           .read<SelectedAircraftCubit>()
-          .selectAircraft(context.read<AircraftBloc>().showcaseDummyMac);
+          .selectAircraft(context.read<AircraftCubit>().showcaseDummyMac);
       context.read<SlidersCubit>().setShowDroneDetail(show: true);
     }
     if (key == aboutPageKey) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../bloc/aircraft/aircraft_bloc.dart';
+import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../app/dialogs.dart';
@@ -21,7 +21,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
 
   void deleteLabelCallback() {
     context
-        .read<AircraftBloc>()
+        .read<AircraftCubit>()
         .deleteAircraftLabel(
           widget.aircraftMac,
         )
@@ -38,7 +38,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
 
   void submitCallback() {
     context
-        .read<AircraftBloc>()
+        .read<AircraftCubit>()
         .addAircraftLabel(
           widget.aircraftMac,
           _controller.text,
@@ -57,7 +57,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
   Widget build(BuildContext context) {
     if (!isInit) {
       final text =
-          context.read<AircraftBloc>().getAircraftLabel(widget.aircraftMac);
+          context.read<AircraftCubit>().getAircraftLabel(widget.aircraftMac);
       if (text != null) {
         _controller.text = text;
       }

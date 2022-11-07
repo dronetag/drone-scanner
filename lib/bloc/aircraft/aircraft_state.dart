@@ -1,4 +1,4 @@
-part of 'aircraft_bloc.dart';
+part of 'aircraft_cubit.dart';
 
 class AircraftState {
   final Map<String, List<MessagePack>> _packHistory;

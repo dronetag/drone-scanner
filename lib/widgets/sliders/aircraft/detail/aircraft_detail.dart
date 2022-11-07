@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
-import '../../../../bloc/aircraft/aircraft_bloc.dart';
+import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
@@ -26,11 +26,11 @@ class AircraftDetail extends StatelessWidget {
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     if (selectedMac == null) return Container();
     final messagePackList =
-        context.watch<AircraftBloc>().packsForDevice(selectedMac) ?? [];
+        context.watch<AircraftCubit>().packsForDevice(selectedMac) ?? [];
     // empty or was deleted, return to list
     if (context.watch<SelectedAircraftCubit>().state.selectedAircraftMac ==
             null ||
-        context.watch<AircraftBloc>().packsForDevice(
+        context.watch<AircraftCubit>().packsForDevice(
                   context
                       .watch<SelectedAircraftCubit>()
                       .state

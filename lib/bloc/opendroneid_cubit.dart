@@ -5,7 +5,7 @@ import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'aircraft/aircraft_bloc.dart';
+import 'aircraft/aircraft_cubit.dart';
 import 'aircraft/selected_aircraft_cubit.dart';
 import 'map/map_cubit.dart';
 
@@ -38,12 +38,12 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   StreamSubscription? wifiStateListener;
   MapCubit mapCubit;
   SelectedAircraftCubit selectedAircraftCubit;
-  AircraftBloc aircraftBloc;
+  AircraftCubit aircraftCubit;
 
   OpendroneIdCubit({
     required this.mapCubit,
     required this.selectedAircraftCubit,
-    required this.aircraftBloc,
+    required this.aircraftCubit,
   }) : super(
           ScanningState(
             isScanningBluetooth: false,
@@ -97,7 +97,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   }
 
   void scanCallback(MessagePack pack) {
-    aircraftBloc.addPack(pack);
+    aircraftCubit.addPack(pack);
     if (mapCubit.state.lockOnPoint &&
         pack.macAddress == selectedAircraftCubit.state.selectedAircraftMac &&
         pack.locationValid()) {
@@ -113,7 +113,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     listener = FlutterOpenDroneId.allMessages
         .debounceTime(Duration(milliseconds: 100))
         .listen(scanCallback);
-    aircraftBloc.initEmitTimer();
+    aircraftCubit.initEmitTimer();
     unawaited(FlutterOpenDroneId.startScan(state.usedTechnologies));
   }
 
@@ -127,7 +127,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
 
   Future<void> stop() async {
     await listener?.cancel();
-    aircraftBloc.stopEmitTimer();
+    aircraftCubit.stopEmitTimer();
     unawaited(FlutterOpenDroneId.stopScan());
   }
 
