@@ -25,6 +25,7 @@ class ScanningStatusField extends StatelessWidget {
     final odidState = context.watch<OpendroneIdCubit>().state;
     final textStyle = TextStyle(fontSize: 14);
     final wifiEnabled = context.read<StandardsCubit>().state.androidSystem;
+    final contentPadding = const EdgeInsets.all(15.0);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -33,7 +34,7 @@ class ScanningStatusField extends StatelessWidget {
           Expanded(
             child: Container(
               margin: EdgeInsets.only(right: 5),
-              padding: const EdgeInsets.all(20.0),
+              padding: contentPadding,
               decoration: decoration,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +100,7 @@ class ScanningStatusField extends StatelessWidget {
                 child: Container(
                   decoration: decoration,
                   margin: EdgeInsets.only(left: 5),
-                  padding: const EdgeInsets.all(20.0),
+                  padding: contentPadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
