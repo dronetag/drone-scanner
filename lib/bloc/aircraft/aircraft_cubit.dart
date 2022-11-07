@@ -87,11 +87,11 @@ class AircraftCubit extends Cubit<AircraftState> {
     stopEmitTimer();
     _refreshTimer = Timer.periodic(
       duration,
-      aircraftUpdate,
+      (_) => aircraftUpdate,
     );
   }
 
-  void aircraftUpdate(_) {
+  void aircraftUpdate() {
     emit(
       AircraftStateUpdate(
         packHistory: state.packHistory(),
