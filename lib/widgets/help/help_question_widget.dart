@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/help/help_question.dart';
 import '../../constants/colors.dart';
@@ -64,7 +66,18 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
             padding: const EdgeInsets.only(top: 10.0),
             child: Visibility(
               visible: showAnswer,
-              child: Text(widget.question.answer),
+              child: MarkdownBody(
+                data: widget.question.answer,
+                onTapLink: (text, href, title) {
+                  if (href == null) return;
+                  final url = Uri.parse(href);
+                  canLaunchUrl(url).then(
+                    (value) {
+                      if (value) launchUrl(url);
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],
