@@ -44,6 +44,7 @@ dependencies:
   wakelock: ^0.6.2
   scrollable_positioned_list: ^0.3.5
   flutter_markdown: ^0.6.13
+  url_launcher: ^6.1.6
 
 dev_dependencies:
   dependency_validator: ^3.0.0
