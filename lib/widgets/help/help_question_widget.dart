@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/help/help_question.dart';
 import '../../constants/colors.dart';
+import '../preferences/preferences_page.dart';
 
 class HelpQuestionWidget extends StatefulWidget {
   final HelpQuestion question;
@@ -70,6 +71,14 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
                 data: widget.question.answer,
                 onTapLink: (text, href, title) {
                   if (href == null) return;
+                  if (href == 'dronescanner/preferences') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PreferencesPage()),
+                    );
+                    return;
+                  }
                   final url = Uri.parse(href);
                   canLaunchUrl(url).then(
                     (value) {
