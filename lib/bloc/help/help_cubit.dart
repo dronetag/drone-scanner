@@ -52,8 +52,8 @@ class HelpCubit extends Cubit<HelpState> {
         }
         final question =
             questionTranslations[translationIndex]['question'] as String;
-        final answer = questionList[i]['question']['translations']
-            [translationIndex]['answer'] as String;
+        final answer =
+            questionTranslations[translationIndex]['answer'] as String;
         loadedQuestions.add(HelpQuestion(question, answer));
       }
       emit(
