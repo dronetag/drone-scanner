@@ -26,18 +26,18 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
       color: AppColors.highlightBlue,
     );
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          showAnswer = !showAnswer;
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.start,
-          children: [
-            Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                showAnswer = !showAnswer;
+              });
+            },
+            child: Row(
               children: [
                 RotatedBox(
                   quarterTurns: showAnswer ? 1 : 0,
@@ -59,15 +59,15 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Visibility(
-                visible: showAnswer,
-                child: Text(widget.question.answer),
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Visibility(
+              visible: showAnswer,
+              child: Text(widget.question.answer),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
