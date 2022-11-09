@@ -9,6 +9,8 @@ import '../../utils/drone_scanner_icon_icons.dart';
 import 'help_question_widget.dart';
 
 class HelpPage extends StatelessWidget {
+  static const routeName = 'HelpPage';
+
   final int? highlightedQuestionIndex;
   const HelpPage({Key? key, this.highlightedQuestionIndex}) : super(key: key);
 

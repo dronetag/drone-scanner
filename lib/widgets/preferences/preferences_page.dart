@@ -25,6 +25,7 @@ import 'components/scanning_status_field.dart';
 import 'components/screen_sleep_checkbox.dart';
 
 class PreferencesPage extends StatelessWidget {
+  static const routeName = 'PreferencesPage';
   const PreferencesPage({Key? key}) : super(key: key);
 
   @override
@@ -166,14 +167,19 @@ class PreferencesPage extends StatelessWidget {
         Padding(
           padding: itemPadding,
           child: GestureDetector(
-            onTap: (() => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HelpPage(
-                      highlightedQuestionIndex: 3,
-                    ),
+            onTap: (() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HelpPage(
+                    highlightedQuestionIndex: 3,
                   ),
-                )),
+                  settings: RouteSettings(
+                    name: HelpPage.routeName,
+                  ),
+                ),
+              );
+            }),
             child: Row(
               children: [
                 Icon(

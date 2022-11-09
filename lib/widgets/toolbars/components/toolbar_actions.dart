@@ -179,13 +179,23 @@ void handleAction(BuildContext context, ToolbarMenuAction action) {
     case ToolbarMenuAction.openSettings:
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PreferencesPage()),
+        MaterialPageRoute(
+          builder: (context) => const PreferencesPage(),
+          settings: RouteSettings(
+            name: PreferencesPage.routeName,
+          ),
+        ),
       );
       break;
     case ToolbarMenuAction.openHelp:
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const HelpPage()),
+        MaterialPageRoute(
+          builder: (context) => const HelpPage(),
+          settings: RouteSettings(
+            name: HelpPage.routeName,
+          ),
+        ),
       );
       break;
     case ToolbarMenuAction.openAbout:
