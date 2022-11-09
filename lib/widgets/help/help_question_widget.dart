@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../bloc/help/help_cubit.dart';
+import '../../bloc/help/help_question.dart';
 import '../../constants/colors.dart';
 
 class HelpQuestionWidget extends StatefulWidget {

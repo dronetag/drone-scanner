@@ -1,12 +1,5 @@
 part of 'help_cubit.dart';
 
-class HelpQuestion {
-  final String question;
-  final String answer;
-
-  HelpQuestion(this.question, this.answer);
-}
-
 class HelpState {}
 
 class HelpStateLoading extends HelpState {}
@@ -31,7 +24,6 @@ class HelpStateLoaded extends HelpState {
         helpText: helpText ?? this.helpText,
         helpSubtext: helpSubtext ?? this.helpSubtext,
         questions: questions ?? this.questions,
-        //answers: answers ?? this.answers,
       );
 }
 
