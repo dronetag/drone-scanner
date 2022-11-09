@@ -11,106 +11,16 @@ import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '/utils/csvlogger.dart';
 import '../../utils/utils.dart';
+import 'aircraft_expiration_cubit.dart';
 
-class AircraftState {
-  final Map<String, List<MessagePack>> _packHistory;
-  final bool cleanOldPacks;
-  final double cleanTimeSec;
-  // map of aircraft labels given by user
-  // keys are aircraft mac adresses, values are labels
-  final Map<String, String> aircraftLabels;
-
-  Map<String, List<MessagePack>> packHistory() {
-    return _packHistory;
-  }
-
-  Map<String, List<MessagePack>> packHistoryByLastUpdate() {
-    return Map.fromEntries(
-      _packHistory.entries.toList()
-        ..sort(
-          (e1, e2) {
-            if (e1.value.last.lastUpdate.isBefore(e2.value.last.lastUpdate)) {
-              return 1;
-            }
-            return -1;
-          },
-        ),
-    );
-  }
-
-  Map<String, List<MessagePack>> packHistoryByUASID() {
-    return Map.fromEntries(
-      _packHistory.entries.toList()
-        ..sort(
-          (e1, e2) {
-            if (e1.value.last.basicIdMessage == null) return 1;
-            if (e2.value.last.basicIdMessage == null) return -1;
-            return e1.value.last.basicIdMessage!.uasId
-                .compareTo(e2.value.last.basicIdMessage!.uasId);
-          },
-        ),
-    );
-  }
-
-  Map<String, List<MessagePack>> packHistoryByDistance(LatLng userPos) {
-    return Map.fromEntries(
-      _packHistory.entries.toList()
-        ..sort(
-          (e1, e2) {
-            if (!e1.value.last.locationValid()) return 0;
-            if (!e2.value.last.locationValid()) return 0;
-
-            final e1Dist = calculateDistance(
-              e1.value.last.locationMessage!.latitude!,
-              e1.value.last.locationMessage!.longitude!,
-              userPos.latitude,
-              userPos.longitude,
-            );
-            final e2Dist = calculateDistance(
-              e2.value.last.locationMessage!.latitude!,
-              e2.value.last.locationMessage!.longitude!,
-              userPos.latitude,
-              userPos.longitude,
-            );
-            if (e1Dist < e2Dist) {
-              return -1;
-            }
-            return 1;
-          },
-        ),
-    );
-  }
-
-  AircraftState(
-      {required Map<String, List<MessagePack>> packHistory,
-      required this.cleanOldPacks,
-      required this.cleanTimeSec,
-      required this.aircraftLabels})
-      : _packHistory = packHistory;
-
-  AircraftState copyWith({
-    Map<String, List<MessagePack>>? packHistory,
-    bool? cleanOldPacks,
-    double? cleanTimeSec,
-    Map<String, String>? aircraftLabels,
-  }) =>
-      AircraftState(
-        packHistory: packHistory ?? _packHistory,
-        cleanOldPacks: cleanOldPacks ?? this.cleanOldPacks,
-        cleanTimeSec: cleanTimeSec ?? this.cleanTimeSec,
-        aircraftLabels: aircraftLabels ?? this.aircraftLabels,
-      );
-}
+part 'aircraft_state.dart';
 
 class AircraftCubit extends Cubit<AircraftState> {
-  Map<String, List<MessagePack>> packHistoryBuffer = {};
-  final Map<String, Timer> _expiryTimers = {};
   Timer? _refreshTimer;
-  AircraftState? stateMemento;
+  AircraftExpirationCubit expirationCubit;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
 
@@ -161,13 +71,14 @@ class AircraftCubit extends Cubit<AircraftState> {
     ),
   ];
 
-  AircraftCubit()
-      : super(AircraftState(
-          packHistory: <String, List<MessagePack>>{},
-          cleanOldPacks: false,
-          cleanTimeSec: 60.0,
-          aircraftLabels: <String, String>{},
-        )) {
+  AircraftCubit(this.expirationCubit)
+      : super(
+          AircraftState(
+            packHistory: <String, List<MessagePack>>{},
+            aircraftLabels: <String, String>{},
+          ),
+        ) {
+    expirationCubit.setDeleteCallback(deletePack);
     fetchSavedLabels();
   }
 
@@ -176,9 +87,16 @@ class AircraftCubit extends Cubit<AircraftState> {
     stopEmitTimer();
     _refreshTimer = Timer.periodic(
       duration,
-      (_) {
-        emit(state.copyWith(packHistory: packHistoryBuffer));
-      },
+      (_) => aircraftUpdate,
+    );
+  }
+
+  void aircraftUpdate() {
+    emit(
+      AircraftStateUpdate(
+        packHistory: state.packHistory(),
+        aircraftLabels: state.aircraftLabels,
+      ),
     );
   }
 
@@ -186,23 +104,6 @@ class AircraftCubit extends Cubit<AircraftState> {
     if (_refreshTimer != null) {
       _refreshTimer!.cancel();
       _refreshTimer = null;
-    }
-  }
-
-  // load persistently saved settings
-  Future<void> fetchSavedSettings() async {
-    final preferences = await SharedPreferences.getInstance();
-    final cleanPacks = preferences.getBool('cleanOldPacks');
-    if (cleanPacks == null) {
-      emit(state.copyWith(cleanOldPacks: false));
-    } else {
-      emit(state.copyWith(cleanOldPacks: cleanPacks));
-    }
-    final cleanPacksSec = preferences.getDouble('cleanTimeSec');
-    if (cleanPacksSec == null) {
-      emit(state.copyWith(cleanTimeSec: 60));
-    } else {
-      emit(state.copyWith(cleanTimeSec: cleanPacksSec));
     }
   }
 
@@ -217,7 +118,9 @@ class AircraftCubit extends Cubit<AircraftState> {
       final labelsMap = <String, String>{};
       (json.decode(labels as String) as Map<String, dynamic>)
           .forEach((key, value) => labelsMap[key] = value as String);
-      emit(state.copyWith(aircraftLabels: labelsMap));
+      emit(
+        state.copyWith(aircraftLabels: labelsMap),
+      );
     }
   }
 
@@ -225,7 +128,9 @@ class AircraftCubit extends Cubit<AircraftState> {
   Future<void> addAircraftLabel(String mac, String label) async {
     var labels = state.aircraftLabels;
     labels[mac] = label;
-    emit(state.copyWith(aircraftLabels: labels));
+    emit(
+      state.copyWith(aircraftLabels: labels),
+    );
     await _saveLabels();
   }
 
@@ -233,7 +138,9 @@ class AircraftCubit extends Cubit<AircraftState> {
   Future<void> deleteAircraftLabel(String mac) async {
     var labels = state.aircraftLabels;
     labels.remove(mac);
-    emit(state.copyWith(aircraftLabels: labels));
+    emit(
+      state.copyWith(aircraftLabels: labels),
+    );
     await _saveLabels();
   }
 
@@ -246,65 +153,6 @@ class AircraftCubit extends Cubit<AircraftState> {
     await fetchSavedLabels();
   }
 
-  Future<void> setCleanOldPacks({required bool clean}) async {
-    // persistently save this settings
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setBool('cleanOldPacks', clean);
-    // cancel or restart expiry timers
-    if (!clean) {
-      _expiryTimers.forEach(
-        (key, value) {
-          value.cancel();
-        },
-      );
-    } else {
-      resetExpiryTimers();
-    }
-    emit(state.copyWith(cleanOldPacks: clean));
-  }
-
-  Future<void> setcleanTimeSec(double s) async {
-    // persistently save this setting
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setDouble('cleanTimeSec', s);
-    emit(state.copyWith(cleanTimeSec: s));
-    if (!state.cleanOldPacks) return;
-    resetExpiryTimers();
-  }
-
-  void resetExpiryTimers() {
-    final toDelete = <String>[];
-    packHistoryBuffer.forEach((key, value) {
-      if (packHistoryBuffer[key] == null ||
-          packHistoryBuffer[key]!.isEmpty ||
-          packHistoryBuffer[key]!.last.locationMessage == null) {
-        return;
-      }
-      final lastTStamp =
-          state.packHistory()[key]!.last.locationMessage!.receivedTimestamp;
-      final packAgeSec =
-          (DateTime.now().millisecondsSinceEpoch - lastTStamp) / 1000;
-      final duration = state.cleanTimeSec - packAgeSec.toInt();
-      if (duration <= 0) {
-        toDelete.add(key);
-        return;
-      }
-      if (_expiryTimers[key] != null) {
-        _expiryTimers[key]?.cancel();
-      }
-      _expiryTimers[key] = Timer(
-          Duration(seconds: state.cleanTimeSec.toInt() - packAgeSec.toInt()),
-          () {
-        // remove if packs expire
-        deletePack(key);
-      });
-    });
-    for (final element in toDelete) {
-      deletePack(element);
-    }
-    emit(state.copyWith(packHistory: packHistoryBuffer));
-  }
-
   MessagePack? findByMacAddress(String mac) {
     return state.packHistory()[mac]?.last;
   }
@@ -314,8 +162,10 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<void> clear() async {
-    packHistoryBuffer = {};
-    emit(state.copyWith(packHistory: packHistoryBuffer));
+    emit(
+      AircraftStateUpdate(
+          packHistory: {}, aircraftLabels: state.aircraftLabels),
+    );
   }
 
   Future<void> addPack(MessagePack pack) async {
@@ -323,24 +173,23 @@ class AircraftCubit extends Cubit<AircraftState> {
       // set received time
       pack.locationMessage?.receivedTimestamp =
           DateTime.now().millisecondsSinceEpoch;
-      final data = packHistoryBuffer;
-      //
+      final data = state._packHistory;
+      // new pack
       if (!data.containsKey(pack.macAddress)) {
         data[pack.macAddress] = [pack];
       } else {
+        // update of already seen aircraft
         data[pack.macAddress]?.add(pack);
-        // restart expiry timer
-        _expiryTimers[pack.macAddress]?.cancel();
+        // remove old and start new expiry timer
+        expirationCubit.removeTimer(pack.macAddress);
       }
-      if (state.cleanOldPacks) {
-        _expiryTimers[pack.macAddress] = Timer(
-          Duration(seconds: state.cleanTimeSec.toInt()),
-          () {
-            // remove if packs expire
-            deletePack(pack.macAddress);
-          },
-        );
-      }
+      expirationCubit.addTimer(pack.macAddress);
+      emit(
+        AircraftStateBuffering(
+          packHistory: data,
+          aircraftLabels: state.aircraftLabels,
+        ),
+      );
     } on Exception {
       rethrow;
     }
@@ -358,7 +207,10 @@ class AircraftCubit extends Cubit<AircraftState> {
     try {
       final data = state.packHistory();
       data[pack.macAddress] = [pack];
-      emit(state.copyWith(packHistory: data));
+      emit(
+        AircraftStateUpdate(
+            packHistory: data, aircraftLabels: state.aircraftLabels),
+      );
     } on Exception {
       rethrow;
     }
@@ -371,13 +223,14 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<void> deletePack(String mac) async {
-    if (_expiryTimers.containsKey(mac)) {
-      _expiryTimers.remove(mac);
-    }
+    expirationCubit.removeTimer(mac);
 
-    final data = packHistoryBuffer;
+    final data = state._packHistory;
     data.removeWhere((key, _) => mac == key);
-    emit(state.copyWith(packHistory: data));
+    emit(
+      AircraftStateUpdate(
+          packHistory: data, aircraftLabels: state.aircraftLabels),
+    );
   }
 
   Future<void> exportPacksToCSV({required bool save}) async {
@@ -471,11 +324,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     }
   }
 
-  void cacheCurrentState() {
-    stateMemento = state.copyWith();
-  }
-
-  void applyCachedState() {
-    if (stateMemento != null) emit(stateMemento!);
+  void applyState(AircraftState state) {
+    emit(state);
   }
 }

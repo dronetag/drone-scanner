@@ -135,7 +135,6 @@ class AircraftCard extends StatelessWidget {
   }
 
   Widget buildTrailing(BuildContext context) {
-    final loc = messagePack.locationMessage;
     if (messagePack.basicIdMessage != null &&
         messagePack.basicIdMessage?.uaType != null) {
       // to-do: icon according to basic.uaType

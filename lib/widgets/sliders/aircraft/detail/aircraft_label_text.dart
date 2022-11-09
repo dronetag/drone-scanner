@@ -26,16 +26,30 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
           widget.aircraftMac,
         )
         .then((value) => setState(() {
+              final snackBarText = 'Label deleted.';
+              showSnackBar(
+                context,
+                snackBarText,
+              );
               isInit = false;
               _controller.clear();
             }));
   }
 
   void submitCallback() {
-    context.read<AircraftCubit>().addAircraftLabel(
+    context
+        .read<AircraftCubit>()
+        .addAircraftLabel(
           widget.aircraftMac,
           _controller.text,
-        );
+        )
+        .then((_) {
+      final snackBarText = 'Label saved.';
+      showSnackBar(
+        context,
+        snackBarText,
+      );
+    });
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
@@ -72,6 +86,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
                 ),
                 controller: _controller,
                 onSubmitted: (_) => submitCallback,
+                onEditingComplete: submitCallback,
               ),
             ),
             const SizedBox(

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show MissingPluginException;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
@@ -38,6 +39,7 @@ class MapUIGoogle extends StatefulWidget {
 
 class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
   late CameraPosition initialCameraPosition;
+  List<dynamic> mapObjects = [];
 
   @override
   void dispose() {
@@ -60,8 +62,20 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final mapObjects =
-        context.read<MapCubit>().constructAirspaceMapObjects(context);
+    return BlocBuilder<AircraftCubit, AircraftState>(
+      buildWhen: (previous, current) {
+        return current is AircraftStateUpdate;
+      },
+      builder: (context, state) => buildMapStack(context),
+    );
+  }
+
+  Widget buildMapStack(BuildContext context) {
+    // do not reload objects if camera is moving
+    if (!context.watch<MapCubit>().state.cameraMoving) {
+      mapObjects =
+          context.read<MapCubit>().constructAirspaceMapObjects(context);
+    }
     final height = MediaQuery.of(context).size.height;
     final selZone = context.watch<SelectedZoneCubit>().state.selectedZone;
     final selItemMac =

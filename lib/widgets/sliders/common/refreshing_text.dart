@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:timer_builder/timer_builder.dart';
 
-import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';
 import '../../../constants/colors.dart';
 
@@ -45,12 +45,12 @@ class _RefreshingTextState extends State<RefreshingText> {
       const Duration(seconds: 1),
       builder: (context) {
         final packAge = (DateTime.now().millisecondsSinceEpoch - tstamp) / 1000;
-        final expiresSoon = !context
-                .watch<ShowcaseCubit>()
-                .state
-                .showcaseActive &&
-            context.watch<AircraftCubit>().state.cleanOldPacks &&
-            ((context.watch<AircraftCubit>().state.cleanTimeSec - packAge) < 3);
+        final expiresSoon =
+            !context.watch<ShowcaseCubit>().state.showcaseActive &&
+                context.watch<AircraftExpirationCubit>().state.cleanOldPacks &&
+                ((context.watch<AircraftExpirationCubit>().state.cleanTimeSec -
+                        packAge) <
+                    3);
         final sec = (DateTime.now().millisecondsSinceEpoch - tstamp) / 1000;
         final min = (sec / 60).floor();
         final minText = min < 1 ? '' : '${min}m';
@@ -67,7 +67,8 @@ class _RefreshingTextState extends State<RefreshingText> {
         }
         if (widget.showExpiryWarning && expiresSoon && !widget.short) {
           final expiryTime =
-              context.watch<AircraftCubit>().state.cleanTimeSec - packAge;
+              context.watch<AircraftExpirationCubit>().state.cleanTimeSec -
+                  packAge;
           text += '\nExpires in ${expiryTime.toStringAsFixed(0)} sec';
         }
         return Text(

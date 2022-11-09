@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../../constants/colors.dart';
 
 class CleanPacksCheckbox extends StatefulWidget {
@@ -17,7 +18,7 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
   bool _cleanPacks = false;
   @override
   Widget build(BuildContext context) {
-    _cleanPacks = context.read<AircraftCubit>().state.cleanOldPacks;
+    _cleanPacks = context.read<AircraftExpirationCubit>().state.cleanOldPacks;
     return SizedBox(
       width: 40,
       child: Switch(
@@ -31,7 +32,10 @@ class _CleanPacksCheckboxState extends State<CleanPacksCheckbox> {
         onChanged: (c) {
           setState(() {
             _cleanPacks = c;
-            context.read<AircraftCubit>().setCleanOldPacks(clean: c);
+            final packs = context.read<AircraftCubit>().state.packHistory();
+            context
+                .read<AircraftExpirationCubit>()
+                .setCleanOldPacks(packs, clean: c);
           });
         },
       ),

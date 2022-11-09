@@ -12,20 +12,25 @@ import 'sliders_cubit.dart';
 class ShowcaseState {
   bool showcaseActive;
   bool showcaseAlreadyPlayed;
+  // keep aircraft state and apply it after showcase ends
+  // so user wont lose data when starting showcase with data already gathered
+  AircraftState? aircraftState;
 
-  ShowcaseState({
-    required this.showcaseActive,
-    required this.showcaseAlreadyPlayed,
-  });
+  ShowcaseState(
+      {required this.showcaseActive,
+      required this.showcaseAlreadyPlayed,
+      this.aircraftState});
 
   ShowcaseState copyWith({
     bool? showcaseActive,
     bool? showcaseAlreadyPlayed,
+    AircraftState? aircraftState,
   }) =>
       ShowcaseState(
         showcaseActive: showcaseActive ?? this.showcaseActive,
         showcaseAlreadyPlayed:
             showcaseAlreadyPlayed ?? this.showcaseAlreadyPlayed,
+        aircraftState: aircraftState ?? this.aircraftState,
       );
 }
 
@@ -132,7 +137,9 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
           .read<AircraftCubit>()
           .removeShowcaseDummyPack()
           .then((value) {
-        context.read<AircraftCubit>().applyCachedState();
+        if (state.aircraftState != null) {
+          context.read<AircraftCubit>().applyState(state.aircraftState!);
+        }
         context.read<OpendroneIdCubit>().start();
       });
     }
@@ -146,12 +153,13 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
           .read<AircraftCubit>()
           .clear()
           .then((value) => _startShowcaseRoutine(context));
-      emit(state.copyWith(showcaseActive: true));
+      emit(state.copyWith(
+          showcaseActive: true,
+          aircraftState: context.read<AircraftCubit>().state));
     });
   }
 
   void _startShowcaseRoutine(BuildContext context) {
-    context.read<AircraftCubit>().cacheCurrentState();
     context.read<SlidersCubit>().setShowDroneDetail(show: false);
     context.read<AircraftCubit>().addShowcaseDummyPack();
     context.read<SlidersCubit>().panelController.animatePanelToSnapPoint();
@@ -162,7 +170,9 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
 
   void onShowcaseFinish(BuildContext context) {
     context.read<AircraftCubit>().removeShowcaseDummyPack();
-    context.read<AircraftCubit>().applyCachedState();
+    if (state.aircraftState != null) {
+      context.read<AircraftCubit>().applyState(state.aircraftState!);
+    }
     context.read<OpendroneIdCubit>().start();
     emit(state.copyWith(showcaseActive: false));
   }
