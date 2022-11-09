@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/help/help_question.dart';
@@ -72,11 +73,25 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
                 onTapLink: (text, href, title) {
                   if (href == null) return;
                   if (href == 'dronescanner/preferences') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PreferencesPage()),
-                    );
+                    final historyObserver = NavigationHistoryObserver();
+                    // if page before current is preferences, just pop
+                    if (historyObserver
+                            .history[historyObserver.history.length - 2]
+                            .settings
+                            .name ==
+                        PreferencesPage.routeName) {
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PreferencesPage(),
+                          settings: RouteSettings(
+                            name: PreferencesPage.routeName,
+                          ),
+                        ),
+                      );
+                    }
                     return;
                   }
                   final url = Uri.parse(href);
