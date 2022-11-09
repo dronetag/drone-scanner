@@ -24,9 +24,9 @@ class HelpCubit extends Cubit<HelpState> {
       query: _query,
     );
     try {
+      emit(HelpStateLoading());
       final response = await http.get(url);
       final loadedQuestions = <HelpQuestion>[];
-
       // map with string keys, value is another map
       final extractedData = (json.decode(response.body))['data'] as Map;
       final helpText = extractedData['excerpt'] as String;
@@ -34,10 +34,26 @@ class HelpCubit extends Cubit<HelpState> {
 
       final questionList = extractedData['displayed_questions'] as List;
       for (var i = 0; i < questionList.length; ++i) {
-        final question = questionList[i]['question']['translations'][1]
-            ['question'] as String;
-        final answer =
-            questionList[i]['question']['translations'][1]['answer'] as String;
+        // find english translation
+        final questionTranslations =
+            questionList[i]['question']['translations'] as List;
+        var translationIndex = 0;
+        var found = false;
+        for (;
+            translationIndex < questionTranslations.length;
+            ++translationIndex) {
+          if (questionTranslations[translationIndex]['languages_id'] == 'en') {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          continue;
+        }
+        final question =
+            questionTranslations[translationIndex]['question'] as String;
+        final answer = questionList[i]['question']['translations']
+            [translationIndex]['answer'] as String;
         loadedQuestions.add(HelpQuestion(question, answer));
       }
       emit(
