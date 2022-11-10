@@ -72,7 +72,7 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
                 data: widget.question.answer,
                 onTapLink: (text, href, title) {
                   if (href == null) return;
-                  if (href == 'dronescanner/preferences') {
+                  if (href == 'dronescanner://preferences') {
                     final historyObserver = NavigationHistoryObserver();
                     // if page before current is preferences, just pop
                     if (historyObserver
