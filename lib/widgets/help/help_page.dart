@@ -10,7 +10,7 @@ import 'help_question_widget.dart';
 
 class HelpPage extends StatelessWidget {
   static const routeName = 'HelpPage';
-
+  static const iphoneWifiQuestionIndex = 3;
   final int? highlightedQuestionIndex;
   const HelpPage({Key? key, this.highlightedQuestionIndex}) : super(key: key);
 
