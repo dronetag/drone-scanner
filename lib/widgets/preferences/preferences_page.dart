@@ -163,45 +163,44 @@ class PreferencesPage extends StatelessWidget {
         padding: itemPadding,
         child: ScanningStatusField(),
       ),
-      if (!context.read<StandardsCubit>().state.androidSystem)
-        Padding(
-          padding: itemPadding,
-          child: GestureDetector(
-            onTap: (() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HelpPage(
-                    highlightedQuestionIndex: 3,
-                  ),
-                  settings: RouteSettings(
-                    name: HelpPage.routeName,
-                  ),
+      Padding(
+        padding: itemPadding,
+        child: GestureDetector(
+          onTap: (() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HelpPage(
+                  highlightedQuestionIndex: HelpPage.iphoneWifiQuestionIndex,
                 ),
-              );
-            }),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.help_outline,
+                settings: RouteSettings(
+                  name: HelpPage.routeName,
+                ),
+              ),
+            );
+          }),
+          child: Row(
+            children: [
+              Icon(
+                Icons.help_outline,
+                color: AppColors.highlightBlue,
+                size: Sizes.textIconSize,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Why Wi-Fi cannot be enabled on the iPhone?',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
                   color: AppColors.highlightBlue,
-                  size: Sizes.textIconSize,
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Why I cannot enable Wi-Fi on my iPhone?',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.highlightBlue,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+      ),
       Headline(
         text: 'Standards',
         child: Tooltip(
