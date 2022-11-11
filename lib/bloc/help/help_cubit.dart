@@ -10,6 +10,7 @@ class HelpCubit extends Cubit<HelpState> {
   static const String _path = 'items/drone_scanner_help_section';
   static const String _query =
       'fields=*,displayed_questions.question.translations.*,displayed_questions.question.id';
+  static const iphoneWifiQuestionIndex = 9;
 
   HelpCubit()
       : super(
@@ -50,12 +51,14 @@ class HelpCubit extends Cubit<HelpState> {
         if (!found) {
           continue;
         }
+        final questionId = questionTranslations[translationIndex]
+            ['frequently_asked_questions_id'] as int;
         final question =
             (questionTranslations[translationIndex]['question'] as String)
                 .replaceAll('\n', '');
         final answer =
             (questionTranslations[translationIndex]['answer'] as String);
-        loadedQuestions.add(HelpQuestion(question, answer));
+        loadedQuestions.add(HelpQuestion(questionId, question, answer));
       }
       emit(
         HelpStateLoaded(

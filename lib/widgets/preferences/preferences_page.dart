@@ -6,6 +6,7 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
+import '../../bloc/help/help_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -171,7 +172,7 @@ class PreferencesPage extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => const HelpPage(
-                  highlightedQuestionIndex: HelpPage.iphoneWifiQuestionIndex,
+                  highlightedQuestionIndex: HelpCubit.iphoneWifiQuestionIndex,
                 ),
                 settings: RouteSettings(
                   name: HelpPage.routeName,
