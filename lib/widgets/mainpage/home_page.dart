@@ -5,6 +5,7 @@ import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
+import '../app/app_scaffold.dart';
 import 'home_body.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -46,18 +47,8 @@ class MyHomePage extends StatelessWidget {
                 }
                 return true;
               },
-              child: const ColoredBox(
-                color: Colors.white,
-                child: SafeArea(
-                  top: false,
-                  left: false,
-                  right: false,
-                  child: Scaffold(
-                    // ensure the keyboard does not move the content up
-                    resizeToAvoidBottomInset: true,
-                    body: HomeBody(),
-                  ),
-                ),
+              child: AppScaffold(
+                child: HomeBody(),
               ),
             ),
           ),

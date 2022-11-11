@@ -6,6 +6,7 @@ import '../../bloc/help/help_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
+import '../app/app_scaffold.dart';
 import 'help_question_widget.dart';
 
 class HelpPage extends StatelessWidget {
@@ -17,18 +18,14 @@ class HelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<HelpCubit>().fetchHelp();
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: ColoredBox(
-        color: Theme.of(context).backgroundColor,
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).viewPadding.top,
-            left: Sizes.preferencesMargin,
-            right: Sizes.preferencesMargin,
-          ),
-          child: buildContent(context),
+    return AppScaffold(
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).viewPadding.top,
+          left: Sizes.preferencesMargin,
+          right: Sizes.preferencesMargin,
         ),
+        child: buildContent(context),
       ),
     );
   }

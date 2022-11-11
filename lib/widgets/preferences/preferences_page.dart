@@ -12,6 +12,7 @@ import '../../bloc/standards_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
+import '../app/app_scaffold.dart';
 import '../app/dialogs.dart';
 import '../help/help_page.dart';
 import '../showcase/showcase_item.dart';
@@ -40,9 +41,8 @@ class PreferencesPage extends StatelessWidget {
         );
         return ShowCaseWidget(
           builder: Builder(
-            builder: (context) => Scaffold(
-              resizeToAvoidBottomInset: true,
-              body: ShowcaseItem(
+            builder: (context) => AppScaffold(
+              child: ShowcaseItem(
                 showcaseKey: context.read<ShowcaseCubit>().aboutPageKey,
                 description:
                     'This page contains infomation about supported standards '
