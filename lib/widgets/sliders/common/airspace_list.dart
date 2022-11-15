@@ -69,7 +69,7 @@ class AirspaceList extends StatelessWidget {
                         horizontal: Sizes.mapContentMargin),
                     height: contentHeight,
                     child: ListView.separated(
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsets.only(bottom: Sizes.listViewPadding),
                       itemCount: children.length,
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,

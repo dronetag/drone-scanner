@@ -10,15 +10,10 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: Colors.white,
-      child: SafeArea(
-        top: false,
-        left: false,
-        right: false,
-        child: Scaffold(
-          // ensure the keyboard does not move the content up
-          resizeToAvoidBottomInset: true,
-          body: child,
-        ),
+      child: Scaffold(
+        // ensure the keyboard does not move the content up
+        resizeToAvoidBottomInset: true,
+        body: child,
       ),
     );
   }

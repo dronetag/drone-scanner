@@ -85,7 +85,8 @@ class PreferencesPage extends StatelessWidget {
                             },
                           )
                         : ListView.builder(
-                            padding: EdgeInsets.zero,
+                            padding:
+                                EdgeInsets.only(bottom: Sizes.listViewPadding),
                             itemBuilder: (context, index) => itemList[index],
                             itemCount: itemList.length,
                             physics: BouncingScrollPhysics(),

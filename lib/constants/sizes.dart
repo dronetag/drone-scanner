@@ -16,4 +16,5 @@ class Sizes {
   static const preferencesMargin = 20.0;
   static const toolbarMargin = 15.0;
   static const showcaseMargin = 20.0;
+  static const listViewPadding = 32.0;
 }

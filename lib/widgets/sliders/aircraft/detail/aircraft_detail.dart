@@ -98,7 +98,7 @@ class AircraftDetail extends StatelessWidget {
                     height: contentHeight,
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsets.only(bottom: Sizes.listViewPadding),
                       itemCount: dataChildren.length,
                       itemBuilder: (context, index) => dataChildren[index],
                     ),
