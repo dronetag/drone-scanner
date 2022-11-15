@@ -9,6 +9,7 @@ class AppColors {
   static const slate = Color(0xff8D9A9D);
   static const dark = Color(0xff586065);
   static const lightGray = Color.fromARGB(255, 189, 200, 201);
+  static const borderGray = Color(0xFFD7DFDF);
   static const detailHeaderColor = Color.fromARGB(255, 0, 38, 77);
   static const detailButtonsColor = Color.fromARGB(255, 0, 67, 126);
   static const highlightBlue = Color.fromARGB(255, 0, 132, 220);

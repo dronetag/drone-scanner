@@ -6,6 +6,7 @@ import '../../../bloc/standards_cubit.dart';
 import '../../../constants/sizes.dart';
 import '../../app/custom_about_dialog.dart';
 import '../../app/dialogs.dart';
+import '../../help/help_page.dart';
 import '../../preferences/preferences_page.dart';
 import 'custom_popup_menu_divider.dart';
 
@@ -13,6 +14,7 @@ enum ToolbarMenuAction {
   toggleBT,
   toggleWifi,
   openSettings,
+  openHelp,
   openAbout,
 }
 
@@ -146,6 +148,16 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
+        value: ToolbarMenuAction.openHelp,
+        child: Text(
+          'Help',
+          style: labelStyle,
+        ),
+      ),
+      PopupMenuItem(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         value: ToolbarMenuAction.openAbout,
         child: Text(
           'About',
@@ -167,7 +179,23 @@ void handleAction(BuildContext context, ToolbarMenuAction action) {
     case ToolbarMenuAction.openSettings:
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PreferencesPage()),
+        MaterialPageRoute(
+          builder: (context) => const PreferencesPage(),
+          settings: RouteSettings(
+            name: PreferencesPage.routeName,
+          ),
+        ),
+      );
+      break;
+    case ToolbarMenuAction.openHelp:
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HelpPage(),
+          settings: RouteSettings(
+            name: HelpPage.routeName,
+          ),
+        ),
       );
       break;
     case ToolbarMenuAction.openAbout:

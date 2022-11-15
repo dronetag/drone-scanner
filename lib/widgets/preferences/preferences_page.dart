@@ -4,24 +4,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
+import '../../bloc/help/help_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
+import '../app/app_scaffold.dart';
 import '../app/dialogs.dart';
+import '../help/help_page.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/common/headline.dart';
-import 'components/clean_packs_checkbox.dart';
 import 'components/custom_dropdown_button.dart';
 import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
+import 'components/preferences_slider.dart';
+import 'components/scanning_status_field.dart';
 import 'components/screen_sleep_checkbox.dart';
 
 class PreferencesPage extends StatelessWidget {
+  static const routeName = 'PreferencesPage';
   const PreferencesPage({Key? key}) : super(key: key);
 
   @override
@@ -36,9 +42,8 @@ class PreferencesPage extends StatelessWidget {
         );
         return ShowCaseWidget(
           builder: Builder(
-            builder: (context) => Scaffold(
-              resizeToAvoidBottomInset: true,
-              body: ShowcaseItem(
+            builder: (context) => AppScaffold(
+              child: ShowcaseItem(
                 showcaseKey: context.read<ShowcaseCubit>().aboutPageKey,
                 description:
                     'This page contains infomation about supported standards '
@@ -80,7 +85,9 @@ class PreferencesPage extends StatelessWidget {
                             },
                           )
                         : ListView.builder(
-                            padding: EdgeInsets.zero,
+                            padding: MediaQuery.of(context)
+                                .padding
+                                .copyWith(top: 0.0),
                             itemBuilder: (context, index) => itemList[index],
                             itemCount: itemList.length,
                             physics: BouncingScrollPhysics(),
@@ -152,6 +159,51 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
+      Headline(
+        text: 'Enabled Technologies',
+      ),
+      Padding(
+        padding: itemPadding,
+        child: ScanningStatusField(),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: GestureDetector(
+          onTap: (() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HelpPage(
+                  highlightedQuestionIndex: HelpCubit.iphoneWifiQuestionIndex,
+                ),
+                settings: RouteSettings(
+                  name: HelpPage.routeName,
+                ),
+              ),
+            );
+          }),
+          child: Row(
+            children: [
+              Icon(
+                Icons.help_outline,
+                color: AppColors.highlightBlue,
+                size: Sizes.textIconSize,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Why Wi-Fi cannot be enabled on the iPhone?',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.highlightBlue,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       Headline(
         text: 'Standards',
         child: Tooltip(
@@ -332,11 +384,19 @@ class PreferencesPage extends StatelessWidget {
       if (isLandscape) const SizedBox(),
       Padding(
         padding: itemPadding,
-        child: const PreferencesFieldWithDescription(
+        child: PreferencesFieldWithDescription(
           label: 'Clean automatically:',
           description: 'Aircrafts inactive for chosen time '
               'will be automatically cleared',
-          child: CleanPacksCheckbox(),
+          child: PreferencesSlider(
+              getValue: () =>
+                  context.read<AircraftExpirationCubit>().state.cleanOldPacks,
+              setValue: (c) {
+                final packs = context.read<AircraftCubit>().state.packHistory();
+                context
+                    .read<AircraftExpirationCubit>()
+                    .setCleanOldPacks(packs, clean: c);
+              }),
         ),
       ),
       Padding(

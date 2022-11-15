@@ -205,7 +205,12 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     if (key == aboutPageKey) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PreferencesPage()),
+        MaterialPageRoute(
+          builder: (context) => const PreferencesPage(),
+          settings: RouteSettings(
+            name: PreferencesPage.routeName,
+          ),
+        ),
       );
     }
     if (key == droneListItemKey) {

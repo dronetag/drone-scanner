@@ -7,6 +7,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'bloc/aircraft/aircraft_cubit.dart';
 import 'bloc/aircraft/aircraft_expiration_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
+import 'bloc/help/help_cubit.dart';
 import 'bloc/map/map_cubit.dart';
 import 'bloc/opendroneid_cubit.dart';
 import 'bloc/screen_cubit.dart';
@@ -110,6 +111,10 @@ void main() async {
               selectedAircraftCubit: selectedCubit,
               aircraftCubit: aircraftCubit,
             ),
+            lazy: false,
+          ),
+          BlocProvider<HelpCubit>(
+            create: (context) => HelpCubit(),
             lazy: false,
           ),
         ],
