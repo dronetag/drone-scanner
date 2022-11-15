@@ -53,7 +53,7 @@ class HelpPage extends StatelessWidget {
       ),
     ];
     return ScrollablePositionedList.builder(
-      padding: EdgeInsets.only(bottom: Sizes.listViewPadding),
+      padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
       itemBuilder: (context, index) => itemList[index],
       itemCount: itemList.length,
       physics: BouncingScrollPhysics(),
@@ -96,7 +96,7 @@ class HelpPage extends StatelessWidget {
       Center(child: CircularProgressIndicator()),
     ];
     return ListView.builder(
-      padding: EdgeInsets.only(bottom: Sizes.listViewPadding),
+      padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
       itemBuilder: (context, index) => itemList[index],
       itemCount: itemList.length,
       physics: BouncingScrollPhysics(),
@@ -137,7 +137,7 @@ class HelpPage extends StatelessWidget {
       ),
     ];
     return ListView.builder(
-      padding: EdgeInsets.only(bottom: Sizes.listViewPadding),
+      padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
       itemBuilder: (context, index) => itemList[index],
       itemCount: itemList.length,
       physics: BouncingScrollPhysics(),

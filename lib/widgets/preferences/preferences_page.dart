@@ -85,8 +85,9 @@ class PreferencesPage extends StatelessWidget {
                             },
                           )
                         : ListView.builder(
-                            padding:
-                                EdgeInsets.only(bottom: Sizes.listViewPadding),
+                            padding: MediaQuery.of(context)
+                                .padding
+                                .copyWith(top: 0.0),
                             itemBuilder: (context, index) => itemList[index],
                             itemCount: itemList.length,
                             physics: BouncingScrollPhysics(),
