@@ -66,8 +66,7 @@ class AirspaceListHeader extends StatelessWidget {
               ),
             ),
           ),
-          if (context.read<SlidersCubit>().panelController.isAttached &&
-              !context.read<SlidersCubit>().panelController.isPanelClosed)
+          if (context.read<SlidersCubit>().panelController.isAttached)
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Sizes.mapContentMargin,
@@ -100,23 +99,27 @@ class AirspaceListHeader extends StatelessWidget {
                         ],
                       ),
                     ),*/
-                  Row(
-                    children: [
-                      const SizedBox(),
-                      if (context.watch<SlidersCubit>().state.filterValue !=
-                          FilterValue.zones)
-                        const Text(
-                          'Sort by',
-                          style: labelStyle,
+                  if (!context
+                      .read<SlidersCubit>()
+                      .panelController
+                      .isPanelClosed)
+                    Row(
+                      children: [
+                        const SizedBox(),
+                        if (context.watch<SlidersCubit>().state.filterValue !=
+                            FilterValue.zones)
+                          const Text(
+                            'Sort by',
+                            style: labelStyle,
+                          ),
+                        const SizedBox(
+                          width: 5,
                         ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      if (context.read<SlidersCubit>().state.filterValue !=
-                          FilterValue.zones)
-                        buildSortCombo(context),
-                    ],
-                  ),
+                        if (context.read<SlidersCubit>().state.filterValue !=
+                            FilterValue.zones)
+                          buildSortCombo(context),
+                      ],
+                    ),
 
                   /*const SizedBox(
                       width: 10,

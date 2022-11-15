@@ -38,9 +38,7 @@ class AirspaceList extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = calcHeaderHeight(context);
-    final minSliderHeight = isLandscape
-        ? height / Sizes.toolbarMinSizeRatioLandscape
-        : height / Sizes.toolbarMinSizeRatioPortrait;
+    final minSliderHeight = headerHeight;
     final snapHeight =
         minSliderHeight + (maxSliderHeight - minSliderHeight) * 0.3;
     final contentHeight = context.watch<SlidersCubit>().isAtSnapPoint()

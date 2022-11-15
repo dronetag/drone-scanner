@@ -52,9 +52,7 @@ class HomeBody extends StatelessWidget {
             statusBarHeight: MediaQuery.of(context).viewPadding.top,
             androidSystem: context.read<StandardsCubit>().state.androidSystem,
           ),
-          minSize: isLandscape
-              ? height / Sizes.toolbarMinSizeRatioLandscape
-              : height / Sizes.toolbarMinSizeRatioPortrait,
+          minSize: calcHeaderHeight(context),
         ),
       ],
     );
