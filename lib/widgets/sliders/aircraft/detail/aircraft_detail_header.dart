@@ -79,8 +79,7 @@ class AircraftDetailHeader extends StatelessWidget {
               ),
             ),
           ),
-          if (context.read<SlidersCubit>().panelController.isAttached &&
-              !context.read<SlidersCubit>().panelController.isPanelClosed)
+          if (context.read<SlidersCubit>().panelController.isAttached)
             messagePackList.isNotEmpty
                 ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
                 : Container(),
