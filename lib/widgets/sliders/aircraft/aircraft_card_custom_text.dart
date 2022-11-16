@@ -35,7 +35,8 @@ class AircraftCardCustomText extends StatelessWidget {
           context.read<MapCubit>().state.userLocation.latitude,
           context.read<MapCubit>().state.userLocation.longitude,
         );
-        if (!context.read<StandardsCubit>().state.locationEnabled) {
+        if (!context.read<StandardsCubit>().state.locationEnabled ||
+            !context.read<MapCubit>().state.userLocationValid) {
           return emptyText;
         } else {
           text = '~${distanceFromMe.toStringAsFixed(2)} km away';
