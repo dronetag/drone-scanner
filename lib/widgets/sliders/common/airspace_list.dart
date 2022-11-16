@@ -35,8 +35,6 @@ class AirspaceList extends StatelessWidget {
       statusBarHeight: MediaQuery.of(context).viewPadding.top,
       androidSystem: context.read<StandardsCubit>().state.androidSystem,
     );
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = calcHeaderHeight(context);
     final minSliderHeight = headerHeight;
     final snapHeight =
