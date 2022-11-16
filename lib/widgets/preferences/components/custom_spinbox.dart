@@ -50,8 +50,9 @@ class CustomSpinBox extends StatelessWidget {
               step: step,
               showButtons: false,
               onChanged: (v) {
-                if (v < minVal) v = minVal;
-                if (v > maxVal) v = maxVal;
+                if (v < minVal || v > maxVal) {
+                  return;
+                }
                 final packs = context.read<AircraftCubit>().state.packHistory();
                 context.read<AircraftExpirationCubit>().setcleanTimeSec(
                       v,

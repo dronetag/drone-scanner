@@ -401,13 +401,10 @@ class PreferencesPage extends StatelessWidget {
       ),
       Padding(
         padding: itemPadding,
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            const Text('Expiration time (sec):'),
-            Container(width: width / 3, child: CustomSpinBox()),
-          ],
+        child: PreferencesFieldWithDescription(
+          label: 'Expiration time (sec):',
+          description: 'Set the duration between 10 and 600 seconds',
+          child: Container(width: width / 3, child: CustomSpinBox()),
         ),
       ),
       Padding(
