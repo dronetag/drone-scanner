@@ -37,19 +37,28 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
   }
 
   void submitCallback() {
-    context
-        .read<AircraftCubit>()
-        .addAircraftLabel(
-          widget.aircraftMac,
-          _controller.text,
-        )
-        .then((_) {
-      final snackBarText = 'Label saved.';
-      showSnackBar(
-        context,
-        snackBarText,
-      );
-    });
+    if (_controller.text.isNotEmpty) {
+      // check if label is not just whitespaces
+      if (_controller.text.trim() != '') {
+        context
+            .read<AircraftCubit>()
+            .addAircraftLabel(
+              widget.aircraftMac,
+              _controller.text,
+            )
+            .then((_) {
+          final snackBarText = 'Label  \"${_controller.text}\" saved.';
+          showSnackBar(
+            context,
+            snackBarText,
+          );
+        });
+      } else {
+        _controller.text = '';
+      }
+    } else {
+      deleteLabelCallback();
+    }
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
