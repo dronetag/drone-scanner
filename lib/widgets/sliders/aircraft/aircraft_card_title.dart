@@ -46,6 +46,7 @@ class AircraftCardTitle extends StatelessWidget {
           ),
         ],
       ),
+      textAlign: TextAlign.left,
     );
   }
 }
