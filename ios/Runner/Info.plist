@@ -30,6 +30,10 @@
 	<string>Drone Scanner needs the bluetooth permission to acquire data from nearby aircraft.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Drone Scanner uses Bluetooth gather data from nearby aircraft.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Application needs Your location to show nearby aircraft.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Application needs Your location to show nearby aircraft.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Application needs Your location to show nearby aircraft.</string>
 	<key>UILaunchStoryboardName</key>
