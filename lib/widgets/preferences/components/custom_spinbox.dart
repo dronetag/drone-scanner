@@ -39,7 +39,7 @@ class CustomSpinBox extends StatelessWidget {
           child: SizedBox(
             width: width / 6,
             child: SpinBox(
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.numberWithOptions(signed: true),
               min: minVal,
               max: maxVal,
               value: context
