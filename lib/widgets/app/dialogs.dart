@@ -46,7 +46,6 @@ void showSnackBar(
   Color textColor = Colors.white,
 }) {
   final snackBar = SnackBar(
-    elevation: MediaQuery.of(context).size.height / 2,
     backgroundColor: AppColors.darkGray.withOpacity(AppColors.toolbarOpacity),
     duration: const Duration(milliseconds: 1500),
     behavior: SnackBarBehavior.floating,
