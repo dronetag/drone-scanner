@@ -37,6 +37,7 @@ class OperatorFields {
     late final String distanceText;
     final systemDataValid = systemMessage != null;
     if (context.read<StandardsCubit>().state.locationEnabled &&
+        context.read<MapCubit>().state.userLocationValid &&
         systemDataValid &&
         locValid(systemMessage)) {
       distanceFromMe = calculateDistance(

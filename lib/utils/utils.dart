@@ -195,7 +195,7 @@ Image? getManufacturerLogo({String? manufacturer, Color color = Colors.black}) {
   return Image.asset(
     path,
     height: 16,
-    width: 24,
+    width: 20,
     alignment: Alignment.centerLeft,
     color: color,
   );

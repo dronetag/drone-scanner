@@ -19,8 +19,6 @@ class HomeBody extends StatelessWidget {
   }) : super(key: key);
 
   Stack buildMapView(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
     final height = MediaQuery.of(context).size.height;
     // acc to doc, wakelock should not be used in main but in widgets build m
     Wakelock.toggle(
@@ -52,9 +50,7 @@ class HomeBody extends StatelessWidget {
             statusBarHeight: MediaQuery.of(context).viewPadding.top,
             androidSystem: context.read<StandardsCubit>().state.androidSystem,
           ),
-          minSize: isLandscape
-              ? height / Sizes.toolbarMinSizeRatioLandscape
-              : height / Sizes.toolbarMinSizeRatioPortrait,
+          minSize: calcHeaderHeight(context),
         ),
       ],
     );

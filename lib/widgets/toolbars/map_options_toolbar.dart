@@ -59,7 +59,12 @@ class MapOptionsToolbar extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   iconSize: Sizes.iconSize,
                   onPressed: () {
-                    context.read<MapCubit>().centerToUser();
+                    context
+                        .read<MapCubit>()
+                        .centerToUser()
+                        ?.catchError((error) {
+                      showSnackBar(context, 'Location not enabled.');
+                    });
                   },
                   icon: const Icon(
                     Icons.location_searching,

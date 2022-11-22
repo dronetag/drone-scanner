@@ -47,12 +47,8 @@ class AircraftDetail extends StatelessWidget {
       statusBarHeight: MediaQuery.of(context).viewPadding.top,
       androidSystem: context.read<StandardsCubit>().state.androidSystem,
     );
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
     final headerHeight = calcHeaderHeight(context);
-    final minSliderHeight = isLandscape
-        ? height / Sizes.toolbarMinSizeRatioLandscape
-        : height / Sizes.toolbarMinSizeRatioPortrait;
+    final minSliderHeight = headerHeight;
     final snapHeight =
         minSliderHeight + (maxSliderHeight - minSliderHeight) * 0.3;
     final contentHeight = context.watch<SlidersCubit>().isAtSnapPoint()

@@ -34,6 +34,7 @@ class LocationFields {
     double? distanceFromMe;
     late final String distanceText;
     if (context.read<StandardsCubit>().state.locationEnabled &&
+        context.read<MapCubit>().state.userLocationValid &&
         loc != null &&
         locValid(loc)) {
       distanceFromMe = calculateDistance(

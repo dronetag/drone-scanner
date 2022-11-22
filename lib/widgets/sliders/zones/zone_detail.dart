@@ -18,7 +18,8 @@ class ZoneDetail extends StatelessWidget {
 
     final countryCode = zoneItem.country;
     double? distanceFromMe;
-    if (context.read<StandardsCubit>().state.locationEnabled) {
+    if (context.read<StandardsCubit>().state.locationEnabled &&
+        context.read<MapCubit>().state.userLocationValid) {
       distanceFromMe = calculateDistance(
         zoneItem.coordinates.first.latitude,
         zoneItem.coordinates.first.longitude,
