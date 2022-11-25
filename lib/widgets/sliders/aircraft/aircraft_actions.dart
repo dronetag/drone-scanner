@@ -20,6 +20,15 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
   final labelStyle = TextStyle(
     fontSize: 16,
   );
+  final selectedMac =
+      context.read<SelectedAircraftCubit>().state.selectedAircraftMac;
+  if (selectedMac == null) return null;
+  final messagePackList = context.read<AircraftCubit>().packsForDevice(
+        selectedMac,
+      );
+  if (messagePackList == null || messagePackList.isEmpty) {
+    return null;
+  }
   return showMenu<AircraftAction>(
     context: context,
     shape: RoundedRectangleBorder(
@@ -33,6 +42,8 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
           horizontal: 20,
         ),
         value: AircraftAction.mapLock,
+        enabled:
+            messagePackList.isNotEmpty && messagePackList.last.locationValid(),
         child: Text(
           context.read<MapCubit>().state.lockOnPoint
               ? 'Unfollow'
