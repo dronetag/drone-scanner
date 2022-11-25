@@ -104,6 +104,7 @@ void handleAction(BuildContext context, AircraftAction action) {
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
           context.read<AircraftCubit>().deletePack(selectedMac);
           context.read<SelectedAircraftCubit>().unselectAircraft();
+          context.read<MapCubit>().turnOffLockOnPoint();
           showSnackBar(
             context,
             'Aircraft data were deleted.',

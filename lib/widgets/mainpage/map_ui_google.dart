@@ -91,6 +91,7 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
       onTap: selItemMac != null || selZone != null || droppedPin
           ? (_) {
               context.read<SelectedAircraftCubit>().unselectAircraft();
+              context.read<MapCubit>().turnOffLockOnPoint();
               context.read<SelectedZoneCubit>().unselectZone();
               FocusScope.of(context).unfocus();
               context.read<MapCubit>().setDroppedPin(pinDropped: false);

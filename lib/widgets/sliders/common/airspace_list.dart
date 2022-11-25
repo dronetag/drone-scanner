@@ -133,6 +133,7 @@ class AirspaceList extends StatelessWidget {
                     context
                         .read<SelectedAircraftCubit>()
                         .selectAircraft(value.last.macAddress);
+                    context.read<MapCubit>().turnOffLockOnPoint();
                     context.read<SelectedZoneCubit>().unselectZone();
                     if (value.last.locationValid()) {
                       context.read<MapCubit>().centerToLocDouble(
@@ -162,6 +163,7 @@ class AirspaceList extends StatelessWidget {
                         context
                             .read<SelectedAircraftCubit>()
                             .unselectAircraft();
+                        context.read<MapCubit>().turnOffLockOnPoint();
                         context.read<MapCubit>().centerToLocDouble(
                               z.coordinates.first.latitude,
                               z.coordinates.first.longitude,

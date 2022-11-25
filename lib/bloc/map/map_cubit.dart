@@ -111,6 +111,10 @@ class MapCubit extends Cubit<GMapState> {
     emit(state.copyWith(lockOnPoint: !state.lockOnPoint));
   }
 
+  Future<void> turnOffLockOnPoint() async {
+    emit(state.copyWith(lockOnPoint: false));
+  }
+
   Future<void> setUserLocation(gmap.LatLng loc) async {
     emit(state.copyWith(userLocation: loc, userLocationValid: true));
   }
@@ -198,6 +202,7 @@ class MapCubit extends Cubit<GMapState> {
                 onTap: () {
                   context.read<SelectedZoneCubit>().selectZone(e);
                   context.read<SelectedAircraftCubit>().unselectAircraft();
+                  context.read<MapCubit>().turnOffLockOnPoint();
                   context.read<MapCubit>().centerToLocDouble(
                         e.coordinates.first.latitude,
                         e.coordinates.first.longitude,
@@ -236,6 +241,7 @@ class MapCubit extends Cubit<GMapState> {
                 onTap: () {
                   context.read<SelectedZoneCubit>().selectZone(e);
                   context.read<SelectedAircraftCubit>().unselectAircraft();
+                  context.read<MapCubit>().turnOffLockOnPoint();
                   context.read<MapCubit>().centerToLocDouble(
                         e.coordinates.first.latitude,
                         e.coordinates.first.longitude,

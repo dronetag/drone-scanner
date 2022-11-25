@@ -99,6 +99,7 @@ class MapOptionsToolbar extends StatelessWidget {
                         context
                             .read<SelectedAircraftCubit>()
                             .unselectAircraft();
+                        context.read<MapCubit>().turnOffLockOnPoint();
                         showSnackBar(
                           context,
                           'All the gathered aircraft data were deleted.',
