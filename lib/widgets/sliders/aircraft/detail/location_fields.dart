@@ -186,7 +186,7 @@ class LocationFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'Altitude Press',
+            headlineText: 'Altitude Press.',
             fieldText: getAltitudeAsString(loc?.altitudePressure),
           ),
           AircraftDetailField(
