@@ -64,17 +64,19 @@ class LocationFields {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Icon(
-                    loc.status == pigeon.AircraftStatus.Airborne
-                        ? Icons.flight_takeoff
-                        : Icons.flight_land,
-                    color: loc.status == pigeon.AircraftStatus.Airborne
-                        ? AppColors.highlightBlue
-                        : AppColors.dark,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  if (loc.status != pigeon.AircraftStatus.Undeclared) ...[
+                    Icon(
+                      loc.status == pigeon.AircraftStatus.Airborne
+                          ? Icons.flight_takeoff
+                          : Icons.flight_land,
+                      color: loc.status == pigeon.AircraftStatus.Airborne
+                          ? AppColors.highlightBlue
+                          : AppColors.dark,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  ],
                   Text(
                     loc.status.toString().replaceAll('AircraftStatus.', ''),
                     style: TextStyle(
