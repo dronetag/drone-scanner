@@ -207,12 +207,12 @@ class AircraftCard extends StatelessWidget {
   }
 
   String _getAircraftText() {
-    if (messagePack.locationMessage == null) return 'Undeclared Status';
+    if (messagePack.locationMessage == null) return 'Unknown Status';
     final status = messagePack.locationMessage!.status;
     return status == pigeon.AircraftStatus.Ground
         ? 'Grounded'
         : status == pigeon.AircraftStatus.Airborne
             ? '${messagePack.locationMessage!.height.toString()}m AGL'
-            : 'Undeclared Status';
+            : 'Unknown Status';
   }
 }
