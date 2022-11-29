@@ -7,6 +7,7 @@ import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
+import '../../bloc/map/map_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -444,6 +445,7 @@ class PreferencesPage extends StatelessWidget {
                   context.read<SlidersCubit>().setShowDroneDetail(show: false);
                   context.read<AircraftCubit>().clear();
                   context.read<SelectedAircraftCubit>().unselectAircraft();
+                  context.read<MapCubit>().turnOffLockOnPoint();
                 },
               );
             },

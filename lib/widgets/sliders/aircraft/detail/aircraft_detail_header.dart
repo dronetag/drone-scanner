@@ -4,6 +4,7 @@ import 'package:flutter_opendroneid/models/message_pack.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
+import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/screen_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
@@ -118,10 +119,10 @@ class AircraftDetailHeader extends StatelessWidget {
                 size: Sizes.detailIconSize,
               ),
               onPressed: () {
-                // on tap to map, unfocus other widgets and unselect aircraft
                 context.read<SlidersCubit>().setShowDroneDetail(show: false);
                 context.read<SelectedZoneCubit>().unselectZone();
                 context.read<SelectedAircraftCubit>().unselectAircraft();
+                context.read<MapCubit>().turnOffLockOnPoint();
               },
             ),
           ),
