@@ -104,32 +104,28 @@ class AircraftCard extends StatelessWidget {
             width: Sizes.cardIconSize,
             height: Sizes.cardIconSize,
           );
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final aircraftText = _getAircraftText();
-    return SizedBox(
+    return Container(
       width: width / 6,
+      margin: EdgeInsets.only(right: 2.0),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Wrap(
-          direction: isLandscape ? Axis.vertical : Axis.horizontal,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-                padding: EdgeInsets.only(left: 6.0),
-                child: icon ??
-                    Icon(
-                      Icons.error_outline,
-                      size: Sizes.cardIconSize,
-                    )),
-            const SizedBox(
-              height: 2,
-            ),
+            icon ??
+                Icon(
+                  Icons.help_outline,
+                  size: Sizes.cardIconSize,
+                ),
             Text(
               aircraftText,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 12.0,
+                fontSize: 11.0,
                 color: status == pigeon.AircraftStatus.Airborne
                     ? AppColors.highlightBlue
                     : AppColors.dark,
@@ -207,12 +203,12 @@ class AircraftCard extends StatelessWidget {
   }
 
   String _getAircraftText() {
-    if (messagePack.locationMessage == null) return 'Unknown Status';
+    if (messagePack.locationMessage == null) return 'Unknown';
     final status = messagePack.locationMessage!.status;
     return status == pigeon.AircraftStatus.Ground
         ? 'Grounded'
         : status == pigeon.AircraftStatus.Airborne
             ? '${messagePack.locationMessage!.height.toString()}m AGL'
-            : 'Unknown Status';
+            : 'Unknown';
   }
 }
