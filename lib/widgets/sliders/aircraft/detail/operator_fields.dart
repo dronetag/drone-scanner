@@ -202,6 +202,7 @@ class OperatorFields {
                 ? systemMessage!.category
                     .toString()
                     .replaceAll('AircraftCategory.', '')
+                    .replaceAll('_', ' ')
                 : 'Unknown',
           ),
           AircraftDetailField(
@@ -210,6 +211,7 @@ class OperatorFields {
                 ? systemMessage!.classValue
                     .toString()
                     .replaceAll('AircraftClass.', '')
+                    .replaceAll('_', ' ')
                 : 'Unknown',
           ),
         ],

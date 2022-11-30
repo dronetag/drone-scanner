@@ -27,12 +27,14 @@ class AircraftCardTitle extends StatelessWidget {
           fontSize: 16.0,
         ),
         children: [
-          if (givenLabel == null && manufacturer != null && logo != null)
+          if (givenLabel == null && manufacturer != null && logo != null) ...[
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
               child: logo,
             ),
-          if (givenLabel != null)
+            TextSpan(text: ' '),
+          ],
+          if (givenLabel != null) ...[
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
               child: Icon(
@@ -41,8 +43,10 @@ class AircraftCardTitle extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
+            TextSpan(text: ' '),
+          ],
           TextSpan(
-            text: givenLabel == null ? ' $uasId' : ' $givenLabel',
+            text: givenLabel == null ? '$uasId' : '$givenLabel',
           ),
         ],
       ),

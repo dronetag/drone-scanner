@@ -64,19 +64,21 @@ class LocationFields {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Icon(
-                    loc.status == pigeon.AircraftStatus.Airborne
-                        ? Icons.flight_takeoff
-                        : Icons.flight_land,
-                    color: loc.status == pigeon.AircraftStatus.Airborne
-                        ? AppColors.highlightBlue
-                        : AppColors.dark,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  if (loc.status != pigeon.AircraftStatus.Undeclared) ...[
+                    Icon(
+                      loc.status == pigeon.AircraftStatus.Airborne
+                          ? Icons.flight_takeoff
+                          : Icons.flight_land,
+                      color: loc.status == pigeon.AircraftStatus.Airborne
+                          ? AppColors.highlightBlue
+                          : AppColors.dark,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  ],
                   Text(
-                    loc.status.toString().replaceAll('AircraftStatus.', ''),
+                    _getStatusText(loc),
                     style: TextStyle(
                       color: loc.status == pigeon.AircraftStatus.Airborne
                           ? AppColors.highlightBlue
@@ -237,5 +239,15 @@ class LocationFields {
         fieldText: timeAccuracyToString(loc?.timeAccuracy),
       ),
     ];
+  }
+
+  static String _getStatusText(pigeon.LocationMessage? loc) {
+    if (loc == null) return 'Unknown';
+    final status = loc!.status;
+    return status == pigeon.AircraftStatus.Ground
+        ? 'Grounded'
+        : status == pigeon.AircraftStatus.Airborne
+            ? 'Airborne'
+            : 'Unknown';
   }
 }

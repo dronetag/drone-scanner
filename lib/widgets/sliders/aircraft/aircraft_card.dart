@@ -93,39 +93,42 @@ class AircraftCard extends StatelessWidget {
 
   Widget buildLeading(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final isAirborne =
-        messagePack.locationMessage?.status == pigeon.AircraftStatus.Airborne;
-    final icon = Image.asset(
-      isAirborne
-          ? 'assets/images/plane_airborne.png'
-          : 'assets/images/plane_grounded.png',
-      width: Sizes.cardIconSize,
-      height: Sizes.cardIconSize,
-    );
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final status = messagePack.locationMessage?.status;
 
-    final aircraftText = messagePack.locationMessage == null ||
-            messagePack.locationMessage!.status == pigeon.AircraftStatus.Ground
-        ? 'Grounded'
-        : '${messagePack.locationMessage!.height.toString()}m AGL';
-    return SizedBox(
+    final icon = status == pigeon.AircraftStatus.Undeclared
+        ? null
+        : Image.asset(
+            status == pigeon.AircraftStatus.Airborne
+                ? 'assets/images/plane_airborne.png'
+                : 'assets/images/plane_grounded.png',
+            width: Sizes.cardIconSize,
+            height: Sizes.cardIconSize,
+          );
+
+    final aircraftText = _getAircraftText();
+    return Container(
       width: width / 6,
+      margin: EdgeInsets.only(right: 2.0),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Wrap(
-          direction: isLandscape ? Axis.vertical : Axis.horizontal,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(padding: EdgeInsets.only(left: 6.0), child: icon),
-            const SizedBox(
-              height: 2,
-            ),
+            icon ??
+                Icon(
+                  Icons.help_outline,
+                  size: Sizes.cardIconSize,
+                ),
             Text(
               aircraftText,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 12.0,
-                color: isAirborne ? AppColors.highlightBlue : AppColors.dark,
+                fontSize: 11.0,
+                color: status == pigeon.AircraftStatus.Airborne
+                    ? AppColors.highlightBlue
+                    : AppColors.dark,
               ),
             ),
           ],
@@ -197,5 +200,15 @@ class AircraftCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getAircraftText() {
+    if (messagePack.locationMessage == null) return 'Unknown';
+    final status = messagePack.locationMessage!.status;
+    return status == pigeon.AircraftStatus.Ground
+        ? 'Grounded'
+        : status == pigeon.AircraftStatus.Airborne
+            ? '${messagePack.locationMessage!.height.toString()}m AGL'
+            : 'Unknown';
   }
 }
