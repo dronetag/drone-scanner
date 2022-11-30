@@ -222,7 +222,7 @@ packages:
       name: flutter_opendroneid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.4"
+    version: "0.9.7"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
