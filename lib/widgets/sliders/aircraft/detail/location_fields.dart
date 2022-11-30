@@ -78,7 +78,7 @@ class LocationFields {
                     ),
                   ],
                   Text(
-                    loc.status.toString().replaceAll('AircraftStatus.', ''),
+                    _getStatusText(loc),
                     style: TextStyle(
                       color: loc.status == pigeon.AircraftStatus.Airborne
                           ? AppColors.highlightBlue
@@ -239,5 +239,15 @@ class LocationFields {
         fieldText: timeAccuracyToString(loc?.timeAccuracy),
       ),
     ];
+  }
+
+  static String _getStatusText(pigeon.LocationMessage? loc) {
+    if (loc == null) return 'Unknown';
+    final status = loc!.status;
+    return status == pigeon.AircraftStatus.Ground
+        ? 'Grounded'
+        : status == pigeon.AircraftStatus.Airborne
+            ? 'Airborne'
+            : 'Unknown';
   }
 }
