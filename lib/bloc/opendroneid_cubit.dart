@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:rxdart/rxdart.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'aircraft/aircraft_cubit.dart';
 import 'aircraft/selected_aircraft_cubit.dart';
 import 'map/map_cubit.dart';
@@ -13,22 +14,35 @@ class ScanningState {
   bool isScanningWifi;
   bool isScanningBluetooth;
   UsedTechnologies usedTechnologies;
+  pigeon.ScanPriority scanPriority;
 
   ScanningState({
     required this.isScanningWifi,
     required this.isScanningBluetooth,
     required this.usedTechnologies,
+    required this.scanPriority,
   });
 
-  ScanningState copyWith({
-    bool? isScanningWifi,
-    bool? isScanningBluetooth,
-    UsedTechnologies? usedTechnologies,
-  }) =>
+  String scanPriorityPreferenceString() {
+    if (scanPriority == pigeon.ScanPriority.Low) {
+      return 'Low';
+    }
+    if (scanPriority == pigeon.ScanPriority.High) {
+      return 'High';
+    }
+    return 'Unknown';
+  }
+
+  ScanningState copyWith(
+          {bool? isScanningWifi,
+          bool? isScanningBluetooth,
+          UsedTechnologies? usedTechnologies,
+          pigeon.ScanPriority? scanPriority}) =>
       ScanningState(
         isScanningBluetooth: isScanningBluetooth ?? this.isScanningBluetooth,
         isScanningWifi: isScanningWifi ?? this.isScanningWifi,
         usedTechnologies: usedTechnologies ?? this.usedTechnologies,
+        scanPriority: scanPriority ?? this.scanPriority,
       );
 }
 
@@ -49,10 +63,22 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
             isScanningBluetooth: false,
             isScanningWifi: false,
             usedTechnologies: UsedTechnologies.None,
+            scanPriority: pigeon.ScanPriority.High,
           ),
         ) {
     initBtListener();
     initWifiListener();
+    fetchAndSetPreference();
+  }
+
+  Future<void> fetchAndSetPreference() async {
+    final preferences = await SharedPreferences.getInstance();
+    final preference = preferences.getString('scanPriorityPreference');
+
+    if (preference == null) {
+      return;
+    }
+    await setScanPriorityPreference(preference);
   }
 
   void initWifiListener() {
@@ -201,5 +227,20 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     if (restart) {
       await start();
     }
+  }
+
+  Future<void> setScanPriorityPreference(String preference) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setString('scanPriorityPreference', preference);
+
+    pigeon.ScanPriority pref;
+    if (preference == 'High') {
+      pref = pigeon.ScanPriority.High;
+    } else if (preference == 'Low') {
+      pref = pigeon.ScanPriority.Low;
+    } else {
+      return;
+    }
+    emit(state.copyWith(scanPriority: pref));
   }
 }

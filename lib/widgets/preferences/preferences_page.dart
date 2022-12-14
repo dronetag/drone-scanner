@@ -8,6 +8,7 @@ import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
+import '../../bloc/opendroneid_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -383,6 +384,31 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
+      Padding(
+        padding: itemPadding / 2,
+        child: PreferencesFieldWithDescription(
+          label: 'Bluetooth scan priority:',
+          description: 'High priority scans gathers more data but use '
+              'more battery energy',
+          child: CustomDropdownButton(
+            value: context
+                .watch<OpendroneIdCubit>()
+                .state
+                .scanPriorityPreferenceString(),
+            valueChangedCallback: (newValue) {
+              if (newValue != null) {
+                context
+                    .read<OpendroneIdCubit>()
+                    .setScanPriorityPreference(newValue);
+              }
+            },
+            items: const [
+              'High',
+              'Low',
+            ],
+          ),
+        ),
+      ),
       Padding(
         padding: itemPadding,
         child: PreferencesFieldWithDescription(
