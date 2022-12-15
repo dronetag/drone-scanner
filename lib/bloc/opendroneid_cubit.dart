@@ -241,6 +241,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     } else {
       return;
     }
+    await FlutterOpenDroneId.setBtScanPriority(pref);
     emit(state.copyWith(scanPriority: pref));
   }
 }
