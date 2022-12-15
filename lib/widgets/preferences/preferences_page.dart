@@ -388,7 +388,7 @@ class PreferencesPage extends StatelessWidget {
         padding: itemPadding / 2,
         child: PreferencesFieldWithDescription(
           label: 'Bluetooth scan priority:',
-          description: 'High priority scans gathers more data but use '
+          description: 'High priority scan gathers more data but uses '
               'more battery energy',
           child: CustomDropdownButton(
             value: context
