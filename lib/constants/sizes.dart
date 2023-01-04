@@ -8,6 +8,7 @@ class Sizes {
   static const toolbarHeight = 50.0;
   static const cardIconSize = 28.0;
   static const iconSize = 25.0;
+  static const flagSize = 16.0;
   static const detailIconSize = 30.0;
   static const textIconSize = 20.0;
   static const detailMargin = 20.0;

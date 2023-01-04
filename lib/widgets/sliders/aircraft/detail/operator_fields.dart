@@ -7,6 +7,7 @@ import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/standards_cubit.dart';
 import '../../../../constants/colors.dart';
+import '../../../../constants/sizes.dart';
 import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
 import '../../common/icon_center_to_loc.dart';
@@ -97,6 +98,30 @@ class OperatorFields {
               ),
             ),
           ),
+          if (opMessage != null && !opMessage.operatorIdValid)
+            AircraftDetailField(
+              headlineText: '',
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      child: Icon(
+                        Icons.warning_amber_sharp,
+                        size: Sizes.flagSize,
+                        color: AppColors.redIcon,
+                      ),
+                      alignment: PlaceholderAlignment.middle,
+                    ),
+                    TextSpan(
+                      style: const TextStyle(
+                        color: AppColors.red,
+                      ),
+                      text: ' Invalid format',
+                    ),
+                  ],
+                ),
+              ),
+            )
         ],
       ),
       AircraftDetailRow(
