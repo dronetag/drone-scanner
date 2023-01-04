@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
+import '../../../../extensions/string_extensions.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
@@ -46,9 +48,8 @@ class AircraftCard extends StatelessWidget {
 
     final opIdText = messagePack.operatorIDSet()
         ? flag == null
-            ? messagePack.operatorIdMessage?.operatorId
-                .replaceAll('[^A-Za-z0-9]', '')
-            : ' ${messagePack.operatorIdMessage?.operatorId.replaceAll('[^A-Za-z0-9]', '')}'
+            ? messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric()
+            : ' ${messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric()}'
         : 'Unknown Operator ID';
 
     return ListTile(
@@ -83,6 +84,8 @@ class AircraftCard extends StatelessWidget {
                   text: opIdText,
                 ),
                 if (messagePack.operatorIdMessage != null &&
+                    messagePack.operatorIdMessage!.operatorId !=
+                        INV_OPERATOR_ID &&
                     !messagePack.operatorIdMessage!.operatorIdValid) ...[
                   TextSpan(text: ' '),
                   WidgetSpan(

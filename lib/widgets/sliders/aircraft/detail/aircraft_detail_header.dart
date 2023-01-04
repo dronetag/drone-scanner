@@ -13,6 +13,7 @@ import '../../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
+import '../../../../extensions/string_extensions.dart';
 import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
@@ -256,8 +257,8 @@ class AircraftDetailHeader extends StatelessWidget {
     }
     final opIdText = messagePackList.last.operatorIDSet()
         ? flag == null
-            ? opIdMessage!.operatorId
-            : ' ${opIdMessage!.operatorId} '
+            ? opIdMessage!.operatorId.removeNonAlphanumeric()
+            : ' ${opIdMessage!.operatorId.removeNonAlphanumeric()} '
         : '';
     return Text.rich(
       TextSpan(

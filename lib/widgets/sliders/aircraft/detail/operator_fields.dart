@@ -8,6 +8,7 @@ import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/standards_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
+import '../../../../extensions/string_extensions.dart';
 import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
 import '../../common/icon_center_to_loc.dart';
@@ -69,8 +70,8 @@ class OperatorFields {
     }
     final opIdText = opMessage != null
         ? flag == null
-            ? opMessage.operatorId.replaceAll('[^A-Za-z0-9]', '')
-            : ' ${opMessage.operatorId.replaceAll('[^A-Za-z0-9]', '')}'
+            ? opMessage.operatorId.removeNonAlphanumeric()
+            : ' ${opMessage.operatorId.removeNonAlphanumeric()}'
         : 'Unknown';
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
