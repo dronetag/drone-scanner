@@ -243,20 +243,21 @@ class AircraftDetailHeader extends StatelessWidget {
     List<MessagePack> messagePackList,
   ) {
     String? countryCode;
-    if (messagePackList.last.operatorIdMessage != null) {
-      countryCode =
-          getCountryCode(messagePackList.last.operatorIdMessage!.operatorId);
+    final opIdMessage = messagePackList.last.operatorIdMessage;
+    if (opIdMessage != null) {
+      countryCode = getCountryCode(opIdMessage.operatorId);
     }
     Widget? flag;
     if (context.read<StandardsCubit>().state.internetAvailable &&
         messagePackList.last.operatorIDSet() &&
-        countryCode != null) {
+        countryCode != null &&
+        opIdMessage!.operatorIdValid) {
       flag = getFlag(countryCode);
     }
     final opIdText = messagePackList.last.operatorIDSet()
         ? flag == null
-            ? messagePackList.last.operatorIdMessage?.operatorId
-            : ' ${messagePackList.last.operatorIdMessage?.operatorId}'
+            ? opIdMessage!.operatorId
+            : ' ${opIdMessage!.operatorId} '
         : '';
     return Text.rich(
       TextSpan(
@@ -278,6 +279,17 @@ class AircraftDetailHeader extends StatelessWidget {
               ),
               text: opIdText,
             ),
+          if (opIdMessage != null && !opIdMessage.operatorIdValid) ...[
+            TextSpan(text: ' '),
+            WidgetSpan(
+              child: Icon(
+                Icons.warning_amber_sharp,
+                size: Sizes.flagSize,
+                color: Colors.white,
+              ),
+              alignment: PlaceholderAlignment.middle,
+            ),
+          ]
         ],
       ),
     );

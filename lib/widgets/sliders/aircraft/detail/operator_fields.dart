@@ -62,15 +62,16 @@ class OperatorFields {
 
     Widget? flag;
     if (countryCode != null &&
-        context.read<StandardsCubit>().state.internetAvailable) {
+        context.read<StandardsCubit>().state.internetAvailable &&
+        opMessage != null &&
+        opMessage!.operatorIdValid) {
       flag = getFlag(countryCode);
     }
     final opIdText = opMessage != null
         ? flag == null
-            ? opMessage.operatorId
-            : ' ${opMessage.operatorId}'
+            ? opMessage.operatorId.replaceAll('[^A-Za-z0-9]', '')
+            : ' ${opMessage.operatorId.replaceAll('[^A-Za-z0-9]', '')}'
         : 'Unknown';
-
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return [
