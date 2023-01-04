@@ -118,7 +118,7 @@ class AircraftDetail extends StatelessWidget {
       ...OperatorFields.buildOperatorFields(
         context,
         messagePackList.last.systemDataMessage,
-        messagePackList.last.operatorIDValid()
+        messagePackList.last.operatorIDSet()
             ? messagePackList.last.operatorIdMessage!
             : null,
       ),

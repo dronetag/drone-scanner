@@ -33,7 +33,7 @@ class AircraftCard extends StatelessWidget {
     Widget? flag;
 
     if (context.read<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDValid() &&
+        messagePack.operatorIDSet() &&
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable) {
       flag = getFlag(countryCode);
@@ -43,10 +43,11 @@ class AircraftCard extends StatelessWidget {
         ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
 
-    final opIdText = messagePack.operatorIDValid()
+    final opIdText = messagePack.operatorIDSet()
         ? flag == null
-            ? messagePack.operatorIdMessage?.operatorId
-            : ' ${messagePack.operatorIdMessage?.operatorId}'
+            ? ' ${messagePack.operatorIdMessage?.operatorId} '
+                .replaceAll('[^A-Za-z0-9]', '')
+            : ' ${messagePack.operatorIdMessage?.operatorId.replaceAll('[^A-Za-z0-9]', '')} '
         : 'Unknown Operator ID';
 
     return ListTile(
@@ -72,7 +73,7 @@ class AircraftCard extends StatelessWidget {
               children: [
                 if (countryCode != null &&
                     flag != null &&
-                    messagePack.operatorIDValid())
+                    messagePack.operatorIDSet())
                   WidgetSpan(
                     child: flag,
                     alignment: PlaceholderAlignment.middle,

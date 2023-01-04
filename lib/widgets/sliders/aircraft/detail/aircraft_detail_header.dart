@@ -133,12 +133,12 @@ class AircraftDetailHeader extends StatelessWidget {
             flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: messagePackList.last.operatorIDValid()
+              mainAxisAlignment: messagePackList.last.operatorIDSet()
                   ? MainAxisAlignment.start
                   : MainAxisAlignment.center,
               children: [
                 buildTitle(context, messagePackList),
-                if (messagePackList.last.operatorIDValid())
+                if (messagePackList.last.operatorIDSet())
                   buildSubtitle(context, messagePackList),
               ],
             ),
@@ -249,11 +249,11 @@ class AircraftDetailHeader extends StatelessWidget {
     }
     Widget? flag;
     if (context.read<StandardsCubit>().state.internetAvailable &&
-        messagePackList.last.operatorIDValid() &&
+        messagePackList.last.operatorIDSet() &&
         countryCode != null) {
       flag = getFlag(countryCode);
     }
-    final opIdText = messagePackList.last.operatorIDValid()
+    final opIdText = messagePackList.last.operatorIDSet()
         ? flag == null
             ? messagePackList.last.operatorIdMessage?.operatorId
             : ' ${messagePackList.last.operatorIdMessage?.operatorId}'
@@ -264,14 +264,14 @@ class AircraftDetailHeader extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
         children: [
-          if (messagePackList.last.operatorIDValid() &&
+          if (messagePackList.last.operatorIDSet() &&
               countryCode != null &&
               flag != null)
             WidgetSpan(
               child: flag,
               alignment: PlaceholderAlignment.middle,
             ),
-          if (messagePackList.last.operatorIDValid())
+          if (messagePackList.last.operatorIDSet())
             TextSpan(
               style: const TextStyle(
                 color: Colors.white,
