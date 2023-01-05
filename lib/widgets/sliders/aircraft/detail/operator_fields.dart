@@ -118,7 +118,7 @@ class OperatorFields {
                       style: const TextStyle(
                         color: AppColors.red,
                       ),
-                      text: ' Invalid format',
+                      text: ' Invalid data',
                     ),
                   ],
                 ),
