@@ -251,8 +251,8 @@ class AircraftDetailHeader extends StatelessWidget {
     Widget? flag;
     if (context.read<StandardsCubit>().state.internetAvailable &&
         messagePackList.last.operatorIDSet() &&
-        countryCode != null &&
-        opIdMessage!.operatorIdValid) {
+        messagePackList.last.operatorIDValid() &&
+        countryCode != null) {
       flag = getFlag(countryCode);
     }
     final opIdText = messagePackList.last.operatorIDSet()
@@ -280,7 +280,7 @@ class AircraftDetailHeader extends StatelessWidget {
               ),
               text: opIdText,
             ),
-          if (opIdMessage != null && !opIdMessage.operatorIdValid) ...[
+          if (!messagePackList.last.operatorIDValid()) ...[
             TextSpan(text: ' '),
             WidgetSpan(
               child: Icon(

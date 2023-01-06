@@ -115,13 +115,7 @@ class AircraftDetail extends StatelessWidget {
       ...ConnectionFields.buildConnectionFields(context, messagePackList),
       ...BasicFields.buildBasicFields(context, messagePackList),
       ...LocationFields.buildLocationFields(context, loc),
-      ...OperatorFields.buildOperatorFields(
-        context,
-        messagePackList.last.systemDataMessage,
-        messagePackList.last.operatorIDSet()
-            ? messagePackList.last.operatorIdMessage!
-            : null,
-      ),
+      ...OperatorFields.buildOperatorFields(context, messagePackList.last),
     ];
   }
 }

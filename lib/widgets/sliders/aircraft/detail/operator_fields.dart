@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
+import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
 import '../../../../bloc/map/map_cubit.dart';
@@ -28,9 +29,10 @@ class OperatorFields {
 
   static List<Widget> buildOperatorFields(
     BuildContext context,
-    pigeon.SystemDataMessage? systemMessage,
-    pigeon.OperatorIdMessage? opMessage,
+    MessagePack pack,
   ) {
+    final systemMessage = pack.systemDataMessage;
+    final opMessage = pack.operatorIdMessage;
     String? countryCode;
     if (opMessage != null) {
       countryCode = getCountryCode(opMessage.operatorId);
@@ -65,7 +67,7 @@ class OperatorFields {
     if (countryCode != null &&
         context.read<StandardsCubit>().state.internetAvailable &&
         opMessage != null &&
-        opMessage!.operatorIdValid) {
+        pack.operatorIDValid()) {
       flag = getFlag(countryCode);
     }
     final opIdText = opMessage != null
@@ -100,7 +102,7 @@ class OperatorFields {
               ),
             ),
           ),
-          if (opMessage != null && !opMessage.operatorIdValid)
+          if (opMessage != null && !pack.operatorIDValid())
             AircraftDetailField(
               headlineText: '',
               child: Text.rich(

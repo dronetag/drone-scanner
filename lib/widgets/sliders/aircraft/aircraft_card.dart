@@ -38,7 +38,7 @@ class AircraftCard extends StatelessWidget {
         messagePack.operatorIDSet() &&
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIdMessage!.operatorIdValid) {
+        messagePack.operatorIDValid()) {
       flag = getFlag(countryCode);
     }
     final uasIdText = messagePack.basicIdMessage != null &&
@@ -85,8 +85,8 @@ class AircraftCard extends StatelessWidget {
                 ),
                 if (messagePack.operatorIdMessage != null &&
                     messagePack.operatorIdMessage!.operatorId !=
-                        INV_OPERATOR_ID &&
-                    !messagePack.operatorIdMessage!.operatorIdValid) ...[
+                        OPERATOR_ID_NOT_SET &&
+                    !messagePack.operatorIDValid()) ...[
                   TextSpan(text: ' '),
                   WidgetSpan(
                     child: Icon(
