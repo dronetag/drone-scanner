@@ -58,7 +58,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       operatorIdMessage: pigeon.OperatorIdMessage(
         macAddress: '00:00:5e:00:53:ae',
         receivedTimestamp: DateTime.now().microsecondsSinceEpoch,
-        operatorId: 'CZE 345398739140810',
+        operatorId: 'FIN87astrdge12k8-xyz',
         rssi: -60,
         source: pigeon.MessageSource.BluetoothLegacy,
       ),
