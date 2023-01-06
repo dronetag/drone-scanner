@@ -70,10 +70,10 @@ class OperatorFields {
         pack.operatorIDValid()) {
       flag = getFlag(countryCode);
     }
-    final opIdText = opMessage != null
+    final opIdText = pack.operatorIDSet()
         ? flag == null
-            ? opMessage.operatorId.removeNonAlphanumeric()
-            : ' ${opMessage.operatorId.removeNonAlphanumeric()}'
+            ? opMessage!.operatorId.removeNonAlphanumeric()
+            : ' ${opMessage!.operatorId.removeNonAlphanumeric()}'
         : 'Unknown';
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -102,7 +102,7 @@ class OperatorFields {
               ),
             ),
           ),
-          if (opMessage != null && !pack.operatorIDValid())
+          if (pack.operatorIDSet() && !pack.operatorIDValid())
             AircraftDetailField(
               headlineText: '',
               child: Text.rich(

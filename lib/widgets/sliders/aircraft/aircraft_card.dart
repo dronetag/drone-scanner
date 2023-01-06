@@ -83,9 +83,7 @@ class AircraftCard extends StatelessWidget {
                 TextSpan(
                   text: opIdText,
                 ),
-                if (messagePack.operatorIdMessage != null &&
-                    messagePack.operatorIdMessage!.operatorId !=
-                        OPERATOR_ID_NOT_SET &&
+                if (messagePack.operatorIDSet() &&
                     !messagePack.operatorIDValid()) ...[
                   TextSpan(text: ' '),
                   WidgetSpan(
