@@ -101,8 +101,9 @@ class ScanningStateIcons extends StatelessWidget {
                       .then((turnedOn) {
                     if (turnedOn) {
                       if (state.isScanningWifi &&
-                              state.usedTechnologies == UsedTechnologies.Wifi ||
-                          state.usedTechnologies == UsedTechnologies.Both) {
+                          (state.usedTechnologies == UsedTechnologies.Wifi ||
+                              state.usedTechnologies ==
+                                  UsedTechnologies.Both)) {
                         context
                             .read<OpendroneIdCubit>()
                             .setWifiUsed(wifiUsed: false);

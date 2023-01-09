@@ -126,10 +126,10 @@ class ScanningStatusField extends StatelessWidget {
                                   .then((turnedOn) {
                                 if (turnedOn) {
                                   if (odidState.isScanningWifi &&
-                                          odidState.usedTechnologies ==
+                                      (odidState.usedTechnologies ==
                                               UsedTechnologies.Wifi ||
-                                      odidState.usedTechnologies ==
-                                          UsedTechnologies.Both) {
+                                          odidState.usedTechnologies ==
+                                              UsedTechnologies.Both)) {
                                     context
                                         .read<OpendroneIdCubit>()
                                         .setWifiUsed(wifiUsed: false);
