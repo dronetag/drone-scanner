@@ -36,8 +36,19 @@ class ScanningStateIcons extends StatelessWidget {
                       context.read<OpendroneIdCubit>().setBtUsed(btUsed: false);
                       snackBarText = 'Bluetooth Scanning Stopped.';
                     } else {
-                      context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
-                      snackBarText = 'Bluetooth Scanning Started.';
+                      final standardsCubitState =
+                          context.read<StandardsCubit>().state;
+                      if (!standardsCubitState.locationEnabled &&
+                          standardsCubitState.androidSystem) {
+                        snackBarText =
+                            'Location has to be enabled for Bluetooth scanning. '
+                            'Please enable location in phone settings.';
+                      } else {
+                        context
+                            .read<OpendroneIdCubit>()
+                            .setBtUsed(btUsed: true);
+                        snackBarText = 'Bluetooth Scanning Started.';
+                      }
                     }
                     showSnackBar(context, snackBarText);
                   } else {
@@ -97,10 +108,19 @@ class ScanningStateIcons extends StatelessWidget {
                             .setWifiUsed(wifiUsed: false);
                         snackBarText = 'Wi-Fi Scanning Stopped.';
                       } else {
-                        context
-                            .read<OpendroneIdCubit>()
-                            .setWifiUsed(wifiUsed: true);
-                        snackBarText = 'Wi-Fi Scanning Started.';
+                        final standardsCubitState =
+                            context.read<StandardsCubit>().state;
+                        if (!standardsCubitState.locationEnabled &&
+                            standardsCubitState.androidSystem) {
+                          snackBarText =
+                              'Location has to be enabled for Wi-Fi scanning. '
+                              'Please enable location in phone settings.';
+                        } else {
+                          context
+                              .read<OpendroneIdCubit>()
+                              .setWifiUsed(wifiUsed: true);
+                          snackBarText = 'Wi-Fi Scanning Started.';
+                        }
                       }
                       showSnackBar(context, snackBarText);
                     } else {
