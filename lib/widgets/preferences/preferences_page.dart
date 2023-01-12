@@ -1,6 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
@@ -31,6 +32,11 @@ import 'components/screen_sleep_checkbox.dart';
 class PreferencesPage extends StatelessWidget {
   static const routeName = 'PreferencesPage';
   const PreferencesPage({Key? key}) : super(key: key);
+
+  static const scanPriorityMapping = {
+    'High': pigeon.ScanPriority.High,
+    'Low': pigeon.ScanPriority.Low,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -391,21 +397,17 @@ class PreferencesPage extends StatelessWidget {
           description: 'High priority scan gathers more data but uses '
               'more battery energy',
           child: CustomDropdownButton(
-            value: context
-                .watch<OpendroneIdCubit>()
-                .state
-                .scanPriorityPreferenceString(),
+            value: scanPriorityMapping.keys.firstWhere((element) =>
+                scanPriorityMapping[element] ==
+                context.watch<OpendroneIdCubit>().state.scanPriority),
             valueChangedCallback: (newValue) {
               if (newValue != null) {
                 context
                     .read<OpendroneIdCubit>()
-                    .setScanPriorityPreference(newValue);
+                    .setScanPriorityPreference(scanPriorityMapping[newValue]!);
               }
             },
-            items: const [
-              'High',
-              'Low',
-            ],
+            items: scanPriorityMapping.keys.toList(),
           ),
         ),
       ),
