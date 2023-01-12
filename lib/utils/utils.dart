@@ -5,6 +5,8 @@ import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../constants/sizes.dart';
+
 double maxSliderSize({
   required double height,
   required double statusBarHeight,
@@ -163,7 +165,7 @@ String getSpeedHorAsString(double? speed) {
 }
 
 Widget? getFlag(String countryCode) {
-  final size = 16.0;
+  final size = Sizes.flagSize;
   Widget? flag;
   NetworkImage? image;
   try {

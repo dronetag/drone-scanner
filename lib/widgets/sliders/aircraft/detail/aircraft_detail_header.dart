@@ -13,6 +13,7 @@ import '../../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
+import '../../../../extensions/string_extensions.dart';
 import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
@@ -133,12 +134,12 @@ class AircraftDetailHeader extends StatelessWidget {
             flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: messagePackList.last.operatorIDValid()
+              mainAxisAlignment: messagePackList.last.operatorIDSet()
                   ? MainAxisAlignment.start
                   : MainAxisAlignment.center,
               children: [
                 buildTitle(context, messagePackList),
-                if (messagePackList.last.operatorIDValid())
+                if (messagePackList.last.operatorIDSet())
                   buildSubtitle(context, messagePackList),
               ],
             ),
@@ -243,20 +244,21 @@ class AircraftDetailHeader extends StatelessWidget {
     List<MessagePack> messagePackList,
   ) {
     String? countryCode;
-    if (messagePackList.last.operatorIdMessage != null) {
-      countryCode =
-          getCountryCode(messagePackList.last.operatorIdMessage!.operatorId);
+    final opIdMessage = messagePackList.last.operatorIdMessage;
+    if (opIdMessage != null) {
+      countryCode = getCountryCode(opIdMessage.operatorId);
     }
     Widget? flag;
     if (context.read<StandardsCubit>().state.internetAvailable &&
+        messagePackList.last.operatorIDSet() &&
         messagePackList.last.operatorIDValid() &&
         countryCode != null) {
       flag = getFlag(countryCode);
     }
-    final opIdText = messagePackList.last.operatorIDValid()
+    final opIdText = messagePackList.last.operatorIDSet()
         ? flag == null
-            ? messagePackList.last.operatorIdMessage?.operatorId
-            : ' ${messagePackList.last.operatorIdMessage?.operatorId}'
+            ? opIdMessage!.operatorId.removeNonAlphanumeric()
+            : ' ${opIdMessage!.operatorId.removeNonAlphanumeric()} '
         : '';
     return Text.rich(
       TextSpan(
@@ -264,20 +266,31 @@ class AircraftDetailHeader extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
         children: [
-          if (messagePackList.last.operatorIDValid() &&
+          if (messagePackList.last.operatorIDSet() &&
               countryCode != null &&
               flag != null)
             WidgetSpan(
               child: flag,
               alignment: PlaceholderAlignment.middle,
             ),
-          if (messagePackList.last.operatorIDValid())
+          if (messagePackList.last.operatorIDSet())
             TextSpan(
               style: const TextStyle(
                 color: Colors.white,
               ),
               text: opIdText,
             ),
+          if (!messagePackList.last.operatorIDValid()) ...[
+            TextSpan(text: ' '),
+            WidgetSpan(
+              child: Icon(
+                Icons.warning_amber_sharp,
+                size: Sizes.flagSize,
+                color: Colors.white,
+              ),
+              alignment: PlaceholderAlignment.middle,
+            ),
+          ]
         ],
       ),
     );

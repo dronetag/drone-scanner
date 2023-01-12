@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
+import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/standards_cubit.dart';
 import '../../../../constants/colors.dart';
+import '../../../../constants/sizes.dart';
+import '../../../../extensions/string_extensions.dart';
 import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
 import '../../common/icon_center_to_loc.dart';
@@ -26,9 +29,10 @@ class OperatorFields {
 
   static List<Widget> buildOperatorFields(
     BuildContext context,
-    pigeon.SystemDataMessage? systemMessage,
-    pigeon.OperatorIdMessage? opMessage,
+    MessagePack pack,
   ) {
+    final systemMessage = pack.systemDataMessage;
+    final opMessage = pack.operatorIdMessage;
     String? countryCode;
     if (opMessage != null) {
       countryCode = getCountryCode(opMessage.operatorId);
@@ -61,15 +65,16 @@ class OperatorFields {
 
     Widget? flag;
     if (countryCode != null &&
-        context.read<StandardsCubit>().state.internetAvailable) {
+        context.read<StandardsCubit>().state.internetAvailable &&
+        opMessage != null &&
+        pack.operatorIDValid()) {
       flag = getFlag(countryCode);
     }
-    final opIdText = opMessage != null
+    final opIdText = pack.operatorIDSet()
         ? flag == null
-            ? opMessage.operatorId
-            : ' ${opMessage.operatorId}'
+            ? opMessage!.operatorId.removeNonAlphanumeric()
+            : ' ${opMessage!.operatorId.removeNonAlphanumeric()}'
         : 'Unknown';
-
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return [
@@ -97,6 +102,30 @@ class OperatorFields {
               ),
             ),
           ),
+          if (pack.operatorIDSet() && !pack.operatorIDValid())
+            AircraftDetailField(
+              headlineText: '',
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      child: Icon(
+                        Icons.warning_amber_sharp,
+                        size: Sizes.flagSize,
+                        color: AppColors.redIcon,
+                      ),
+                      alignment: PlaceholderAlignment.middle,
+                    ),
+                    TextSpan(
+                      style: const TextStyle(
+                        color: AppColors.red,
+                      ),
+                      text: ' Invalid data',
+                    ),
+                  ],
+                ),
+              ),
+            )
         ],
       ),
       AircraftDetailRow(

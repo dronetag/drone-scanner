@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
+import '../../../../extensions/string_extensions.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
@@ -33,9 +35,10 @@ class AircraftCard extends StatelessWidget {
     Widget? flag;
 
     if (context.read<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDValid() &&
+        messagePack.operatorIDSet() &&
         countryCode != null &&
-        context.watch<StandardsCubit>().state.internetAvailable) {
+        context.watch<StandardsCubit>().state.internetAvailable &&
+        messagePack.operatorIDValid()) {
       flag = getFlag(countryCode);
     }
     final uasIdText = messagePack.basicIdMessage != null &&
@@ -43,10 +46,10 @@ class AircraftCard extends StatelessWidget {
         ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
 
-    final opIdText = messagePack.operatorIDValid()
+    final opIdText = messagePack.operatorIDSet()
         ? flag == null
-            ? messagePack.operatorIdMessage?.operatorId
-            : ' ${messagePack.operatorIdMessage?.operatorId}'
+            ? messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric()
+            : ' ${messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric()}'
         : 'Unknown Operator ID';
 
     return ListTile(
@@ -72,7 +75,7 @@ class AircraftCard extends StatelessWidget {
               children: [
                 if (countryCode != null &&
                     flag != null &&
-                    messagePack.operatorIDValid())
+                    messagePack.operatorIDSet())
                   WidgetSpan(
                     child: flag,
                     alignment: PlaceholderAlignment.middle,
@@ -80,6 +83,18 @@ class AircraftCard extends StatelessWidget {
                 TextSpan(
                   text: opIdText,
                 ),
+                if (messagePack.operatorIDSet() &&
+                    !messagePack.operatorIDValid()) ...[
+                  TextSpan(text: ' '),
+                  WidgetSpan(
+                    child: Icon(
+                      Icons.warning_amber_sharp,
+                      size: Sizes.flagSize,
+                      color: AppColors.redIcon,
+                    ),
+                    alignment: PlaceholderAlignment.middle,
+                  ),
+                ],
               ],
             ),
           ),
