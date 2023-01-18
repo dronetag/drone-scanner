@@ -20,37 +20,36 @@ enum ToolbarMenuAction {
 
 void setWifiUsed(BuildContext context, Function setState,
     {required bool used}) {
-  final standardsCubitState = context.read<StandardsCubit>().state;
-  if (used &&
-      !standardsCubitState.locationEnabled &&
-      standardsCubitState.androidSystem) {
-    final snackBarText = 'Location has to be enabled for Wi-Fi scanning. '
-        'Please enable location in phone settings.';
-    showWifiSnackBar(context, errorText: snackBarText);
-  } else {
-    context
-        .read<OpendroneIdCubit>()
-        .setWifiUsed(wifiUsed: used)
-        .then((value) => setState);
-    showWifiSnackBar(context, started: used);
-  }
+  context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: used).then((value) {
+    if (used && !value) {
+      final snackBarText = 'Location has to be enabled for Wi-Fi scanning. '
+          'Please enable location in phone settings.';
+      showWifiSnackBar(context, errorText: snackBarText);
+    } else {
+      showWifiSnackBar(context, started: used);
+    }
+  });
 }
 
 void setBTUsed(BuildContext context, Function setState, {required bool used}) {
-  final standardsCubitState = context.read<StandardsCubit>().state;
-  if (used &&
-      !standardsCubitState.locationEnabled &&
-      standardsCubitState.androidSystem) {
-    final snackBarText = 'Location has to be enabled for Bluetooth scanning. '
-        'Please enable location in phone settings.';
-    showBtSnackBar(context, errorText: snackBarText);
-  } else {
-    context
-        .read<OpendroneIdCubit>()
-        .setBtUsed(btUsed: used)
-        .then((value) => setState);
-    showBtSnackBar(context, started: used);
-  }
+  context.read<OpendroneIdCubit>().isBtTurnedOn().then((turnedOn) {
+    if (turnedOn) {
+      context.read<OpendroneIdCubit>().setBtUsed(btUsed: used).then((value) {
+        if (used && !value) {
+          final snackBarText =
+              'Location has to be enabled for Bluetooth scanning. '
+              'Please enable location in phone settings.';
+          showBtSnackBar(context, errorText: snackBarText);
+        } else {
+          showBtSnackBar(context, started: used);
+        }
+      });
+    } else {
+      final snackBarText = 'Turn Bluetooth on to start scanning.\n'
+          'Ensure that an app has Bluetooth permissions in preferences';
+      showBtSnackBar(context, errorText: snackBarText);
+    }
+  });
 }
 
 void showWifiSnackBar(BuildContext context,

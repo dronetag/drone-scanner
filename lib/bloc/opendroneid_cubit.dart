@@ -128,13 +128,18 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     }
   }
 
-  Future<void> start() async {
-    if (state.usedTechnologies == UsedTechnologies.None) return;
+  Future<bool> start(UsedTechnologies usedTechnology) async {
     listener = FlutterOpenDroneId.allMessages
         .debounceTime(Duration(milliseconds: 100))
         .listen(scanCallback);
-    aircraftCubit.initEmitTimer();
-    await FlutterOpenDroneId.startScan(state.usedTechnologies);
+    final started =
+        await FlutterOpenDroneId.startScan(usedTechnology).then((value) {
+      aircraftCubit.initEmitTimer();
+      return true;
+    }).onError((error, stackTrace) {
+      return false;
+    });
+    return started;
   }
 
   Future<bool> isBtTurnedOn() async {
@@ -151,7 +156,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     unawaited(FlutterOpenDroneId.stopScan());
   }
 
-  Future<void> setBtUsed({required bool btUsed}) async {
+  Future<bool> setBtUsed({required bool btUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
     // cancel wifi subscription to avoid receiving events
@@ -182,13 +187,16 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
       }
     }
     initWifiListener();
-    emit(state.copyWith(usedTechnologies: usedT));
     if (restart) {
-      await start();
+      final started = await start(usedT);
+      if (started) emit(state.copyWith(usedTechnologies: usedT));
+      return started;
     }
+    emit(state.copyWith(usedTechnologies: usedT));
+    return true;
   }
 
-  Future<void> setWifiUsed({required bool wifiUsed}) async {
+  Future<bool> setWifiUsed({required bool wifiUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
     await btStateListener?.cancel();
@@ -216,11 +224,14 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
         usedT = UsedTechnologies.None;
       }
     }
-    emit(state.copyWith(usedTechnologies: usedT));
     initBtListener();
     if (restart) {
-      await start();
+      final started = await start(usedT);
+      if (started) emit(state.copyWith(usedTechnologies: usedT));
+      return started;
     }
+    emit(state.copyWith(usedTechnologies: usedT));
+    return true;
   }
 
   Future<void> setScanPriorityPreference(pigeon.ScanPriority priority) async {

@@ -35,24 +35,25 @@ class ScanningStateIcons extends StatelessWidget {
                             state.usedTechnologies == UsedTechnologies.Both)) {
                       context.read<OpendroneIdCubit>().setBtUsed(btUsed: false);
                       snackBarText = 'Bluetooth Scanning Stopped.';
+                      showSnackBar(context, snackBarText);
                     } else {
-                      final standardsCubitState =
-                          context.read<StandardsCubit>().state;
-                      if (!standardsCubitState.locationEnabled &&
-                          standardsCubitState.androidSystem) {
-                        snackBarText =
-                            'Location has to be enabled for Bluetooth scanning. '
-                            'Please enable location in phone settings.';
-                      } else {
-                        context
-                            .read<OpendroneIdCubit>()
-                            .setBtUsed(btUsed: true);
-                        snackBarText = 'Bluetooth Scanning Started.';
-                      }
+                      context
+                          .read<OpendroneIdCubit>()
+                          .setBtUsed(btUsed: true)
+                          .then((value) {
+                        if (value) {
+                          snackBarText = 'Bluetooth Scanning Started.';
+                        } else {
+                          snackBarText =
+                              'Location has to be enabled for Bluetooth scanning. '
+                              'Please enable location in phone settings.';
+                        }
+                        showSnackBar(context, snackBarText);
+                      });
                     }
-                    showSnackBar(context, snackBarText);
                   } else {
-                    snackBarText = 'Turn Bluetooth on to start scanning.';
+                    snackBarText = 'Turn Bluetooth on to start scanning.\n'
+                        'Ensure that an app has Bluetooth permissions in preferences';
                     showSnackBar(
                       context,
                       snackBarText,
@@ -108,22 +109,22 @@ class ScanningStateIcons extends StatelessWidget {
                             .read<OpendroneIdCubit>()
                             .setWifiUsed(wifiUsed: false);
                         snackBarText = 'Wi-Fi Scanning Stopped.';
+                        showSnackBar(context, snackBarText);
                       } else {
-                        final standardsCubitState =
-                            context.read<StandardsCubit>().state;
-                        if (!standardsCubitState.locationEnabled &&
-                            standardsCubitState.androidSystem) {
-                          snackBarText =
-                              'Location has to be enabled for Wi-Fi scanning. '
-                              'Please enable location in phone settings.';
-                        } else {
-                          context
-                              .read<OpendroneIdCubit>()
-                              .setWifiUsed(wifiUsed: true);
-                          snackBarText = 'Wi-Fi Scanning Started.';
-                        }
+                        context
+                            .read<OpendroneIdCubit>()
+                            .setWifiUsed(wifiUsed: true)
+                            .then((value) {
+                          if (value) {
+                            snackBarText = 'Wi-Fi Scanning Started.';
+                          } else {
+                            snackBarText =
+                                'Location has to be enabled for Wi-Fi scanning. '
+                                'Please enable location in phone settings.';
+                          }
+                          showSnackBar(context, snackBarText);
+                        });
                       }
-                      showSnackBar(context, snackBarText);
                     } else {
                       snackBarText = 'Turn Wi-Fi on to start scanning.';
                       showSnackBar(

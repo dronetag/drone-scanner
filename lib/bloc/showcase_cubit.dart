@@ -140,7 +140,9 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
         if (state.aircraftState != null) {
           context.read<AircraftCubit>().applyState(state.aircraftState!);
         }
-        context.read<OpendroneIdCubit>().start();
+        final odidCubit = context.read<OpendroneIdCubit>();
+        odidCubit.start(odidCubit.state.usedTechnologies);
+        emit(state.copyWith(showcaseActive: false));
       });
     }
     emit(state.copyWith(showcaseActive: active));
@@ -173,7 +175,8 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     if (state.aircraftState != null) {
       context.read<AircraftCubit>().applyState(state.aircraftState!);
     }
-    context.read<OpendroneIdCubit>().start();
+    final odidCubit = context.read<OpendroneIdCubit>();
+    odidCubit.start(odidCubit.state.usedTechnologies);
     emit(state.copyWith(showcaseActive: false));
   }
 
