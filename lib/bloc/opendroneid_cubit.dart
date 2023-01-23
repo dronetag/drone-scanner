@@ -129,17 +129,16 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   }
 
   Future<bool> start(UsedTechnologies usedTechnology) async {
-    listener = FlutterOpenDroneId.allMessages
-        .debounceTime(Duration(milliseconds: 100))
-        .listen(scanCallback);
-    final started =
-        await FlutterOpenDroneId.startScan(usedTechnology).then((value) {
+    try {
+      await FlutterOpenDroneId.startScan(usedTechnology);
+      listener = FlutterOpenDroneId.allMessages
+          .debounceTime(Duration(milliseconds: 100))
+          .listen(scanCallback);
       aircraftCubit.initEmitTimer();
-      return true;
-    }).onError((error, stackTrace) {
+    } on PermissionMissingException catch (e) {
       return false;
-    });
-    return started;
+    }
+    return true;
   }
 
   Future<bool> isBtTurnedOn() async {
