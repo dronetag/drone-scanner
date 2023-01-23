@@ -65,22 +65,20 @@ class ScanningStatusField extends StatelessWidget {
                                 context
                                     .read<OpendroneIdCubit>()
                                     .setBtUsed(btUsed: true)
-                                    .then((value) {
-                                  if (value) {
+                                    .then((result) {
+                                  if (result.success) {
                                     snackBarText =
                                         'Bluetooth Scanning Started.';
                                   } else {
-                                    snackBarText =
-                                        'Location has to be enabled for Bluetooth scanning. '
-                                        'Please enable location in phone settings.';
+                                    snackBarText = 'Unable to start scan: '
+                                        '${result.error}.';
                                   }
                                   showSnackBar(context, snackBarText);
                                 });
                               }
                             } else {
                               snackBarText =
-                                  'Turn Bluetooth on to start scanning.\n'
-                                  'Ensure that an app has Bluetooth permissions in preferences';
+                                  'Turn Bluetooth on to start scanning.';
                               showSnackBar(
                                 context,
                                 snackBarText,
@@ -141,14 +139,13 @@ class ScanningStatusField extends StatelessWidget {
                                     context
                                         .read<OpendroneIdCubit>()
                                         .setWifiUsed(wifiUsed: true)
-                                        .then((success) {
-                                      if (success) {
+                                        .then((result) {
+                                      if (result.success) {
                                         snackBarText =
                                             'Wi-Fi Scanning Started.';
                                       } else {
-                                        snackBarText =
-                                            'Location has to be enabled for Wi-Fi scanning. '
-                                            'Please enable location in phone settings.';
+                                        snackBarText = 'Unable to start scan: '
+                                            '${result.error}.';
                                       }
                                       showSnackBar(context, snackBarText);
                                     });

@@ -20,10 +20,10 @@ enum ToolbarMenuAction {
 
 void setWifiUsed(BuildContext context, Function setState,
     {required bool used}) {
-  context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: used).then((value) {
-    if (used && !value) {
-      final snackBarText = 'Location has to be enabled for Wi-Fi scanning. '
-          'Please enable location in phone settings.';
+  context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: used).then((result) {
+    if (used && !result.success) {
+      final snackBarText = 'Unable to start scan: '
+          '${result.error}.';
       showWifiSnackBar(context, errorText: snackBarText);
     } else {
       showWifiSnackBar(context, started: used);
@@ -34,11 +34,10 @@ void setWifiUsed(BuildContext context, Function setState,
 void setBTUsed(BuildContext context, Function setState, {required bool used}) {
   context.read<OpendroneIdCubit>().isBtTurnedOn().then((turnedOn) {
     if (turnedOn) {
-      context.read<OpendroneIdCubit>().setBtUsed(btUsed: used).then((value) {
-        if (used && !value) {
-          final snackBarText =
-              'Location has to be enabled for Bluetooth scanning. '
-              'Please enable location in phone settings.';
+      context.read<OpendroneIdCubit>().setBtUsed(btUsed: used).then((result) {
+        if (used && !result.success) {
+          final snackBarText = 'Unable to start scan: '
+              '${result.error}.';
           showBtSnackBar(context, errorText: snackBarText);
         } else {
           showBtSnackBar(context, started: used);

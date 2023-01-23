@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/permission_missing_exception.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,6 +35,13 @@ class ScanningState {
         usedTechnologies: usedTechnologies ?? this.usedTechnologies,
         scanPriority: scanPriority ?? this.scanPriority,
       );
+}
+
+class SetScanResult {
+  final bool success;
+  final String? error;
+
+  SetScanResult({required this.success, this.error});
 }
 
 class OpendroneIdCubit extends Cubit<ScanningState> {
@@ -128,7 +136,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     }
   }
 
-  Future<bool> start(UsedTechnologies usedTechnology) async {
+  Future<SetScanResult> start(UsedTechnologies usedTechnology) async {
     try {
       await FlutterOpenDroneId.startScan(usedTechnology);
       listener = FlutterOpenDroneId.allMessages
@@ -136,9 +144,9 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
           .listen(scanCallback);
       aircraftCubit.initEmitTimer();
     } on PermissionMissingException catch (e) {
-      return false;
+      return SetScanResult(success: false, error: e.description);
     }
-    return true;
+    return SetScanResult(success: true);
   }
 
   Future<bool> isBtTurnedOn() async {
@@ -155,7 +163,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     unawaited(FlutterOpenDroneId.stopScan());
   }
 
-  Future<bool> setBtUsed({required bool btUsed}) async {
+  Future<SetScanResult> setBtUsed({required bool btUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
     // cancel wifi subscription to avoid receiving events
@@ -187,15 +195,15 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     }
     initWifiListener();
     if (restart) {
-      final started = await start(usedT);
-      if (started) emit(state.copyWith(usedTechnologies: usedT));
-      return started;
+      final res = await start(usedT);
+      if (res.success) emit(state.copyWith(usedTechnologies: usedT));
+      return res;
     }
     emit(state.copyWith(usedTechnologies: usedT));
-    return true;
+    return SetScanResult(success: true);
   }
 
-  Future<bool> setWifiUsed({required bool wifiUsed}) async {
+  Future<SetScanResult> setWifiUsed({required bool wifiUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
     await btStateListener?.cancel();
@@ -225,12 +233,12 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     }
     initBtListener();
     if (restart) {
-      final started = await start(usedT);
-      if (started) emit(state.copyWith(usedTechnologies: usedT));
-      return started;
+      final res = await start(usedT);
+      if (res.success) emit(state.copyWith(usedTechnologies: usedT));
+      return res;
     }
     emit(state.copyWith(usedTechnologies: usedT));
-    return true;
+    return SetScanResult(success: true);
   }
 
   Future<void> setScanPriorityPreference(pigeon.ScanPriority priority) async {
