@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/opendroneid_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/sizes.dart';
+import '../../../constants/snackbar_messages.dart';
 import '../../app/custom_about_dialog.dart';
 import '../../app/dialogs.dart';
 import '../../help/help_page.dart';
@@ -22,9 +23,7 @@ void setWifiUsed(BuildContext context, Function setState,
     {required bool used}) {
   context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: used).then((result) {
     if (used && !result.success) {
-      final snackBarText = 'Unable to start scan: '
-          '${result.error}.';
-      showWifiSnackBar(context, errorText: snackBarText);
+      showWifiSnackBar(context, errorText: unableToStartMessage(result.error!));
     } else {
       showWifiSnackBar(context, started: used);
     }
@@ -36,17 +35,17 @@ void setBTUsed(BuildContext context, Function setState, {required bool used}) {
     if (turnedOn) {
       context.read<OpendroneIdCubit>().setBtUsed(btUsed: used).then((result) {
         if (used && !result.success) {
-          final snackBarText = 'Unable to start scan: '
-              '${result.error}.';
-          showBtSnackBar(context, errorText: snackBarText);
+          showBtSnackBar(context,
+              errorText: unableToStartMessage(result.error!));
         } else {
           showBtSnackBar(context, started: used);
         }
       });
     } else {
-      final snackBarText = 'Turn Bluetooth on to start scanning.\n'
-          'Ensure that an app has Bluetooth permissions in preferences';
-      showBtSnackBar(context, errorText: snackBarText);
+      showBtSnackBar(context,
+          errorText: btTurnedOffMessage(
+            isAndroidSystem: context.read<StandardsCubit>().state.androidSystem,
+          ));
     }
   });
 }
@@ -56,9 +55,9 @@ void showWifiSnackBar(BuildContext context,
   late final String snackBarText;
   if (started != null) {
     if (started) {
-      snackBarText = 'Wi-Fi Scanning Started.';
+      snackBarText = wifiScanStartMessage;
     } else {
-      snackBarText = 'Wi-Fi Scanning Stopped.';
+      snackBarText = wifiScanStopMessage;
     }
     showSnackBar(context, snackBarText);
   } else if (errorText != null) {
@@ -70,9 +69,9 @@ void showBtSnackBar(BuildContext context, {bool? started, String? errorText}) {
   late final String snackBarText;
   if (started != null) {
     if (started) {
-      snackBarText = 'Bluetooth Scanning Started.';
+      snackBarText = btScanStartMessage;
     } else {
-      snackBarText = 'Bluetooth Scanning Stopped.';
+      snackBarText = btScanStopMessage;
     }
     showSnackBar(context, snackBarText);
   } else if (errorText != null) {

@@ -8,6 +8,7 @@ import '../../../bloc/opendroneid_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../constants/snackbar_messages.dart';
 import '../../app/dialogs.dart';
 
 class ScanningStateIcons extends StatelessWidget {
@@ -34,7 +35,7 @@ class ScanningStateIcons extends StatelessWidget {
                         (state.usedTechnologies == UsedTechnologies.Bluetooth ||
                             state.usedTechnologies == UsedTechnologies.Both)) {
                       context.read<OpendroneIdCubit>().setBtUsed(btUsed: false);
-                      snackBarText = 'Bluetooth Scanning Stopped.';
+                      snackBarText = btScanStopMessage;
                       showSnackBar(context, snackBarText);
                     } else {
                       context
@@ -42,19 +43,21 @@ class ScanningStateIcons extends StatelessWidget {
                           .setBtUsed(btUsed: true)
                           .then((result) {
                         if (result.success) {
-                          snackBarText = 'Bluetooth Scanning Started.';
+                          snackBarText = btScanStartMessage;
                         } else {
-                          snackBarText =
-                              'Unable to start scan: ${result.error}.';
+                          snackBarText = unableToStartMessage(result.error!);
                         }
                         showSnackBar(context, snackBarText);
                       });
                     }
                   } else {
-                    snackBarText = 'Turn Bluetooth on to start scanning.';
                     showSnackBar(
                       context,
-                      snackBarText,
+                      btTurnedOffMessage(
+                          isAndroidSystem: context
+                              .read<StandardsCubit>()
+                              .state
+                              .androidSystem),
                     );
                   }
                 });
@@ -106,25 +109,23 @@ class ScanningStateIcons extends StatelessWidget {
                         context
                             .read<OpendroneIdCubit>()
                             .setWifiUsed(wifiUsed: false);
-                        snackBarText = 'Wi-Fi Scanning Stopped.';
+                        snackBarText = wifiScanStopMessage;
                         showSnackBar(context, snackBarText);
                       } else {
                         context
                             .read<OpendroneIdCubit>()
                             .setWifiUsed(wifiUsed: true)
                             .then((result) {
-                          print('taggs adssdsa ${result.success}');
                           if (result.success) {
-                            snackBarText = 'Wi-Fi Scanning Started.';
+                            snackBarText = wifiScanStartMessage;
                           } else {
-                            snackBarText = 'Unable to start scan: '
-                                '${result.error}.';
+                            snackBarText = unableToStartMessage(result.error!);
                           }
                           showSnackBar(context, snackBarText);
                         });
                       }
                     } else {
-                      snackBarText = 'Turn Wi-Fi on to start scanning.';
+                      snackBarText = wifiTurnedOffMessage;
                       showSnackBar(
                         context,
                         snackBarText,
