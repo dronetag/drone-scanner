@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
-import 'package:flutter_opendroneid/models/permission_missing_exception.dart';
+import 'package:flutter_opendroneid/models/permissions_missing_exception.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/snackbar_messages.dart';
 import 'aircraft/aircraft_cubit.dart';
 import 'aircraft/selected_aircraft_cubit.dart';
 import 'map/map_cubit.dart';
@@ -143,8 +144,10 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
           .debounceTime(Duration(milliseconds: 100))
           .listen(scanCallback);
       aircraftCubit.initEmitTimer();
-    } on PermissionMissingException catch (e) {
-      return SetScanResult(success: false, error: e.description);
+    } on PermissionsMissingException catch (e) {
+      return SetScanResult(
+          success: false,
+          error: getMissingPermissionsMessage(e.missingPermissions));
     }
     return SetScanResult(success: true);
   }
