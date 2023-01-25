@@ -6,6 +6,7 @@ import '../../../bloc/opendroneid_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../constants/snackbar_messages.dart';
 import '../../app/dialogs.dart';
 import 'preferences_slider.dart';
 
@@ -45,12 +46,12 @@ class ScanningStatusField extends StatelessWidget {
                       PreferencesSlider(
                         getValue: () => odidState.isScanningBluetooth,
                         setValue: (c) {
-                          late final String snackBarText;
                           context
                               .read<OpendroneIdCubit>()
                               .isBtTurnedOn()
                               .then((turnedOn) {
                             if (turnedOn) {
+                              late final String snackBarText;
                               if (odidState.isScanningBluetooth &&
                                   (odidState.usedTechnologies ==
                                           UsedTechnologies.Bluetooth ||
@@ -59,20 +60,31 @@ class ScanningStatusField extends StatelessWidget {
                                 context
                                     .read<OpendroneIdCubit>()
                                     .setBtUsed(btUsed: false);
-                                snackBarText = 'Bluetooth Scanning Stopped.';
+                                snackBarText = btScanStopMessage;
+                                showSnackBar(context, snackBarText);
                               } else {
                                 context
                                     .read<OpendroneIdCubit>()
-                                    .setBtUsed(btUsed: true);
-                                snackBarText = 'Bluetooth Scanning Started.';
+                                    .setBtUsed(btUsed: true)
+                                    .then((result) {
+                                  if (result.success) {
+                                    snackBarText = btScanStartMessage;
+                                  } else {
+                                    snackBarText =
+                                        unableToStartMessage(result.error!);
+                                  }
+                                  showSnackBar(context, snackBarText);
+                                });
                               }
-                              showSnackBar(context, snackBarText);
                             } else {
-                              snackBarText =
-                                  'Turn Bluetooth on to start scanning.';
                               showSnackBar(
                                 context,
-                                snackBarText,
+                                btTurnedOffMessage(
+                                  isAndroidSystem: context
+                                      .read<StandardsCubit>()
+                                      .state
+                                      .androidSystem,
+                                ),
                               );
                             }
                           });
@@ -110,34 +122,40 @@ class ScanningStatusField extends StatelessWidget {
                           PreferencesSlider(
                             getValue: () => odidState.isScanningWifi,
                             setValue: (c) {
-                              late final String snackBarText;
                               context
                                   .read<OpendroneIdCubit>()
                                   .isWifiTurnedOn()
                                   .then((turnedOn) {
                                 if (turnedOn) {
+                                  late final String snackBarText;
                                   if (odidState.isScanningWifi &&
-                                          odidState.usedTechnologies ==
+                                      (odidState.usedTechnologies ==
                                               UsedTechnologies.Wifi ||
-                                      odidState.usedTechnologies ==
-                                          UsedTechnologies.Both) {
+                                          odidState.usedTechnologies ==
+                                              UsedTechnologies.Both)) {
                                     context
                                         .read<OpendroneIdCubit>()
                                         .setWifiUsed(wifiUsed: false);
-                                    snackBarText = 'Wi-Fi Scanning Stopped.';
+                                    snackBarText = wifiScanStopMessage;
+                                    showSnackBar(context, snackBarText);
                                   } else {
                                     context
                                         .read<OpendroneIdCubit>()
-                                        .setWifiUsed(wifiUsed: true);
-                                    snackBarText = 'Wi-Fi Scanning Started.';
+                                        .setWifiUsed(wifiUsed: true)
+                                        .then((result) {
+                                      if (result.success) {
+                                        snackBarText = wifiScanStartMessage;
+                                      } else {
+                                        snackBarText =
+                                            unableToStartMessage(result.error!);
+                                      }
+                                      showSnackBar(context, snackBarText);
+                                    });
                                   }
-                                  showSnackBar(context, snackBarText);
                                 } else {
-                                  snackBarText =
-                                      'Turn Wi-Fi on to start scanning.';
                                   showSnackBar(
                                     context,
-                                    snackBarText,
+                                    wifiTurnedOffMessage,
                                   );
                                 }
                               });

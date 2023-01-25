@@ -27,7 +27,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       Timer(const Duration(seconds: 5), checkInternetConnection);
-      //checkPermissions();
+      checkPermissions();
     }
   }
 
@@ -130,18 +130,24 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     location.onLocationChanged.listen(userLocationChanged);
   }
 
+  // check permission status without requests
   Future<void> checkPermissions() async {
+    if (!mounted) return;
     final loc = await Permission.location.isGranted;
     // check loc, if was not set before, init listener
-    if (!mounted) return;
     if (loc && !context.read<StandardsCubit>().state.locationEnabled) {
       initLocation();
     }
-    if (!mounted) return;
     await context.read<StandardsCubit>().setLocationEnabled(enabled: loc);
     final bt = await Permission.bluetooth.isGranted;
-    if (!mounted) return;
-    await context.read<StandardsCubit>().setBluetoothEnabled(enabled: bt);
+    if (Platform.isAndroid) {
+      final btScan = await Permission.bluetoothScan.isGranted;
+      await context
+          .read<StandardsCubit>()
+          .setBluetoothEnabled(enabled: bt && btScan);
+    } else {
+      await context.read<StandardsCubit>().setBluetoothEnabled(enabled: bt);
+    }
   }
 
   void userLocationChanged(LocationData currentLocation) {
