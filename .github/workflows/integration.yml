@@ -1,0 +1,45 @@
+name: Integration
+
+# Integration workflow integrates the code, checking for code style issues
+# and runs the unit test suite
+
+env:
+  FLUTTER_VERSION: '3.7.x'
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_call:
+
+jobs:
+  lint:
+    name: Check for linting or code style errors
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install the project
+        uses: dronetag/gha-shared/.github/actions/flutter-install@master
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+      - name: Run code analysis
+        run: flutter analyze --no-fatal-infos
+      - name: Enforce code style
+        uses: dronetag/gha-shared/.github/actions/enforce-dart-format@master
+
+  # test:
+  #   name: Run unit tests suite
+  #   runs-on: ubuntu-22.04
+  #   timeout-minutes: 10
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #     - name: Install the project
+  #       uses: dronetag/gha-shared/.github/actions/flutter-install@master
+  #       with:
+  #         flutter-version: ${{ env.FLUTTER_VERSION }}
+  #     - name: Run code analysis
+  #       run: flutter test -r expanded
