@@ -243,7 +243,7 @@ class LocationFields {
 
   static String _getStatusText(pigeon.LocationMessage? loc) {
     if (loc == null) return 'Unknown';
-    final status = loc!.status;
+    final status = loc.status;
     return status == pigeon.AircraftStatus.Ground
         ? 'Grounded'
         : status == pigeon.AircraftStatus.Airborne
