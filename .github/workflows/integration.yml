@@ -7,9 +7,6 @@ env:
   FLUTTER_VERSION: '3.7.x'
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
   workflow_call:
 
