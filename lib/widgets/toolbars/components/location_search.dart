@@ -7,31 +7,18 @@ import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
-import '../../../utils/google_api_key_reader.dart';
 
-class LocationSearch extends StatefulWidget {
+class LocationSearch extends StatelessWidget {
   const LocationSearch({Key? key}) : super(key: key);
-
-  @override
-  State<LocationSearch> createState() => _LocationSearchState();
-}
-
-class _LocationSearchState extends State<LocationSearch> {
-  String? googleApikey = GoogleApiKeyReader.getApiKey();
-  String? locationCache;
 
   Future<List<SearchInfo>> suggest(String input) async {
     return await addressSuggestion(input);
   }
 
-  void applyFoundLocation(LatLng location) async {
-    if (!mounted) return;
+  void applyFoundLocation(BuildContext context, LatLng location) async {
     await context.read<MapCubit>().centerToLoc(location);
-    if (!mounted) return;
     await context.read<MapCubit>().setDroppedPinLocation(location);
-    if (!mounted) return;
     await context.read<MapCubit>().setDroppedPin(pinDropped: true);
-    if (!mounted) return;
     if (context.read<SlidersCubit>().panelController.isPanelOpen) {
       await context
           .read<SlidersCubit>()
@@ -97,7 +84,9 @@ class _LocationSearchState extends State<LocationSearch> {
         onSelected: (option) {
           if (option.point != null) {
             applyFoundLocation(
-                LatLng(option.point!.latitude, option.point!.longitude));
+              context,
+              LatLng(option.point!.latitude, option.point!.longitude),
+            );
           }
         },
         fieldViewBuilder:
