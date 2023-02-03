@@ -57,5 +57,7 @@
 	<array>
   		<string>https</string>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>
