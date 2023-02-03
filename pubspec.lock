@@ -137,14 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  dart_either:
-    dependency: transitive
-    description:
-      name: dart_either
-      sha256: "928895b8266ac5906eb4e2993fead563a73b17fc86eec6b40172100d56ca2507"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   dependency_validator:
     dependency: "direct dev"
     description:
@@ -201,6 +193,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.6"
   f_logs:
     dependency: "direct main"
     description:
@@ -238,14 +238,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.1.1"
-  flutter_google_places_hoc081098:
-    dependency: "direct main"
-    description:
-      name: flutter_google_places_hoc081098
-      sha256: cee7620085f3187d56a78f03b25acedf699fcebf9355ee4b0251cc09e8ba74f2
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   flutter_markdown:
     dependency: "direct main"
     description:
@@ -262,6 +254,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.0"
+  flutter_osm_interface:
+    dependency: transitive
+    description:
+      name: flutter_osm_interface
+      sha256: "9248c2e45f22155c22d19ee8f7bb7018e61fe252cc9ea4c0e773240cd8f7dd4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.31"
+  flutter_osm_plugin:
+    dependency: "direct main"
+    description:
+      name: flutter_osm_plugin
+      sha256: a5c9c72e83143134c6411ca75fbc49d1ba1082b92f03a707be06e23753829f61
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.42.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -331,14 +339,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.5"
-  google_maps_webservice:
-    dependency: "direct main"
+  google_polyline_algorithm:
+    dependency: transitive
     description:
-      name: google_maps_webservice
-      sha256: d0ae4e4508afd74a3f051565261a3cdbae59db29448f9b6e6beb5674545e1eb7
+      name: google_polyline_algorithm
+      sha256: "357874f00d3f93c3ba1bf4b4d9a154aa9ee87147c068238c1e8392012b686a03"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.20-nullsafety.5"
+    version: "3.1.0"
   http:
     dependency: "direct main"
     description:
@@ -387,14 +395,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
-  listenable_stream:
-    dependency: transitive
-    description:
-      name: listenable_stream
-      sha256: "5458276035c7eb66477c30f8eab0942e56537ba3d268172574f7af97e265e894"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   localstorage:
     dependency: "direct main"
     description:
@@ -615,18 +615,18 @@ packages:
     dependency: "direct main"
     description:
       name: permission_handler
-      sha256: "5749ebeb7ec0c3865ea17e3eb337174b87747be816dab582c551e1aff6f6bbf3"
+      sha256: "33c6a1253d1f95fd06fa74b65b7ba907ae9811f9d5c1d3150e51417d04b8d6a8"
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.0"
+    version: "10.2.0"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
-      sha256: a512e0fa8abcb0659d938ec2df93a70eb1df1fdea5fdc6d79a866bfd858a28fc
+      sha256: "8028362b40c4a45298f1cbfccd227c8dd6caf0e27088a69f2ba2ab15464159e2"
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.2+1"
+    version: "10.2.0"
   permission_handler_apple:
     dependency: transitive
     description:
@@ -715,14 +715,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
-  rxdart_ext:
-    dependency: transitive
-    description:
-      name: rxdart_ext
-      sha256: a7207eee19b6758c3537efd148c769360a3f384a572a4ca9956d4dada4ae4869
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.8"
   scrollable_positioned_list:
     dependency: "direct main"
     description:
