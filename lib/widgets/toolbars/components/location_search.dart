@@ -43,7 +43,6 @@ class LocationSearch extends StatelessWidget {
       fontSize: 14,
     );
     return Container(
-      color: Colors.green,
       child: Autocomplete<SearchInfo>(
         optionsBuilder: (textEditingValue) async {
           return await suggest(textEditingValue.text);
@@ -82,6 +81,8 @@ class LocationSearch extends StatelessWidget {
         },
         displayStringForOption: (option) => option.address.toString(),
         onSelected: (option) {
+          // unfocus text field
+          FocusManager.instance.primaryFocus?.unfocus();
           if (option.point != null) {
             applyFoundLocation(
               context,
@@ -98,6 +99,12 @@ class LocationSearch extends StatelessWidget {
           autocorrect: false,
           cursorColor: Colors.white,
           decoration: InputDecoration(
+            contentPadding: EdgeInsets.zero,
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
             hintText: 'Search Locations',
             hintStyle: hintStyle,
             floatingLabelBehavior: FloatingLabelBehavior.never,

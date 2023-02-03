@@ -52,7 +52,7 @@ class _ToolbarState extends State<Toolbar> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Expanded(
-              flex: 3,
+              flex: 2,
               child: LocationSearch(),
             ),
             Expanded(
