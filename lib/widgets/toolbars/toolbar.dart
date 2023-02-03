@@ -52,8 +52,7 @@ class _ToolbarState extends State<Toolbar> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Expanded(
-              flex: 2,
-              // source: https://www.fluttercampus.com/guide/254/google-map-autocomplete-place-search-flutter/
+              flex: 3,
               child: LocationSearch(),
             ),
             Expanded(
