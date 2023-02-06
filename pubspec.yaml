@@ -27,7 +27,7 @@ dependencies:
   path_provider: ^2.0.9
   showcaseview: ^1.1.7
   shared_preferences: ^2.0.13
-  device_info_plus: ^3.2.2
+  device_info_plus: ^8.0.0
   f_logs: ^2.0.0 
   timer_builder: ^2.0.0
   csv: ^5.0.1
