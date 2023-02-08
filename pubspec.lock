@@ -218,10 +218,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_opendroneid
-      sha256: "9c35aa405d3ea83da24a9548edf983cc5c8278f35d43d09a4d1513d46dd622ff"
+      sha256: "94fdede6420c245266a682b2673f78044eb6c13fd4579bfaf7df0840e77619bb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.0"
+    version: "0.11.1"
   flutter_osm_interface:
     dependency: transitive
     description:
