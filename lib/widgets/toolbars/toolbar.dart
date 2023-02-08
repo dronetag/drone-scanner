@@ -53,7 +53,6 @@ class _ToolbarState extends State<Toolbar> {
           children: [
             Expanded(
               flex: 2,
-              // source: https://www.fluttercampus.com/guide/254/google-map-autocomplete-place-search-flutter/
               child: LocationSearch(),
             ),
             Expanded(

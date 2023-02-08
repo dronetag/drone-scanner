@@ -15,21 +15,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_opendroneid: 0.11.0
+  flutter_opendroneid: 0.11.1
   sprintf: "^6.0.0"
-  flutter_google_places_hoc081098: 1.1.0
   google_api_headers: ^1.1.1
-  google_maps_webservice: ^0.0.20-nullsafety.5
   google_maps_flutter: ^2.1.1
   sliding_up_panel: ^2.0.0+1
   location: ^4.2.0
   http: ^0.13.4
-  permission_handler: ^9.2.0
+  permission_handler: ^10.0.0
   flutter_spinbox: ^0.8.0
   path_provider: ^2.0.9
   showcaseview: ^1.1.7
   shared_preferences: ^2.0.13
-  device_info_plus: ^3.2.2
+  device_info_plus: ^8.0.0
   f_logs: ^2.0.0 
   timer_builder: ^2.0.0
   csv: ^5.0.1
@@ -44,6 +42,7 @@ dependencies:
   wakelock: ^0.6.2
   scrollable_positioned_list: ^0.3.5
   flutter_markdown: ^0.6.13
+  flutter_osm_plugin: ^0.42.0
   url_launcher: ^6.1.6
   navigation_history_observer: ^1.1.0
 
