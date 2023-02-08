@@ -138,7 +138,7 @@ class StandardsCubit extends Cubit<StandardsState> {
       final androidInfo = await deviceInfo.androidInfo;
       phoneModel = androidInfo.model;
       phoneManufacturer = androidInfo.manufacturer;
-      osVersion = '${androidInfo.version.release!} $osVersion';
+      osVersion = '${androidInfo.version.release} $osVersion';
     } else {
       final iosInfo = await deviceInfo.iosInfo;
       phoneModel = iosInfo.name;
