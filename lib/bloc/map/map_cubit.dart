@@ -25,7 +25,7 @@ class MapCubit extends Cubit<GMapState> {
     target: gmap.LatLng(50.5, 14.25),
     zoom: 11.0,
   );
-  static const maxPolylinePoints = 500;
+  static const maxPolylinePoints = 400;
 
   List<VoidCallback> postLoadCallbacks = [];
 
