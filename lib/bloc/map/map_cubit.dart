@@ -25,6 +25,8 @@ class MapCubit extends Cubit<GMapState> {
     target: gmap.LatLng(50.5, 14.25),
     zoom: 11.0,
   );
+  static const maxPolylinePoints = 500;
+
   List<VoidCallback> postLoadCallbacks = [];
 
   MapCubit(LocationService locationService)
@@ -391,16 +393,15 @@ class MapCubit extends Cubit<GMapState> {
     selItemHistory =
         context.read<AircraftCubit>().state.packHistory()[selItemMac];
     if (selItemHistory == null) return {};
-    const maxPoints = 75;
     var filteredList = <MessagePack>[];
     // calc portion of history that will be filtered out
-    final skip = selItemHistory.length ~/ maxPoints;
+    final skip = (selItemHistory.length / maxPolylinePoints);
 
     if (skip <= 1) {
       filteredList = selItemHistory;
     } else {
       for (var i = 0; i < selItemHistory.length; ++i) {
-        if ((i % skip) == 0) {
+        if ((i % skip) < 1) {
           filteredList.add(selItemHistory[i]);
         }
       }
