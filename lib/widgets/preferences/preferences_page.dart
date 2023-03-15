@@ -10,6 +10,7 @@ import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/opendroneid_cubit.dart';
+import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -398,9 +399,9 @@ class PreferencesPage extends StatelessWidget {
           description: 'Fire alert when other aircraft gets close to Yours',
           child: PreferencesSlider(
             getValue: () =>
-                context.read<AircraftCubit>().state.proximityAlertActive,
+                context.read<ProximityAlertsCubit>().state.proximityAlertActive,
             setValue: (c) => context
-                .read<AircraftCubit>()
+                .read<ProximityAlertsCubit>()
                 .setProximityAlertsActive(active: c),
           ),
         ),
@@ -414,13 +415,15 @@ class PreferencesPage extends StatelessWidget {
           child: Container(
             width: width / 3,
             child: CustomSpinBox(
-              maxVal: AircraftExpirationCubit.maxTime,
-              minVal: AircraftExpirationCubit.minTime,
-              step: AircraftExpirationCubit.timeStep,
-              value:
-                  context.watch<AircraftCubit>().state.proximityAlertDistance,
+              maxVal: ProximityAlertsCubit.maxProximityAlertDistance,
+              minVal: ProximityAlertsCubit.minProximityAlertDistance,
+              step: ProximityAlertsCubit.proximityAlertStep,
+              value: context
+                  .read<ProximityAlertsCubit>()
+                  .state
+                  .proximityAlertDistance,
               valueSetter: (value) => context
-                  .read<AircraftCubit>()
+                  .read<ProximityAlertsCubit>()
                   .setProximityAlertsDistance(value),
             ),
           ),

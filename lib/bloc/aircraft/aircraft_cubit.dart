@@ -12,22 +12,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../services/location_service.dart';
 import '/utils/csvlogger.dart';
 import '../../utils/utils.dart';
+import '../proximity_alerts_cubit.dart';
 import 'aircraft_expiration_cubit.dart';
 
 part 'aircraft_state.dart';
 
 class AircraftCubit extends Cubit<AircraftState> {
   Timer? _refreshTimer;
-  AircraftExpirationCubit expirationCubit;
+  final AircraftExpirationCubit expirationCubit;
+  final ProximityAlertsCubit proximityAlertsCubit;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
-  static const maxProximityAlertDistance = 5000.0;
-  static const minProximityAlertDistance = 100.0;
-  static const defaultProximityAlertDistance = 2000.0;
-  static const maxProximityAlertStep = 10.0;
 
   static const uiUpdateIntervalMs = 200;
 
@@ -78,18 +75,15 @@ class AircraftCubit extends Cubit<AircraftState> {
     ),
   ];
 
-  AircraftCubit(this.expirationCubit)
+  AircraftCubit(this.expirationCubit, this.proximityAlertsCubit)
       : super(
           AircraftState(
             packHistory: <String, List<MessagePack>>{},
             aircraftLabels: <String, String>{},
-            usersAircraftUASID: null,
-            proximityAlertDistance: defaultProximityAlertDistance,
-            proximityAlertActive: false,
           ),
         ) {
     expirationCubit.setDeleteCallback(deletePack);
-    fetchSavedData();
+    fetchSavedAircraftLabels();
   }
 
   // timer used to notify UI
@@ -110,9 +104,6 @@ class AircraftCubit extends Cubit<AircraftState> {
       AircraftStateUpdate(
         packHistory: state.packHistory(),
         aircraftLabels: state.aircraftLabels,
-        usersAircraftUASID: state.usersAircraftUASID,
-        proximityAlertDistance: state.proximityAlertDistance,
-        proximityAlertActive: state.proximityAlertActive,
       ),
     );
   }
@@ -125,7 +116,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   //Retrieves the labels stored persistently locally on the device
-  Future<void> fetchSavedData() async {
+  Future<void> fetchSavedAircraftLabels() async {
     final ready = await storage.ready;
     if (ready) {
       var labels = storage.getItem('labels');
@@ -134,19 +125,9 @@ class AircraftCubit extends Cubit<AircraftState> {
         (json.decode(labels as String) as Map<String, dynamic>)
             .forEach((key, value) => labelsMap[key] = value as String);
       }
-      var usersAircraftUASID = storage.getItem('usersAircraftUASID');
-      var proximityAlertDistance = storage.getItem('proximityAlertDistance');
-      var proximityAlertActive = storage.getItem('proximityAlertActive');
       emit(
         state.copyWith(
           aircraftLabels: labelsMap,
-          usersAircraftUASID: (usersAircraftUASID as String),
-          proximityAlertDistance: proximityAlertDistance == null
-              ? defaultProximityAlertDistance
-              : proximityAlertDistance as double,
-          proximityAlertActive: proximityAlertActive == null
-              ? false
-              : proximityAlertActive as bool,
         ),
       );
     }
@@ -178,31 +159,7 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   Future<void> _saveLabels() async {
     await storage.setItem('labels', json.encode(state.aircraftLabels));
-    await fetchSavedData();
-  }
-
-  Future<void> setUsersAircraftUASID(String uasId) async {
-    await storage.setItem(
-      'usersAircraftUASID',
-      uasId,
-    );
-    await fetchSavedData();
-  }
-
-  Future<void> setProximityAlertsDistance(double distance) async {
-    await storage.setItem(
-      'proximityAlertDistance',
-      distance,
-    );
-    await fetchSavedData();
-  }
-
-  Future<void> setProximityAlertsActive({required bool active}) async {
-    await storage.setItem(
-      'proximityAlertActive',
-      active,
-    );
-    await fetchSavedData();
+    await fetchSavedAircraftLabels();
   }
 
   MessagePack? findByMacAddress(String mac) {
@@ -218,9 +175,6 @@ class AircraftCubit extends Cubit<AircraftState> {
       AircraftStateUpdate(
         packHistory: {},
         aircraftLabels: state.aircraftLabels,
-        usersAircraftUASID: state.usersAircraftUASID,
-        proximityAlertDistance: state.proximityAlertDistance,
-        proximityAlertActive: state.proximityAlertActive,
       ),
     );
   }
@@ -245,12 +199,9 @@ class AircraftCubit extends Cubit<AircraftState> {
         AircraftStateBuffering(
           packHistory: data,
           aircraftLabels: state.aircraftLabels,
-          usersAircraftUASID: state.usersAircraftUASID,
-          proximityAlertDistance: state.proximityAlertDistance,
-          proximityAlertActive: state.proximityAlertActive,
         ),
       );
-      _checkProximityAlerts(pack);
+      proximityAlertsCubit.checkProximityAlerts(pack, state.packHistory());
     } on Exception {
       rethrow;
     }
@@ -272,9 +223,6 @@ class AircraftCubit extends Cubit<AircraftState> {
         AircraftStateUpdate(
           packHistory: data,
           aircraftLabels: state.aircraftLabels,
-          usersAircraftUASID: state.usersAircraftUASID,
-          proximityAlertDistance: state.proximityAlertDistance,
-          proximityAlertActive: state.proximityAlertActive,
         ),
       );
     } on Exception {
@@ -297,9 +245,6 @@ class AircraftCubit extends Cubit<AircraftState> {
       AircraftStateUpdate(
         packHistory: data,
         aircraftLabels: state.aircraftLabels,
-        usersAircraftUASID: state.usersAircraftUASID,
-        proximityAlertDistance: state.proximityAlertDistance,
-        proximityAlertActive: state.proximityAlertActive,
       ),
     );
   }
@@ -375,33 +320,5 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   void applyState(AircraftState state) {
     emit(state);
-  }
-
-  void _checkProximityAlerts(MessagePack pack) {
-    if (state.proximityAlertActive &&
-        pack.basicIdMessage?.uasId != null &&
-        pack.basicIdMessage?.uasId == state.usersAircraftUASID &&
-        pack.locationValid()) {
-      state.packHistory().forEach(
-        (key, value) {
-          if (value.last.basicIdMessage?.uasId != null &&
-              value.last.basicIdMessage?.uasId != state.usersAircraftUASID &&
-              value.last.locationValid()) {
-            // calc distance and convert to meters
-            final distance = calculateDistance(
-                    pack.locationMessage!.latitude!,
-                    pack.locationMessage!.longitude!,
-                    value.last.locationMessage!.latitude!,
-                    value.last.locationMessage!.longitude!) *
-                1000;
-            if (distance <= state.proximityAlertDistance) {
-              print('taggs calculated distance btw ${state.usersAircraftUASID}'
-                  'and ${value.last.basicIdMessage?.uasId} is $distance, smaller than ${state.proximityAlertDistance}');
-              print('taggs ALERT ALERT ALERT');
-            }
-          }
-        },
-      );
-    }
   }
 }

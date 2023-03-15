@@ -10,6 +10,7 @@ import 'bloc/aircraft/selected_aircraft_cubit.dart';
 import 'bloc/help/help_cubit.dart';
 import 'bloc/map/map_cubit.dart';
 import 'bloc/opendroneid_cubit.dart';
+import 'bloc/proximity_alerts_cubit.dart';
 import 'bloc/screen_cubit.dart';
 import 'bloc/showcase_cubit.dart';
 import 'bloc/sliders_cubit.dart';
@@ -60,7 +61,9 @@ void main() async {
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
-  final aircraftCubit = AircraftCubit(aircraftExpirationCubit);
+  final proximityAlertsCubit = ProximityAlertsCubit();
+  final aircraftCubit =
+      AircraftCubit(aircraftExpirationCubit, proximityAlertsCubit);
   runAppWithSentry(
     () => runApp(
       MultiBlocProvider(
@@ -99,6 +102,10 @@ void main() async {
           ),
           BlocProvider<AircraftExpirationCubit>(
             create: (context) => aircraftExpirationCubit,
+            lazy: false,
+          ),
+          BlocProvider<ProximityAlertsCubit>(
+            create: (context) => proximityAlertsCubit,
             lazy: false,
           ),
           BlocProvider<SelectedAircraftCubit>(

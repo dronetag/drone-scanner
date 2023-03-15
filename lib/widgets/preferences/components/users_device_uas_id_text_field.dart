@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/proximity_alerts_cubit.dart';
 import 'preferences_field_with_description.dart';
 
 class UsersDeviceUASIDTextField extends StatelessWidget {
@@ -10,13 +11,16 @@ class UsersDeviceUASIDTextField extends StatelessWidget {
 
   void _submit(BuildContext context) {
     // TODO: validate
-    context.read<AircraftCubit>().setUsersAircraftUASID(_controller.text);
+    context
+        .read<ProximityAlertsCubit>()
+        .setUsersAircraftUASID(_controller.text);
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    final userDevice = context.read<AircraftCubit>().state.usersAircraftUASID;
+    final userDevice =
+        context.read<ProximityAlertsCubit>().state.usersAircraftUASID;
     if (userDevice != null) {
       _controller.text = userDevice;
     }

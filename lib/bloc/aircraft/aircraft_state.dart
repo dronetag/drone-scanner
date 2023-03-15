@@ -5,10 +5,6 @@ class AircraftState {
   // map of aircraft labels given by user
   // keys are aircraft mac adresses, values are labels
   final Map<String, String> aircraftLabels;
-  // uas id of drone selected by user as their own
-  final String? usersAircraftUASID;
-  final double proximityAlertDistance;
-  final bool proximityAlertActive;
 
   Map<String, List<MessagePack>> packHistory() {
     return _packHistory;
@@ -74,25 +70,15 @@ class AircraftState {
   AircraftState({
     required Map<String, List<MessagePack>> packHistory,
     required this.aircraftLabels,
-    required this.usersAircraftUASID,
-    required this.proximityAlertDistance,
-    required this.proximityAlertActive,
   }) : _packHistory = packHistory;
 
   AircraftState copyWith({
     Map<String, List<MessagePack>>? packHistory,
     Map<String, String>? aircraftLabels,
-    String? usersAircraftUASID,
-    double? proximityAlertDistance,
-    bool? proximityAlertActive,
   }) =>
       AircraftState(
         packHistory: packHistory ?? _packHistory,
         aircraftLabels: aircraftLabels ?? this.aircraftLabels,
-        usersAircraftUASID: usersAircraftUASID ?? this.usersAircraftUASID,
-        proximityAlertDistance:
-            proximityAlertDistance ?? this.proximityAlertDistance,
-        proximityAlertActive: proximityAlertActive ?? this.proximityAlertActive,
       );
 }
 
@@ -100,15 +86,9 @@ class AircraftStateUpdate extends AircraftState {
   AircraftStateUpdate({
     required Map<String, List<MessagePack>> packHistory,
     required Map<String, String> aircraftLabels,
-    required String? usersAircraftUASID,
-    required double proximityAlertDistance,
-    required bool proximityAlertActive,
   }) : super(
           packHistory: packHistory,
           aircraftLabels: aircraftLabels,
-          usersAircraftUASID: usersAircraftUASID,
-          proximityAlertDistance: proximityAlertDistance,
-          proximityAlertActive: proximityAlertActive,
         );
 }
 
@@ -116,14 +96,8 @@ class AircraftStateBuffering extends AircraftState {
   AircraftStateBuffering({
     required Map<String, List<MessagePack>> packHistory,
     required Map<String, String> aircraftLabels,
-    required String? usersAircraftUASID,
-    required double proximityAlertDistance,
-    required bool proximityAlertActive,
   }) : super(
           packHistory: packHistory,
           aircraftLabels: aircraftLabels,
-          usersAircraftUASID: usersAircraftUASID,
-          proximityAlertDistance: proximityAlertDistance,
-          proximityAlertActive: proximityAlertActive,
         );
 }

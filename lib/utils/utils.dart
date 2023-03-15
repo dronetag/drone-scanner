@@ -26,6 +26,7 @@ double calcHeaderHeight(BuildContext context) {
   return isLandscape ? height / 5 : height / 9;
 }
 
+// calculates distance in km
 double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   const p = 0.017453292519943295;
   const c = math.cos;
