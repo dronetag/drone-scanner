@@ -9,23 +9,27 @@ class ProximityAlertsState {
   final String? usersAircraftUASID;
   final double proximityAlertDistance;
   final bool proximityAlertActive;
+  final String? alert;
 
   ProximityAlertsState({
     required this.usersAircraftUASID,
     required this.proximityAlertDistance,
     required this.proximityAlertActive,
+    this.alert,
   });
 
   ProximityAlertsState copyWith({
     String? usersAircraftUASID,
     double? proximityAlertDistance,
     bool? proximityAlertActive,
+    String? alert,
   }) =>
       ProximityAlertsState(
         usersAircraftUASID: usersAircraftUASID ?? this.usersAircraftUASID,
         proximityAlertDistance:
             proximityAlertDistance ?? this.proximityAlertDistance,
         proximityAlertActive: proximityAlertActive ?? this.proximityAlertActive,
+        alert: alert ?? this.alert,
       );
 }
 
@@ -64,6 +68,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           proximityAlertActive: proximityAlertActive == null
               ? false
               : proximityAlertActive as bool,
+          alert: null,
         ),
       );
     }
@@ -115,10 +120,17 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
               print('taggs calculated distance btw ${state.usersAircraftUASID}'
                   'and ${value.last.basicIdMessage?.uasId} is $distance, smaller than ${state.proximityAlertDistance}');
               print('taggs ALERT ALERT ALERT');
+              final alert =
+                  'Warning! Aircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft';
+              emit(state.copyWith(alert: alert));
+            } else if (state.alert != null) {
+              emit(state.copyWith(alert: null));
             }
           }
         },
       );
+    } else if (state.alert != null) {
+      emit(state.copyWith(alert: null));
     }
   }
 }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/standards_cubit.dart';
+import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/utils.dart';
 import '../showcase/showcase_item.dart';
@@ -19,6 +21,7 @@ class HomeBody extends StatelessWidget {
   }) : super(key: key);
 
   Stack buildMapView(BuildContext context) {
+    final proximityAlert = context.watch<ProximityAlertsCubit>().state.alert;
     final height = MediaQuery.of(context).size.height;
     // acc to doc, wakelock should not be used in main but in widgets build m
     Wakelock.toggle(
@@ -35,6 +38,21 @@ class HomeBody extends StatelessWidget {
             child: const MapUIGoogle(),
           ),
         ),
+        if (proximityAlert != null)
+          Positioned(
+            top: height / 2,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColors.red),
+              ),
+              margin: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+              padding: EdgeInsets.all(Sizes.mapContentMargin),
+              width: MediaQuery.of(context).size.width -
+                  2 * Sizes.mapContentMargin,
+              child: Text(proximityAlert),
+            ),
+          ),
         const Toolbar(),
         Positioned(
           top: Sizes.toolbarHeight +
