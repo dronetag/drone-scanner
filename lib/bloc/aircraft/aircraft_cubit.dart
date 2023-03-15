@@ -24,6 +24,8 @@ class AircraftCubit extends Cubit<AircraftState> {
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
 
+  static const uiUpdateIntervalMs = 200;
+
   // data for showcase
   final List<MessagePack> _packs = [
     MessagePack(
@@ -83,7 +85,11 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   // timer used to notify UI
-  void initEmitTimer({Duration duration = const Duration(milliseconds: 500)}) {
+  void initEmitTimer({
+    Duration duration = const Duration(
+      milliseconds: uiUpdateIntervalMs,
+    ),
+  }) {
     stopEmitTimer();
     _refreshTimer = Timer.periodic(
       duration,

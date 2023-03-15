@@ -53,6 +53,8 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   SelectedAircraftCubit selectedAircraftCubit;
   AircraftCubit aircraftCubit;
 
+  static const messageDebounceMs = 50;
+
   OpendroneIdCubit({
     required this.mapCubit,
     required this.selectedAircraftCubit,
@@ -141,7 +143,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     try {
       await FlutterOpenDroneId.startScan(usedTechnology);
       listener = FlutterOpenDroneId.allMessages
-          .debounceTime(Duration(milliseconds: 100))
+          .debounceTime(Duration(milliseconds: messageDebounceMs))
           .listen(scanCallback);
       aircraftCubit.initEmitTimer();
     } on PermissionsMissingException catch (e) {
