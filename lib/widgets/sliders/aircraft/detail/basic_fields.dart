@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
+import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
@@ -87,6 +89,25 @@ class BasicFields {
           AircraftLabelText(
             aircraftMac: messagePackList.last.macAddress,
           ),
+        ],
+      ),
+      AircraftDetailRow(
+        children: [
+          Text('This is my aircraft'),
+          Checkbox(
+            value: context.read<AircraftCubit>().state.usersAircraftUASID !=
+                    null &&
+                context.read<AircraftCubit>().state.usersAircraftUASID ==
+                    messagePackList.last.basicIdMessage?.uasId,
+            onChanged: (value) {
+              if (value != null &&
+                  value &&
+                  messagePackList.last.basicIdMessage?.uasId != null) {
+                context.read<AircraftCubit>().setUsersAircraftUASID(
+                    messagePackList.last.basicIdMessage!.uasId);
+              }
+            },
+          )
         ],
       ),
       if (messagePackList.last.selfIdMessage != null &&

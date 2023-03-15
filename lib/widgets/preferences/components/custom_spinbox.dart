@@ -7,10 +7,20 @@ import '../../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../../constants/colors.dart';
 
 class CustomSpinBox extends StatelessWidget {
-  const CustomSpinBox({Key? key}) : super(key: key);
-  static const maxVal = 600.0;
-  static const minVal = 10.0;
-  static const step = 5.0;
+  final ValueSetter<double> valueSetter;
+  final double maxVal;
+  final double minVal;
+  final double step;
+  final double value;
+
+  const CustomSpinBox({
+    Key? key,
+    required this.maxVal,
+    required this.minVal,
+    required this.step,
+    required this.value,
+    required this.valueSetter,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -19,13 +29,8 @@ class CustomSpinBox extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () {
-            final current =
-                context.read<AircraftExpirationCubit>().state.cleanTimeSec;
-            if (current - step >= minVal) {
-              final packs = context.read<AircraftCubit>().state.packHistory();
-              context
-                  .read<AircraftExpirationCubit>()
-                  .setcleanTimeSec(current - step, packs);
+            if (value - step >= minVal) {
+              valueSetter(value - step);
             }
           },
           icon: Icon(
@@ -42,22 +47,14 @@ class CustomSpinBox extends StatelessWidget {
               keyboardType: TextInputType.numberWithOptions(signed: true),
               min: minVal,
               max: maxVal,
-              value: context
-                  .watch<AircraftExpirationCubit>()
-                  .state
-                  .cleanTimeSec
-                  .toDouble(),
+              value: value,
               step: step,
               showButtons: false,
               onChanged: (v) {
                 if (v < minVal || v > maxVal) {
                   return;
                 }
-                final packs = context.read<AircraftCubit>().state.packHistory();
-                context.read<AircraftExpirationCubit>().setcleanTimeSec(
-                      v,
-                      packs,
-                    );
+                valueSetter(v);
               },
               decoration: const InputDecoration(
                 fillColor: Colors.white,
@@ -74,14 +71,8 @@ class CustomSpinBox extends StatelessWidget {
         IconButton(
           constraints: BoxConstraints(),
           onPressed: () {
-            final current =
-                context.read<AircraftExpirationCubit>().state.cleanTimeSec;
-            if (current + step <= maxVal) {
-              final packs = context.read<AircraftCubit>().state.packHistory();
-              context.read<AircraftExpirationCubit>().setcleanTimeSec(
-                    current + step,
-                    packs,
-                  );
+            if (value + step <= maxVal) {
+              valueSetter(value + step);
             }
           },
           icon: Icon(

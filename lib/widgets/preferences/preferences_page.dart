@@ -28,6 +28,7 @@ import 'components/preferences_field_with_description.dart';
 import 'components/preferences_slider.dart';
 import 'components/scanning_status_field.dart';
 import 'components/screen_sleep_checkbox.dart';
+import 'components/users_device_uas_id_text_field.dart';
 
 class PreferencesPage extends StatelessWidget {
   static const routeName = 'PreferencesPage';
@@ -391,6 +392,45 @@ class PreferencesPage extends StatelessWidget {
       ),
       if (isLandscape) const SizedBox(),
       Padding(
+        padding: itemPadding,
+        child: PreferencesFieldWithDescription(
+          label: 'Proximity alerts:',
+          description: 'Fire alert when other aircraft gets close to Yours',
+          child: PreferencesSlider(
+            getValue: () =>
+                context.read<AircraftCubit>().state.proximityAlertActive,
+            setValue: (c) => context
+                .read<AircraftCubit>()
+                .setProximityAlertsActive(active: c),
+          ),
+        ),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesFieldWithDescription(
+          label: 'Proximity alerts distance (m):',
+          description:
+              'Set the distance between your and other aircraft that fires alert.',
+          child: Container(
+            width: width / 3,
+            child: CustomSpinBox(
+              maxVal: AircraftExpirationCubit.maxTime,
+              minVal: AircraftExpirationCubit.minTime,
+              step: AircraftExpirationCubit.timeStep,
+              value:
+                  context.watch<AircraftCubit>().state.proximityAlertDistance,
+              valueSetter: (value) => context
+                  .read<AircraftCubit>()
+                  .setProximityAlertsDistance(value),
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding: itemPadding / 2,
+        child: UsersDeviceUASIDTextField(),
+      ),
+      Padding(
         padding: itemPadding / 2,
         child: PreferencesFieldWithDescription(
           label: 'Bluetooth scan priority:',
@@ -433,7 +473,26 @@ class PreferencesPage extends StatelessWidget {
         child: PreferencesFieldWithDescription(
           label: 'Expiration time (sec):',
           description: 'Set the duration between 10 and 600 seconds',
-          child: Container(width: width / 3, child: CustomSpinBox()),
+          child: Container(
+            width: width / 3,
+            child: CustomSpinBox(
+              maxVal: AircraftExpirationCubit.maxTime,
+              minVal: AircraftExpirationCubit.minTime,
+              step: AircraftExpirationCubit.timeStep,
+              value: context
+                  .watch<AircraftExpirationCubit>()
+                  .state
+                  .cleanTimeSec
+                  .toDouble(),
+              valueSetter: (value) {
+                final packs = context.read<AircraftCubit>().state.packHistory();
+                context.read<AircraftExpirationCubit>().setcleanTimeSec(
+                      value,
+                      packs,
+                    );
+              },
+            ),
+          ),
         ),
       ),
       Padding(
