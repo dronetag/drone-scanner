@@ -398,12 +398,16 @@ class PreferencesPage extends StatelessWidget {
           label: 'Proximity alerts:',
           description: 'Fire alert when other aircraft gets close to Yours',
           child: PreferencesSlider(
-            getValue: () =>
-                context.read<ProximityAlertsCubit>().state.proximityAlertActive,
-            setValue: (c) => context
-                .read<ProximityAlertsCubit>()
-                .setProximityAlertsActive(active: c),
-          ),
+              getValue: () => context
+                  .read<ProximityAlertsCubit>()
+                  .state
+                  .proximityAlertActive,
+              setValue: (c) {
+                final cubit = context.read<ProximityAlertsCubit>();
+                if (cubit.state.usersAircraftUASID != null) {
+                  cubit.setProximityAlertsActive(active: c);
+                }
+              }),
         ),
       ),
       Padding(

@@ -61,7 +61,9 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       var proximityAlertActive = storage.getItem('proximityAlertActive');
       emit(
         state.copyWith(
-          usersAircraftUASID: (usersAircraftUASID as String),
+          usersAircraftUASID: usersAircraftUASID == null
+              ? null
+              : (usersAircraftUASID as String),
           proximityAlertDistance: proximityAlertDistance == null
               ? defaultProximityAlertDistance
               : proximityAlertDistance as double,
@@ -72,6 +74,17 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
         ),
       );
     }
+  }
+
+  Future<void> clearUsersAircraftUASID() async {
+    await storage.deleteItem(
+      'usersAircraftUASID',
+    );
+    await storage.setItem(
+      'proximityAlertActive',
+      false,
+    );
+    await fetchSavedData();
   }
 
   Future<void> setUsersAircraftUASID(String uasId) async {
@@ -116,7 +129,10 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
                     value.last.locationMessage!.latitude!,
                     value.last.locationMessage!.longitude!) *
                 1000;
-            if (distance <= state.proximityAlertDistance) {
+            // consider just packs not older than 30s
+            if (distance <= state.proximityAlertDistance &&
+                value.last.lastUpdate
+                    .isAfter(DateTime.now().subtract(Duration(seconds: 30)))) {
               print('taggs calculated distance btw ${state.usersAircraftUASID}'
                   'and ${value.last.basicIdMessage?.uasId} is $distance, smaller than ${state.proximityAlertDistance}');
               print('taggs ALERT ALERT ALERT');

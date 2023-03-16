@@ -97,20 +97,27 @@ class BasicFields {
           Text('This is my aircraft'),
           Checkbox(
             value: context
-                        .read<ProximityAlertsCubit>()
+                        .watch<ProximityAlertsCubit>()
                         .state
                         .usersAircraftUASID !=
                     null &&
-                context.read<ProximityAlertsCubit>().state.usersAircraftUASID ==
+                context
+                        .watch<ProximityAlertsCubit>()
+                        .state
+                        .usersAircraftUASID ==
                     messagePackList.last.basicIdMessage?.uasId,
             onChanged: (value) {
-              if (value != null &&
-                  value &&
-                  messagePackList.last.basicIdMessage?.uasId != null) {
+              if (value == null) return;
+              if (value && messagePackList.last.basicIdMessage?.uasId != null) {
                 context.read<ProximityAlertsCubit>().setUsersAircraftUASID(
                     messagePackList.last.basicIdMessage!.uasId);
+              } else {
+                context.read<ProximityAlertsCubit>().clearUsersAircraftUASID();
               }
             },
+            fillColor: MaterialStateProperty.all<Color>(
+              AppColors.blue,
+            ),
           )
         ],
       ),

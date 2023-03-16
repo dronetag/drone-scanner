@@ -3,11 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
-import 'preferences_field_with_description.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
+import '../../app/dialogs.dart';
 
-class UsersDeviceUASIDTextField extends StatelessWidget {
+class UsersDeviceUASIDTextField extends StatefulWidget {
   UsersDeviceUASIDTextField({Key? key}) : super(key: key);
+
+  @override
+  State<UsersDeviceUASIDTextField> createState() => _AircraftLabelTextState();
+}
+
+class _AircraftLabelTextState extends State<UsersDeviceUASIDTextField> {
   final TextEditingController _controller = TextEditingController();
+  bool isInit = false;
 
   void _submit(BuildContext context) {
     // TODO: validate
@@ -17,27 +26,109 @@ class UsersDeviceUASIDTextField extends StatelessWidget {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  void _delete(BuildContext context) {
+    context.read<ProximityAlertsCubit>().clearUsersAircraftUASID().then((_) {
+      final snackBarText = 'Users aircraft UAS ID was cleared.';
+      showSnackBar(
+        context,
+        snackBarText,
+      );
+      _controller.clear();
+      isInit = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userDevice =
-        context.read<ProximityAlertsCubit>().state.usersAircraftUASID;
-    if (userDevice != null) {
-      _controller.text = userDevice;
+    final width = MediaQuery.of(context).size.width;
+    if (!isInit) {
+      final userDevice =
+          context.read<ProximityAlertsCubit>().state.usersAircraftUASID;
+      if (userDevice != null) {
+        _controller.text = userDevice;
+      } else {
+        _controller.clear();
+      }
+      isInit = true;
     }
-    return PreferencesFieldWithDescription(
-      label: 'Own device UAS ID',
-      description: 'Register your aircrafts UAS ID to be able to receive'
-          'proximity alerts',
-      child: Expanded(
-        child: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'UAS ID',
+
+    return SizedBox(
+      width: width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Own device UAS ID',
           ),
-          controller: _controller,
-          onSubmitted: (_) => _submit(context),
-          onEditingComplete: () => _submit(context),
-        ),
+          Text(
+            'Register your aircrafts UAS ID to be able to receive'
+            ' proximity alerts',
+            textScaleFactor: 0.8,
+            style: const TextStyle(
+              color: AppColors.lightGray,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'UAS ID',
+                  ),
+                  controller: _controller,
+                  onSubmitted: (_) => _submit(context),
+                  onEditingComplete: () => _submit(context),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: Sizes.standard / 2),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.highlightBlue,
+                ),
+                height: Sizes.iconSize,
+                width: Sizes.iconSize,
+                child: IconButton(
+                  padding: const EdgeInsets.all(1.0),
+                  iconSize: 20,
+                  icon: const Icon(
+                    Icons.done_sharp,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _submit(context),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: Sizes.standard / 2),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.highlightBlue,
+                ),
+                height: Sizes.iconSize,
+                width: Sizes.iconSize,
+                child: IconButton(
+                  padding: const EdgeInsets.all(1.0),
+                  iconSize: 20,
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    showAlertDialog(
+                      context,
+                      'Are you sure you want to delete the aircraft UAS ID?',
+                      () => _delete(context),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
