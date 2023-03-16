@@ -37,7 +37,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const maxProximityAlertDistance = 5000.0;
   static const minProximityAlertDistance = 100.0;
   static const defaultProximityAlertDistance = 2000.0;
-  static const proximityAlertStep = 10.0;
 
   static const proximityAlertActiveKey = 'proximityAlertActive';
   static const proximityAlertDistanceKey = 'proximityAlertDistance';
@@ -63,8 +62,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       var usersAircraftUASID = storage.getItem(usersAircraftUASIDKey);
       var proximityAlertDistance = storage.getItem(proximityAlertDistanceKey);
       var proximityAlertActive = storage.getItem(proximityAlertActiveKey);
-
-      print('taggs fetchSavedData 2 $proximityAlertActive $usersAircraftUASID');
       emit(
         ProximityAlertsState(
           usersAircraftUASID: usersAircraftUASID == null
@@ -115,7 +112,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   }
 
   Future<void> setProximityAlertsActive({required bool active}) async {
-    print('taggs setProximityAlertsActive $active');
     await storage.setItem(
       proximityAlertActiveKey,
       active,

@@ -27,6 +27,7 @@ import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
 import 'components/preferences_slider.dart';
+import 'components/proximity_alert_distance_field.dart';
 import 'components/scanning_status_field.dart';
 import 'components/screen_sleep_checkbox.dart';
 import 'components/users_device_uas_id_text_field.dart';
@@ -412,26 +413,7 @@ class PreferencesPage extends StatelessWidget {
       ),
       Padding(
         padding: itemPadding,
-        child: PreferencesFieldWithDescription(
-          label: 'Proximity alerts distance (m):',
-          description:
-              'Set the distance between your and other aircraft that fires alert.',
-          child: Container(
-            width: width / 3,
-            child: CustomSpinBox(
-              maxVal: ProximityAlertsCubit.maxProximityAlertDistance,
-              minVal: ProximityAlertsCubit.minProximityAlertDistance,
-              step: ProximityAlertsCubit.proximityAlertStep,
-              value: context
-                  .read<ProximityAlertsCubit>()
-                  .state
-                  .proximityAlertDistance,
-              valueSetter: (value) => context
-                  .read<ProximityAlertsCubit>()
-                  .setProximityAlertsDistance(value),
-            ),
-          ),
-        ),
+        child: ProximityAlertDistanceField(),
       ),
       Padding(
         padding: itemPadding / 2,

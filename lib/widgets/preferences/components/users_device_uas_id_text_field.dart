@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -20,9 +19,16 @@ class _AircraftLabelTextState extends State<UsersDeviceUASIDTextField> {
 
   void _submit(BuildContext context) {
     // TODO: validate
-    context
-        .read<ProximityAlertsCubit>()
-        .setUsersAircraftUASID(_controller.text);
+    if (_controller.text.isEmpty) {
+      // check if label is not just whitespaces
+      if (_controller.text.trim() != '') {
+        context
+            .read<ProximityAlertsCubit>()
+            .setUsersAircraftUASID(_controller.text);
+      } else {
+        _controller.text = '';
+      }
+    }
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
