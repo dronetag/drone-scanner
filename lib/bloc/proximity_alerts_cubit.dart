@@ -39,6 +39,10 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const defaultProximityAlertDistance = 2000.0;
   static const proximityAlertStep = 10.0;
 
+  static const proximityAlertActiveKey = 'proximityAlertActive';
+  static const proximityAlertDistanceKey = 'proximityAlertDistance';
+  static const usersAircraftUASIDKey = 'usersAircraftUASID';
+
   final LocalStorage storage = LocalStorage('dronescanner-proximity-alerts');
 
   ProximityAlertsCubit()
@@ -56,11 +60,13 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   Future<void> fetchSavedData() async {
     final ready = await storage.ready;
     if (ready) {
-      var usersAircraftUASID = storage.getItem('usersAircraftUASID');
-      var proximityAlertDistance = storage.getItem('proximityAlertDistance');
-      var proximityAlertActive = storage.getItem('proximityAlertActive');
+      var usersAircraftUASID = storage.getItem(usersAircraftUASIDKey);
+      var proximityAlertDistance = storage.getItem(proximityAlertDistanceKey);
+      var proximityAlertActive = storage.getItem(proximityAlertActiveKey);
+
+      print('taggs fetchSavedData 2 $proximityAlertActive $usersAircraftUASID');
       emit(
-        state.copyWith(
+        ProximityAlertsState(
           usersAircraftUASID: usersAircraftUASID == null
               ? null
               : (usersAircraftUASID as String),
@@ -78,10 +84,10 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   Future<void> clearUsersAircraftUASID() async {
     await storage.deleteItem(
-      'usersAircraftUASID',
+      usersAircraftUASIDKey,
     );
     await storage.setItem(
-      'proximityAlertActive',
+      proximityAlertActiveKey,
       false,
     );
     await fetchSavedData();
@@ -89,23 +95,29 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   Future<void> setUsersAircraftUASID(String uasId) async {
     await storage.setItem(
-      'usersAircraftUASID',
+      usersAircraftUASIDKey,
       uasId,
+    );
+    // turn alert on after setting aircraft
+    await storage.setItem(
+      proximityAlertActiveKey,
+      true,
     );
     await fetchSavedData();
   }
 
   Future<void> setProximityAlertsDistance(double distance) async {
     await storage.setItem(
-      'proximityAlertDistance',
+      proximityAlertDistanceKey,
       distance,
     );
     await fetchSavedData();
   }
 
   Future<void> setProximityAlertsActive({required bool active}) async {
+    print('taggs setProximityAlertsActive $active');
     await storage.setItem(
-      'proximityAlertActive',
+      proximityAlertActiveKey,
       active,
     );
     await fetchSavedData();
