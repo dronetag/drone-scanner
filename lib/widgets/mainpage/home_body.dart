@@ -9,6 +9,8 @@ import '../../bloc/standards_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/utils.dart';
+import '../app/expiring_alert.dart';
+import '../preferences/components/proximity_alert.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/airspace_sliding_panel.dart';
 import '../toolbars/map_options_toolbar.dart';
@@ -21,8 +23,10 @@ class HomeBody extends StatelessWidget {
   }) : super(key: key);
 
   Stack buildMapView(BuildContext context) {
-    final proximityAlert = context.watch<ProximityAlertsCubit>().state.alert;
     final height = MediaQuery.of(context).size.height;
+    final mapToolbarHeight = height / 6;
+    final alertsDismissed =
+        context.watch<ProximityAlertsCubit>().state.alertDismissed;
     // acc to doc, wakelock should not be used in main but in widgets build m
     Wakelock.toggle(
         enable: context.watch<ScreenCubit>().state.screenSleepDisabled);
@@ -38,32 +42,42 @@ class HomeBody extends StatelessWidget {
             child: const MapUIGoogle(),
           ),
         ),
-        if (proximityAlert != null)
-          Positioned(
-            top: height / 3,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: AppColors.red),
-              ),
-              margin: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
-              padding: EdgeInsets.all(
-                Sizes.mapContentMargin / 2,
-              ),
-              width: MediaQuery.of(context).size.width -
-                  2 * Sizes.mapContentMargin,
-              child: Column(
-                children: [
-                  Text(proximityAlert),
-                  ElevatedButton(
-                      onPressed: () {
-                        context.read<ProximityAlertsCubit>().dismissAlert();
-                      },
-                      child: Text('Dismiss')),
-                ],
-              ),
-            ),
-          ),
+        StreamBuilder(
+          stream: context.read<ProximityAlertsCubit>().alertStream,
+          builder: (context, snapshot) =>
+              (snapshot.data is String) && (snapshot.data as String).isNotEmpty
+                  ? alertsDismissed
+                      ? ExpiringWidget(
+                          child: Positioned(
+                            top: Sizes.toolbarHeight +
+                                MediaQuery.of(context).viewPadding.top +
+                                Sizes.mapContentMargin +
+                                context.read<ScreenCubit>().scaleHeight * 25 +
+                                mapToolbarHeight,
+                            right: Sizes.mapContentMargin,
+                            child: IconButton(
+                              onPressed: () => context
+                                  .read<ProximityAlertsCubit>()
+                                  .setAlertDismissed(dismissed: false),
+                              icon: Icon(
+                                Icons.warning_rounded,
+                                color: AppColors.redIcon,
+                                size: Sizes.iconSize,
+                              ),
+                            ),
+                          ),
+                        )
+                      : ExpiringWidget(
+                          child: Positioned(
+                          top: height / 3,
+                          child: ProximityAlert(
+                            text: (snapshot.data is String)
+                                ? snapshot.data as String
+                                : '',
+                          ),
+                        ))
+                  : SizedBox.shrink(),
+        ),
         const Toolbar(),
         Positioned(
           top: Sizes.toolbarHeight +

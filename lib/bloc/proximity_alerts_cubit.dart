@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:localstorage/localstorage.dart';
 
 import '../utils/utils.dart';
@@ -9,27 +12,27 @@ class ProximityAlertsState {
   final String? usersAircraftUASID;
   final double proximityAlertDistance;
   final bool proximityAlertActive;
-  final String? alert;
+  final bool alertDismissed;
 
   ProximityAlertsState({
     required this.usersAircraftUASID,
     required this.proximityAlertDistance,
     required this.proximityAlertActive,
-    this.alert,
+    required this.alertDismissed,
   });
 
   ProximityAlertsState copyWith({
     String? usersAircraftUASID,
     double? proximityAlertDistance,
     bool? proximityAlertActive,
-    String? alert,
+    bool? alertDismissed,
   }) =>
       ProximityAlertsState(
         usersAircraftUASID: usersAircraftUASID ?? this.usersAircraftUASID,
         proximityAlertDistance:
             proximityAlertDistance ?? this.proximityAlertDistance,
         proximityAlertActive: proximityAlertActive ?? this.proximityAlertActive,
-        alert: alert ?? this.alert,
+        alertDismissed: alertDismissed ?? this.alertDismissed,
       );
 }
 
@@ -37,8 +40,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const maxProximityAlertDistance = 5000.0;
   static const minProximityAlertDistance = 100.0;
   static const defaultProximityAlertDistance = 2000.0;
-
   static const maxPackAge = 30;
+  static const expirationTimeSec = 10;
 
   static const proximityAlertActiveKey = 'proximityAlertActive';
   static const proximityAlertDistanceKey = 'proximityAlertDistance';
@@ -46,19 +49,23 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   final LocalStorage storage = LocalStorage('dronescanner-proximity-alerts');
 
+  final _alertController = StreamController<String>();
+  Stream<String> get alertStream => _alertController.stream;
+  Timer? alertExpiryTimer;
+
   ProximityAlertsCubit()
       : super(
           ProximityAlertsState(
             usersAircraftUASID: null,
             proximityAlertDistance: defaultProximityAlertDistance,
             proximityAlertActive: false,
+            alertDismissed: false,
           ),
         ) {
     fetchSavedData().then((_) {
       if (state.proximityAlertActive) {
-        emit(state.copyWith(
-            alert:
-                'Proximity alerts for device ${state.usersAircraftUASID} are active.'));
+        _sendAlert(
+            'Proximity alerts for device ${state.usersAircraftUASID} are active.');
       }
     });
   }
@@ -81,7 +88,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           proximityAlertActive: proximityAlertActive == null
               ? false
               : proximityAlertActive as bool,
-          alert: null,
+          alertDismissed: state.alertDismissed,
         ),
       );
     }
@@ -95,6 +102,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       proximityAlertActiveKey,
       false,
     );
+    _alertController.add('');
     await fetchSavedData();
   }
 
@@ -124,18 +132,25 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       proximityAlertActiveKey,
       active,
     );
+    if (!active) {
+      _alertController.add('');
+    }
     await fetchSavedData();
   }
 
-  void dismissAlert() {
-    emit(
-      ProximityAlertsState(
-        usersAircraftUASID: state.usersAircraftUASID,
-        proximityAlertDistance: state.proximityAlertDistance,
-        proximityAlertActive: state.proximityAlertActive,
-        alert: null,
-      ),
-    );
+  void setAlertDismissed({required bool dismissed}) {
+    emit(state.copyWith(alertDismissed: dismissed));
+  }
+
+  void _sendAlert(String alert) {
+    _alertController.add(alert);
+    if (alertExpiryTimer != null && alertExpiryTimer!.isActive) {
+      alertExpiryTimer!.cancel();
+    }
+    // send null to signal aler expiration
+    alertExpiryTimer = Timer(Duration(seconds: expirationTimeSec), () {
+      _alertController.add('');
+    });
   }
 
   void checkProximityAlerts(
@@ -143,7 +158,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     if (state.proximityAlertActive &&
         pack.basicIdMessage?.uasId != null &&
         pack.basicIdMessage?.uasId == state.usersAircraftUASID &&
-        pack.locationValid()) {
+        pack.locationValid() &&
+        pack.locationMessage!.status == AircraftStatus.Airborne) {
       packHistory.forEach(
         (key, value) {
           if (value.last.basicIdMessage?.uasId != null &&
@@ -165,15 +181,11 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
               print('taggs ALERT ALERT ALERT');
               final alert =
                   'Warning!\nAircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft';
-              emit(state.copyWith(alert: alert));
-            } else if (state.alert != null) {
-              dismissAlert();
+              _sendAlert(alert);
             }
           }
         },
       );
-    } else if (state.alert != null) {
-      emit(state.copyWith(alert: null));
     }
   }
 }
