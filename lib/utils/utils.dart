@@ -6,6 +6,7 @@ import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../constants/sizes.dart';
+import '../extensions/string_extensions.dart';
 
 double maxSliderSize({
   required double height,
@@ -207,6 +208,43 @@ Image? getManufacturerLogo({String? manufacturer, Color color = Colors.black}) {
 String? getCountryCode(String operatorId) {
   if (operatorId.length >= 2) {
     return operatorId.substring(0, 2);
+  }
+  return null;
+}
+
+// validate according to (ANSI/CTA-2063-A)
+// SN = [4 Character MFR CODE][1 Character LENGTH CODE]
+//      [15 Character MANUFACTURER’S SERIAL NUMBER]
+// returns null if successfull, otherwise it returns error message
+String? validateUASID(String text) {
+  if (text.length <= 5) return 'Invalid length';
+  // 4-char. code, may include a combination of digits and uppercase letters,
+  // except the letters O and I.
+  final mfr = text.substring(0, 4);
+  if (!RegExp(r'^[0-9]*[A-Z]*$').hasMatch(mfr) ||
+      mfr.contains('O') ||
+      mfr.contains('I')) {
+    return 'Invalid Manufacturer code';
+  }
+  late final int msnLen;
+  try {
+    msnLen = int.parse(
+      text.substring(4, 5),
+      radix: 16,
+    );
+  } catch (_) {
+    return 'Invalid lenght code';
+  }
+
+  if (msnLen < 1 || msnLen > 15 || text.length - 5 != msnLen) {
+    return 'Invalid length';
+  }
+
+  final msn = text.substring(5, 5 + msnLen);
+  if (msn != msn.removeNonAlphanumeric() ||
+      msn.contains('O') ||
+      msn.contains('I')) {
+    return 'Invalid Manufacturer Serial Number';
   }
   return null;
 }

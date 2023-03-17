@@ -4,27 +4,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../utils/utils.dart';
 import '../../app/dialogs.dart';
 
 class UsersDeviceUASIDTextField extends StatefulWidget {
   UsersDeviceUASIDTextField({Key? key}) : super(key: key);
 
   @override
-  State<UsersDeviceUASIDTextField> createState() => _AircraftLabelTextState();
+  State<UsersDeviceUASIDTextField> createState() =>
+      _UsersDeviceUASIDTextFieldState();
 }
 
-class _AircraftLabelTextState extends State<UsersDeviceUASIDTextField> {
+class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
   final TextEditingController _controller = TextEditingController();
   bool isInit = false;
 
   void _submit(BuildContext context) {
-    // TODO: validate
-    if (_controller.text.isEmpty) {
-      // check if label is not just whitespaces
+    if (_controller.text.isNotEmpty) {
+      // check if text is not just whitespaces
       if (_controller.text.trim() != '') {
+        final validationError = validateUASID(_controller.text);
+        if (validationError != null) {
+          showSnackBar(context, 'Error parsing UAS ID: $validationError');
+          FocusManager.instance.primaryFocus?.unfocus();
+          return;
+        }
         context
             .read<ProximityAlertsCubit>()
             .setUsersAircraftUASID(_controller.text);
+        showSnackBar(context, 'UAS ID set sucessfully');
       } else {
         _controller.text = '';
       }
@@ -64,11 +72,11 @@ class _AircraftLabelTextState extends State<UsersDeviceUASIDTextField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Own device UAS ID',
+            'Owned device UAS ID',
           ),
           Text(
             'Register your aircrafts UAS ID to be able to receive'
-            ' proximity alerts',
+            ' proximity alerts. The UAS ID must be compliant with the ANSI/CTA-2063 standard.',
             textScaleFactor: 0.8,
             style: const TextStyle(
               color: AppColors.lightGray,

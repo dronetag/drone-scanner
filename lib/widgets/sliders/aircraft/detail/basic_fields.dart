@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
-import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/proximity_alerts_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
+import '../../../app/dialogs.dart';
 import '../../common/headline.dart';
 import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
@@ -94,29 +94,53 @@ class BasicFields {
       ),
       AircraftDetailRow(
         children: [
-          Text('This is my aircraft'),
-          Checkbox(
-            value: context
-                        .watch<ProximityAlertsCubit>()
-                        .state
-                        .usersAircraftUASID !=
-                    null &&
-                context
-                        .watch<ProximityAlertsCubit>()
-                        .state
-                        .usersAircraftUASID ==
-                    messagePackList.last.basicIdMessage?.uasId,
-            onChanged: (value) {
-              if (value == null) return;
-              if (value && messagePackList.last.basicIdMessage?.uasId != null) {
-                context.read<ProximityAlertsCubit>().setUsersAircraftUASID(
-                    messagePackList.last.basicIdMessage!.uasId);
-              } else {
-                context.read<ProximityAlertsCubit>().clearUsersAircraftUASID();
-              }
-            },
-            fillColor: MaterialStateProperty.all<Color>(
-              AppColors.blue,
+          Text(
+            'This aircraft is mine',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 20,
+              height: 20,
+              child: Checkbox(
+                value: context
+                            .watch<ProximityAlertsCubit>()
+                            .state
+                            .usersAircraftUASID !=
+                        null &&
+                    context
+                            .watch<ProximityAlertsCubit>()
+                            .state
+                            .usersAircraftUASID ==
+                        messagePackList.last.basicIdMessage?.uasId,
+                onChanged: (value) {
+                  if (value == null) return;
+                  final uasId = messagePackList.last.basicIdMessage?.uasId;
+                  if (value && uasId != null) {
+                    final validationError = validateUASID(uasId);
+                    if (validationError != null) {
+                      showSnackBar(
+                          context, 'Error parsing UAS ID: $validationError');
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      return;
+                    }
+                    context
+                        .read<ProximityAlertsCubit>()
+                        .setUsersAircraftUASID(uasId);
+                    showSnackBar(context, 'Aircaft set as owned');
+                  } else {
+                    context
+                        .read<ProximityAlertsCubit>()
+                        .clearUsersAircraftUASID();
+                  }
+                },
+                fillColor: MaterialStateProperty.all<Color>(
+                  AppColors.highlightBlue,
+                ),
+              ),
             ),
           )
         ],

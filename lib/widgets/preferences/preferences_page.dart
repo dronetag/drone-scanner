@@ -397,7 +397,8 @@ class PreferencesPage extends StatelessWidget {
         padding: itemPadding,
         child: PreferencesFieldWithDescription(
           label: 'Proximity alerts:',
-          description: 'Fire alert when other aircraft gets close to Yours',
+          description:
+              'Fire alert when some other aircraft gets close to yours',
           child: PreferencesSlider(
               getValue: () => context
                   .read<ProximityAlertsCubit>()

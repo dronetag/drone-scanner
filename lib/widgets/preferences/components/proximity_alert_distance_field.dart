@@ -18,7 +18,8 @@ class ProximityAlertDistanceField extends StatelessWidget {
       children: [
         Text('Proximity alerts distance (m):'),
         Text(
-          'Set the horizontal distance between your and other aircraft that fires alert.',
+          'Set the horizontal distance between your and other aircraft'
+          ' that causes the alert to fire',
           textScaleFactor: 0.8,
           style: const TextStyle(
             color: AppColors.lightGray,
