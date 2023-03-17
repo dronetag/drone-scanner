@@ -40,17 +40,28 @@ class HomeBody extends StatelessWidget {
         ),
         if (proximityAlert != null)
           Positioned(
-            top: height / 2,
+            top: height / 3,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: AppColors.red),
               ),
               margin: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
-              padding: EdgeInsets.all(Sizes.mapContentMargin),
+              padding: EdgeInsets.all(
+                Sizes.mapContentMargin / 2,
+              ),
               width: MediaQuery.of(context).size.width -
                   2 * Sizes.mapContentMargin,
-              child: Text(proximityAlert),
+              child: Column(
+                children: [
+                  Text(proximityAlert),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.read<ProximityAlertsCubit>().dismissAlert();
+                      },
+                      child: Text('Dismiss')),
+                ],
+              ),
             ),
           ),
         const Toolbar(),

@@ -38,6 +38,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const minProximityAlertDistance = 100.0;
   static const defaultProximityAlertDistance = 2000.0;
 
+  static const maxPackAge = 30;
+
   static const proximityAlertActiveKey = 'proximityAlertActive';
   static const proximityAlertDistanceKey = 'proximityAlertDistance';
   static const usersAircraftUASIDKey = 'usersAircraftUASID';
@@ -52,7 +54,13 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             proximityAlertActive: false,
           ),
         ) {
-    fetchSavedData();
+    fetchSavedData().then((_) {
+      if (state.proximityAlertActive) {
+        emit(state.copyWith(
+            alert:
+                'Proximity alerts for device ${state.usersAircraftUASID} are active.'));
+      }
+    });
   }
 
   //Retrieves the labels stored persistently locally on the device
@@ -119,6 +127,17 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     await fetchSavedData();
   }
 
+  void dismissAlert() {
+    emit(
+      ProximityAlertsState(
+        usersAircraftUASID: state.usersAircraftUASID,
+        proximityAlertDistance: state.proximityAlertDistance,
+        proximityAlertActive: state.proximityAlertActive,
+        alert: null,
+      ),
+    );
+  }
+
   void checkProximityAlerts(
       MessagePack pack, Map<String, List<MessagePack>> packHistory) {
     if (state.proximityAlertActive &&
@@ -139,16 +158,16 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
                 1000;
             // consider just packs not older than 30s
             if (distance <= state.proximityAlertDistance &&
-                value.last.lastUpdate
-                    .isAfter(DateTime.now().subtract(Duration(seconds: 30)))) {
+                value.last.lastUpdate.isAfter(
+                    DateTime.now().subtract(Duration(seconds: maxPackAge)))) {
               print('taggs calculated distance btw ${state.usersAircraftUASID}'
                   'and ${value.last.basicIdMessage?.uasId} is $distance, smaller than ${state.proximityAlertDistance}');
               print('taggs ALERT ALERT ALERT');
               final alert =
-                  'Warning! Aircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft';
+                  'Warning!\nAircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft';
               emit(state.copyWith(alert: alert));
             } else if (state.alert != null) {
-              emit(state.copyWith(alert: null));
+              dismissAlert();
             }
           }
         },
