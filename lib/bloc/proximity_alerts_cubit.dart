@@ -5,6 +5,7 @@ import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:localstorage/localstorage.dart';
 
+import '../services/notification_service.dart';
 import '../utils/utils.dart';
 
 class ProximityAlertsState {
@@ -47,13 +48,15 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const proximityAlertDistanceKey = 'proximityAlertDistance';
   static const usersAircraftUASIDKey = 'usersAircraftUASID';
 
+  final NotificationService notificationService;
+
   final LocalStorage storage = LocalStorage('dronescanner-proximity-alerts');
 
   final _alertController = StreamController<String>();
   Stream<String> get alertStream => _alertController.stream;
   Timer? alertExpiryTimer;
 
-  ProximityAlertsCubit()
+  ProximityAlertsCubit(this.notificationService)
       : super(
           ProximityAlertsState(
             usersAircraftUASID: null,
@@ -182,6 +185,12 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
               final alert =
                   'Warning!\nAircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft';
               _sendAlert(alert);
+              notificationService.addNotification(
+                'Proximity Alert',
+                'Aircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft',
+                DateTime.now().millisecondsSinceEpoch + 1000,
+                channel: 'testing',
+              );
             }
           }
         },

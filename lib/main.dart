@@ -18,6 +18,7 @@ import 'bloc/standards_cubit.dart';
 import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
 import 'services/location_service.dart';
+import 'services/notification_service.dart';
 import 'utils/google_api_key_reader.dart';
 import 'utils/uasid_prefix_reader.dart';
 import 'widgets/app/app.dart';
@@ -54,14 +55,17 @@ void runAppWithSentry(void Function() appRunner) async {
 void main() async {
   // init high priority services
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize Google services
+  // init local notifications
+  final notificationService = NotificationService();
+  await notificationService.setup();
+  // Init Google services
   await GoogleApiKeyReader.initialize();
   await UASIDPrefixReader.initialize();
   final locationService = LocationService();
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
-  final proximityAlertsCubit = ProximityAlertsCubit();
+  final proximityAlertsCubit = ProximityAlertsCubit(notificationService);
   final aircraftCubit =
       AircraftCubit(aircraftExpirationCubit, proximityAlertsCubit);
   runAppWithSentry(
