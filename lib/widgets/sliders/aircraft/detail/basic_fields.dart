@@ -4,6 +4,7 @@ import 'package:flutter_opendroneid/models/message_pack.dart';
 
 import '../../../../bloc/proximity_alerts_cubit.dart';
 import '../../../../constants/colors.dart';
+import '../../../../constants/sizes.dart';
 import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
 import '../../../app/dialogs.dart';
@@ -34,7 +35,9 @@ class BasicFields {
         idTypeString?.replaceAll('IdType.', '').replaceAll('_', ' ');
     final uaTypeLabel =
         uaTypeString?.replaceAll('UaType.', '').replaceAll('_', ' ');
-
+    final uasId = messagePackList.last.basicIdMessage?.uasId;
+    final proximityAlertsActive =
+        context.read<ProximityAlertsCubit>().state.isAlertActiveForId(uasId);
     return [
       const Headline(text: 'AIRCRAFT'),
       if (isLandscape) const SizedBox(),
@@ -53,34 +56,85 @@ class BasicFields {
       AircraftDetailRow(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               AircraftDetailField(
                 headlineText: 'UAS ID',
-                fieldText: messagePackList.last.basicIdMessage == null
-                    ? 'Unknown'
-                    : '${messagePackList.last.basicIdMessage?.uasId}',
+                child: logo != null && manufacturer != null
+                    ? Text.rich(
+                        TextSpan(
+                          text: messagePackList.last.basicIdMessage == null
+                              ? 'Unknown'
+                              : '${messagePackList.last.basicIdMessage?.uasId}',
+                          style: const TextStyle(
+                            color: AppColors.lightGray,
+                          ),
+                          children: [
+                            TextSpan(text: '\n'),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: logo,
+                            ),
+                            TextSpan(
+                              text: manufacturer,
+                            ),
+                          ],
+                        ),
+                      )
+                    : null,
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              if (logo != null && manufacturer != null)
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(
-                      color: AppColors.lightGray,
-                    ),
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: logo,
-                      ),
-                      TextSpan(
-                        text: manufacturer,
-                      ),
-                    ],
+              ElevatedButton(
+                onPressed: () {
+                  final alertsCubit = context.read<ProximityAlertsCubit>();
+                  if (uasId != null &&
+                      alertsCubit.state.usersAircraftUASID != uasId) {
+                    final validationError = validateUASID(uasId);
+                    if (validationError != null) {
+                      showSnackBar(
+                          context, 'Error parsing UAS ID: $validationError');
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      return;
+                    }
+                    alertsCubit.setUsersAircraftUASID(uasId);
+                    showSnackBar(context, 'Aircaft set as owned');
+                  } else {
+                    alertsCubit.clearUsersAircraftUASID();
+                  }
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    proximityAlertsActive ? AppColors.green : Colors.white,
+                  ),
+                  side: MaterialStateProperty.all<BorderSide>(
+                    BorderSide(
+                        width: 2.0,
+                        color: proximityAlertsActive
+                            ? Colors.white
+                            : AppColors.green),
                   ),
                 ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: Sizes.iconSize,
+                      color: proximityAlertsActive
+                          ? Colors.white
+                          : AppColors.green,
+                    ),
+                    Text(
+                      'SET AS MINE',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: proximityAlertsActive
+                              ? Colors.white
+                              : AppColors.green),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ],
@@ -90,59 +144,6 @@ class BasicFields {
           AircraftLabelText(
             aircraftMac: messagePackList.last.macAddress,
           ),
-        ],
-      ),
-      AircraftDetailRow(
-        children: [
-          Text(
-            'This aircraft is mine',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: 20,
-              height: 20,
-              child: Checkbox(
-                value: context
-                            .watch<ProximityAlertsCubit>()
-                            .state
-                            .usersAircraftUASID !=
-                        null &&
-                    context
-                            .watch<ProximityAlertsCubit>()
-                            .state
-                            .usersAircraftUASID ==
-                        messagePackList.last.basicIdMessage?.uasId,
-                onChanged: (value) {
-                  if (value == null) return;
-                  final uasId = messagePackList.last.basicIdMessage?.uasId;
-                  if (value && uasId != null) {
-                    final validationError = validateUASID(uasId);
-                    if (validationError != null) {
-                      showSnackBar(
-                          context, 'Error parsing UAS ID: $validationError');
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      return;
-                    }
-                    context
-                        .read<ProximityAlertsCubit>()
-                        .setUsersAircraftUASID(uasId);
-                    showSnackBar(context, 'Aircaft set as owned');
-                  } else {
-                    context
-                        .read<ProximityAlertsCubit>()
-                        .clearUsersAircraftUASID();
-                  }
-                },
-                fillColor: MaterialStateProperty.all<Color>(
-                  AppColors.highlightBlue,
-                ),
-              ),
-            ),
-          )
         ],
       ),
       if (messagePackList.last.selfIdMessage != null &&

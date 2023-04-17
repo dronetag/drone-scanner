@@ -5,7 +5,11 @@ import '../../../constants/colors.dart';
 class Headline extends StatelessWidget {
   final String text;
   final Widget? child;
-  const Headline({Key? key, required this.text, this.child}) : super(key: key);
+  final Widget? leading;
+  final Color? color;
+  const Headline(
+      {Key? key, required this.text, this.child, this.leading, this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +17,12 @@ class Headline extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         children: [
+          if (leading != null) leading!,
           Text(
             text.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.lightGray,
+              color: color ?? AppColors.lightGray,
             ),
           ),
           if (child != null)

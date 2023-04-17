@@ -71,15 +71,16 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Owned device UAS ID',
-          ),
-          Text(
-            'Register your aircrafts UAS ID to be able to receive'
-            ' proximity alerts. The UAS ID must be compliant with the ANSI/CTA-2063 standard.',
-            textScaleFactor: 0.8,
-            style: const TextStyle(
-              color: AppColors.lightGray,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: Sizes.standard * 2),
+            child: Text(
+              'Select from the list of visible drones or a serial number of your'
+              ' drone or Remote ID add-on in the ANSI CTA format to mark the'
+              ' drone as yours(marked green).',
+              textScaleFactor: 0.8,
+              style: const TextStyle(
+                color: AppColors.lightGray,
+              ),
             ),
           ),
           Row(

@@ -5,12 +5,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
+import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../app/dialogs.dart';
+import '../preferences/components/rotating_icon.dart';
+import '../preferences/proximity_alerts_page.dart';
 import '../showcase/showcase_item.dart';
 
 class MapOptionsToolbar extends StatelessWidget {
@@ -109,6 +112,29 @@ class MapOptionsToolbar extends StatelessWidget {
                   },
                   iconSize: Sizes.iconSize,
                   icon: const Icon(Icons.delete),
+                ),
+                IconButton(
+                  constraints: BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProximityAlertsPage(),
+                        settings: RouteSettings(
+                          name: ProximityAlertsPage.routeName,
+                        ),
+                      ),
+                    );
+                  },
+                  iconSize: Sizes.iconSize,
+                  icon: RotatingIcon(
+                    icon: const Icon(Icons.radar),
+                    rotating: context
+                        .read<ProximityAlertsCubit>()
+                        .state
+                        .proximityAlertActive,
+                  ),
                 ),
               ],
             ),

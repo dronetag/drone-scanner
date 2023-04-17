@@ -10,7 +10,6 @@ import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/opendroneid_cubit.dart';
-import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -27,10 +26,8 @@ import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
 import 'components/preferences_field_with_description.dart';
 import 'components/preferences_slider.dart';
-import 'components/proximity_alert_distance_field.dart';
 import 'components/scanning_status_field.dart';
 import 'components/screen_sleep_checkbox.dart';
-import 'components/users_device_uas_id_text_field.dart';
 
 class PreferencesPage extends StatelessWidget {
   static const routeName = 'PreferencesPage';
@@ -393,33 +390,6 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
-      Padding(
-        padding: itemPadding,
-        child: PreferencesFieldWithDescription(
-          label: 'Proximity alerts:',
-          description:
-              'Fire alert when some other aircraft gets close to yours',
-          child: PreferencesSlider(
-              getValue: () => context
-                  .read<ProximityAlertsCubit>()
-                  .state
-                  .proximityAlertActive,
-              setValue: (c) {
-                final cubit = context.read<ProximityAlertsCubit>();
-                if (cubit.state.usersAircraftUASID != null) {
-                  cubit.setProximityAlertsActive(active: c);
-                }
-              }),
-        ),
-      ),
-      Padding(
-        padding: itemPadding,
-        child: ProximityAlertDistanceField(),
-      ),
-      Padding(
-        padding: itemPadding / 2,
-        child: UsersDeviceUASIDTextField(),
-      ),
       Padding(
         padding: itemPadding / 2,
         child: PreferencesFieldWithDescription(

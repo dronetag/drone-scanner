@@ -14,12 +14,16 @@ class ProximityAlertsState {
   final double proximityAlertDistance;
   final bool proximityAlertActive;
   final bool alertDismissed;
+  final bool sendNotifications;
+  final int expirationTimeSec;
 
   ProximityAlertsState({
     required this.usersAircraftUASID,
     required this.proximityAlertDistance,
     required this.proximityAlertActive,
     required this.alertDismissed,
+    required this.sendNotifications,
+    required this.expirationTimeSec,
   });
 
   ProximityAlertsState copyWith({
@@ -27,6 +31,8 @@ class ProximityAlertsState {
     double? proximityAlertDistance,
     bool? proximityAlertActive,
     bool? alertDismissed,
+    bool? sendNotifications,
+    int? expirationTimeSec,
   }) =>
       ProximityAlertsState(
         usersAircraftUASID: usersAircraftUASID ?? this.usersAircraftUASID,
@@ -34,7 +40,12 @@ class ProximityAlertsState {
             proximityAlertDistance ?? this.proximityAlertDistance,
         proximityAlertActive: proximityAlertActive ?? this.proximityAlertActive,
         alertDismissed: alertDismissed ?? this.alertDismissed,
+        sendNotifications: sendNotifications ?? this.sendNotifications,
+        expirationTimeSec: expirationTimeSec ?? this.expirationTimeSec,
       );
+
+  bool isAlertActiveForId(String? uasId) =>
+      uasId != null && usersAircraftUASID == uasId;
 }
 
 class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
@@ -42,11 +53,12 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const minProximityAlertDistance = 100.0;
   static const defaultProximityAlertDistance = 2000.0;
   static const maxPackAge = 30;
-  static const expirationTimeSec = 10;
 
   static const proximityAlertActiveKey = 'proximityAlertActive';
   static const proximityAlertDistanceKey = 'proximityAlertDistance';
   static const usersAircraftUASIDKey = 'usersAircraftUASID';
+  static const sendNotificationsKey = 'sendNotifications';
+  static const expirationTimeKey = 'expirationTime';
 
   final NotificationService notificationService;
 
@@ -63,6 +75,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             proximityAlertDistance: defaultProximityAlertDistance,
             proximityAlertActive: false,
             alertDismissed: false,
+            sendNotifications: true,
+            expirationTimeSec: 10,
           ),
         ) {
     fetchSavedData().then((_) {
@@ -80,6 +94,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       var usersAircraftUASID = storage.getItem(usersAircraftUASIDKey);
       var proximityAlertDistance = storage.getItem(proximityAlertDistanceKey);
       var proximityAlertActive = storage.getItem(proximityAlertActiveKey);
+      var sendNotifications = storage.getItem(sendNotificationsKey);
+      var expirationTime = storage.getItem(expirationTimeKey);
       emit(
         ProximityAlertsState(
           usersAircraftUASID: usersAircraftUASID == null
@@ -92,6 +108,10 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
               ? false
               : proximityAlertActive as bool,
           alertDismissed: state.alertDismissed,
+          sendNotifications:
+              sendNotifications == null ? true : sendNotifications as bool,
+          expirationTimeSec:
+              expirationTime == null ? 10 : expirationTime as int,
         ),
       );
     }
@@ -130,6 +150,14 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     await fetchSavedData();
   }
 
+  Future<void> setNotificationExpirationTime(int time) async {
+    await storage.setItem(
+      expirationTimeKey,
+      time,
+    );
+    await fetchSavedData();
+  }
+
   Future<void> setProximityAlertsActive({required bool active}) async {
     await storage.setItem(
       proximityAlertActiveKey,
@@ -145,16 +173,27 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     emit(state.copyWith(alertDismissed: dismissed));
   }
 
-  void _sendAlert(String alert) {
-    _alertController.add(alert);
+  void setSendNotifications({required bool send}) async {
+    await storage.setItem(
+      sendNotificationsKey,
+      send,
+    );
+    await fetchSavedData();
+  }
+
+  void _sendAlert(List<ProximityAlert> dronesNearby) {
+    _alertController.add(dronesNearby);
     if (alertExpiryTimer != null && alertExpiryTimer!.isActive) {
       alertExpiryTimer!.cancel();
     }
-    // send null to signal aler expiration
-    alertExpiryTimer = Timer(Duration(seconds: expirationTimeSec), () {
-      _alertController.add('');
+    // send [] to signal aler expiration
+    alertExpiryTimer = Timer(Duration(seconds: state.expirationTimeSec), () {
+      _alertController.add([]);
     });
   }
+
+  // TODO
+  void _sendStartAlert(String message) {}
 
   void checkProximityAlerts(
       MessagePack pack, Map<String, List<MessagePack>> packHistory) {
@@ -179,18 +218,14 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             if (distance <= state.proximityAlertDistance &&
                 value.last.lastUpdate.isAfter(
                     DateTime.now().subtract(Duration(seconds: maxPackAge)))) {
-              print('taggs calculated distance btw ${state.usersAircraftUASID}'
-                  'and ${value.last.basicIdMessage?.uasId} is $distance, smaller than ${state.proximityAlertDistance}');
-              print('taggs ALERT ALERT ALERT');
-              final alert =
-                  'Warning!\nAircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft';
-              _sendAlert(alert);
-              notificationService.addNotification(
-                'Proximity Alert',
-                'Aircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft',
-                DateTime.now().millisecondsSinceEpoch + 1000,
-                channel: 'testing',
-              );
+              if (state.sendNotifications) {
+                notificationService.addNotification(
+                  'Proximity Alert',
+                  'Aircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft',
+                  DateTime.now().millisecondsSinceEpoch + 1000,
+                  channel: 'testing',
+                );
+              }
             }
           }
         },
