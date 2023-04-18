@@ -18,25 +18,20 @@ class NotificationService {
     String title,
     String body,
     int endTime, {
-    String sound = '',
     String channel = 'default',
   }) async {
     tzData.initializeTimeZones();
     final scheduleTime =
         tz.TZDateTime.fromMillisecondsSinceEpoch(tz.local, endTime);
-    final iosDetail = sound == ''
-        ? null
-        : DarwinNotificationDetails(presentSound: true, sound: sound);
-
-    final soundFile = sound.replaceAll('.mp3', '');
-    final notificationSound =
-        sound == '' ? null : RawResourceAndroidNotificationSound(soundFile);
+    final iosDetail = DarwinNotificationDetails(
+      presentAlert: false,
+      presentBadge: false,
+    );
 
     final androidDetail = AndroidNotificationDetails(
-        channel, // channel Id
-        channel, // channel Name
-        playSound: true,
-        sound: notificationSound);
+      channel, // channel Id
+      channel, // channel Name
+    );
 
     final noticeDetail = NotificationDetails(
       iOS: iosDetail,
