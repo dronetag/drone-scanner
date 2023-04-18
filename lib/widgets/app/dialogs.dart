@@ -1,7 +1,10 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
+import '../../bloc/proximity_alerts_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
+import 'proximity_alert_snackbar.dart';
 
 void showAlertDialog(
   BuildContext context,
@@ -61,4 +64,25 @@ void showSnackBar(
   );
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+void showProximityAlertSnackBar(
+    BuildContext context, int durationSec, List<ProximityAlert> nearbyDrones) {
+  final snackbar = SnackBar(
+    backgroundColor: AppColors.lightRed,
+    duration: Duration(seconds: durationSec),
+    behavior: SnackBarBehavior.floating,
+    elevation: 2.0,
+    margin: EdgeInsets.only(
+      bottom: MediaQuery.of(context).size.height,
+      right: Sizes.mapContentMargin,
+      left: Sizes.mapContentMargin,
+    ),
+    content: ProximityAlertSnackbar(
+      list: nearbyDrones,
+      expirationTime: durationSec,
+    ),
+  );
+  //ScaffoldMessenger.of(context).removeCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(snackbar);
 }

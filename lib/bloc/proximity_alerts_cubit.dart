@@ -8,6 +8,14 @@ import 'package:localstorage/localstorage.dart';
 import '../services/notification_service.dart';
 import '../utils/utils.dart';
 
+class ProximityAlert {
+  final String uasId;
+  final double distance;
+  final int expirationTimeSec;
+
+  ProximityAlert(this.uasId, this.distance, this.expirationTimeSec);
+}
+
 class ProximityAlertsState {
   // uas id of drone selected by user as their own
   final String? usersAircraftUASID;
@@ -64,8 +72,9 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   final LocalStorage storage = LocalStorage('dronescanner-proximity-alerts');
 
-  final _alertController = StreamController<String>();
-  Stream<String> get alertStream => _alertController.stream;
+  final _alertController = StreamController<List<ProximityAlert>>();
+  Stream<List<ProximityAlert>> get alertStream => _alertController.stream;
+
   Timer? alertExpiryTimer;
 
   ProximityAlertsCubit(this.notificationService)
@@ -81,7 +90,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
         ) {
     fetchSavedData().then((_) {
       if (state.proximityAlertActive) {
-        _sendAlert(
+        _sendStartAlert(
             'Proximity alerts for device ${state.usersAircraftUASID} are active.');
       }
     });
@@ -125,7 +134,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       proximityAlertActiveKey,
       false,
     );
-    _alertController.add('');
+    _alertController.add([]);
     await fetchSavedData();
   }
 
@@ -164,7 +173,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       active,
     );
     if (!active) {
-      _alertController.add('');
+      _alertController.add([]);
     }
     await fetchSavedData();
   }
@@ -218,6 +227,10 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             if (distance <= state.proximityAlertDistance &&
                 value.last.lastUpdate.isAfter(
                     DateTime.now().subtract(Duration(seconds: maxPackAge)))) {
+              _sendAlert([
+                ProximityAlert(value.last.basicIdMessage!.uasId, distance,
+                    state.expirationTimeSec)
+              ]);
               if (state.sendNotifications) {
                 notificationService.addNotification(
                   'Proximity Alert',
