@@ -41,6 +41,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   final GlobalKey searchKey = GlobalKey();
   final GlobalKey mapKey = GlobalKey();
   final GlobalKey mapToolbarKey = GlobalKey();
+  final GlobalKey droneRadarKey = GlobalKey();
   final GlobalKey droneDetailPanelKey = GlobalKey();
   final GlobalKey droneDetailMoreKey = GlobalKey();
   final GlobalKey droneListKey = GlobalKey();
@@ -68,6 +69,9 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   final String mapToolbarDescription =
       'Use the map toolbar to center on your position, change the zoom or '
       'switch to satellite map';
+  final String droneRadarDescription =
+      'Use the radar function to get proximity alerts when other'
+      ' drones get dangerously close';
   final String droneDetailPanelDescription =
       'After tapping on an item on a list or selecting aircraft from the map, '
       'see detailed Aircraft information.\nAll the data acquired will be shown '
@@ -99,6 +103,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       scanningStateKey,
       showInfoKey,
       mapToolbarKey,
+      droneRadarKey,
       droneListKey,
       droneListItemKey,
       // to-do: uncomment when zones are back

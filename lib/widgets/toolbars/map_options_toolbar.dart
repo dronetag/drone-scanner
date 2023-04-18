@@ -113,30 +113,36 @@ class MapOptionsToolbar extends StatelessWidget {
                   iconSize: Sizes.iconSize,
                   icon: const Icon(Icons.delete),
                 ),
-                IconButton(
-                  constraints: BoxConstraints(),
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProximityAlertsPage(),
-                        settings: RouteSettings(
-                          name: ProximityAlertsPage.routeName,
+                ShowcaseItem(
+                  showcaseKey: context.read<ShowcaseCubit>().droneRadarKey,
+                  description:
+                      context.read<ShowcaseCubit>().droneRadarDescription,
+                  title: 'Drone Radar',
+                  child: IconButton(
+                    constraints: BoxConstraints(),
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProximityAlertsPage(),
+                          settings: RouteSettings(
+                            name: ProximityAlertsPage.routeName,
+                          ),
                         ),
+                      );
+                    },
+                    iconSize: Sizes.iconSize,
+                    icon: RotatingIcon(
+                      icon: Image.asset(
+                        'assets/images/radar.png',
+                        width: Sizes.iconSize,
                       ),
-                    );
-                  },
-                  iconSize: Sizes.iconSize,
-                  icon: RotatingIcon(
-                    icon: Image.asset(
-                      'assets/images/radar.png',
-                      width: Sizes.iconSize,
+                      rotating: context
+                          .read<ProximityAlertsCubit>()
+                          .state
+                          .proximityAlertActive,
                     ),
-                    rotating: context
-                        .read<ProximityAlertsCubit>()
-                        .state
-                        .proximityAlertActive,
                   ),
                 ),
               ],
