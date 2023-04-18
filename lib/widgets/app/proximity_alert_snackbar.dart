@@ -35,6 +35,12 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final headerText = widget.list.length > 1
         ? '${widget.list.length} drones are flying close'
@@ -61,7 +67,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
             padding: EdgeInsets.only(
               left: Sizes.standard,
               right: Sizes.standard,
-              bottom: Sizes.standard,
+              bottom: Sizes.standard * 2,
             ),
             child: Column(
               children: [
@@ -124,10 +130,11 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
               animation: controller,
               builder: (context, child) => CustomPaint(
                 painter: CustomTimerPainter(
-                    animation: controller,
-                    backgroundColor: AppColors.lightRed,
-                    color: AppColors.red,
-                    height: 10.0),
+                  animation: controller,
+                  backgroundColor: AppColors.lightRed,
+                  color: AppColors.red,
+                  height: 10.0,
+                ),
               ),
             ),
           ),

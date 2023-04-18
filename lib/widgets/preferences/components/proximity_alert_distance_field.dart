@@ -69,36 +69,64 @@ class ProximityAlertDistanceField extends StatelessWidget {
             ),
           ],
         ),
-        Slider(
-          value: distance,
-          onChanged: (val) => _onChange(context, val),
-          onChangeEnd: (val) => _onChangeEnd(context, val),
-          min: minValue,
-          max: maxValue,
-          thumbColor: AppColors.darkGray,
-          activeColor: AppColors.lightGray,
-          inactiveColor: AppColors.lightGray,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              '${minValue}m',
-              style: TextStyle(
-                fontSize: 10,
-                color: AppColors.lightGray,
+            SliderTheme(
+              data: SliderThemeData(
+                // here
+                trackShape: CustomTrackShape(),
+              ),
+              child: Slider(
+                value: distance,
+                onChanged: (val) => _onChange(context, val),
+                onChangeEnd: (val) => _onChangeEnd(context, val),
+                min: minValue,
+                max: maxValue,
+                thumbColor: AppColors.darkGray,
+                activeColor: AppColors.lightGray,
+                inactiveColor: AppColors.lightGray,
               ),
             ),
-            Text(
-              '${maxValue}m',
-              style: TextStyle(
-                fontSize: 10,
-                color: AppColors.lightGray,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${minValue}m',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.lightGray,
+                  ),
+                ),
+                Text(
+                  '${maxValue}m',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.lightGray,
+                  ),
+                ),
+              ],
             ),
           ],
         )
       ],
     );
+  }
+}
+
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final trackHeight = sliderTheme.trackHeight;
+    final trackLeft = offset.dx;
+    final trackTop = offset.dy + (parentBox.size.height - trackHeight!) / 2;
+    final trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
 }

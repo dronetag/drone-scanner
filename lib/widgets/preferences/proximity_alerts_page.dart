@@ -107,7 +107,7 @@ class ProximityAlertsPage extends StatelessWidget {
 
     final itemPadding = EdgeInsets.symmetric(vertical: Sizes.standard);
     final alertsState = context.watch<ProximityAlertsCubit>().state;
-    final radarIconSize = 40.0;
+    final radarIconSize = 50.0;
     return [
       Align(
         alignment: Alignment.centerLeft,
@@ -180,9 +180,9 @@ class ProximityAlertsPage extends StatelessWidget {
               alignment: AlignmentDirectional.center,
               children: [
                 RotatingIcon(
-                  icon: Icon(
-                    Icons.radar,
-                    size: radarIconSize,
+                  icon: Image.asset(
+                    'assets/images/radar.png',
+                    width: radarIconSize,
                     color: alertsState.proximityAlertActive
                         ? Colors.black
                         : AppColors.lightGray,
@@ -204,7 +204,7 @@ class ProximityAlertsPage extends StatelessWidget {
         ),
       ),
       Padding(
-        padding: itemPadding * 2,
+        padding: itemPadding * 4,
         child: GestureDetector(
           onTap: (() {
             Navigator.push(
@@ -251,16 +251,10 @@ class ProximityAlertsPage extends StatelessWidget {
           size: Sizes.textIconSize,
         ),
       ),
-      Padding(
-        padding: itemPadding / 2,
-        child: UsersDeviceUASIDTextField(),
-      ),
+      UsersDeviceUASIDTextField(),
       Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.only(
-          top: Sizes.standard,
-          bottom: Sizes.standard * 2,
-        ),
+        padding: itemPadding * 2,
         child: ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -302,7 +296,7 @@ class ProximityAlertsPage extends StatelessWidget {
         child: ProximityAlertDistanceField(),
       ),
       Padding(
-        padding: itemPadding,
+        padding: EdgeInsets.zero,
         child: _buildExpirationTimeField(context),
       ),
       Padding(
