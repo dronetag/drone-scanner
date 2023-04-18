@@ -243,7 +243,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     await checkStoragePermission();
     var csv = '';
     state.packHistory().forEach((key, value) {
-      final csvData = createCSV(value);
+      final csvData = CSVLogger.createCSV(value);
       csv += const ListToCsvConverter().convert(csvData);
     });
     if (save) {
@@ -261,7 +261,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     // request permission
     await checkStoragePermission();
 
-    final csvData = createCSV(state.packHistory()[mac]!);
+    final csvData = CSVLogger.createCSV(state.packHistory()[mac]!);
 
     final csv = const ListToCsvConverter().convert(csvData);
 
