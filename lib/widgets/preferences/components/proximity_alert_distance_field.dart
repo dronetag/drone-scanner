@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
 
 class ProximityAlertDistanceField extends StatelessWidget {
   const ProximityAlertDistanceField({Key? key}) : super(key: key);
@@ -18,27 +19,37 @@ class ProximityAlertDistanceField extends StatelessWidget {
   Widget build(BuildContext context) {
     final distance =
         context.read<ProximityAlertsCubit>().state.proximityAlertDistance;
+    final text = '${distance.round()}m';
     final _controller = TextEditingController.fromValue(
       TextEditingValue(
-        text: '${distance.round()}m',
+        text: text,
+        selection:
+            TextSelection.fromPosition(TextPosition(offset: text.length - 1)),
       ),
     );
     final minValue = ProximityAlertsCubit.minProximityAlertDistance;
     final maxValue = ProximityAlertsCubit.maxProximityAlertDistance;
-    const defaultTextFieldWidth = 70.0;
+    const defaultTextFieldWidth = 90.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Proximity alerts distance:'),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(
-              child: Text(
-                'Set horizontal distance threshold for proximity alerts',
-                textScaleFactor: 0.8,
-                style: const TextStyle(
-                  color: AppColors.lightGray,
-                ),
+            Container(
+              width: MediaQuery.of(context).size.width / 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Proximity alerts distance:'),
+                  Text(
+                    'Set horizontal distance threshold for proximity alerts',
+                    textScaleFactor: 0.8,
+                    style: const TextStyle(
+                      color: AppColors.lightGray,
+                    ),
+                  ),
+                ],
               ),
             ),
             Container(
@@ -50,14 +61,14 @@ class ProximityAlertDistanceField extends StatelessWidget {
                   FilteringTextInputFormatter.digitsOnly,
                 ],
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(5.0), isDense: true),
+                  contentPadding: EdgeInsets.all(Sizes.standard),
+                  isDense: true,
+                ),
                 keyboardType: TextInputType.numberWithOptions(),
                 textInputAction: TextInputAction.go,
                 controller: _controller,
-                onTap: () => _controller.selection = TextSelection(
-                    baseOffset: 0, extentOffset: _controller.value.text.length),
                 onFieldSubmitted: (value) {
-                  var newValue = double.parse(value);
+                  var newValue = double.parse(value.replaceAll('m', ''));
                   if (newValue < minValue) {
                     newValue = minValue;
                   } else if (newValue > maxValue) {
@@ -83,7 +94,7 @@ class ProximityAlertDistanceField extends StatelessWidget {
                 onChangeEnd: (val) => _onChangeEnd(context, val),
                 min: minValue,
                 max: maxValue,
-                thumbColor: AppColors.darkGray,
+                thumbColor: AppColors.preferencesButtonColor,
                 activeColor: AppColors.lightGray,
                 inactiveColor: AppColors.lightGray,
               ),
@@ -99,7 +110,7 @@ class ProximityAlertDistanceField extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${maxValue}m',
+                  '${(maxValue / 1000).toStringAsFixed(0)}km',
                   style: TextStyle(
                     fontSize: 10,
                     color: AppColors.lightGray,
@@ -123,10 +134,11 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
     bool isEnabled = false,
     bool isDiscrete = false,
   }) {
+    final thumbSize = 10;
     final trackHeight = sliderTheme.trackHeight;
-    final trackLeft = offset.dx;
+    final trackLeft = offset.dx + thumbSize;
     final trackTop = offset.dy + (parentBox.size.height - trackHeight!) / 2;
-    final trackWidth = parentBox.size.width;
+    final trackWidth = parentBox.size.width - thumbSize * 2;
     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
 }

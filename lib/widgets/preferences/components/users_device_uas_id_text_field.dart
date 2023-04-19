@@ -74,13 +74,10 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: Sizes.standard * 2),
             child: Text(
-              'Select from the list of visible drones or a serial number of your'
+              'Select from the list of visible drones or insert a serial number of your'
               ' drone or Remote ID add-on in the ANSI CTA format to mark the'
-              ' drone as yours(marked green).',
-              textScaleFactor: 0.8,
-              style: const TextStyle(
-                color: AppColors.lightGray,
-              ),
+              ' drone as yours (marked green).',
+              style: TextStyle(fontSize: 14),
             ),
           ),
           Row(
@@ -98,8 +95,7 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
                 ),
               ),
               Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: Sizes.standard / 2),
+                margin: const EdgeInsets.only(left: Sizes.standard * 2),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.highlightBlue,
@@ -117,8 +113,7 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
                 ),
               ),
               Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: Sizes.standard / 2),
+                margin: const EdgeInsets.only(left: Sizes.standard),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.highlightBlue,

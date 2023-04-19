@@ -116,15 +116,30 @@ class BasicFields {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.person,
-                      size: Sizes.iconSize,
-                      color: proximityAlertsActive
-                          ? Colors.white
-                          : AppColors.green,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: proximityAlertsActive ? 0 : Sizes.iconPadding,
+                      ),
+                      child: Icon(
+                        Icons.person,
+                        size: Sizes.iconSize,
+                        color: proximityAlertsActive
+                            ? Colors.white
+                            : AppColors.green,
+                      ),
                     ),
+                    if (proximityAlertsActive)
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(right: Sizes.iconPadding),
+                        child: Icon(
+                          Icons.done,
+                          color: Colors.white,
+                          size: Sizes.iconSize * 0.75,
+                        ),
+                      ),
                     Text(
-                      'SET AS MINE',
+                      proximityAlertsActive ? 'MINE' : 'SET AS MINE',
                       style: TextStyle(
                           fontSize: 12,
                           color: proximityAlertsActive

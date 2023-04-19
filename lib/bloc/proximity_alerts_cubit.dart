@@ -57,7 +57,7 @@ class ProximityAlertsState {
 }
 
 class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
-  static const maxProximityAlertDistance = 5000.0;
+  static const maxProximityAlertDistance = 2000.0;
   static const minProximityAlertDistance = 100.0;
   static const defaultProximityAlertDistance = 2000.0;
   static const maxPackAge = 30;

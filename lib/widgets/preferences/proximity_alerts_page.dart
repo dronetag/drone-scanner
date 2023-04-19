@@ -166,14 +166,23 @@ class ProximityAlertsPage extends StatelessWidget {
                 ),
                 if (alertsState.usersAircraftUASID == null)
                   Text(
-                    'My Drone is not selected',
-                    style: TextStyle(color: AppColors.red),
+                    '\"My Drone\" is not selected',
+                    style: TextStyle(
+                      color: AppColors.red,
+                      fontSize: 10,
+                    ),
                   ),
-                Text(alertsState.usersAircraftUASID == null
-                    ? 'Radar cannot be enabled'
-                    : alertsState.proximityAlertActive
-                        ? 'Radar is enabled'
-                        : 'Radar is disabled'),
+                Text(
+                  alertsState.usersAircraftUASID == null
+                      ? 'Radar cannot be enabled'
+                      : alertsState.proximityAlertActive
+                          ? 'Radar is enabled'
+                          : 'Radar is disabled',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.toolbarColor,
+                  ),
+                ),
               ],
             ),
             Stack(
@@ -183,6 +192,7 @@ class ProximityAlertsPage extends StatelessWidget {
                   icon: Image.asset(
                     'assets/images/radar.png',
                     width: radarIconSize,
+                    height: radarIconSize,
                     color: alertsState.proximityAlertActive
                         ? Colors.black
                         : AppColors.lightGray,
@@ -193,9 +203,12 @@ class ProximityAlertsPage extends StatelessWidget {
                   Transform.rotate(
                     angle: math.pi / 4,
                     child: Container(
-                      width: Sizes.iconSize / 8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.preferencesButtonColor,
+                      ),
+                      width: Sizes.iconSize / 6,
                       height: radarIconSize + 3,
-                      color: Colors.black,
                     ),
                   ),
               ],
@@ -245,16 +258,20 @@ class ProximityAlertsPage extends StatelessWidget {
       Headline(
         text: 'My Drone',
         color: AppColors.green,
+        fontSize: 12,
         leading: const Icon(
           Icons.person,
           color: AppColors.green,
-          size: Sizes.textIconSize,
+          size: 16,
         ),
       ),
       UsersDeviceUASIDTextField(),
       Container(
         alignment: Alignment.center,
-        padding: itemPadding * 2,
+        padding: EdgeInsets.only(
+          top: Sizes.standard * 2,
+          bottom: Sizes.standard * 4,
+        ),
         child: ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -274,6 +291,7 @@ class ProximityAlertsPage extends StatelessWidget {
       ),
       Headline(
         text: 'Options',
+        fontSize: 12,
       ),
       Padding(
         padding: itemPadding,
@@ -292,7 +310,8 @@ class ProximityAlertsPage extends StatelessWidget {
         ),
       ),
       Padding(
-        padding: itemPadding,
+        padding:
+            EdgeInsets.only(top: Sizes.standard, bottom: Sizes.standard * 4),
         child: ProximityAlertDistanceField(),
       ),
       Padding(

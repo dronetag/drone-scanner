@@ -98,6 +98,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                         context
                             .read<ProximityAlertsCubit>()
                             .setAlertDismissed(dismissed: true);
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       },
                       icon: Icon(
                         Icons.close_rounded,
