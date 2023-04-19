@@ -488,7 +488,13 @@ class PreferencesPage extends StatelessWidget {
           child: ElevatedButton(
             style: buttonStyle,
             onPressed: () {
-              context.read<AircraftCubit>().exportPacksToCSV(save: false);
+              context.read<AircraftCubit>().exportPacksToCSV(save: false).then(
+                (value) {
+                  if (value.isNotEmpty) {
+                    showSnackBar(context, 'CSV shared successfuly.');
+                  }
+                },
+              );
             },
             child: const Text('Export all data'),
           ),

@@ -223,9 +223,10 @@ class CSVLogger {
     return row;
   }
 
-  static List<List<dynamic>> createCSV(List<MessagePack> list) {
+  static List<List<dynamic>> createCSV(List<MessagePack> list,
+      {bool includeHeader = true}) {
     final csvData = <List<dynamic>>[];
-    csvData.add(commonHeader);
+    if (includeHeader) csvData.add(commonHeader);
     for (var i = 0; i < list.length; ++i) {
       final pack = list[i];
       if (pack.locationMessage != null) {

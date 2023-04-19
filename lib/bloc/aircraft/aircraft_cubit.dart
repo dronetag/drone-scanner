@@ -239,17 +239,18 @@ class AircraftCubit extends Cubit<AircraftState> {
     );
   }
 
-  Future<void> exportPacksToCSV({required bool save}) async {
+  Future<String> exportPacksToCSV({required bool save}) async {
     await checkStoragePermission();
     var csv = '';
     state.packHistory().forEach((key, value) {
-      final csvData = CSVLogger.createCSV(value);
+      final csvData = CSVLogger.createCSV(value, includeHeader: csv == '');
+      csv += '\n';
       csv += const ListToCsvConverter().convert(csvData);
     });
     if (save) {
-      await _saveExportFile(csv, 'all');
+      return await _saveExportFile(csv, 'all');
     } else {
-      await _shareExportFile(csv, 'all');
+      return await _shareExportFile(csv, 'all');
     }
   }
 
@@ -314,7 +315,7 @@ class AircraftCubit extends Cubit<AircraftState> {
 
     late final String pathOfTheFileToWrite;
     if (Platform.isAndroid) {
-      pathOfTheFileToWrite = '${directory.path}/csv_export-$name.csv';
+      pathOfTheFileToWrite = '${directory.path}/csv_export_$name.csv';
     } else {
       pathOfTheFileToWrite = '${directory.path}/csv_export.csv';
     }
