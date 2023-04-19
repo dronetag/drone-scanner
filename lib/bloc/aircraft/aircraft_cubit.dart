@@ -301,7 +301,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     final generalDownloadDir = Directory('/storage/emulated/0/Download');
     final resultName = name.replaceAll(':', '-');
     final pathOfTheFileToWrite =
-        '${generalDownloadDir.path}/csv_export$resultName.csv';
+        '${generalDownloadDir.path}drone_scanner_export_$resultName.csv';
     var file = await File(pathOfTheFileToWrite).create();
     file = await file.writeAsString(csv);
     return pathOfTheFileToWrite.replaceAll(
@@ -313,12 +313,8 @@ class AircraftCubit extends Cubit<AircraftState> {
   Future<String> _shareExportFile(String csv, String name) async {
     final directory = await getApplicationDocumentsDirectory();
 
-    late final String pathOfTheFileToWrite;
-    if (Platform.isAndroid) {
-      pathOfTheFileToWrite = '${directory.path}/csv_export_$name.csv';
-    } else {
-      pathOfTheFileToWrite = '${directory.path}/csv_export.csv';
-    }
+    final pathOfTheFileToWrite =
+        '${directory.path}/drone_scanner_export_$name.csv';
     var file = File(pathOfTheFileToWrite);
     file = await file.writeAsString(csv);
 
