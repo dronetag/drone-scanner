@@ -47,12 +47,15 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
         : '1 drone is flying close';
     final width =
         MediaQuery.of(context).size.width - 2 * Sizes.mapContentMargin;
+    final borderRadius = 10.0;
+    final progressBarHeight = 8.0;
     controller.animateTo(1);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
           color: AppColors.red,
+          width: 2,
         ),
         color: AppColors.lightRed,
       ),
@@ -60,7 +63,10 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(borderRadius),
+                topRight: Radius.circular(borderRadius),
+              ),
               color: AppColors.lightRed,
             ),
             width: width,
@@ -103,7 +109,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                       icon: Icon(
                         Icons.close_rounded,
                         color: AppColors.red,
-                        //size: Sizes.textIconSize,
+                        size: Sizes.textIconSize,
                       ),
                       iconSize: Sizes.textIconSize,
                     )
@@ -123,10 +129,14 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
             ),
           ),
           Container(
-            //alignment: Alignment.bottomCenter,
-            height: 10.0,
+            height: progressBarHeight,
             width: width,
-            //padding: EdgeInsets.only(top: Sizes.standard * 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(borderRadius),
+                bottomRight: Radius.circular(borderRadius),
+              ),
+            ),
             child: AnimatedBuilder(
               animation: controller,
               builder: (context, child) => CustomPaint(
@@ -134,7 +144,8 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                   animation: controller,
                   backgroundColor: AppColors.lightRed,
                   color: AppColors.red,
-                  height: 10.0,
+                  height: progressBarHeight,
+                  borderRadius: borderRadius,
                 ),
               ),
             ),
@@ -146,30 +157,52 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
 }
 
 class CustomTimerPainter extends CustomPainter {
-  CustomTimerPainter({
-    required this.animation,
-    required this.backgroundColor,
-    required this.color,
-    required this.height,
-  }) : super(repaint: animation);
+  CustomTimerPainter(
+      {required this.animation,
+      required this.backgroundColor,
+      required this.color,
+      required this.height,
+      required this.borderRadius})
+      : super(repaint: animation);
 
   final Animation<double> animation;
   final Color backgroundColor;
   final Color color;
   final double height;
+  final double borderRadius;
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
       ..color = backgroundColor
-      ..strokeWidth = height
-      ..strokeCap = StrokeCap.butt
-      ..style = PaintingStyle.stroke;
+      ..strokeCap = StrokeCap.square
+      ..style = PaintingStyle.fill;
 
-    canvas.drawLine(Offset.zero, Offset(size.width, 0), paint);
+    final usableWidth = size.width - 2 * borderRadius;
+    canvas.drawRect(
+      Rect.fromLTRB(borderRadius, 0, borderRadius + usableWidth, height),
+      paint,
+    );
     paint.color = color;
     var progress = animation.value;
-    canvas.drawLine(Offset.zero, Offset(size.width * (1 - progress), 0), paint);
+    canvas.drawRect(
+      Rect.fromLTRB(
+          borderRadius, 0, borderRadius + usableWidth * (1 - progress), height),
+      paint,
+    );
+    canvas.drawArc(
+      Rect.fromLTRB(0, -borderRadius, borderRadius * 2, borderRadius),
+      math.pi / 2,
+      math.pi / 2,
+      true,
+      paint,
+    );
+    paint.color = Colors.black;
+    canvas.drawRect(
+      Rect.fromLTRB(borderRadius + usableWidth * (1 - progress) - 2, 0,
+          borderRadius + usableWidth * (1 - progress), height),
+      paint,
+    );
   }
 
   @override
