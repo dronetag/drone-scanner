@@ -6,6 +6,7 @@ import '../../../../utils/utils.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
+import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
@@ -94,7 +95,7 @@ class AirspaceList extends StatelessWidget {
 
   List<Widget> buildListChildren(BuildContext context) {
     final state = context.watch<AircraftCubit>().state;
-    late final Map<String, List<MessagePack>> aircraft;
+    Map<String, List<MessagePack>> aircraft;
     if (sortValue == SortValue.uasid) {
       aircraft = state.packHistoryByUASID();
     } else if (sortValue == SortValue.time) {
@@ -102,6 +103,18 @@ class AirspaceList extends StatelessWidget {
     } else {
       aircraft = state
           .packHistoryByDistance(context.watch<MapCubit>().state.userLocation);
+    }
+    // move user owned aircraft to 1st position
+    final userAircraftUasId =
+        context.watch<ProximityAlertsCubit>().state.usersAircraftUASID;
+    if (userAircraftUasId != null &&
+        aircraft.values
+            .any((e) => e.first.basicIdMessage?.uasId == userAircraftUasId)) {
+      final entryList = aircraft.entries.toList();
+      final priorityData = entryList.firstWhere((element) =>
+          element.value.first.basicIdMessage?.uasId == userAircraftUasId);
+      entryList.insert(0, priorityData);
+      aircraft = Map.fromEntries(entryList);
     }
     if (context.read<ShowcaseCubit>().state.showcaseActive &&
         aircraft.isNotEmpty) {

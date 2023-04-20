@@ -10,6 +10,7 @@ import '../../services/location_service.dart';
 import '../../utils/google_map_style_reader.dart';
 import '../aircraft/aircraft_cubit.dart';
 import '../aircraft/selected_aircraft_cubit.dart';
+import '../proximity_alerts_cubit.dart';
 import '../sliders_cubit.dart';
 import '../zones/selected_zone_cubit.dart';
 import '../zones/zone_item.dart';
@@ -168,12 +169,14 @@ class MapCubit extends Cubit<GMapState> {
   }
 
   List<dynamic> constructAirspaceMapObjects(BuildContext context) {
+    final userAircraftUasId =
+        context.watch<ProximityAlertsCubit>().state.usersAircraftUASID;
     final selZone = context.watch<SelectedZoneCubit>().state.selectedZone;
     final selItemMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     return [
       ...buildPolygonZones(context, selZone),
-      ...buildMarkers(context, selItemMac),
+      ...buildMarkers(context, selItemMac, userAircraftUasId),
       ...buildCircleZones(context, selZone),
       ...buildPolylines(context, selItemMac),
     ];
@@ -256,7 +259,8 @@ class MapCubit extends Cubit<GMapState> {
         : {};
   }
 
-  Set<gmap.Marker> buildMarkers(BuildContext context, String? selItemMac) {
+  Set<gmap.Marker> buildMarkers(
+      BuildContext context, String? selItemMac, String? userAircraftUasId) {
     // ignore: omit_local_variable_types
     final Set<gmap.Marker> markers = context
                 .watch<SlidersCubit>()
@@ -278,6 +282,9 @@ class MapCubit extends Cubit<GMapState> {
                   late final double markerHue;
                   if (selItemMac != null && e.last.macAddress == selItemMac) {
                     markerHue = gmap.BitmapDescriptor.hueRed;
+                  } else if (userAircraftUasId != null &&
+                      e.last.basicIdMessage?.uasId == userAircraftUasId) {
+                    markerHue = 110;
                   } else if (e.last.locationMessage == null ||
                       e.last.locationMessage?.status == AircraftStatus.Ground) {
                     markerHue = 195;
