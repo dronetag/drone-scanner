@@ -17,7 +17,7 @@ class ProximityAlertsState {
   final String? usersAircraftUASID;
   final double proximityAlertDistance;
   final bool proximityAlertActive;
-  final bool alertDismissed;
+
   final bool sendNotifications;
   final int expirationTimeSec;
 
@@ -25,7 +25,6 @@ class ProximityAlertsState {
     required this.usersAircraftUASID,
     required this.proximityAlertDistance,
     required this.proximityAlertActive,
-    required this.alertDismissed,
     required this.sendNotifications,
     required this.expirationTimeSec,
   });
@@ -34,7 +33,6 @@ class ProximityAlertsState {
     String? usersAircraftUASID,
     double? proximityAlertDistance,
     bool? proximityAlertActive,
-    bool? alertDismissed,
     bool? sendNotifications,
     int? expirationTimeSec,
   }) =>
@@ -43,7 +41,6 @@ class ProximityAlertsState {
         proximityAlertDistance:
             proximityAlertDistance ?? this.proximityAlertDistance,
         proximityAlertActive: proximityAlertActive ?? this.proximityAlertActive,
-        alertDismissed: alertDismissed ?? this.alertDismissed,
         sendNotifications: sendNotifications ?? this.sendNotifications,
         expirationTimeSec: expirationTimeSec ?? this.expirationTimeSec,
       );

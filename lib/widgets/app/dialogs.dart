@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/proximity_alerts_cubit.dart';
@@ -66,8 +67,8 @@ void showSnackBar(
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-void showProximityAlertSnackBar(
-    BuildContext context, int durationSec, List<ProximityAlert> nearbyDrones) {
+void showProximityAlertSnackBar(BuildContext context, int durationSec,
+    List<ProximityAlert> nearbyDrones, double heightPosition) {
   final snackbar = SnackBar(
     backgroundColor: Colors.transparent,
     dismissDirection: DismissDirection.up,
@@ -76,7 +77,8 @@ void showProximityAlertSnackBar(
     elevation: 2.0,
     padding: EdgeInsets.zero,
     margin: EdgeInsets.only(
-      bottom: MediaQuery.of(context).size.height * 0.8,
+      top: heightPosition,
+      bottom: MediaQuery.of(context).size.height,
       right: Sizes.mapContentMargin,
       left: Sizes.mapContentMargin,
     ),
@@ -88,4 +90,21 @@ void showProximityAlertSnackBar(
 
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(snackbar);
+}
+
+Flushbar createProximityAlertFlushBar(
+    BuildContext context, int durationSec, List<ProximityAlert> nearbyDrones) {
+  return Flushbar(
+    duration: Duration(seconds: durationSec),
+    backgroundColor: Colors.transparent,
+    flushbarPosition: FlushbarPosition.TOP,
+    padding: EdgeInsets.symmetric(
+      horizontal: Sizes.mapContentMargin,
+      vertical: Sizes.standard,
+    ),
+    messageText: ProximityAlertSnackbar(
+      list: nearbyDrones,
+      expirationTime: durationSec,
+    ),
+  );
 }

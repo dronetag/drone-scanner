@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wakelock/wakelock.dart';
@@ -28,24 +29,33 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
+  BuildContext? currentContext;
   StreamSubscription? alertsStreamSub;
+  Flushbar? alertFlushbar;
   @override
   void initState() {
     final alertsCubit = context.read<ProximityAlertsCubit>();
     alertsStreamSub = alertsCubit.alertStream.listen((event) {
+      if (currentContext == null || !currentContext!.mounted) return;
       if (event.length == 1 && event.first is ProximityAlertsStart) {
         showSnackBar(
-          context,
+          currentContext!,
           'Drone Radar is enabled for drone with UAS ID '
           '${alertsCubit.state.usersAircraftUASID}',
           durationMs: 10000,
         );
-      } else {
-        showProximityAlertSnackBar(
-          context,
+      } else if (event.isNotEmpty) {
+        // do not show if already shown
+        if (alertFlushbar != null &&
+            (alertFlushbar!.isAppearing() || alertFlushbar!.isShowing())) {
+          return;
+        }
+        alertFlushbar = createProximityAlertFlushBar(
+          currentContext!,
           (event.first as DroneNearbyAlert).expirationTimeSec,
           event,
         );
+        alertFlushbar?.show(context);
       }
     });
 
@@ -98,6 +108,7 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
+    currentContext = context;
     // rebuild home page when showcase active changes
     context.read<ScreenCubit>().initScreen();
     context.watch<ShowcaseCubit>().state.showcaseActive;
@@ -107,25 +118,5 @@ class _HomeBodyState extends State<HomeBody> {
       }
     });
     return buildMapView(context);
-  }
-}
-
-class ProximityAlertIcon extends StatelessWidget {
-  const ProximityAlertIcon({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => context
-          .read<ProximityAlertsCubit>()
-          .setAlertDismissed(dismissed: false),
-      icon: Icon(
-        Icons.warning_rounded,
-        color: AppColors.redIcon,
-        size: Sizes.iconSize,
-      ),
-    );
   }
 }

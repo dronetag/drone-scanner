@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/proximity_alerts_cubit.dart';
 import '../../constants/colors.dart';
@@ -54,6 +53,13 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Sizes.panelBorderRadius),
         color: AppColors.lightRed,
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 5,
+            offset: Offset(0, 3),
+            color: AppColors.shadow,
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -99,10 +105,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                       Spacer(),
                       GestureDetector(
                         onTap: () {
-                          context
-                              .read<ProximityAlertsCubit>()
-                              .setAlertDismissed(dismissed: true);
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          Navigator.pop(context);
                         },
                         child: Row(
                           children: [

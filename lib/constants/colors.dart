@@ -23,4 +23,5 @@ class AppColors {
   static const detailFieldHeaderColor = Color(0xFF636E71);
   static const detailFieldColor = Color(0xFF3B4345);
   static const preferencesButtonColor = Color(0xFF778487);
+  static const shadow = Color.fromARGB(200, 100, 100, 100);
 }

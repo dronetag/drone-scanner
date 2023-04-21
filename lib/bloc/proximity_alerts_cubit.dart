@@ -37,7 +37,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             usersAircraftUASID: null,
             proximityAlertDistance: defaultProximityAlertDistance,
             proximityAlertActive: false,
-            alertDismissed: false,
             sendNotifications: true,
             expirationTimeSec: 10,
           ),
@@ -71,7 +70,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           proximityAlertActive: proximityAlertActive == null
               ? false
               : proximityAlertActive as bool,
-          alertDismissed: state.alertDismissed,
           sendNotifications:
               sendNotifications == null ? true : sendNotifications as bool,
           expirationTimeSec:
@@ -131,10 +129,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       _alertController.add([]);
     }
     await fetchSavedData();
-  }
-
-  void setAlertDismissed({required bool dismissed}) {
-    emit(state.copyWith(alertDismissed: dismissed));
   }
 
   void setSendNotifications({required bool send}) async {
