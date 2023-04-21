@@ -53,10 +53,6 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Sizes.panelBorderRadius),
-        border: Border.all(
-          color: AppColors.red,
-          width: 2,
-        ),
         color: AppColors.lightRed,
       ),
       child: Column(
@@ -71,52 +67,69 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
             ),
             width: width,
             padding: EdgeInsets.only(
+              top: Sizes.standard,
               left: Sizes.standard,
               right: Sizes.standard,
               bottom: Sizes.standard * 2,
             ),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: Sizes.iconPadding),
-                      child: Icon(
-                        Icons.error_outline,
-                        size: Sizes.textIconSize,
-                        color: AppColors.red,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Sizes.standard),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(right: Sizes.iconPadding),
+                        child: Icon(
+                          Icons.error_outline,
+                          size: Sizes.textIconSize,
+                          color: AppColors.red,
+                        ),
                       ),
-                    ),
-                    Text(
-                      headerText,
-                      style: TextStyle(
-                        color: AppColors.red,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                      Text(
+                        headerText,
+                        style: TextStyle(
+                          color: AppColors.red,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        context
-                            .read<ProximityAlertsCubit>()
-                            .setAlertDismissed(dismissed: true);
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      },
-                      icon: Icon(
-                        Icons.close_rounded,
-                        color: AppColors.red,
-                        size: Sizes.textIconSize,
-                      ),
-                      iconSize: Sizes.textIconSize,
-                    )
-                  ],
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          context
+                              .read<ProximityAlertsCubit>()
+                              .setAlertDismissed(dismissed: true);
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        },
+                        child: Row(
+                          children: [
+                            AnimatedBuilder(
+                              animation: controller,
+                              builder: (context, child) => Text(
+                                '${(widget.expirationTime * (1 - controller.value)).toStringAsFixed(0)}',
+                                style: TextStyle(
+                                  color: AppColors.red,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              Icons.close_rounded,
+                              color: AppColors.red,
+                              size: Sizes.textIconSize,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 ...widget.list
-                    .where((element) => element is DroneNearbyAlert)
+                    .whereType<DroneNearbyAlert>()
                     .map(
                       (e) => Container(
                         color: AppColors.lightRed,
@@ -176,6 +189,7 @@ class CustomTimerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
       ..color = backgroundColor
+      ..strokeWidth = 0
       ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.fill;
 
@@ -192,7 +206,7 @@ class CustomTimerPainter extends CustomPainter {
       paint,
     );
     canvas.drawArc(
-      Rect.fromLTRB(0, -borderRadius, borderRadius * 2, borderRadius),
+      Rect.fromLTRB(0, -height, borderRadius * 2, height),
       math.pi / 2,
       math.pi / 2,
       true,

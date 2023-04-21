@@ -25,9 +25,12 @@ class ProximityAlertWidget extends StatelessWidget {
           Row(
             children: [
               Padding(
-                  padding: EdgeInsets.only(right: Sizes.iconPadding),
-                  child:
-                      Icon(Icons.location_searching, size: Sizes.textIconSize)),
+                padding: EdgeInsets.only(right: Sizes.iconPadding),
+                child: Icon(
+                  Icons.location_searching,
+                  size: Sizes.textIconSize,
+                ),
+              ),
               Text(
                 alert.uasId,
                 style: TextStyle(
