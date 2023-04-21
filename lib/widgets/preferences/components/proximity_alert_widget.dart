@@ -5,7 +5,7 @@ import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 
 class ProximityAlertWidget extends StatelessWidget {
-  final ProximityAlert alert;
+  final DroneNearbyAlert alert;
 
   const ProximityAlertWidget({Key? key, required this.alert}) : super(key: key);
 

@@ -8,53 +8,7 @@ import 'package:localstorage/localstorage.dart';
 import '../services/notification_service.dart';
 import '../utils/utils.dart';
 
-class ProximityAlert {
-  final String uasId;
-  final double distance;
-  final int expirationTimeSec;
-
-  ProximityAlert(this.uasId, this.distance, this.expirationTimeSec);
-}
-
-class ProximityAlertsState {
-  // uas id of drone selected by user as their own
-  final String? usersAircraftUASID;
-  final double proximityAlertDistance;
-  final bool proximityAlertActive;
-  final bool alertDismissed;
-  final bool sendNotifications;
-  final int expirationTimeSec;
-
-  ProximityAlertsState({
-    required this.usersAircraftUASID,
-    required this.proximityAlertDistance,
-    required this.proximityAlertActive,
-    required this.alertDismissed,
-    required this.sendNotifications,
-    required this.expirationTimeSec,
-  });
-
-  ProximityAlertsState copyWith({
-    String? usersAircraftUASID,
-    double? proximityAlertDistance,
-    bool? proximityAlertActive,
-    bool? alertDismissed,
-    bool? sendNotifications,
-    int? expirationTimeSec,
-  }) =>
-      ProximityAlertsState(
-        usersAircraftUASID: usersAircraftUASID ?? this.usersAircraftUASID,
-        proximityAlertDistance:
-            proximityAlertDistance ?? this.proximityAlertDistance,
-        proximityAlertActive: proximityAlertActive ?? this.proximityAlertActive,
-        alertDismissed: alertDismissed ?? this.alertDismissed,
-        sendNotifications: sendNotifications ?? this.sendNotifications,
-        expirationTimeSec: expirationTimeSec ?? this.expirationTimeSec,
-      );
-
-  bool isAlertActiveForId(String? uasId) =>
-      uasId != null && usersAircraftUASID == uasId;
-}
+part 'proximity_alerts_state.dart';
 
 class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const maxProximityAlertDistance = 2000.0;
@@ -88,15 +42,16 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             expirationTimeSec: 10,
           ),
         ) {
-    fetchSavedData().then((_) {
-      if (state.proximityAlertActive) {
-        _sendStartAlert(
-            'Proximity alerts for device ${state.usersAircraftUASID} are active.');
-      }
-    });
+    initProximityAlerts();
   }
 
-  //Retrieves the labels stored persistently locally on the device
+  void initProximityAlerts() async {
+    await fetchSavedData();
+    if (state.proximityAlertActive) {
+      _sendStartAlert();
+    }
+  }
+
   Future<void> fetchSavedData() async {
     final ready = await storage.ready;
     if (ready) {
@@ -201,8 +156,9 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     });
   }
 
-  // TODO
-  void _sendStartAlert(String message) {}
+  void _sendStartAlert() {
+    _alertController.add([ProximityAlertsStart()]);
+  }
 
   void checkProximityAlerts(
       MessagePack pack, Map<String, List<MessagePack>> packHistory) {
@@ -228,7 +184,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
                 value.last.lastUpdate.isAfter(
                     DateTime.now().subtract(Duration(seconds: maxPackAge)))) {
               _sendAlert([
-                ProximityAlert(value.last.basicIdMessage!.uasId, distance,
+                DroneNearbyAlert(value.last.basicIdMessage!.uasId, distance,
                     state.expirationTimeSec)
               ]);
               if (state.sendNotifications) {

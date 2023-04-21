@@ -46,10 +46,11 @@ void showSnackBar(
   BuildContext context,
   String snackBarText, {
   Color textColor = Colors.white,
+  int durationMs = 1500,
 }) {
   final snackBar = SnackBar(
     backgroundColor: AppColors.darkGray.withOpacity(AppColors.toolbarOpacity),
-    duration: const Duration(milliseconds: 1500),
+    duration: Duration(milliseconds: durationMs),
     behavior: SnackBarBehavior.floating,
     content: Text(
       snackBarText,

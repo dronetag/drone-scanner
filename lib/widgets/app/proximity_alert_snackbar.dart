@@ -116,11 +116,12 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                   ],
                 ),
                 ...widget.list
+                    .where((element) => element is DroneNearbyAlert)
                     .map(
                       (e) => Container(
                         color: AppColors.lightRed,
                         child: ProximityAlertWidget(
-                          alert: e,
+                          alert: e as DroneNearbyAlert,
                         ),
                       ),
                     )

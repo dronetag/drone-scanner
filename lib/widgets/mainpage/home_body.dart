@@ -31,16 +31,24 @@ class _HomeBodyState extends State<HomeBody> {
   StreamSubscription? alertsStreamSub;
   @override
   void initState() {
-    alertsStreamSub =
-        context.read<ProximityAlertsCubit>().alertStream.listen((event) {
-      if (!context.read<ProximityAlertsCubit>().state.alertDismissed) {
+    final alertsCubit = context.read<ProximityAlertsCubit>();
+    alertsStreamSub = alertsCubit.alertStream.listen((event) {
+      if (event.length == 1 && event.first is ProximityAlertsStart) {
+        showSnackBar(
+          context,
+          'Drone Radar is enabled for drone with UAS ID '
+          '${alertsCubit.state.usersAircraftUASID}',
+          durationMs: 10000,
+        );
+      } else {
         showProximityAlertSnackBar(
           context,
-          event.first.expirationTimeSec,
+          (event.first as DroneNearbyAlert).expirationTimeSec,
           event,
         );
       }
     });
+
     super.initState();
   }
 
