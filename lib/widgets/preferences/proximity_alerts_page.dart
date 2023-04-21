@@ -203,12 +203,17 @@ class ProximityAlertsPage extends StatelessWidget {
                   Transform.rotate(
                     angle: math.pi / 4,
                     child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: AppColors.preferencesButtonColor,
+                      padding: EdgeInsets.all(2),
+                      width: Sizes.iconSize / 3,
+                      height: radarIconSize * 1.3,
+                      color: Colors.white,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(Sizes.panelBorderRadius),
+                          color: AppColors.preferencesButtonColor,
+                        ),
                       ),
-                      width: Sizes.iconSize / 6,
-                      height: radarIconSize + 3,
                     ),
                   ),
               ],

@@ -103,7 +103,7 @@ class ProximityAlertDistanceField extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${minValue}m',
+                  '${minValue.toStringAsFixed(0)}m',
                   style: TextStyle(
                     fontSize: 10,
                     color: AppColors.lightGray,

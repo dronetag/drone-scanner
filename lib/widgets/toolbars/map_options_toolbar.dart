@@ -27,7 +27,7 @@ class MapOptionsToolbar extends StatelessWidget {
         MediaQuery.of(context).orientation == Orientation.landscape;
     final toolbarHeight = isLandscape
         ? MediaQuery.of(context).size.height / 3
-        : MediaQuery.of(context).size.height / 6;
+        : MediaQuery.of(context).size.height / 5;
     final toolbarWidth = isLandscape
         ? MediaQuery.of(context).size.width / 12
         : MediaQuery.of(context).size.width / 8;
