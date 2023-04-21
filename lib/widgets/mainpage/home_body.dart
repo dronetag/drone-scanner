@@ -35,7 +35,10 @@ class _HomeBodyState extends State<HomeBody> {
         context.read<ProximityAlertsCubit>().alertStream.listen((event) {
       if (!context.read<ProximityAlertsCubit>().state.alertDismissed) {
         showProximityAlertSnackBar(
-            context, event.first.expirationTimeSec, event);
+          context,
+          event.first.expirationTimeSec,
+          event,
+        );
       }
     });
     super.initState();

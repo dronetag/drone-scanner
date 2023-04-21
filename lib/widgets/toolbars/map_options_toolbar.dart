@@ -46,7 +46,7 @@ class MapOptionsToolbar extends StatelessWidget {
               ),
               boxShadow: const <BoxShadow>[
                 BoxShadow(
-                  blurRadius: 10.0,
+                  blurRadius: Sizes.panelBorderRadius,
                   color: Color.fromRGBO(0, 0, 0, 0.1),
                 )
               ],

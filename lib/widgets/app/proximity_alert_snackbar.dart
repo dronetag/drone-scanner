@@ -47,12 +47,12 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
         : '1 drone is flying close';
     final width =
         MediaQuery.of(context).size.width - 2 * Sizes.mapContentMargin;
-    final borderRadius = 10.0;
+
     final progressBarHeight = 8.0;
     controller.animateTo(1);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(Sizes.panelBorderRadius),
         border: Border.all(
           color: AppColors.red,
           width: 2,
@@ -64,8 +64,8 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(borderRadius),
-                topRight: Radius.circular(borderRadius),
+                topLeft: Radius.circular(Sizes.panelBorderRadius),
+                topRight: Radius.circular(Sizes.panelBorderRadius),
               ),
               color: AppColors.lightRed,
             ),
@@ -133,8 +133,8 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
             width: width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(borderRadius),
-                bottomRight: Radius.circular(borderRadius),
+                bottomLeft: Radius.circular(Sizes.panelBorderRadius),
+                bottomRight: Radius.circular(Sizes.panelBorderRadius),
               ),
             ),
             child: AnimatedBuilder(
@@ -145,7 +145,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                   backgroundColor: AppColors.lightRed,
                   color: AppColors.red,
                   height: progressBarHeight,
-                  borderRadius: borderRadius,
+                  borderRadius: Sizes.panelBorderRadius,
                 ),
               ),
             ),

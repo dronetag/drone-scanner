@@ -348,7 +348,7 @@ class ProximityAlertsPage extends StatelessWidget {
       '30 seconds',
       '1 min',
     ];
-    getValue(BuildContext context) {
+    String getValue(BuildContext context) {
       final sec = context.watch<ProximityAlertsCubit>().state.expirationTimeSec;
       if (sec == 5) {
         return items[0];
