@@ -112,7 +112,7 @@ class AirspaceList extends StatelessWidget {
             .any((e) => e.first.basicIdMessage?.uasId == userAircraftUasId)) {
       final entryList = aircraft.entries.toList();
       final priorityData = entryList.firstWhere((element) =>
-          element.value.first.basicIdMessage?.uasId == userAircraftUasId);
+          element.value.last.basicIdMessage?.uasId == userAircraftUasId);
       entryList.insert(0, priorityData);
       aircraft = Map.fromEntries(entryList);
     }

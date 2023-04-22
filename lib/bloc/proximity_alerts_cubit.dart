@@ -14,7 +14,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const maxProximityAlertDistance = 2000.0;
   static const minProximityAlertDistance = 100.0;
   static const defaultProximityAlertDistance = 2000.0;
-  static const maxPackAge = 30;
 
   static const proximityAlertActiveKey = 'proximityAlertActive';
   static const proximityAlertDistanceKey = 'proximityAlertDistance';
@@ -29,8 +28,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   final _alertController = StreamController<List<ProximityAlert>>();
   Stream<List<ProximityAlert>> get alertStream => _alertController.stream;
 
-  Timer? alertExpiryTimer;
-
   ProximityAlertsCubit(this.notificationService)
       : super(
           ProximityAlertsState(
@@ -39,6 +36,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             proximityAlertActive: false,
             sendNotifications: true,
             expirationTimeSec: 10,
+            foundAircraft: {},
           ),
         ) {
     initProximityAlerts();
@@ -74,6 +72,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
               sendNotifications == null ? true : sendNotifications as bool,
           expirationTimeSec:
               expirationTime == null ? 10 : expirationTime as int,
+          foundAircraft: state.foundAircraft,
         ),
       );
     }
@@ -89,6 +88,16 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     );
     _alertController.add([]);
     await fetchSavedData();
+  }
+
+  void clearFoundDrones() {
+    emit(state.copyWith(foundAircraft: {}));
+  }
+
+  void clearFoundDrone(String uasId) {
+    final updated = state.foundAircraft;
+    updated.remove(uasId);
+    emit(state.copyWith(foundAircraft: updated));
   }
 
   Future<void> setUsersAircraftUASID(String uasId) async {
@@ -139,60 +148,80 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     await fetchSavedData();
   }
 
-  void _sendAlert(List<ProximityAlert> dronesNearby) {
+  void _sendAlert(List<DroneNearbyAlert> dronesNearby) {
     _alertController.add(dronesNearby);
-    if (alertExpiryTimer != null && alertExpiryTimer!.isActive) {
-      alertExpiryTimer!.cancel();
-    }
-    // send [] to signal aler expiration
-    alertExpiryTimer = Timer(Duration(seconds: state.expirationTimeSec), () {
-      _alertController.add([]);
-    });
+
+    emit(
+      state.updateFoundAircraft(
+        dronesNearby.map<String>((e) => e.uasId).toList(),
+      ),
+    );
   }
 
   void _sendStartAlert() {
     _alertController.add([ProximityAlertsStart()]);
   }
 
+  // check if owned drone has location, uasid and is airborne
+  bool _alertsReady(MessagePack pack) =>
+      state.proximityAlertActive &&
+      pack.basicIdMessage?.uasId != null &&
+      pack.basicIdMessage?.uasId == state.usersAircraftUASID &&
+      pack.locationValid() &&
+      pack.locationMessage!.status == AircraftStatus.Airborne;
+
+  // check distance, consider just packs not older than expiration time
+  bool _isNearby(MessagePack pack, double distance) =>
+      distance <= state.proximityAlertDistance &&
+      pack.lastUpdate.isAfter(
+        DateTime.now().subtract(
+          Duration(seconds: state.expirationTimeSec),
+        ),
+      );
+
   void checkProximityAlerts(
       MessagePack pack, Map<String, List<MessagePack>> packHistory) {
-    if (state.proximityAlertActive &&
-        pack.basicIdMessage?.uasId != null &&
-        pack.basicIdMessage?.uasId == state.usersAircraftUASID &&
-        pack.locationValid() &&
-        pack.locationMessage!.status == AircraftStatus.Airborne) {
-      packHistory.forEach(
-        (key, value) {
-          if (value.last.basicIdMessage?.uasId != null &&
-              value.last.basicIdMessage?.uasId != state.usersAircraftUASID &&
-              value.last.locationValid()) {
-            // calc distance and convert to meters
-            final distance = calculateDistance(
-                    pack.locationMessage!.latitude!,
-                    pack.locationMessage!.longitude!,
-                    value.last.locationMessage!.latitude!,
-                    value.last.locationMessage!.longitude!) *
-                1000;
-            // consider just packs not older than 30s
-            if (distance <= state.proximityAlertDistance &&
-                value.last.lastUpdate.isAfter(
-                    DateTime.now().subtract(Duration(seconds: maxPackAge)))) {
-              _sendAlert([
-                DroneNearbyAlert(value.last.basicIdMessage!.uasId, distance,
-                    state.expirationTimeSec)
-              ]);
-              if (state.sendNotifications) {
-                notificationService.addNotification(
-                  'Proximity Alert',
-                  'Aircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft',
-                  DateTime.now().millisecondsSinceEpoch + 1000,
-                  channel: 'testing',
-                );
-              }
+    if (!_alertsReady(pack)) {
+      return;
+    }
+
+    packHistory.forEach(
+      (key, value) {
+        final uasId = value.last.basicIdMessage?.uasId;
+        if (uasId != null &&
+            uasId != state.usersAircraftUASID &&
+            value.last.locationValid()) {
+          // calc distance and convert to meters
+          final distance = calculateDistance(
+                  pack.locationMessage!.latitude!,
+                  pack.locationMessage!.longitude!,
+                  value.last.locationMessage!.latitude!,
+                  value.last.locationMessage!.longitude!) *
+              1000;
+          // send alart once per intruder
+          if (_isNearby(value.last, distance)) {
+            // if was found before, check time
+            if (state.foundAircraft.containsKey(uasId)) {
+              final ageMs = DateTime.now().millisecondsSinceEpoch -
+                  state.foundAircraft[uasId]!.millisecondsSinceEpoch;
+              // TODO: change minutes variable, found out best value
+              if (ageMs < Duration(minutes: 2).inMilliseconds) return;
+            }
+            _sendAlert([
+              DroneNearbyAlert(value.last.basicIdMessage!.uasId, distance,
+                  state.expirationTimeSec)
+            ]);
+            if (state.sendNotifications) {
+              notificationService.addNotification(
+                'Proximity Alert',
+                'Aircraft ${value.last.basicIdMessage?.uasId} is ${distance.toStringAsFixed(2)} meters from your aircraft',
+                DateTime.now().millisecondsSinceEpoch + 1000,
+                channel: 'testing',
+              );
             }
           }
-        },
-      );
-    }
+        }
+      },
+    );
   }
 }
