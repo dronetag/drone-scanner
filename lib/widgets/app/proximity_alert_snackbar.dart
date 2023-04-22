@@ -1,8 +1,13 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/aircraft/aircraft_cubit.dart';
+import '../../bloc/aircraft/selected_aircraft_cubit.dart';
+import '../../bloc/map/map_cubit.dart';
 import '../../bloc/proximity_alerts_cubit.dart';
+import '../../bloc/sliders_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../preferences/components/proximity_alert_widget.dart';
@@ -134,10 +139,30 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                 ...widget.list
                     .whereType<DroneNearbyAlert>()
                     .map(
-                      (e) => Container(
-                        color: AppColors.lightRed,
-                        child: ProximityAlertWidget(
-                          alert: e as DroneNearbyAlert,
+                      (e) => GestureDetector(
+                        onTap: () {
+                          final data = context
+                              .read<AircraftCubit>()
+                              .findByUasID(e.uasId);
+                          if (data == null) return;
+                          if (data.locationValid()) {
+                            context.read<MapCubit>().centerToLocDouble(
+                                  data.locationMessage!.latitude!,
+                                  data.locationMessage!.longitude!,
+                                );
+                          }
+                          context
+                              .read<SelectedAircraftCubit>()
+                              .selectAircraft(data.macAddress);
+                          context
+                              .read<SlidersCubit>()
+                              .setShowDroneDetail(show: true);
+                        },
+                        child: Container(
+                          color: AppColors.lightRed,
+                          child: ProximityAlertWidget(
+                            alert: e,
+                          ),
                         ),
                       ),
                     )
