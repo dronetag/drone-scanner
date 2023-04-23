@@ -65,9 +65,10 @@ void main() async {
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
-  final proximityAlertsCubit = ProximityAlertsCubit(notificationService);
-  final aircraftCubit =
-      AircraftCubit(aircraftExpirationCubit, proximityAlertsCubit);
+  final aircraftCubit = AircraftCubit(aircraftExpirationCubit);
+  final proximityAlertsCubit =
+      ProximityAlertsCubit(notificationService, aircraftCubit);
+
   runAppWithSentry(
     () => runApp(
       MultiBlocProvider(

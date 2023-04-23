@@ -7,13 +7,15 @@ import 'package:localstorage/localstorage.dart';
 
 import '../services/notification_service.dart';
 import '../utils/utils.dart';
+import 'aircraft/aircraft_cubit.dart';
 
 part 'proximity_alerts_state.dart';
 
 class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const maxProximityAlertDistance = 2000.0;
   static const minProximityAlertDistance = 100.0;
-  static const defaultProximityAlertDistance = 2000.0;
+  static const defaultProximityAlertDistance = maxProximityAlertDistance;
+  static const alertsUpdateIntervalSec = 1;
 
   static const proximityAlertActiveKey = 'proximityAlertActive';
   static const proximityAlertDistanceKey = 'proximityAlertDistance';
@@ -22,13 +24,16 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   static const expirationTimeKey = 'expirationTime';
 
   final NotificationService notificationService;
+  final AircraftCubit aircraftCubit;
 
   final LocalStorage storage = LocalStorage('dronescanner-proximity-alerts');
 
   final _alertController = StreamController<List<ProximityAlert>>();
   Stream<List<ProximityAlert>> get alertStream => _alertController.stream;
 
-  ProximityAlertsCubit(this.notificationService)
+  Timer? _refreshTimer;
+
+  ProximityAlertsCubit(this.notificationService, this.aircraftCubit)
       : super(
           ProximityAlertsState(
             usersAircraftUASID: null,
@@ -46,6 +51,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     await fetchSavedData();
     if (state.proximityAlertActive) {
       _sendStartAlert();
+      _startAlerts();
     }
   }
 
@@ -105,12 +111,13 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       usersAircraftUASIDKey,
       uasId,
     );
-    // turn alert on after setting aircraft
     await storage.setItem(
       proximityAlertActiveKey,
       true,
     );
-    await fetchSavedData();
+    // turn alert on after setting aircraft
+    if (_refreshTimer == null || !_refreshTimer!.isActive) _startAlerts();
+    emit(state.copyWith(usersAircraftUASID: uasId, proximityAlertActive: true));
   }
 
   Future<void> setProximityAlertsDistance(double distance) async {
@@ -118,7 +125,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       proximityAlertDistanceKey,
       distance,
     );
-    await fetchSavedData();
+    emit(state.copyWith(proximityAlertDistance: distance));
   }
 
   Future<void> setNotificationExpirationTime(int time) async {
@@ -126,10 +133,12 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       expirationTimeKey,
       time,
     );
-    await fetchSavedData();
+    emit(state.copyWith(expirationTimeSec: time));
   }
 
   Future<void> setProximityAlertsActive({required bool active}) async {
+    if (state.usersAircraftUASID == null ||
+        aircraftCubit.findByUasID(state.usersAircraftUASID!) == null) return;
     await storage.setItem(
       proximityAlertActiveKey,
       active,
@@ -137,7 +146,26 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     if (!active) {
       _alertController.add([]);
     }
-    await fetchSavedData();
+    if (active) {
+      _startAlerts();
+    } else {
+      _stopAlerts();
+    }
+    emit(state.copyWith(proximityAlertActive: active));
+  }
+
+  void _startAlerts() {
+    _refreshTimer = Timer.periodic(
+      Duration(seconds: alertsUpdateIntervalSec),
+      (_) => checkProximityAlerts(
+        aircraftCubit.findByUasID(state.usersAircraftUASID!)!,
+        aircraftCubit.state.packHistory(),
+      ),
+    );
+  }
+
+  void _stopAlerts() {
+    _refreshTimer?.cancel();
   }
 
   void setSendNotifications({required bool send}) async {
@@ -145,7 +173,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       sendNotificationsKey,
       send,
     );
-    await fetchSavedData();
+    emit(state.copyWith(sendNotifications: send));
   }
 
   void _sendAlert(List<DroneNearbyAlert> dronesNearby) {

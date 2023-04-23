@@ -14,7 +14,6 @@ import 'package:share_plus/share_plus.dart';
 
 import '/utils/csvlogger.dart';
 import '../../utils/utils.dart';
-import '../proximity_alerts_cubit.dart';
 import 'aircraft_expiration_cubit.dart';
 
 part 'aircraft_state.dart';
@@ -22,7 +21,6 @@ part 'aircraft_state.dart';
 class AircraftCubit extends Cubit<AircraftState> {
   Timer? _refreshTimer;
   final AircraftExpirationCubit expirationCubit;
-  final ProximityAlertsCubit proximityAlertsCubit;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
 
@@ -75,7 +73,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     ),
   ];
 
-  AircraftCubit(this.expirationCubit, this.proximityAlertsCubit)
+  AircraftCubit(this.expirationCubit)
       : super(
           AircraftState(
             packHistory: <String, List<MessagePack>>{},
@@ -210,7 +208,6 @@ class AircraftCubit extends Cubit<AircraftState> {
           aircraftLabels: state.aircraftLabels,
         ),
       );
-      proximityAlertsCubit.checkProximityAlerts(pack, state.packHistory());
     } on Exception {
       rethrow;
     }
