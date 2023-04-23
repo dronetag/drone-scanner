@@ -157,6 +157,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                           context
                               .read<SlidersCubit>()
                               .setShowDroneDetail(show: true);
+                          context.read<SlidersCubit>().openIfClosed();
                         },
                         child: Container(
                           color: AppColors.lightRed,

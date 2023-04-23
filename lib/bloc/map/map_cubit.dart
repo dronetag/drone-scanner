@@ -325,15 +325,7 @@ class MapCubit extends Cubit<GMapState> {
                       context
                           .read<SlidersCubit>()
                           .setShowDroneDetail(show: true);
-                      if (context
-                          .read<SlidersCubit>()
-                          .panelController
-                          .isPanelClosed) {
-                        context
-                            .read<SlidersCubit>()
-                            .panelController
-                            .animatePanelToSnapPoint();
-                      }
+                      context.read<SlidersCubit>().openIfClosed();
                     },
                     icon: gmap.BitmapDescriptor.defaultMarkerWithHue(markerHue),
                   );

@@ -117,6 +117,12 @@ class SlidersCubit extends Cubit<SlidersState> {
     }
   }
 
+  void openIfClosed() {
+    if (panelController.isPanelClosed) {
+      panelController.animatePanelToSnapPoint();
+    }
+  }
+
   Future<void> setSliderMaximized({required bool maximized}) async {
     emit(state.copyWith(sliderMaximized: maximized));
   }
