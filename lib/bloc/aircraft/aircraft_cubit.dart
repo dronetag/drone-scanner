@@ -311,8 +311,13 @@ class AircraftCubit extends Cubit<AircraftState> {
     var file = File(pathOfTheFileToWrite);
     file = await file.writeAsString(csv);
 
-    final result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)],
-        subject: 'Drone Scanner Export', text: 'Your Remote ID Data');
+    late final result;
+    if (Platform.isAndroid) {
+      result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)],
+          subject: 'Drone Scanner Export', text: 'Your Remote ID Data');
+    } else {
+      result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)]);
+    }
     if (result.status == ShareResultStatus.success) {
       return pathOfTheFileToWrite;
     } else {
