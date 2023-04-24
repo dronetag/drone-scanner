@@ -239,7 +239,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     );
   }
 
-  Future<String> exportPacksToCSV({required bool save}) async {
+  Future<String> exportPacksToCSV() async {
     await checkStoragePermission();
     var csv = '';
     state.packHistory().forEach((key, value) {
@@ -247,16 +247,11 @@ class AircraftCubit extends Cubit<AircraftState> {
       csv += '\n';
       csv += const ListToCsvConverter().convert(csvData);
     });
-    if (save) {
-      return await _saveExportFile(csv, 'all');
-    } else {
-      return await _shareExportFile(csv, 'all');
-    }
+    return await _shareExportFile(csv, 'all');
   }
 
   Future<String> exportPackToCSV({
     required String mac,
-    required bool save,
   }) async {
     if (state.packHistory()[mac] == null) return '';
     // request permission
@@ -276,11 +271,9 @@ class AircraftCubit extends Cubit<AircraftState> {
       uasId = mac;
     }
     String filePath;
-    if (save) {
-      filePath = await _saveExportFile(csv, uasId);
-    } else {
-      filePath = await _shareExportFile(csv, uasId);
-    }
+
+    filePath = await _shareExportFile(csv, uasId);
+
     return filePath;
   }
 

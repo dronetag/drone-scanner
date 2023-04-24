@@ -488,7 +488,7 @@ class PreferencesPage extends StatelessWidget {
           child: ElevatedButton(
             style: buttonStyle,
             onPressed: () {
-              context.read<AircraftCubit>().exportPacksToCSV(save: false).then(
+              context.read<AircraftCubit>().exportPacksToCSV().then(
                 (value) {
                   if (value.isNotEmpty) {
                     showSnackBar(context, 'CSV shared successfuly.');
