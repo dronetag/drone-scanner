@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../services/notification_service.dart';
 import '../utils/utils.dart';
@@ -28,7 +29,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   final LocalStorage storage = LocalStorage('dronescanner-proximity-alerts');
 
-  final _alertController = StreamController<List<ProximityAlert>>();
+  final StreamController<List<ProximityAlert>> _alertController =
+      BehaviorSubject();
   Stream<List<ProximityAlert>> get alertStream => _alertController.stream;
 
   Timer? _refreshTimer;
@@ -42,6 +44,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             sendNotifications: true,
             expirationTimeSec: 10,
             foundAircraft: {},
+            alreadyShownAlerts: {},
           ),
         ) {
     initProximityAlerts();
@@ -79,6 +82,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           expirationTimeSec:
               expirationTime == null ? 10 : expirationTime as int,
           foundAircraft: state.foundAircraft,
+          alreadyShownAlerts: state.alreadyShownAlerts,
         ),
       );
     }
@@ -92,12 +96,23 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       proximityAlertActiveKey,
       false,
     );
-    _alertController.add([]);
-    await fetchSavedData();
+    _stopAlerts();
+    emit(
+      ProximityAlertsState(
+        proximityAlertActive: false,
+        usersAircraftUASID: null,
+        alreadyShownAlerts: state.alreadyShownAlerts,
+        expirationTimeSec: state.expirationTimeSec,
+        foundAircraft: state.foundAircraft,
+        proximityAlertDistance: state.proximityAlertDistance,
+        sendNotifications: state.sendNotifications,
+      ),
+    );
   }
 
-  void clearFoundDrones() {
-    emit(state.copyWith(foundAircraft: {}));
+  void showHiddenAlerts() {
+    emit(state.copyWith(alreadyShownAlerts: {}));
+    checkProximityAlerts();
   }
 
   void clearFoundDrone(String uasId) {
@@ -115,9 +130,22 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       proximityAlertActiveKey,
       true,
     );
+    emit(
+      ProximityAlertsState(
+        proximityAlertActive: true,
+        usersAircraftUASID: uasId,
+        alreadyShownAlerts: state.alreadyShownAlerts,
+        expirationTimeSec: state.expirationTimeSec,
+        foundAircraft: state.foundAircraft,
+        proximityAlertDistance: state.proximityAlertDistance,
+        sendNotifications: state.sendNotifications,
+      ),
+    );
     // turn alert on after setting aircraft
-    if (_refreshTimer == null || !_refreshTimer!.isActive) _startAlerts();
-    emit(state.copyWith(usersAircraftUASID: uasId, proximityAlertActive: true));
+    if (_refreshTimer == null || !_refreshTimer!.isActive) {
+      _startAlerts();
+      showHiddenAlerts();
+    }
   }
 
   Future<void> setProximityAlertsDistance(double distance) async {
@@ -148,20 +176,26 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     }
     if (active) {
       _startAlerts();
+      showHiddenAlerts();
     } else {
       _stopAlerts();
     }
     emit(state.copyWith(proximityAlertActive: active));
   }
 
+  void onAlertsExpired() {
+    _stopAlerts();
+    emit(state.updateAlreadyShownAircraft(state.foundAircraft.keys.toList()));
+    if (state.proximityAlertActive) _startAlerts();
+  }
+
   void _startAlerts() {
+    void callback() => checkProximityAlerts();
     _refreshTimer = Timer.periodic(
       Duration(seconds: alertsUpdateIntervalSec),
-      (_) => checkProximityAlerts(
-        aircraftCubit.findByUasID(state.usersAircraftUASID!)!,
-        aircraftCubit.state.packHistory(),
-      ),
+      (_) => callback(),
     );
+    callback();
   }
 
   void _stopAlerts() {
@@ -207,12 +241,13 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
         ),
       );
 
-  void checkProximityAlerts(
-      MessagePack pack, Map<String, List<MessagePack>> packHistory) {
+  void checkProximityAlerts() {
+    final pack = aircraftCubit.findByUasID(state.usersAircraftUASID!)!;
+    final packHistory = aircraftCubit.state.packHistory();
     if (!_alertsReady(pack)) {
       return;
     }
-
+    final foundAlerts = <DroneNearbyAlert>[];
     packHistory.forEach(
       (key, value) {
         final uasId = value.last.basicIdMessage?.uasId;
@@ -229,16 +264,11 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           // send alart once per intruder
           if (_isNearby(value.last, distance)) {
             // if was found before, check time
-            if (state.foundAircraft.containsKey(uasId)) {
-              final ageMs = DateTime.now().millisecondsSinceEpoch -
-                  state.foundAircraft[uasId]!.millisecondsSinceEpoch;
-              // TODO: change minutes variable, found out best value
-              if (ageMs < Duration(minutes: 2).inMilliseconds) return;
+            if (!state.alreadyShownAlerts.contains(uasId)) {
+              foundAlerts.add(
+                  DroneNearbyAlert(uasId, distance, state.expirationTimeSec));
             }
-            _sendAlert([
-              DroneNearbyAlert(value.last.basicIdMessage!.uasId, distance,
-                  state.expirationTimeSec)
-            ]);
+
             if (state.sendNotifications) {
               notificationService.addNotification(
                 'Proximity Alert',
@@ -251,5 +281,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
         }
       },
     );
+    _sendAlert(foundAlerts);
   }
 }

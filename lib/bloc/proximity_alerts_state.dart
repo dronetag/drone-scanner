@@ -23,6 +23,8 @@ class ProximityAlertsState {
   // stored uasid and timestamp for found aircraft
   final Map<String, DateTime> foundAircraft;
 
+  final Set<String> alreadyShownAlerts;
+
   ProximityAlertsState({
     required this.usersAircraftUASID,
     required this.proximityAlertDistance,
@@ -30,6 +32,7 @@ class ProximityAlertsState {
     required this.sendNotifications,
     required this.expirationTimeSec,
     required this.foundAircraft,
+    required this.alreadyShownAlerts,
   });
 
   ProximityAlertsState copyWith({
@@ -39,6 +42,7 @@ class ProximityAlertsState {
     bool? sendNotifications,
     int? expirationTimeSec,
     Map<String, DateTime>? foundAircraft,
+    Set<String>? alreadyShownAlerts,
   }) =>
       ProximityAlertsState(
         usersAircraftUASID: usersAircraftUASID ?? this.usersAircraftUASID,
@@ -48,6 +52,7 @@ class ProximityAlertsState {
         sendNotifications: sendNotifications ?? this.sendNotifications,
         expirationTimeSec: expirationTimeSec ?? this.expirationTimeSec,
         foundAircraft: foundAircraft ?? this.foundAircraft,
+        alreadyShownAlerts: alreadyShownAlerts ?? this.alreadyShownAlerts,
       );
 
   ProximityAlertsState updateFoundAircraft(List<String> found) {
@@ -60,6 +65,21 @@ class ProximityAlertsState {
       sendNotifications: sendNotifications,
       expirationTimeSec: expirationTimeSec,
       foundAircraft: updated,
+      alreadyShownAlerts: alreadyShownAlerts,
+    );
+  }
+
+  ProximityAlertsState updateAlreadyShownAircraft(List<String> list) {
+    final updated = alreadyShownAlerts;
+    updated.addAll(list);
+    return ProximityAlertsState(
+      usersAircraftUASID: usersAircraftUASID,
+      proximityAlertDistance: proximityAlertDistance,
+      proximityAlertActive: proximityAlertActive,
+      sendNotifications: sendNotifications,
+      expirationTimeSec: expirationTimeSec,
+      foundAircraft: foundAircraft,
+      alreadyShownAlerts: updated,
     );
   }
 

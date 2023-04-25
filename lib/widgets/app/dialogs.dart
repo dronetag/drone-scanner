@@ -67,33 +67,7 @@ void showSnackBar(
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-void showProximityAlertSnackBar(BuildContext context, int durationSec,
-    List<ProximityAlert> nearbyDrones, double heightPosition) {
-  final snackbar = SnackBar(
-    backgroundColor: Colors.transparent,
-    dismissDirection: DismissDirection.up,
-    duration: Duration(seconds: durationSec),
-    behavior: SnackBarBehavior.floating,
-    elevation: 2.0,
-    padding: EdgeInsets.zero,
-    margin: EdgeInsets.only(
-      top: heightPosition,
-      bottom: MediaQuery.of(context).size.height,
-      right: Sizes.mapContentMargin,
-      left: Sizes.mapContentMargin,
-    ),
-    content: ProximityAlertSnackbar(
-      list: nearbyDrones,
-      expirationTime: durationSec,
-    ),
-  );
-
-  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  ScaffoldMessenger.of(context).showSnackBar(snackbar);
-}
-
-Flushbar createProximityAlertFlushBar(
-    BuildContext context, int durationSec, List<ProximityAlert> nearbyDrones) {
+Flushbar createProximityAlertFlushBar(BuildContext context, int durationSec) {
   return Flushbar(
     duration: Duration(seconds: durationSec),
     backgroundColor: Colors.transparent,
@@ -103,7 +77,6 @@ Flushbar createProximityAlertFlushBar(
       vertical: Sizes.standard,
     ),
     messageText: ProximityAlertSnackbar(
-      list: nearbyDrones,
       expirationTime: durationSec,
     ),
   );

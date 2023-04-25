@@ -13,11 +13,9 @@ import '../../constants/sizes.dart';
 import '../preferences/components/proximity_alert_widget.dart';
 
 class ProximityAlertSnackbar extends StatefulWidget {
-  final List<ProximityAlert> list;
   final int expirationTime;
   const ProximityAlertSnackbar({
     Key? key,
-    required this.list,
     required this.expirationTime,
   }) : super(key: key);
 
@@ -28,6 +26,7 @@ class ProximityAlertSnackbar extends StatefulWidget {
 class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
     with TickerProviderStateMixin {
   late final AnimationController controller;
+  ProximityAlertsCubit? alertsCubit;
 
   @override
   void initState() {
@@ -40,19 +39,18 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
 
   @override
   void dispose() {
+    alertsCubit?.onAlertsExpired();
     controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final headerText = widget.list.length > 1
-        ? '${widget.list.length} drones are flying close'
-        : '1 drone is flying close';
     final width =
         MediaQuery.of(context).size.width - 2 * Sizes.mapContentMargin;
 
     final progressBarHeight = 8.0;
+    alertsCubit = context.read<ProximityAlertsCubit>();
     controller.animateTo(1);
     return Container(
       decoration: BoxDecoration(
@@ -77,98 +75,113 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
               color: AppColors.lightRed,
             ),
             width: width,
-            padding: EdgeInsets.only(
-              top: Sizes.standard,
-              left: Sizes.standard,
-              right: Sizes.standard,
-              bottom: Sizes.standard * 2,
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: Sizes.standard),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            padding: EdgeInsets.all(Sizes.standard),
+            child: StreamBuilder(
+              stream: alertsCubit!.alertStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasError &&
+                    snapshot.data is List<ProximityAlert> &&
+                    (snapshot.data as List<ProximityAlert>).isNotEmpty) {
+                  final data = snapshot.data as List<ProximityAlert>;
+                  final headerText = data.length > 1
+                      ? '${data.length} drones are flying close'
+                      : '1 drone is flying close';
+
+                  return Column(
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsets.only(right: Sizes.iconPadding),
-                        child: Icon(
-                          Icons.error_outline,
-                          size: Sizes.textIconSize,
-                          color: AppColors.red,
-                        ),
-                      ),
-                      Text(
-                        headerText,
-                        style: TextStyle(
-                          color: AppColors.red,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
+                        padding: const EdgeInsets.only(bottom: Sizes.standard),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            AnimatedBuilder(
-                              animation: controller,
-                              builder: (context, child) => Text(
-                                '${(widget.expirationTime * (1 - controller.value)).toStringAsFixed(0)}',
-                                style: TextStyle(
-                                  color: AppColors.red,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  right: Sizes.iconPadding),
+                              child: Icon(
+                                Icons.error_outline,
+                                size: Sizes.textIconSize,
+                                color: AppColors.red,
+                              ),
+                            ),
+                            Text(
+                              headerText,
+                              style: TextStyle(
+                                color: AppColors.red,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                alertsCubit?.onAlertsExpired();
+                                Navigator.pop(context);
+                              },
+                              child: Row(
+                                children: [
+                                  AnimatedBuilder(
+                                    animation: controller,
+                                    builder: (context, child) => Text(
+                                      '${(widget.expirationTime * (1 - controller.value)).toStringAsFixed(0)}',
+                                      style: TextStyle(
+                                        color: AppColors.red,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.close_rounded,
+                                    color: AppColors.red,
+                                    size: Sizes.textIconSize,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      ...(snapshot.data as List<ProximityAlert>)
+                          .whereType<DroneNearbyAlert>()
+                          .map(
+                            (e) => Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: Sizes.standard),
+                              child: GestureDetector(
+                                onTap: () {
+                                  final data = context
+                                      .read<AircraftCubit>()
+                                      .findByUasID(e.uasId);
+                                  if (data == null) return;
+                                  if (data.locationValid()) {
+                                    context.read<MapCubit>().centerToLocDouble(
+                                          data.locationMessage!.latitude!,
+                                          data.locationMessage!.longitude!,
+                                        );
+                                  }
+                                  context
+                                      .read<SelectedAircraftCubit>()
+                                      .selectAircraft(data.macAddress);
+                                  context
+                                      .read<SlidersCubit>()
+                                      .setShowDroneDetail(show: true);
+                                  context.read<SlidersCubit>().openIfClosed();
+                                },
+                                child: Container(
+                                  color: AppColors.lightRed,
+                                  child: ProximityAlertWidget(
+                                    alert: e,
+                                  ),
                                 ),
                               ),
                             ),
-                            Icon(
-                              Icons.close_rounded,
-                              color: AppColors.red,
-                              size: Sizes.textIconSize,
-                            ),
-                          ],
-                        ),
-                      )
+                          )
+                          .toList(),
                     ],
-                  ),
-                ),
-                ...widget.list
-                    .whereType<DroneNearbyAlert>()
-                    .map(
-                      (e) => GestureDetector(
-                        onTap: () {
-                          final data = context
-                              .read<AircraftCubit>()
-                              .findByUasID(e.uasId);
-                          if (data == null) return;
-                          if (data.locationValid()) {
-                            context.read<MapCubit>().centerToLocDouble(
-                                  data.locationMessage!.latitude!,
-                                  data.locationMessage!.longitude!,
-                                );
-                          }
-                          context
-                              .read<SelectedAircraftCubit>()
-                              .selectAircraft(data.macAddress);
-                          context
-                              .read<SlidersCubit>()
-                              .setShowDroneDetail(show: true);
-                          context.read<SlidersCubit>().openIfClosed();
-                        },
-                        child: Container(
-                          color: AppColors.lightRed,
-                          child: ProximityAlertWidget(
-                            alert: e,
-                          ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ],
+                  );
+                }
+                return SizedBox.shrink();
+              },
             ),
           ),
           Container(

@@ -37,7 +37,8 @@ class BasicFields {
         uaTypeString?.replaceAll('UaType.', '').replaceAll('_', ' ');
     final uasId = messagePackList.last.basicIdMessage?.uasId;
     final proximityAlertsActive =
-        context.read<ProximityAlertsCubit>().state.isAlertActiveForId(uasId);
+        context.watch<ProximityAlertsCubit>().state.isAlertActiveForId(uasId);
+
     return [
       const Headline(text: 'AIRCRAFT'),
       if (isLandscape) const SizedBox(),
