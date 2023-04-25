@@ -19,6 +19,7 @@ class StandardsState {
   // permissions
   bool btEnabled = false;
   bool locationEnabled = false;
+  bool notificationsEnabled = false;
   bool internetAvailable = false;
 
   StandardsState({
@@ -31,6 +32,7 @@ class StandardsState {
     required this.maxAdvDataLen,
     required this.btEnabled,
     required this.locationEnabled,
+    required this.notificationsEnabled,
     required this.internetAvailable,
   });
 
@@ -44,6 +46,7 @@ class StandardsState {
     int? maxAdvDataLen,
     bool? btEnabled,
     bool? locationEnabled,
+    bool? notificationsEnabled,
     bool? internetAvailable,
   }) =>
       StandardsState(
@@ -56,6 +59,7 @@ class StandardsState {
         maxAdvDataLen: maxAdvDataLen ?? this.maxAdvDataLen,
         btEnabled: btEnabled ?? this.btEnabled,
         locationEnabled: locationEnabled ?? this.locationEnabled,
+        notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
         internetAvailable: internetAvailable ?? this.internetAvailable,
       );
 }
@@ -73,6 +77,7 @@ class StandardsCubit extends Cubit<StandardsState> {
             maxAdvDataLen: 0,
             btEnabled: false,
             internetAvailable: false,
+            notificationsEnabled: false,
             locationEnabled: false,
           ),
         );
@@ -165,6 +170,10 @@ class StandardsCubit extends Cubit<StandardsState> {
 
   Future<void> setBluetoothEnabled({required bool enabled}) async {
     emit(state.copyWith(btEnabled: enabled));
+  }
+
+  Future<void> setNotificationsEnabled({required bool enabled}) async {
+    emit(state.copyWith(notificationsEnabled: enabled));
   }
 
   Future<void> setInternetAvailable({required bool available}) async {

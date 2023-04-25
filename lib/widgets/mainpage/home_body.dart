@@ -45,8 +45,7 @@ class _HomeBodyState extends State<HomeBody> {
         );
       } else if (event.isNotEmpty) {
         // do not show if already shown
-        if (alertFlushbar != null &&
-            (alertFlushbar!.isAppearing() || alertFlushbar!.isShowing())) {
+        if (isFlushbarShown()) {
           return;
         }
         alertFlushbar = createProximityAlertFlushBar(
@@ -99,7 +98,8 @@ class _HomeBodyState extends State<HomeBody> {
                 .watch<ProximityAlertsCubit>()
                 .state
                 .foundAircraft
-                .isNotEmpty)
+                .isNotEmpty &&
+            !isFlushbarShown())
           Positioned(
             top: Sizes.toolbarHeight +
                 MediaQuery.of(context).viewPadding.top +
@@ -125,6 +125,11 @@ class _HomeBodyState extends State<HomeBody> {
         ),
       ],
     );
+  }
+
+  bool isFlushbarShown() {
+    return alertFlushbar != null &&
+        (alertFlushbar!.isAppearing() || alertFlushbar!.isShowing());
   }
 
   @override

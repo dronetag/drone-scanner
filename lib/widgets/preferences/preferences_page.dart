@@ -307,7 +307,7 @@ class PreferencesPage extends StatelessWidget {
           padding: tooltipPadding,
           margin: tooltipMargin,
           message:
-              'See what permissions are currently granted with anpossibility '
+              'See what permissions are currently granted with a possibility '
               'to change them from the system settings.',
           child: const Icon(
             Icons.help_outline,
@@ -342,6 +342,15 @@ class PreferencesPage extends StatelessWidget {
           text: state.btEnabled ? 'Granted' : 'Not Granted',
           color: state.btEnabled ? AppColors.green : AppColors.red,
           icon: state.btEnabled ? positiveIcon : negativeIcon,
+        ),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Notifications',
+          text: state.notificationsEnabled ? 'Granted' : 'Not Granted',
+          color: state.notificationsEnabled ? AppColors.green : AppColors.red,
+          icon: state.notificationsEnabled ? positiveIcon : negativeIcon,
         ),
       ),
       if (isLandscape) const SizedBox(),

@@ -13,6 +13,7 @@ import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
 import '../app/app_scaffold.dart';
+import '../app/dialogs.dart';
 import '../help/help_page.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/common/headline.dart';
@@ -306,8 +307,17 @@ class ProximityAlertsPage extends StatelessWidget {
               'Notification will be sent when there is another drone close to yours',
           child: PreferencesSlider(
               getValue: () =>
+                  context.read<StandardsCubit>().state.notificationsEnabled &&
                   context.read<ProximityAlertsCubit>().state.sendNotifications,
               setValue: (c) {
+                if (!context
+                    .read<StandardsCubit>()
+                    .state
+                    .notificationsEnabled) {
+                  showSnackBar(context,
+                      'Unable to send notifications due to missing permission');
+                  return;
+                }
                 context
                     .read<ProximityAlertsCubit>()
                     .setSendNotifications(send: c);

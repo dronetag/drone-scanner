@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
@@ -93,6 +94,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
       if (!mounted) return;
       await context.read<StandardsCubit>().setLocationEnabled(enabled: false);
     }
+    final notificationStatus = await Permission.notification.request();
+    if (notificationStatus.isGranted) {
+      await context
+          .read<StandardsCubit>()
+          .setNotificationsEnabled(enabled: true);
+    }
   }
 
   Future<void> _initPermissionsAndroid() async {
@@ -120,8 +127,31 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
       if (!mounted) return;
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: false);
     }
-    if (!mounted) return;
-    await context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: true);
+    if (!mounted) {
+      return;
+    }
+    final version = await getAndroidVersionNumber();
+    if (version == null) return;
+    if ((version >= 13 &&
+            await Permission.nearbyWifiDevices.request().isGranted) ||
+        version < 13) {
+      await context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: true);
+    }
+    // local notifications
+    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    final result = await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestPermission();
+    await context
+        .read<StandardsCubit>()
+        .setNotificationsEnabled(enabled: result ?? false);
+  }
+
+  Future<int?> getAndroidVersionNumber() async {
+    final deviceInfo = DeviceInfoPlugin();
+    final androidVersion = (await deviceInfo.androidInfo).version.release;
+    return int.tryParse(androidVersion);
   }
 
   void initLocation() {
@@ -148,6 +178,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     } else {
       await context.read<StandardsCubit>().setBluetoothEnabled(enabled: bt);
     }
+
+    await context.read<StandardsCubit>().setNotificationsEnabled(
+        enabled: await Permission.notification.isGranted);
   }
 
   void userLocationChanged(LocationData currentLocation) {
