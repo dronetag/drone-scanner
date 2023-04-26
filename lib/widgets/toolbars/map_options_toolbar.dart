@@ -95,6 +95,7 @@ class MapOptionsToolbar extends StatelessWidget {
                       context,
                       'Are you sure you want to delete all gathered data?',
                       () {
+                        context.read<ProximityAlertsCubit>().clearFoundDrones();
                         context
                             .read<SlidersCubit>()
                             .setShowDroneDetail(show: false);

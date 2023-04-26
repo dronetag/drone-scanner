@@ -114,7 +114,6 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                             Spacer(),
                             GestureDetector(
                               onTap: () {
-                                alertsCubit?.onAlertsExpired();
                                 Navigator.pop(context);
                               },
                               child: Row(

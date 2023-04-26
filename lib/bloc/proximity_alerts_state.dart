@@ -6,6 +6,7 @@ class DroneNearbyAlert extends ProximityAlert {
   final String uasId;
   final double distance;
   final int expirationTimeSec;
+  bool expired = false;
 
   DroneNearbyAlert(this.uasId, this.distance, this.expirationTimeSec);
 }
@@ -20,10 +21,8 @@ class ProximityAlertsState {
 
   final bool sendNotifications;
   final int expirationTimeSec;
-  // stored uasid and timestamp for found aircraft
-  final Map<String, DateTime> foundAircraft;
-
-  final Set<String> alreadyShownAlerts;
+  // stored uasid and flag whether alert expired
+  final Map<String, DroneNearbyAlert> foundAircraft;
 
   ProximityAlertsState({
     required this.usersAircraftUASID,
@@ -32,7 +31,6 @@ class ProximityAlertsState {
     required this.sendNotifications,
     required this.expirationTimeSec,
     required this.foundAircraft,
-    required this.alreadyShownAlerts,
   });
 
   ProximityAlertsState copyWith({
@@ -41,8 +39,7 @@ class ProximityAlertsState {
     bool? proximityAlertActive,
     bool? sendNotifications,
     int? expirationTimeSec,
-    Map<String, DateTime>? foundAircraft,
-    Set<String>? alreadyShownAlerts,
+    Map<String, DroneNearbyAlert>? foundAircraft,
   }) =>
       ProximityAlertsState(
         usersAircraftUASID: usersAircraftUASID ?? this.usersAircraftUASID,
@@ -52,12 +49,13 @@ class ProximityAlertsState {
         sendNotifications: sendNotifications ?? this.sendNotifications,
         expirationTimeSec: expirationTimeSec ?? this.expirationTimeSec,
         foundAircraft: foundAircraft ?? this.foundAircraft,
-        alreadyShownAlerts: alreadyShownAlerts ?? this.alreadyShownAlerts,
       );
 
-  ProximityAlertsState updateFoundAircraft(List<String> found) {
+  ProximityAlertsState updateFoundAircraft(List<DroneNearbyAlert> newlyFound) {
+    // remove those already marked as expired
+    newlyFound.removeWhere(foundAircraft.containsKey);
     final updated = foundAircraft;
-    updated.addAll({for (var e in found) e: DateTime.now()});
+    updated.addAll({for (var e in newlyFound) e.uasId: e});
     return ProximityAlertsState(
       usersAircraftUASID: usersAircraftUASID,
       proximityAlertDistance: proximityAlertDistance,
@@ -65,21 +63,39 @@ class ProximityAlertsState {
       sendNotifications: sendNotifications,
       expirationTimeSec: expirationTimeSec,
       foundAircraft: updated,
-      alreadyShownAlerts: alreadyShownAlerts,
     );
   }
 
-  ProximityAlertsState updateAlreadyShownAircraft(List<String> list) {
-    final updated = alreadyShownAlerts;
-    updated.addAll(list);
+  ProximityAlertsState clearAlreadyShownAircraft() {
+    print('taggs clearAlreadyShownAircraft $proximityAlertActive');
+    final updated = foundAircraft;
+    updated.forEach(
+      (key, value) => value.expired = false,
+    );
     return ProximityAlertsState(
       usersAircraftUASID: usersAircraftUASID,
       proximityAlertDistance: proximityAlertDistance,
       proximityAlertActive: proximityAlertActive,
       sendNotifications: sendNotifications,
       expirationTimeSec: expirationTimeSec,
-      foundAircraft: foundAircraft,
-      alreadyShownAlerts: updated,
+      foundAircraft: updated,
+    );
+  }
+
+  ProximityAlertsState updateAlreadyShownAircraft(List<String> list) {
+    final updated = foundAircraft;
+    for (var i = 0; i < list.length; ++i) {
+      if (updated.containsKey(list[i])) {
+        updated[list[i]]!.expired = true;
+      }
+    }
+    return ProximityAlertsState(
+      usersAircraftUASID: usersAircraftUASID,
+      proximityAlertDistance: proximityAlertDistance,
+      proximityAlertActive: proximityAlertActive,
+      sendNotifications: sendNotifications,
+      expirationTimeSec: expirationTimeSec,
+      foundAircraft: updated,
     );
   }
 

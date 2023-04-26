@@ -165,12 +165,11 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   MessagePack? findByUasID(String uasId) {
-    return state
-        .packHistory()
-        .values
-        .firstWhere((packList) =>
-            packList.any((element) => element.basicIdMessage?.uasId == uasId))
-        .last;
+    final packs = state.packHistory().values.firstWhere(
+        (packList) =>
+            packList.any((element) => element.basicIdMessage?.uasId == uasId),
+        orElse: () => []);
+    return packs.isEmpty ? null : packs.last;
   }
 
   List<MessagePack>? packsForDevice(String mac) {

@@ -34,26 +34,27 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   void initState() {
     final alertsCubit = context.read<ProximityAlertsCubit>();
-    alertsStreamSub = alertsCubit.alertStream.listen((event) {
+    alertsStreamSub = alertsCubit.alertStateStream.listen((event) {
       if (currentContext == null || !currentContext!.mounted) return;
-      if (event.length == 1 && event.first is ProximityAlertsStart) {
+      if (event is AlertStart) {
         showSnackBar(
           currentContext!,
           'Drone Radar is enabled for drone with UAS ID '
           '${alertsCubit.state.usersAircraftUASID}',
           durationMs: 10000,
         );
-      } else if (event.isNotEmpty) {
+      } else if (event is AlertShow) {
         // do not show if already shown
         if (isFlushbarShown()) {
           return;
         }
         alertFlushbar = createProximityAlertFlushBar(
           currentContext!,
-          (event.first as DroneNearbyAlert).expirationTimeSec,
+          currentContext!.read<ProximityAlertsCubit>().state.expirationTimeSec,
         );
         alertFlushbar?.show(context);
-      } else if (alertFlushbar != null) {
+      } else if ((event is AlertExpired || event is AlertStop) &&
+          isFlushbarShown()) {
         alertFlushbar?.dismiss();
       }
     });
@@ -112,7 +113,7 @@ class _HomeBodyState extends State<HomeBody> {
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(),
               onPressed: () =>
-                  context.read<ProximityAlertsCubit>().showHiddenAlerts(),
+                  context.read<ProximityAlertsCubit>().showExpiredAlerts(),
             ),
           ),
         AirspaceSlidingPanel(
