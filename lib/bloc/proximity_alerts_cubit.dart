@@ -183,8 +183,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   }
 
   Future<void> setProximityAlertsActive({required bool active}) async {
-    if (state.usersAircraftUASID == null ||
-        aircraftCubit.findByUasID(state.usersAircraftUASID!) == null) return;
+    if (active && state.usersAircraftUASID == null) return;
     await storage.setItem(
       proximityAlertActiveKey,
       active,
@@ -280,7 +279,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
                   value.last.locationMessage!.latitude!,
                   value.last.locationMessage!.longitude!) *
               1000;
-          // send alart once per intruder
           if (_isNearby(value.last, distance)) {
             // refresh if not marked as expired
             if (state.foundAircraft[uasId] == null ||

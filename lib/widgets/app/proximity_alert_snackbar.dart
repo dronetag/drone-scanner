@@ -90,7 +90,10 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                   return Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: Sizes.standard),
+                        padding: const EdgeInsets.only(
+                          bottom: Sizes.standard * 1.5,
+                          top: Sizes.standard / 2,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [

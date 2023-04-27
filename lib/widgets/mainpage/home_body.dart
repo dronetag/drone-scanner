@@ -9,6 +9,7 @@ import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/standards_cubit.dart';
+import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/utils.dart';
 import '../app/dialogs.dart';
@@ -109,6 +110,7 @@ class _HomeBodyState extends State<HomeBody> {
             left: Sizes.mapContentMargin,
             child: IconButton(
               icon: Icon(Icons.warning),
+              color: AppColors.red,
               iconSize: Sizes.iconSize,
               padding: EdgeInsets.zero,
               constraints: BoxConstraints(),

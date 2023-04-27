@@ -1,7 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
-import '../../bloc/proximity_alerts_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import 'proximity_alert_snackbar.dart';

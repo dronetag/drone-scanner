@@ -163,26 +163,54 @@ class ProximityAlertsPage extends StatelessWidget {
                         cubit.setProximityAlertsActive(active: c);
                       }
                     },
+                    enabled: context
+                            .watch<ProximityAlertsCubit>()
+                            .state
+                            .usersAircraftUASID !=
+                        null,
                   ),
                 ),
                 if (alertsState.usersAircraftUASID == null)
-                  Text(
-                    '\"My Drone\" is not selected',
-                    style: TextStyle(
-                      color: AppColors.red,
-                      fontSize: 10,
+                  Padding(
+                    padding: EdgeInsets.only(bottom: Sizes.standard / 2),
+                    child: Text(
+                      '\"My Drone\" is not selected',
+                      style: TextStyle(
+                        color: AppColors.red,
+                        fontSize: 10,
+                      ),
                     ),
                   ),
-                Text(
-                  alertsState.usersAircraftUASID == null
-                      ? 'Radar cannot be enabled'
-                      : alertsState.proximityAlertActive
-                          ? 'Radar is enabled'
-                          : 'Radar is disabled',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.toolbarColor,
-                  ),
+                RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.toolbarColor,
+                      ),
+                      children: [
+                        if (alertsState.usersAircraftUASID == null) ...[
+                          TextSpan(
+                            text: 'Radar cannot be enabled',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.lightGray,
+                            ),
+                          )
+                        ] else ...[
+                          if (alertsState.proximityAlertActive) ...[
+                            TextSpan(text: 'Radar is '),
+                            TextSpan(
+                              text: 'enabled',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppColors.toolbarColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ] else
+                            TextSpan(text: 'Radar is disabled')
+                        ]
+                      ]),
                 ),
               ],
             ),
@@ -288,6 +316,12 @@ class ProximityAlertsPage extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all<Color>(
               AppColors.preferencesButtonColor,
             ),
+            padding: MaterialStateProperty.all(
+              EdgeInsets.symmetric(
+                horizontal: Sizes.standard * 4,
+                vertical: Sizes.standard * 1.5,
+              ),
+            ),
           ),
           child: const Text(
             'Select from the visible drones',
@@ -302,7 +336,7 @@ class ProximityAlertsPage extends StatelessWidget {
       Padding(
         padding: itemPadding,
         child: PreferencesFieldWithDescription(
-          label: 'Send proximity push Notifications:',
+          label: 'Send proximity push notifications:',
           description:
               'Notification will be sent when there is another drone close to yours',
           child: PreferencesSlider(
@@ -330,15 +364,15 @@ class ProximityAlertsPage extends StatelessWidget {
         child: ProximityAlertDistanceField(),
       ),
       Padding(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.only(bottom: Sizes.standard),
         child: _buildExpirationTimeField(context),
       ),
       Padding(
         padding: EdgeInsets.only(bottom: Sizes.standard * 4),
         child: PreferencesFieldWithDescription(
           label: 'Data Source',
-          description: 'Choose which information you prefer to see in the list '
-              'of aircrafts',
+          description: 'Select the data source to be used '
+              'for the radar functionality',
           child: CustomDropdownButton(
             value: 'This phone',
             valueChangedCallback: (newValue) {

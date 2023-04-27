@@ -5,10 +5,12 @@ import '../../../constants/colors.dart';
 class PreferencesSlider extends StatefulWidget {
   final Function(bool c) setValue;
   final bool Function() getValue;
+  final bool enabled;
   const PreferencesSlider({
     Key? key,
     required this.setValue,
     required this.getValue,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
@@ -24,18 +26,24 @@ class _CleanPacksCheckboxState extends State<PreferencesSlider> {
       width: 40,
       child: Switch(
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        inactiveThumbColor: AppColors.preferencesButtonColor,
+        inactiveThumbColor: widget.enabled
+            ? AppColors.preferencesButtonColor
+            : AppColors.lightGray.withOpacity(0.75),
         activeColor: AppColors.highlightBlue,
         trackColor: MaterialStateProperty.all<Color>(
-          AppColors.lightGray,
+          widget.enabled
+              ? AppColors.lightGray
+              : AppColors.lightGray.withOpacity(0.25),
         ),
-        value: _value,
-        onChanged: (c) {
-          setState(() {
-            _value = c;
-            widget.setValue(c);
-          });
-        },
+        value: widget.enabled ? _value : false,
+        onChanged: widget.enabled
+            ? (c) {
+                setState(() {
+                  _value = c;
+                  widget.setValue(c);
+                });
+              }
+            : null,
       ),
     );
   }
