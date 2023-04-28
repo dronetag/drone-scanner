@@ -69,7 +69,6 @@ class ProximityAlertsState {
   }
 
   ProximityAlertsState clearAlreadyShownAircraft() {
-    print('taggs clearAlreadyShownAircraft $proximityAlertActive');
     final updated = foundAircraft;
     updated.forEach(
       (key, value) => value.expired = false,

@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/opendroneid_cubit.dart';
+import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -30,6 +31,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     if (state == AppLifecycleState.resumed) {
       Timer(const Duration(seconds: 5), checkInternetConnection);
       checkPermissions();
+      if (context.read<ProximityAlertsCubit>().state.proximityAlertActive) {
+        context.read<ProximityAlertsCubit>().showExpiredAlerts();
+      }
     }
   }
 
