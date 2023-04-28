@@ -27,6 +27,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
     with TickerProviderStateMixin {
   late final AnimationController controller;
   ProximityAlertsCubit? alertsCubit;
+  bool active = true;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
 
   @override
   void dispose() {
+    active = false;
     alertsCubit?.onAlertsExpired();
     controller.dispose();
     super.dispose();
@@ -117,7 +119,9 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                             Spacer(),
                             GestureDetector(
                               onTap: () {
+                                if (!active) return;
                                 Navigator.pop(context);
+                                active = false;
                               },
                               child: Row(
                                 children: [
@@ -151,6 +155,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                   const EdgeInsets.only(bottom: Sizes.standard),
                               child: GestureDetector(
                                 onTap: () {
+                                  if (!active) return;
                                   final data = context
                                       .read<AircraftCubit>()
                                       .findByUasID(e.uasId);
