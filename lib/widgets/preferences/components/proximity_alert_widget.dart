@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -11,6 +13,8 @@ class ProximityAlertWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final aircraftCubit = context.read<AircraftCubit>();
+    final droneMac = aircraftCubit.findByUasID(alert.uasId)?.macAddress;
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.red),
@@ -31,8 +35,11 @@ class ProximityAlertWidget extends StatelessWidget {
                   size: Sizes.textIconSize,
                 ),
               ),
+              // show label if exists
               Text(
-                alert.uasId,
+                aircraftCubit.state.aircraftLabels.containsKey(droneMac)
+                    ? aircraftCubit.state.aircraftLabels[droneMac]!
+                    : alert.uasId,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
