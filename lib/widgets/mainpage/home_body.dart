@@ -9,7 +9,6 @@ import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/standards_cubit.dart';
-import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/utils.dart';
 import '../app/dialogs.dart';
@@ -95,29 +94,6 @@ class _HomeBodyState extends State<HomeBody> {
           right: Sizes.mapContentMargin,
           child: MapOptionsToolbar(),
         ),
-        if (context.watch<ProximityAlertsCubit>().state.proximityAlertActive &&
-            context
-                .watch<ProximityAlertsCubit>()
-                .state
-                .foundAircraft
-                .isNotEmpty &&
-            !isFlushbarShown())
-          Positioned(
-            top: Sizes.toolbarHeight +
-                MediaQuery.of(context).viewPadding.top +
-                Sizes.mapContentMargin +
-                context.read<ScreenCubit>().scaleHeight * 25,
-            left: Sizes.mapContentMargin,
-            child: IconButton(
-              icon: Icon(Icons.warning),
-              color: AppColors.red,
-              iconSize: Sizes.iconSize,
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              onPressed: () =>
-                  context.read<ProximityAlertsCubit>().showExpiredAlerts(),
-            ),
-          ),
         AirspaceSlidingPanel(
           maxSize: maxSliderSize(
             height: height,

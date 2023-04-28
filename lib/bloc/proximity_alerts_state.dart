@@ -6,9 +6,11 @@ class DroneNearbyAlert extends ProximityAlert {
   final String uasId;
   final double distance;
   final int expirationTimeSec;
+  final DateTime timestamp;
   bool expired = false;
 
-  DroneNearbyAlert(this.uasId, this.distance, this.expirationTimeSec);
+  DroneNearbyAlert(
+      this.uasId, this.distance, this.expirationTimeSec, this.timestamp);
 }
 
 class ProximityAlertsStart extends ProximityAlert {}
@@ -96,6 +98,16 @@ class ProximityAlertsState {
       sendNotifications: sendNotifications,
       expirationTimeSec: expirationTimeSec,
       foundAircraft: updated,
+    );
+  }
+
+  bool hasRecentAlerts() {
+    return foundAircraft.values.any(
+      (element) => DateTime.now().isBefore(
+        (element.timestamp.add(
+          Duration(seconds: expirationTimeSec),
+        )),
+      ),
     );
   }
 

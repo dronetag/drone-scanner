@@ -7,6 +7,7 @@ import '../../constants/colors.dart' as colors;
 import '../../constants/sizes.dart';
 import '../showcase/showcase_item.dart';
 import 'components/location_search.dart';
+import 'components/proximity_alerts_icon.dart';
 import 'components/scanning_state_icons.dart';
 
 class Toolbar extends StatefulWidget {
@@ -51,6 +52,7 @@ class _ToolbarState extends State<Toolbar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            ProximityAlertsIcon(),
             Expanded(
               flex: 2,
               child: LocationSearch(),
