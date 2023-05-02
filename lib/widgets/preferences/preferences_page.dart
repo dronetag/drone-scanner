@@ -490,8 +490,13 @@ class PreferencesPage extends StatelessWidget {
             onPressed: () {
               context.read<AircraftCubit>().exportPacksToCSV().then(
                 (value) {
-                  if (value.isNotEmpty) {
+                  if (value) {
                     showSnackBar(context, 'CSV shared successfuly.');
+                  } else {
+                    showSnackBar(
+                      context,
+                      'Sharing data was not succesful.',
+                    );
                   }
                 },
               );

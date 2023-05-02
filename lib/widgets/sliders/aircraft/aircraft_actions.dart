@@ -117,8 +117,13 @@ void handleAction(BuildContext context, AircraftAction action) {
           .exportPackToCSV(mac: messagePackList.last.macAddress)
           .then(
         (value) {
-          if (value.isNotEmpty) {
+          if (value) {
             showSnackBar(context, 'CSV shared successfuly.');
+          } else {
+            showSnackBar(
+              context,
+              'Sharing data was not succesful.',
+            );
           }
         },
       );
