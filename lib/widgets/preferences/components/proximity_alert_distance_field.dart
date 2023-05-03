@@ -41,7 +41,7 @@ class ProximityAlertDistanceField extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Proximity alerts distance:'),
+                  Text('Proximity alerts distance'),
                   Text(
                     'Set horizontal distance threshold for proximity alerts',
                     textScaleFactor: 0.8,

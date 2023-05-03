@@ -336,7 +336,7 @@ class ProximityAlertsPage extends StatelessWidget {
       Padding(
         padding: itemPadding,
         child: PreferencesFieldWithDescription(
-          label: 'Send proximity push notifications:',
+          label: 'Send proximity push notifications',
           description:
               'Notification will be sent when there is another drone close to yours',
           child: PreferencesSlider(
@@ -408,7 +408,7 @@ class ProximityAlertsPage extends StatelessWidget {
     }
 
     return PreferencesFieldWithDescription(
-      label: 'Notification display duration:',
+      label: 'Notification display duration',
       description:
           'The duration until the radar notifications are automatically closed',
       child: CustomDropdownButton(

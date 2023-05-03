@@ -76,7 +76,7 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
             child: Text(
               'Select from the list of visible drones or insert a serial number of your'
               ' drone or Remote ID add-on in the ANSI CTA format to mark the'
-              ' drone as yours (marked green).',
+              ' drone as yours (marked green)',
               style: TextStyle(fontSize: 14),
             ),
           ),
