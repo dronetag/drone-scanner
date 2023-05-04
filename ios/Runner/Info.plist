@@ -55,7 +55,7 @@
 	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-  		<string>dronescanner</string>
+  		<string>https</string>
 	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
