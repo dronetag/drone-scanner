@@ -193,7 +193,7 @@ class ProximityAlertsPage extends StatelessWidget {
                             text: 'Radar cannot be enabled',
                             style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.lightGray,
+                              color: AppColors.toolbarColor.withOpacity(0.5),
                             ),
                           )
                         ] else ...[
@@ -204,7 +204,7 @@ class ProximityAlertsPage extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: AppColors.toolbarColor,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ] else
