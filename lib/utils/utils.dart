@@ -217,6 +217,7 @@ String? getCountryCode(String operatorId) {
 //      [15 Character MANUFACTURER’S SERIAL NUMBER]
 // returns null if successfull, otherwise it returns error message
 String? validateUASID(String text) {
+  text = text.removeNonAlphanumeric();
   if (text.length <= 5) return 'Invalid length';
   // 4-char. code, may include a combination of digits and uppercase letters,
   // except the letters O and I.
