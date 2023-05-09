@@ -77,7 +77,10 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
               color: AppColors.lightRed,
             ),
             width: width,
-            padding: EdgeInsets.all(Sizes.standard),
+            padding: EdgeInsets.symmetric(
+              horizontal: Sizes.standard * 2,
+              vertical: Sizes.standard,
+            ),
             child: StreamBuilder(
               stream: alertsCubit!.alertStream,
               builder: (context, snapshot) {
@@ -85,9 +88,8 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                     snapshot.data is List<ProximityAlert> &&
                     (snapshot.data as List<ProximityAlert>).isNotEmpty) {
                   final data = snapshot.data as List<ProximityAlert>;
-                  final headerText = data.length > 1
-                      ? '${data.length} drones are flying close'
-                      : '1 drone is flying close';
+                  final dronesText =
+                      data.length > 1 ? '${data.length} drones' : '1 drone';
 
                   return Column(
                     children: [
@@ -101,19 +103,33 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                  right: Sizes.iconPadding),
+                                right: Sizes.iconPadding,
+                              ),
                               child: Icon(
                                 Icons.error_outline,
                                 size: Sizes.textIconSize,
                                 color: AppColors.red,
                               ),
                             ),
-                            Text(
-                              headerText,
-                              style: TextStyle(
-                                color: AppColors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
+                            Text.rich(
+                              TextSpan(
+                                text: dronesText,
+                                style: TextStyle(
+                                  color: AppColors.red,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        ' ${data.length > 1 ? 'are' : 'is'} flying close',
+                                    style: TextStyle(
+                                      color: AppColors.red,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             Spacer(),
@@ -139,7 +155,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                   Icon(
                                     Icons.close_rounded,
                                     color: AppColors.red,
-                                    size: Sizes.textIconSize,
+                                    size: Sizes.textIconSize * 1.2,
                                   ),
                                 ],
                               ),
@@ -251,7 +267,11 @@ class CustomTimerPainter extends CustomPainter {
     var progress = animation.value;
     canvas.drawRect(
       Rect.fromLTRB(
-          borderRadius, 0, borderRadius + usableWidth * (1 - progress), height),
+        borderRadius - 1,
+        0,
+        borderRadius + usableWidth * (1 - progress),
+        height,
+      ),
       paint,
     );
     canvas.drawArc(

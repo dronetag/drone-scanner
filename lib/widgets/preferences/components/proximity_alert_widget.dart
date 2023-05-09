@@ -17,13 +17,12 @@ class ProximityAlertWidget extends StatelessWidget {
     final droneMac = aircraftCubit.findByUasID(alert.uasId)?.macAddress;
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.red),
-        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: AppColors.pink),
+        borderRadius: BorderRadius.circular(Sizes.panelBorderRadius),
       ),
       padding: EdgeInsets.all(
         Sizes.mapContentMargin / 2,
       ),
-      width: MediaQuery.of(context).size.width - 2 * Sizes.mapContentMargin,
       child: Column(
         children: [
           Row(
@@ -42,15 +41,15 @@ class ProximityAlertWidget extends StatelessWidget {
                     : alert.uasId,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  fontSize: 14,
                   color: Colors.black,
                 ),
               ),
               Spacer(),
               Text(
-                '~${alert.distance.toStringAsFixed(1)} m away',
+                '~${alert.distance.toStringAsFixed(1)}m away',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w400,
                   fontSize: 12,
                   color: AppColors.red,
                 ),
