@@ -162,10 +162,7 @@ class OperatorFields {
                           systemMessage!.operatorLatitude,
                           systemMessage.operatorLongitude,
                         );
-                    context
-                        .read<SlidersCubit>()
-                        .panelController
-                        .animatePanelToSnapPoint();
+                    context.read<SlidersCubit>().animatePanelToSnapPoint();
                   },
                 ),
             ],

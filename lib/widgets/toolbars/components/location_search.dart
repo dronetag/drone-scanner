@@ -19,11 +19,8 @@ class LocationSearch extends StatelessWidget {
     await context.read<MapCubit>().centerToLoc(location);
     await context.read<MapCubit>().setDroppedPinLocation(location);
     await context.read<MapCubit>().setDroppedPin(pinDropped: true);
-    if (context.read<SlidersCubit>().panelController.isPanelOpen) {
-      await context
-          .read<SlidersCubit>()
-          .panelController
-          .animatePanelToSnapPoint();
+    if (context.read<SlidersCubit>().isPanelOpened()) {
+      await context.read<SlidersCubit>().animatePanelToSnapPoint();
     }
   }
 

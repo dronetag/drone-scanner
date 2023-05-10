@@ -45,11 +45,7 @@ class AircraftDetailHeader extends StatelessWidget {
     final headerHeight = calcHeaderHeight(context);
     chevron.context = context;
     chevron.color = AppColors.detailButtonsColor;
-    if (chevron.direction != ChevronDirection.none) {
-      chevron.direction = context.watch<SlidersCubit>().state.sliderMaximized
-          ? ChevronDirection.downwards
-          : ChevronDirection.upwards;
-    }
+
     return Container(
       padding: EdgeInsets.only(bottom: screenCubit.scaleHeight * 8),
       decoration: const BoxDecoration(
@@ -81,7 +77,7 @@ class AircraftDetailHeader extends StatelessWidget {
               ),
             ),
           ),
-          if (context.read<SlidersCubit>().panelController.isAttached)
+          if (context.read<SlidersCubit>().panelController.state != null)
             messagePackList.isNotEmpty
                 ? buildHeaderButtonsRow(context, messagePackList, zoneItem)
                 : Container(),

@@ -169,7 +169,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   void _startShowcaseRoutine(BuildContext context) {
     context.read<SlidersCubit>().setShowDroneDetail(show: false);
     context.read<AircraftCubit>().addShowcaseDummyPack();
-    context.read<SlidersCubit>().panelController.animatePanelToSnapPoint();
+    context.read<SlidersCubit>().animatePanelToSnapPoint();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => ShowCaseWidget.of(context).startShowCase(keys),
     );
@@ -195,7 +195,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       context.read<SlidersCubit>().setShowDroneDetail(show: false);
     }
     if (key == droneDetailMoreKey) {
-      context.read<SlidersCubit>().panelController.animatePanelToSnapPoint();
+      context.read<SlidersCubit>().animatePanelToSnapPoint();
     }
   }
 

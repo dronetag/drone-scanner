@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 
 enum FilterValue { all, aircraft, zones }
 
@@ -12,7 +12,6 @@ enum MyDronePositioning { defaultPosition, alwaysFirst, alwaysLast }
 
 class SlidersState {
   bool showDroneDetail = false;
-  bool sliderMaximized = false;
   FilterValue filterValue = FilterValue.all;
   SortValue sortValue = SortValue.uasid;
   ListFieldPreference listFieldPreference = ListFieldPreference.distance;
@@ -20,7 +19,6 @@ class SlidersState {
 
   SlidersState({
     required this.showDroneDetail,
-    required this.sliderMaximized,
     required this.filterValue,
     required this.sortValue,
     required this.listFieldPreference,
@@ -77,7 +75,6 @@ class SlidersState {
 
   SlidersState copyWith({
     bool? showDroneDetail,
-    bool? sliderMaximized,
     FilterValue? filterValue,
     SortValue? sortValue,
     ListFieldPreference? listFieldPreference,
@@ -85,7 +82,6 @@ class SlidersState {
   }) =>
       SlidersState(
         showDroneDetail: showDroneDetail ?? this.showDroneDetail,
-        sliderMaximized: sliderMaximized ?? this.sliderMaximized,
         filterValue: filterValue ?? this.filterValue,
         sortValue: sortValue ?? this.sortValue,
         listFieldPreference: listFieldPreference ?? this.listFieldPreference,
@@ -94,13 +90,18 @@ class SlidersState {
 }
 
 class SlidersCubit extends Cubit<SlidersState> {
-  final PanelController panelController = PanelController();
+  static const bottomSnap = 0.1;
+  static const middleSnap = 0.3;
+  static const topSnap = 0.9;
+
+  static const snappings = [bottomSnap, middleSnap, topSnap];
+
+  final SheetController panelController = SheetController();
 
   SlidersCubit()
       : super(
           SlidersState(
             showDroneDetail: false,
-            sliderMaximized: false,
             filterValue: FilterValue.aircraft,
             sortValue: SortValue.uasid,
             listFieldPreference: ListFieldPreference.distance,
@@ -120,32 +121,34 @@ class SlidersCubit extends Cubit<SlidersState> {
     );
   }
 
-  bool isSliderAnimating() {
-    return panelController.isAttached && panelController.isPanelAnimating;
+  bool isAtSnapPoint() {
+    return panelController.state != null &&
+        panelController.state!.extent == middleSnap;
   }
 
-  bool isAtSnapPoint() {
-    return panelController.panelPosition - 0.3 < 0.0001;
+  bool isPanelClosed() {
+    return panelController.state != null &&
+        panelController.state!.extent == bottomSnap;
+  }
+
+  bool isPanelOpened() {
+    return panelController.state != null &&
+        panelController.state!.extent == topSnap;
+  }
+
+  Future<void> animatePanelToSnapPoint() async {
+    return panelController.snapToExtent(middleSnap);
   }
 
   void openSlider() {
-    panelController.open();
+    panelController.expand();
   }
 
   void closeSlider() {
-    if (panelController.isAttached && panelController.isPanelOpen) {
-      panelController.close();
+    if (panelController.state?.isExpanded != null &&
+        panelController.state!.isExpanded) {
+      panelController.hide();
     }
-  }
-
-  void openIfClosed() {
-    if (panelController.isPanelClosed) {
-      panelController.animatePanelToSnapPoint();
-    }
-  }
-
-  Future<void> setSliderMaximized({required bool maximized}) async {
-    emit(state.copyWith(sliderMaximized: maximized));
   }
 
   Future<void> setShowDroneDetail({required bool show}) async {

@@ -22,6 +22,7 @@ dependencies:
   google_api_headers: ^1.1.1
   google_maps_flutter: ^2.1.1
   sliding_up_panel: ^2.0.0+1
+  sliding_sheet: ^0.5.2
   location: ^4.2.0
   http: ^0.13.4
   permission_handler: ^10.0.0
