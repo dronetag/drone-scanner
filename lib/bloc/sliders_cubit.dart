@@ -141,11 +141,16 @@ class SlidersCubit extends Cubit<SlidersState> {
   }
 
   Future<void> openSlider() async {
-    return panelController.snapToExtent(topSnap);
+    // for some reason expading does not work from middle snap
+    // probably bug in package
+    if (isAtSnapPoint()) {
+      await panelController.collapse();
+    }
+    return await panelController.expand();
   }
 
   void closeSlider() {
-    panelController.snapToExtent(bottomSnap);
+    panelController.collapse();
   }
 
   Future<void> setShowDroneDetail({required bool show}) async {
