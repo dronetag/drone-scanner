@@ -5,7 +5,9 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
+import '../../bloc/standards_cubit.dart';
 import '../../bloc/zones/selected_zone_cubit.dart';
+import '../../utils/utils.dart';
 import 'aircraft/detail/aircraft_detail.dart';
 import 'aircraft/detail/aircraft_detail_header.dart';
 import 'common/airspace_list.dart';
@@ -14,12 +16,7 @@ import 'common/chevron.dart';
 import 'zones/zone_detail.dart';
 
 class AirspaceSlidingPanel extends StatefulWidget {
-  final double maxSize;
-  final double minSize;
-
   const AirspaceSlidingPanel({
-    required this.maxSize,
-    required this.minSize,
     Key? key,
   }) : super(key: key);
 
@@ -62,40 +59,48 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
         return OrientationBuilder(
           builder: (context, orientation) {
             return SlidingSheet(
-              controller: context.read<SlidersCubit>().panelController,
-              minHeight: widget.minSize,
-              extendBody: true,
-              snapSpec: SnapSpec(
-                snap: true,
-                snappings: SlidersCubit.snappings,
-                initialSnap: SlidersCubit.middleSnap,
-                positioning: SnapPositioning.relativeToAvailableSpace,
-                onSnap: (p0, snap) {
-                  print('taggs snap $snap');
-                  late final ChevronDirection dir;
-                  if (snap == SlidersCubit.bottomSnap) {
-                    dir = ChevronDirection.upwards;
-                  } else if (snap == SlidersCubit.topSnap) {
-                    dir = ChevronDirection.downwards;
-                  } else {
-                    dir = ChevronDirection.none;
-                  }
-                  if (chevron.direction != dir) {
-                    setState(() {
-                      chevron.direction = dir;
-                    });
-                  }
-                },
-              ),
-              cornerRadius: borderRadius,
-              headerBuilder: (context, sheetState) => buildHeader(width, state),
-              builder: (context, sheetState) => Container(
-                height: widget.maxSize,
-                child: state.showDroneDetail
-                    ? buildDetailPanel(context)
-                    : buildListPanel(context),
-              ),
-            );
+                controller: context.read<SlidersCubit>().panelController,
+                snapSpec: SnapSpec(
+                  snap: true,
+                  snappings: SlidersCubit.snappings,
+                  initialSnap: SlidersCubit.middleSnap,
+                  positioning: SnapPositioning.relativeToAvailableSpace,
+                  onSnap: (p0, snap) {
+                    late final ChevronDirection dir;
+                    if (snap == SlidersCubit.bottomSnap) {
+                      dir = ChevronDirection.upwards;
+                    } else if (snap == SlidersCubit.topSnap) {
+                      dir = ChevronDirection.downwards;
+                    } else {
+                      dir = ChevronDirection.none;
+                    }
+                    if (chevron.direction != dir) {
+                      setState(() {
+                        chevron.direction = dir;
+                      });
+                    }
+                  },
+                ),
+                cornerRadius: borderRadius,
+                headerBuilder: (context, sheetState) =>
+                    buildHeader(width, state),
+                builder: (context, sheetState) {
+                  final height = MediaQuery.of(context).size.height;
+                  final maxSliderHeight = height * SlidersCubit.topSnap;
+                  final headerHeight = calcHeaderHeight(context);
+                  final snapHeight = height * SlidersCubit.middleSnap;
+                  final contentHeight =
+                      context.watch<SlidersCubit>().isAtSnapPoint()
+                          ? snapHeight - headerHeight
+                          : maxSliderHeight - headerHeight;
+
+                  return Container(
+                    height: contentHeight,
+                    child: state.showDroneDetail
+                        ? buildDetailPanel(context)
+                        : buildListPanel(context),
+                  );
+                });
           },
         );
       },

@@ -110,14 +110,7 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
           right: Sizes.mapContentMargin,
           child: MapOptionsToolbar(),
         ),
-        AirspaceSlidingPanel(
-          maxSize: maxSliderSize(
-            height: height,
-            statusBarHeight: MediaQuery.of(context).viewPadding.top,
-            androidSystem: context.read<StandardsCubit>().state.androidSystem,
-          ),
-          minSize: calcHeaderHeight(context),
-        ),
+        AirspaceSlidingPanel(),
       ],
     );
   }

@@ -8,18 +8,6 @@ import 'package:sprintf/sprintf.dart';
 import '../constants/sizes.dart';
 import '../extensions/string_extensions.dart';
 
-double maxSliderSize({
-  required double height,
-  required double statusBarHeight,
-  required bool androidSystem,
-}) {
-  if (androidSystem) {
-    return height - (statusBarHeight + 10);
-  } else {
-    return height - (statusBarHeight + height / 20);
-  }
-}
-
 double calcHeaderHeight(BuildContext context) {
   final height = MediaQuery.of(context).size.height;
   final isLandscape =
