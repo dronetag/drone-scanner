@@ -5,7 +5,6 @@ import 'package:sliding_sheet/sliding_sheet.dart';
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
-import '../../bloc/standards_cubit.dart';
 import '../../bloc/zones/selected_zone_cubit.dart';
 import '../../utils/utils.dart';
 import 'aircraft/detail/aircraft_detail.dart';
@@ -27,13 +26,6 @@ class AirspaceSlidingPanel extends StatefulWidget {
 class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
     with WidgetsBindingObserver {
   Chevron chevron = Chevron();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => context.read<SlidersCubit>().animatePanelToSnapPoint());
-  }
 
   @override
   Widget build(BuildContext context) {

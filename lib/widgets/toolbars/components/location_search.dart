@@ -95,6 +95,11 @@ class LocationSearch extends StatelessWidget {
           focusNode: focusNode,
           autocorrect: false,
           cursorColor: Colors.white,
+          onTap: () {
+            if (context.read<SlidersCubit>().isPanelOpened()) {
+              context.read<SlidersCubit>().animatePanelToSnapPoint();
+            }
+          },
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
             border: InputBorder.none,

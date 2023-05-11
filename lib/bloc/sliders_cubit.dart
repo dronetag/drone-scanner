@@ -140,15 +140,12 @@ class SlidersCubit extends Cubit<SlidersState> {
     return panelController.snapToExtent(middleSnap);
   }
 
-  void openSlider() {
-    panelController.expand();
+  Future<void> openSlider() async {
+    return panelController.snapToExtent(topSnap);
   }
 
   void closeSlider() {
-    if (panelController.state?.isExpanded != null &&
-        panelController.state!.isExpanded) {
-      panelController.hide();
-    }
+    panelController.snapToExtent(bottomSnap);
   }
 
   Future<void> setShowDroneDetail({required bool show}) async {
