@@ -121,11 +121,6 @@ class SlidersCubit extends Cubit<SlidersState> {
     );
   }
 
-  bool isAtSnapPoint() {
-    return panelController.state != null &&
-        panelController.state!.extent == middleSnap;
-  }
-
   bool isPanelClosed() {
     return panelController.state != null &&
         panelController.state!.extent == bottomSnap;
@@ -137,15 +132,11 @@ class SlidersCubit extends Cubit<SlidersState> {
   }
 
   Future<void> animatePanelToSnapPoint() async {
-    return panelController.snapToExtent(middleSnap);
+    // snap slightly higher for effect
+    return panelController.snapToExtent(middleSnap + 0.01);
   }
 
   Future<void> openSlider() async {
-    // for some reason expading does not work from middle snap
-    // probably bug in package
-    if (isAtSnapPoint()) {
-      await panelController.collapse();
-    }
     return await panelController.expand();
   }
 

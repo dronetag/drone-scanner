@@ -51,48 +51,49 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
         return OrientationBuilder(
           builder: (context, orientation) {
             return SlidingSheet(
-                controller: context.read<SlidersCubit>().panelController,
-                snapSpec: SnapSpec(
-                  snap: true,
-                  snappings: SlidersCubit.snappings,
-                  initialSnap: SlidersCubit.middleSnap,
-                  positioning: SnapPositioning.relativeToAvailableSpace,
-                  onSnap: (p0, snap) {
-                    late final ChevronDirection dir;
-                    if (snap == SlidersCubit.bottomSnap) {
-                      dir = ChevronDirection.upwards;
-                    } else if (snap == SlidersCubit.topSnap) {
-                      dir = ChevronDirection.downwards;
-                    } else {
-                      dir = ChevronDirection.none;
-                    }
-                    if (chevron.direction != dir) {
-                      setState(() {
-                        chevron.direction = dir;
-                      });
-                    }
-                  },
-                ),
-                cornerRadius: borderRadius,
-                headerBuilder: (context, sheetState) =>
-                    buildHeader(width, state),
-                builder: (context, sheetState) {
-                  final height = MediaQuery.of(context).size.height;
-                  final maxSliderHeight = height * SlidersCubit.topSnap;
-                  final headerHeight = calcHeaderHeight(context);
-                  final snapHeight = height * SlidersCubit.middleSnap;
-                  final contentHeight =
-                      context.watch<SlidersCubit>().isAtSnapPoint()
-                          ? snapHeight - headerHeight
-                          : maxSliderHeight - headerHeight;
+              controller: context.read<SlidersCubit>().panelController,
+              snapSpec: SnapSpec(
+                snap: true,
+                snappings: SlidersCubit.snappings,
+                initialSnap: SlidersCubit.middleSnap,
+                positioning: SnapPositioning.relativeToAvailableSpace,
+                onSnap: (p0, snap) {
+                  late final ChevronDirection dir;
+                  if (snap == SlidersCubit.bottomSnap) {
+                    dir = ChevronDirection.upwards;
+                  } else if (snap == SlidersCubit.topSnap) {
+                    dir = ChevronDirection.downwards;
+                  } else {
+                    dir = ChevronDirection.none;
+                  }
+                  if (chevron.direction != dir) {
+                    setState(() {
+                      chevron.direction = dir;
+                    });
+                  }
+                },
+              ),
+              cornerRadius: borderRadius,
+              headerBuilder: (context, sheetState) => buildHeader(width, state),
+              builder: (context, sheetState) {
+                final cubit = context.read<SlidersCubit>();
+                final height = MediaQuery.of(context).size.height;
+                final maxSliderHeight = height * SlidersCubit.topSnap;
+                final headerHeight = calcHeaderHeight(context);
+                final snapHeight = height * SlidersCubit.middleSnap;
+                final contentHeight =
+                    sheetState.extent == SlidersCubit.middleSnap
+                        ? (snapHeight - headerHeight) + 1
+                        : maxSliderHeight - headerHeight;
 
-                  return Container(
-                    height: contentHeight,
-                    child: state.showDroneDetail
-                        ? buildDetailPanel(context)
-                        : buildListPanel(context),
-                  );
-                });
+                return Container(
+                  height: contentHeight,
+                  child: state.showDroneDetail
+                      ? buildDetailPanel(context)
+                      : buildListPanel(context),
+                );
+              },
+            );
           },
         );
       },
