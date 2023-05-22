@@ -14,6 +14,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '/utils/csvlogger.dart';
 import '../../utils/utils.dart';
+import '../sliders_cubit.dart';
 import 'aircraft_expiration_cubit.dart';
 
 part 'aircraft_state.dart';

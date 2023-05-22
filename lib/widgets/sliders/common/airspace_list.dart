@@ -96,26 +96,23 @@ class AirspaceList extends StatelessWidget {
   List<Widget> buildListChildren(BuildContext context) {
     final state = context.watch<AircraftCubit>().state;
     Map<String, List<MessagePack>> aircraft;
-    if (sortValue == SortValue.uasid) {
-      aircraft = state.packHistoryByUASID();
-    } else if (sortValue == SortValue.time) {
-      aircraft = state.packHistoryByLastUpdate();
-    } else {
-      aircraft = state
-          .packHistoryByDistance(context.watch<MapCubit>().state.userLocation);
-    }
-    // move user owned aircraft to 1st position
     final userAircraftUasId =
         context.watch<ProximityAlertsCubit>().state.usersAircraftUASID;
-    if (userAircraftUasId != null &&
-        aircraft.values
-            .any((e) => e.first.basicIdMessage?.uasId == userAircraftUasId)) {
-      final entryList = aircraft.entries.toList();
-      final priorityData = entryList.firstWhere((element) =>
-          element.value.last.basicIdMessage?.uasId == userAircraftUasId);
-      entryList.insert(0, priorityData);
-      aircraft = Map.fromEntries(entryList);
+    final userDronePositioning =
+        context.watch<SlidersCubit>().state.myDronePositioning;
+    if (sortValue == SortValue.uasid) {
+      aircraft =
+          state.packHistoryByUASID(userAircraftUasId, userDronePositioning);
+    } else if (sortValue == SortValue.time) {
+      aircraft = state.packHistoryByLastUpdate(
+          userAircraftUasId, userDronePositioning);
+    } else {
+      aircraft = state.packHistoryByDistance(
+          context.watch<MapCubit>().state.userLocation,
+          userAircraftUasId,
+          userDronePositioning);
     }
+
     if (context.read<ShowcaseCubit>().state.showcaseActive &&
         aircraft.isNotEmpty) {
       return [

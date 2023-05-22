@@ -19,6 +19,7 @@ class CustomDropdownButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
+        alignment: Alignment.centerRight,
         value: value,
         isDense: true,
         icon: RotatedBox(

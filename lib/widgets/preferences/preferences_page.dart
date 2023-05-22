@@ -487,7 +487,28 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
-      if (isLandscape) const SizedBox(),
+      Padding(
+        padding: itemPadding / 2,
+        child: PreferencesFieldWithDescription(
+          label: 'My drone position in list:',
+          description: 'Choose how your drone should be positioned in a list '
+              'of all nearby drones',
+          child: CustomDropdownButton(
+            value:
+                context.watch<SlidersCubit>().state.myDronePositioningString(),
+            valueChangedCallback: (newValue) {
+              if (newValue != null) {
+                context.read<SlidersCubit>().setMyDronePositioning(newValue);
+              }
+            },
+            items: const [
+              'Default',
+              'Always First',
+              'Always Last',
+            ],
+          ),
+        ),
+      ),
       Align(
         child: Container(
           padding: itemPadding / 2,
