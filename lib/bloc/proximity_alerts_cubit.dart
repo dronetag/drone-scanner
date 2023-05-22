@@ -240,13 +240,12 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     _alertController.add([ProximityAlertsStart()]);
   }
 
-  // check if owned drone has location, uasid and is airborne
+  // check if owned drone has location, expected uasid
   bool _alertsReady(MessagePack pack) =>
       state.proximityAlertActive &&
       pack.basicIdMessage?.uasId != null &&
       pack.basicIdMessage?.uasId == state.usersAircraftUASID &&
-      pack.locationValid() &&
-      pack.locationMessage!.status == AircraftStatus.Airborne;
+      pack.locationValid();
 
   // check distance, consider just packs not older than expiration time
   bool _isNearby(MessagePack pack, double distance) =>
