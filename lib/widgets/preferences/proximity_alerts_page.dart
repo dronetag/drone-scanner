@@ -183,34 +183,39 @@ class ProximityAlertsPage extends StatelessWidget {
                   ),
                 RichText(
                   text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.toolbarColor,
-                      ),
-                      children: [
-                        if (alertsState.usersAircraftUASID == null) ...[
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.toolbarColor,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'TitilliumWeb',
+                    ),
+                    children: [
+                      if (alertsState.usersAircraftUASID == null) ...[
+                        TextSpan(
+                          text: 'Radar cannot be enabled',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.toolbarColor.withOpacity(0.5),
+                            fontFamily: 'TitilliumWeb',
+                          ),
+                        )
+                      ] else ...[
+                        if (alertsState.proximityAlertActive) ...[
+                          TextSpan(text: 'Radar is '),
                           TextSpan(
-                            text: 'Radar cannot be enabled',
+                            text: 'enabled',
                             style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.toolbarColor.withOpacity(0.5),
+                              color: AppColors.toolbarColor,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'TitilliumWeb',
                             ),
-                          )
-                        ] else ...[
-                          if (alertsState.proximityAlertActive) ...[
-                            TextSpan(text: 'Radar is '),
-                            TextSpan(
-                              text: 'enabled',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.toolbarColor,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ] else
-                            TextSpan(text: 'Radar is disabled')
-                        ]
-                      ]),
+                          ),
+                        ] else
+                          TextSpan(text: 'Radar is disabled')
+                      ]
+                    ],
+                  ),
                 ),
               ],
             ),
