@@ -224,7 +224,7 @@ class ProximityAlertsPage extends StatelessWidget {
               children: [
                 RotatingIcon(
                   icon: Image.asset(
-                    'assets/images/radar.png',
+                    'assets/images/radar-icon.png',
                     width: radarIconSize,
                     height: radarIconSize,
                     color: alertsState.proximityAlertActive

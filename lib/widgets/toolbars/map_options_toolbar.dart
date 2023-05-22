@@ -136,7 +136,7 @@ class MapOptionsToolbar extends StatelessWidget {
                     iconSize: Sizes.iconSize,
                     icon: RotatingIcon(
                       icon: Image.asset(
-                        'assets/images/radar.png',
+                        'assets/images/radar-icon.png',
                         width: Sizes.iconSize,
                       ),
                       rotating: context
