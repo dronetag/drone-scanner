@@ -367,7 +367,8 @@ class ProximityAlertsPage extends StatelessWidget {
         padding: EdgeInsets.only(bottom: Sizes.standard),
         child: _buildExpirationTimeField(context),
       ),
-      Padding(
+      // TODO: put back when there are more data sources available
+      /*Padding(
         padding: EdgeInsets.only(bottom: Sizes.standard * 4),
         child: PreferencesFieldWithDescription(
           label: 'Data Source',
@@ -376,12 +377,12 @@ class ProximityAlertsPage extends StatelessWidget {
           child: CustomDropdownButton(
             value: 'This phone',
             valueChangedCallback: (newValue) {
-              // TODO:
+              
             },
             items: const ['This phone'],
           ),
         ),
-      ),
+      ),*/
     ];
   }
 
