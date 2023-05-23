@@ -100,6 +100,8 @@ class BasicFields {
                     alertsCubit.setUsersAircraftUASID(uasId);
                     showSnackBar(context, 'Aircaft set as owned');
                   } else {
+                    showSnackBar(context,
+                        'Cannot set aircraft as owned: Unknown UAS ID');
                     alertsCubit.clearUsersAircraftUASID();
                   }
                 },
