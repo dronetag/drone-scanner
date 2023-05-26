@@ -43,7 +43,7 @@ String getSourceText(MessageSource source) {
     sourceText = 'BT 5 Extended';
   } else if (source == MessageSource.WifiBeacon) {
     sourceText = 'Wi-Fi Beacon';
-  } else if (source == MessageSource.WifiNaN) {
+  } else if (source == MessageSource.WifiNan) {
     sourceText = 'Wi-Fi NaN';
   }
   return sourceText;
@@ -57,7 +57,7 @@ String getSourceShortcut(MessageSource source) {
     sourceText = '5';
   } else if (source == MessageSource.WifiBeacon) {
     sourceText = 'B';
-  } else if (source == MessageSource.WifiNaN) {
+  } else if (source == MessageSource.WifiNan) {
     sourceText = 'N';
   }
   return sourceText;
