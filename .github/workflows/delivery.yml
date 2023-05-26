@@ -5,7 +5,7 @@ name: Delivery
 # later published, for both iOS and Android platforms
 
 env:
-  FLUTTER_VERSION: '3.7.x'
+  FLUTTER_VERSION: '3.10.x'
   DEPLOYMENT_ENV_NAME: production
   APP_BUNDLE_NAME: cz.dronetag.drone-scanner
   ANDROID_TARGET_TRACK: internal
