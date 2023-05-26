@@ -239,31 +239,32 @@ class AircraftCubit extends Cubit<AircraftState> {
     );
   }
 
-  Future<void> exportPacksToCSV({required bool save}) async {
-    await checkStoragePermission();
+  Future<bool> exportPacksToCSV() async {
+    final hasPerm = await checkStoragePermission();
+    if (!hasPerm) {
+      return false;
+    }
     var csv = '';
     state.packHistory().forEach((key, value) {
-      final csvData = createCSV(value);
+      final csvData = CSVLogger.createCSV(value, includeHeader: csv == '');
+      csv += '\n';
       csv += const ListToCsvConverter().convert(csvData);
     });
-    if (save) {
-      await _saveExportFile(csv, 'all');
-    } else {
-      await _shareExportFile(csv, 'all');
-    }
+    if (csv.isEmpty) return false;
+    return await _shareExportFile(csv, 'all');
   }
 
-  Future<String> exportPackToCSV({
+  Future<bool> exportPackToCSV({
     required String mac,
-    required bool save,
   }) async {
-    if (state.packHistory()[mac] == null) return '';
+    if (state.packHistory()[mac] == null) return false;
     // request permission
-    await checkStoragePermission();
+    final hasPermission = await checkStoragePermission();
+    if (!hasPermission) return false;
 
-    final csvData = createCSV(state.packHistory()[mac]!);
-
+    final csvData = CSVLogger.createCSV(state.packHistory()[mac]!);
     final csv = const ListToCsvConverter().convert(csvData);
+    if (csv.isEmpty) return false;
 
     /// Write to a file
     late final String uasId;
@@ -274,59 +275,36 @@ class AircraftCubit extends Cubit<AircraftState> {
     } else {
       uasId = mac;
     }
-    String filePath;
-    if (save) {
-      filePath = await _saveExportFile(csv, uasId);
-    } else {
-      filePath = await _shareExportFile(csv, uasId);
-    }
-    return filePath;
+    return await _shareExportFile(csv, uasId);
   }
 
-  Future<void> checkStoragePermission() async {
+  Future<bool> checkStoragePermission() async {
     final perm = await Permission.storage.isGranted;
     if (!perm) {
-      await [
-        Permission.storage,
-      ].request();
+      return await Permission.storage.request().isGranted;
     }
+    return perm;
   }
 
-  Future<String> _saveExportFile(String csv, String name) async {
-    //general downloads folder (accessible by files app) ANDROID ONLY
-    if (!Platform.isAndroid) {
-      return '';
-    }
-    final generalDownloadDir = Directory('/storage/emulated/0/Download');
-    final resultName = name.replaceAll(':', '-');
-    final pathOfTheFileToWrite =
-        '${generalDownloadDir.path}/csv_export$resultName.csv';
-    var file = await File(pathOfTheFileToWrite).create();
-    file = await file.writeAsString(csv);
-    return pathOfTheFileToWrite.replaceAll(
-      '/storage/emulated/0/Download',
-      'Downloads',
-    );
-  }
-
-  Future<String> _shareExportFile(String csv, String name) async {
+  Future<bool> _shareExportFile(String csv, String name) async {
     final directory = await getApplicationDocumentsDirectory();
 
-    late final String pathOfTheFileToWrite;
-    if (Platform.isAndroid) {
-      pathOfTheFileToWrite = '${directory.path}/csv_export-$name.csv';
-    } else {
-      pathOfTheFileToWrite = '${directory.path}/csv_export.csv';
-    }
+    final pathOfTheFileToWrite =
+        '${directory.path}/drone_scanner_export_$name.csv';
     var file = File(pathOfTheFileToWrite);
     file = await file.writeAsString(csv);
 
-    final result = await Share.shareFilesWithResult([pathOfTheFileToWrite],
-        text: 'Your Data');
-    if (result.status == ShareResultStatus.success) {
-      return pathOfTheFileToWrite;
+    late final result;
+    if (Platform.isAndroid) {
+      result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)],
+          subject: 'Drone Scanner Export', text: 'Your Remote ID Data');
     } else {
-      return '';
+      result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)]);
+    }
+    if (result.status == ShareResultStatus.success) {
+      return true;
+    } else {
+      return false;
     }
   }
 

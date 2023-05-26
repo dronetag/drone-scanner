@@ -32,7 +32,7 @@ dependencies:
   timer_builder: ^2.0.0
   csv: ^5.0.1
   app_settings: ^4.1.3
-  share_plus: ^4.0.3
+  share_plus: ^6.3.2
   flutter_bloc: ^8.0.1
   package_info: ^2.0.2
   localstorage: ^4.0.0+1

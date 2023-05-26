@@ -12,7 +12,6 @@ import '../../app/dialogs.dart';
 enum AircraftAction {
   delete,
   share,
-  export,
   mapLock,
 }
 
@@ -115,22 +114,17 @@ void handleAction(BuildContext context, AircraftAction action) {
     case AircraftAction.share:
       context
           .read<AircraftCubit>()
-          .exportPackToCSV(mac: messagePackList.last.macAddress, save: false)
+          .exportPackToCSV(mac: messagePackList.last.macAddress)
           .then(
         (value) {
-          if (value.isNotEmpty) {
+          if (value) {
             showSnackBar(context, 'CSV shared successfuly.');
+          } else {
+            showSnackBar(
+              context,
+              'Sharing data was not succesful.',
+            );
           }
-        },
-      );
-      break;
-    case AircraftAction.export:
-      context
-          .read<AircraftCubit>()
-          .exportPackToCSV(mac: messagePackList.last.macAddress, save: true)
-          .then(
-        (value) {
-          showSnackBar(context, 'Saved successfuly to $value');
         },
       );
       break;
