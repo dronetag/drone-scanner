@@ -9,13 +9,13 @@ version: 1.5.2
 
 publish_to: none
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: ^3.7.0
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_opendroneid: 0.11.2
+  flutter_opendroneid: 0.12.0
   sprintf: "^6.0.0"
   google_api_headers: ^1.1.1
   google_maps_flutter: ^2.1.1

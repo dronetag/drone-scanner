@@ -179,7 +179,7 @@ class AircraftCard extends StatelessWidget {
                   color: AppColors.slate,
                 ),
               if (source == pigeon.MessageSource.WifiBeacon ||
-                  source == pigeon.MessageSource.WifiNaN)
+                  source == pigeon.MessageSource.WifiNan)
                 Image.asset(
                   'assets/images/wifi_icon.png',
                   color: AppColors.slate,

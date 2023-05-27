@@ -44,7 +44,7 @@ class ConnectionFields {
                         size: Sizes.iconSize / 3 * 2,
                       ),
                     if (source == MessageSource.WifiBeacon ||
-                        source == MessageSource.WifiNaN)
+                        source == MessageSource.WifiNan)
                       Image.asset(
                         'assets/images/wifi_icon.png',
                         width: Sizes.iconSize / 3 * 2,
