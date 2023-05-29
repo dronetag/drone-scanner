@@ -70,67 +70,63 @@ class _ProximityAlertsIconState extends State<ProximityAlertsIcon>
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ProximityAlertsCubit>().state;
-    if (state.proximityAlertActive && state.hasRecentAlerts()) {
-      return Container(
-        width: Sizes.iconSize * upperBound,
-        height: Sizes.iconSize * upperBound,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            IconButton(
-              alignment: Alignment.center,
-              icon: Image.asset(
-                'assets/images/warning-icon.png',
-                color: AppColors.red,
-                width: iconSize,
-                height: iconSize,
-              ),
+    return Container(
+      width: Sizes.iconSize * upperBound,
+      height: Sizes.iconSize * upperBound,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          IconButton(
+            alignment: Alignment.center,
+            icon: Image.asset(
+              'assets/images/warning-icon.png',
               color: AppColors.red,
-              iconSize: iconSize,
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              onPressed: () =>
-                  context.read<ProximityAlertsCubit>().showExpiredAlerts(),
+              width: iconSize,
+              height: iconSize,
             ),
-            Positioned(
-              top: -2,
-              right: 0,
-              child: Text(
-                '${state.foundAircraft.length}',
-                style: TextStyle(
-                  color: AppColors.red,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  shadows: [
-                    Shadow(
-                      // bottomLeft
-                      offset: Offset(-0.25, -0.25),
-                      color: AppColors.toolbarColor,
-                    ),
-                    Shadow(
-                      // bottomRight
-                      offset: Offset(0.25, -0.25),
-                      color: AppColors.toolbarColor,
-                    ),
-                    Shadow(
-                      // topRight
-                      offset: Offset(0.25, 0.25),
-                      color: AppColors.toolbarColor,
-                    ),
-                    Shadow(
-                      // topLeft
-                      offset: Offset(-0.25, 0.25),
-                      color: AppColors.toolbarColor,
-                    ),
-                  ],
-                ),
+            color: AppColors.red,
+            iconSize: iconSize,
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
+            onPressed: () =>
+                context.read<ProximityAlertsCubit>().showExpiredAlerts(),
+          ),
+          Positioned(
+            top: -2,
+            right: 0,
+            child: Text(
+              '${state.foundAircraft.length}',
+              style: TextStyle(
+                color: AppColors.red,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                shadows: [
+                  Shadow(
+                    // bottomLeft
+                    offset: Offset(-0.25, -0.25),
+                    color: AppColors.toolbarColor,
+                  ),
+                  Shadow(
+                    // bottomRight
+                    offset: Offset(0.25, -0.25),
+                    color: AppColors.toolbarColor,
+                  ),
+                  Shadow(
+                    // topRight
+                    offset: Offset(0.25, 0.25),
+                    color: AppColors.toolbarColor,
+                  ),
+                  Shadow(
+                    // topLeft
+                    offset: Offset(-0.25, 0.25),
+                    color: AppColors.toolbarColor,
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
-      );
-    } else {
-      return SizedBox.shrink();
-    }
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
