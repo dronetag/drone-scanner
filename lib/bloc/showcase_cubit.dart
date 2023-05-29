@@ -68,10 +68,10 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       'zone to highlight.';
   final String mapToolbarDescription =
       'Use the map toolbar to center on your position, change the zoom or '
-      'switch to satellite map';
+      'switch to satellite map.';
   final String droneRadarDescription =
       'Use the radar function to get proximity alerts when other'
-      ' drones get dangerously close';
+      ' drones get dangerously close.';
   final String droneDetailPanelDescription =
       'After tapping on an item on a list or selecting aircraft from the map, '
       'see detailed Aircraft information.\nAll the data acquired will be shown '
