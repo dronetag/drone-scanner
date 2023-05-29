@@ -8,6 +8,14 @@ import 'package:sprintf/sprintf.dart';
 import '../constants/sizes.dart';
 import '../extensions/string_extensions.dart';
 
+T swapSign<T extends num>(T value) {
+  return value.isNegative ? value.abs() as T : value * -1 as T;
+}
+
+double toPrecision(double value, [int precision = 3]) {
+  return double.parse(value.toStringAsFixed(precision));
+}
+
 double calcHeaderHeight(BuildContext context) {
   final height = MediaQuery.of(context).size.height;
   final isLandscape =

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
@@ -12,6 +11,8 @@ import 'aircraft/detail/aircraft_detail_header.dart';
 import 'common/airspace_list.dart';
 import 'common/airspace_list_header.dart';
 import 'common/chevron.dart';
+import 'sheet/sheet.dart';
+import 'sheet/specs.dart';
 import 'zones/zone_detail.dart';
 
 class AirspaceSlidingPanel extends StatefulWidget {

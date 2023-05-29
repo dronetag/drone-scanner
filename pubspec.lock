@@ -816,14 +816,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sliding_sheet:
-    dependency: "direct main"
-    description:
-      name: sliding_sheet
-      sha256: c8607c47c9bb1779010e05f3625bfa9fcc5bb9eb5a93ec40e630e27de67c20ab
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.2"
   source_span:
     dependency: transitive
     description:

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
+
+import '../widgets/sliders/sheet/sheet.dart';
 
 enum FilterValue { all, aircraft, zones }
 

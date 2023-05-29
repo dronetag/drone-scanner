@@ -45,7 +45,7 @@ class OperatorFields {
         systemDataValid &&
         locValid(systemMessage)) {
       distanceFromMe = calculateDistance(
-        systemMessage!.operatorLatitude,
+        systemMessage.operatorLatitude,
         systemMessage.operatorLongitude,
         context.read<MapCubit>().state.userLocation.latitude,
         context.read<MapCubit>().state.userLocation.longitude,
@@ -159,7 +159,7 @@ class OperatorFields {
                 IconCenterToLoc(
                   onPressedCallback: () {
                     context.read<MapCubit>().centerToLocDouble(
-                          systemMessage!.operatorLatitude,
+                          systemMessage.operatorLatitude,
                           systemMessage.operatorLongitude,
                         );
                     context.read<SlidersCubit>().animatePanelToSnapPoint();
@@ -174,14 +174,14 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Altitude Geod.',
             fieldText: systemDataValid &&
-                    systemMessage!.operatorAltitudeGeo.toInt() != INV_ALT
+                    systemMessage.operatorAltitudeGeo.toInt() != INV_ALT
                 ? '${systemMessage.operatorAltitudeGeo.toString()}  m'
                 : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Location Type',
             fieldText: systemDataValid
-                ? systemMessage!.operatorLocationType
+                ? systemMessage.operatorLocationType
                     .toString()
                     .replaceAll('OperatorLocationType.', '')
                 : 'Unknown',
@@ -193,13 +193,13 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Area Radius',
             fieldText: systemDataValid
-                ? '${systemMessage!.areaRadius.toString()}  m'
+                ? '${systemMessage.areaRadius.toString()}  m'
                 : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Count',
             fieldText: systemDataValid
-                ? systemMessage!.areaCount.toString()
+                ? systemMessage.areaCount.toString()
                 : 'Unknown',
           ),
         ],
@@ -209,13 +209,13 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Area Ceiling',
             fieldText: systemDataValid
-                ? getAltitudeAsString(systemMessage!.areaCeiling)
+                ? getAltitudeAsString(systemMessage.areaCeiling)
                 : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Floor',
             fieldText: systemDataValid
-                ? getAltitudeAsString(systemMessage!.areaFloor)
+                ? getAltitudeAsString(systemMessage.areaFloor)
                 : 'Unknown',
           ),
         ],
@@ -225,7 +225,7 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Category',
             fieldText: systemDataValid
-                ? systemMessage!.category
+                ? systemMessage.category
                     .toString()
                     .replaceAll('AircraftCategory.', '')
                     .replaceAll('_', ' ')
@@ -234,7 +234,7 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Class',
             fieldText: systemDataValid
-                ? systemMessage!.classValue
+                ? systemMessage.classValue
                     .toString()
                     .replaceAll('AircraftClass.', '')
                     .replaceAll('_', ' ')
