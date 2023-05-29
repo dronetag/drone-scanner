@@ -29,10 +29,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      Timer(const Duration(seconds: 5), checkInternetConnection);
       checkPermissions();
-      if (context.read<ProximityAlertsCubit>().state.proximityAlertActive) {
-        context.read<ProximityAlertsCubit>().showExpiredAlerts();
+      Future.delayed(const Duration(seconds: 5), checkInternetConnection);
+      final alertsState = context.read<ProximityAlertsCubit>().state;
+      if (alertsState.proximityAlertActive && alertsState.hasRecentAlerts()) {
+        Future.delayed(const Duration(seconds: 1),
+            () => context.read<ProximityAlertsCubit>().showExpiredAlerts());
       }
     }
   }
