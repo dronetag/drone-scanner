@@ -27,37 +27,52 @@ class HomeBody extends StatefulWidget {
   _HomeBodyState createState() => _HomeBodyState();
 }
 
-class _HomeBodyState extends State<HomeBody> {
+class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
   BuildContext? currentContext;
   StreamSubscription? alertsStreamSub;
   Flushbar? alertFlushbar;
+  AppLifecycleState _notification = AppLifecycleState.resumed;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _notification = state;
+    });
+  }
+
   @override
   void initState() {
+    WidgetsBinding.instance?.addObserver(this);
     final alertsCubit = context.read<ProximityAlertsCubit>();
-    alertsStreamSub = alertsCubit.alertStateStream.listen((event) {
-      if (currentContext == null || !currentContext!.mounted) return;
-      if (event is AlertStart) {
-        showSnackBar(
-          currentContext!,
-          'Drone Radar is enabled for drone with UAS ID '
-          '${alertsCubit.state.usersAircraftUASID}',
-          durationMs: 10000,
-        );
-      } else if (event is AlertShow) {
-        // do not show if already shown
-        if (isFlushbarShown()) {
-          return;
+    alertsStreamSub = alertsCubit.alertStateStream.listen(
+      (event) {
+        if (currentContext == null || !currentContext!.mounted) return;
+        if (event is AlertStart) {
+          showSnackBar(
+            currentContext!,
+            'Drone Radar is enabled for drone with UAS ID '
+            '${alertsCubit.state.usersAircraftUASID}',
+            durationMs: 10000,
+          );
+        } else if (event is AlertShow) {
+          // do not show if already shown or app is in background
+          if (isFlushbarShown() || _notification != AppLifecycleState.resumed) {
+            return;
+          }
+          alertFlushbar = createProximityAlertFlushBar(
+            currentContext!,
+            currentContext!
+                .read<ProximityAlertsCubit>()
+                .state
+                .expirationTimeSec,
+          );
+          alertFlushbar?.show(context);
+        } else if ((event is AlertExpired || event is AlertStop) &&
+            isFlushbarShown()) {
+          alertFlushbar?.dismiss();
         }
-        alertFlushbar = createProximityAlertFlushBar(
-          currentContext!,
-          currentContext!.read<ProximityAlertsCubit>().state.expirationTimeSec,
-        );
-        alertFlushbar?.show(context);
-      } else if ((event is AlertExpired || event is AlertStop) &&
-          isFlushbarShown()) {
-        alertFlushbar?.dismiss();
-      }
-    });
+      },
+    );
 
     super.initState();
   }
@@ -65,6 +80,7 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   void dispose() {
     alertsStreamSub?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
