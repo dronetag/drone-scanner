@@ -14,13 +14,14 @@ import 'package:share_plus/share_plus.dart';
 
 import '/utils/csvlogger.dart';
 import '../../utils/utils.dart';
+import '../sliders_cubit.dart';
 import 'aircraft_expiration_cubit.dart';
 
 part 'aircraft_state.dart';
 
 class AircraftCubit extends Cubit<AircraftState> {
   Timer? _refreshTimer;
-  AircraftExpirationCubit expirationCubit;
+  final AircraftExpirationCubit expirationCubit;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
 
@@ -81,7 +82,7 @@ class AircraftCubit extends Cubit<AircraftState> {
           ),
         ) {
     expirationCubit.setDeleteCallback(deletePack);
-    fetchSavedLabels();
+    fetchSavedAircraftLabels();
   }
 
   // timer used to notify UI
@@ -114,18 +115,19 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   //Retrieves the labels stored persistently locally on the device
-  Future<void> fetchSavedLabels() async {
+  Future<void> fetchSavedAircraftLabels() async {
     final ready = await storage.ready;
     if (ready) {
       var labels = storage.getItem('labels');
-      if (labels == null) {
-        return;
-      }
       final labelsMap = <String, String>{};
-      (json.decode(labels as String) as Map<String, dynamic>)
-          .forEach((key, value) => labelsMap[key] = value as String);
+      if (labels != null) {
+        (json.decode(labels as String) as Map<String, dynamic>)
+            .forEach((key, value) => labelsMap[key] = value as String);
+      }
       emit(
-        state.copyWith(aircraftLabels: labelsMap),
+        state.copyWith(
+          aircraftLabels: labelsMap,
+        ),
       );
     }
   }
@@ -156,11 +158,19 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   Future<void> _saveLabels() async {
     await storage.setItem('labels', json.encode(state.aircraftLabels));
-    await fetchSavedLabels();
+    await fetchSavedAircraftLabels();
   }
 
   MessagePack? findByMacAddress(String mac) {
     return state.packHistory()[mac]?.last;
+  }
+
+  MessagePack? findByUasID(String uasId) {
+    final packs = state.packHistory().values.firstWhere(
+        (packList) =>
+            packList.any((element) => element.basicIdMessage?.uasId == uasId),
+        orElse: () => []);
+    return packs.isEmpty ? null : packs.last;
   }
 
   List<MessagePack>? packsForDevice(String mac) {
@@ -170,7 +180,9 @@ class AircraftCubit extends Cubit<AircraftState> {
   Future<void> clear() async {
     emit(
       AircraftStateUpdate(
-          packHistory: {}, aircraftLabels: state.aircraftLabels),
+        packHistory: {},
+        aircraftLabels: state.aircraftLabels,
+      ),
     );
   }
 
@@ -215,7 +227,9 @@ class AircraftCubit extends Cubit<AircraftState> {
       data[pack.macAddress] = [pack];
       emit(
         AircraftStateUpdate(
-            packHistory: data, aircraftLabels: state.aircraftLabels),
+          packHistory: data,
+          aircraftLabels: state.aircraftLabels,
+        ),
       );
     } on Exception {
       rethrow;
@@ -235,7 +249,9 @@ class AircraftCubit extends Cubit<AircraftState> {
     data.removeWhere((key, _) => mac == key);
     emit(
       AircraftStateUpdate(
-          packHistory: data, aircraftLabels: state.aircraftLabels),
+        packHistory: data,
+        aircraftLabels: state.aircraftLabels,
+      ),
     );
   }
 

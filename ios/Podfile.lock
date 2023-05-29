@@ -5,6 +5,8 @@ PODS:
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_opendroneid (1.0.0):
     - Flutter
   - flutter_osm_plugin (0.0.1):
@@ -52,6 +54,7 @@ DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_opendroneid (from `.symlinks/plugins/flutter_opendroneid/ios`)
   - flutter_osm_plugin (from `.symlinks/plugins/flutter_osm_plugin/ios`)
   - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
@@ -81,6 +84,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_opendroneid:
     :path: ".symlinks/plugins/flutter_opendroneid/ios"
   flutter_osm_plugin:
@@ -113,6 +118,7 @@ SPEC CHECKSUMS:
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_opendroneid: 92e28add32d6bf2b5705fdad0666657476de2e15
   flutter_osm_plugin: f06ae1e854af57270c61ae27bdb8a386cfd4afa5
   google_maps_flutter_ios: 3e0b99383a8003b8169d06e7e324170bd0424105
@@ -131,6 +137,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
-PODFILE CHECKSUM: d6db177a20c5a5443889d3d877c44a056f63f3eb
+PODFILE CHECKSUM: 5393230c672d3a74e2eae365640a3f251271ea30
 
 COCOAPODS: 1.11.3

@@ -16,10 +16,13 @@ class AppColors {
   static const purple = Color.fromARGB(255, 120, 113, 235);
   static const blue = Color.fromARGB(255, 0, 104, 183);
   static const red = Color(0xFFA1483C);
+  static const pink = Color(0xFFD5BAB6);
+  static const lightRed = Color(0xFFF3E9E7);
   static const redIcon = Color(0xFFA2483C);
   static const green = Color(0xFF4D8439);
   static const orange = Color(0xFF957538);
   static const detailFieldHeaderColor = Color(0xFF636E71);
   static const detailFieldColor = Color(0xFF3B4345);
   static const preferencesButtonColor = Color(0xFF778487);
+  static const shadow = Color.fromARGB(200, 100, 100, 100);
 }

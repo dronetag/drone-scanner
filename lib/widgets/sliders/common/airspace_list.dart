@@ -6,6 +6,7 @@ import '../../../../utils/utils.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
+import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
@@ -94,15 +95,24 @@ class AirspaceList extends StatelessWidget {
 
   List<Widget> buildListChildren(BuildContext context) {
     final state = context.watch<AircraftCubit>().state;
-    late final Map<String, List<MessagePack>> aircraft;
+    Map<String, List<MessagePack>> aircraft;
+    final userAircraftUasId =
+        context.watch<ProximityAlertsCubit>().state.usersAircraftUASID;
+    final userDronePositioning =
+        context.watch<SlidersCubit>().state.myDronePositioning;
     if (sortValue == SortValue.uasid) {
-      aircraft = state.packHistoryByUASID();
+      aircraft =
+          state.packHistoryByUASID(userAircraftUasId, userDronePositioning);
     } else if (sortValue == SortValue.time) {
-      aircraft = state.packHistoryByLastUpdate();
+      aircraft = state.packHistoryByLastUpdate(
+          userAircraftUasId, userDronePositioning);
     } else {
-      aircraft = state
-          .packHistoryByDistance(context.watch<MapCubit>().state.userLocation);
+      aircraft = state.packHistoryByDistance(
+          context.watch<MapCubit>().state.userLocation,
+          userAircraftUasId,
+          userDronePositioning);
     }
+
     if (context.read<ShowcaseCubit>().state.showcaseActive &&
         aircraft.isNotEmpty) {
       return [

@@ -16,6 +16,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_opendroneid: 0.12.0
+  flutter_local_notifications: ^14.0.0
+  another_flushbar: ^1.12.29
   sprintf: "^6.0.0"
   google_api_headers: ^1.1.1
   google_maps_flutter: ^2.1.1

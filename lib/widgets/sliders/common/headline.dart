@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
 
 class Headline extends StatelessWidget {
   final String text;
   final Widget? child;
-  const Headline({Key? key, required this.text, this.child}) : super(key: key);
+  final Widget? leading;
+  final Color? color;
+  final double? fontSize;
+  const Headline({
+    Key? key,
+    required this.text,
+    this.child,
+    this.leading,
+    this.color,
+    this.fontSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +24,17 @@ class Headline extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         children: [
+          if (leading != null)
+            Padding(
+              padding: const EdgeInsets.only(right: Sizes.standard / 2),
+              child: leading!,
+            ),
           Text(
             text.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.lightGray,
+              color: color ?? AppColors.lightGray,
+              fontSize: fontSize,
             ),
           ),
           if (child != null)

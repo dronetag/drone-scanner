@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
+import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../constants/sizes.dart';
@@ -100,10 +101,14 @@ void handleAction(BuildContext context, AircraftAction action) {
         context,
         'Are you sure you want to delete aircraft data?',
         () {
+          context
+              .read<ProximityAlertsCubit>()
+              .clearFoundDrone(messagePackList.last.basicIdMessage?.uasId);
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
           context.read<AircraftCubit>().deletePack(selectedMac);
           context.read<SelectedAircraftCubit>().unselectAircraft();
           context.read<MapCubit>().turnOffLockOnPoint();
+
           showSnackBar(
             context,
             'Aircraft data were deleted.',

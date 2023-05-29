@@ -10,6 +10,7 @@ import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/opendroneid_cubit.dart';
+import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
@@ -307,7 +308,7 @@ class PreferencesPage extends StatelessWidget {
           padding: tooltipPadding,
           margin: tooltipMargin,
           message:
-              'See what permissions are currently granted with anpossibility '
+              'See what permissions are currently granted with a possibility '
               'to change them from the system settings.',
           child: const Icon(
             Icons.help_outline,
@@ -342,6 +343,15 @@ class PreferencesPage extends StatelessWidget {
           text: state.btEnabled ? 'Granted' : 'Not Granted',
           color: state.btEnabled ? AppColors.green : AppColors.red,
           icon: state.btEnabled ? positiveIcon : negativeIcon,
+        ),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
+          label: 'Notifications',
+          text: state.notificationsEnabled ? 'Granted' : 'Not Granted',
+          color: state.notificationsEnabled ? AppColors.green : AppColors.red,
+          icon: state.notificationsEnabled ? positiveIcon : negativeIcon,
         ),
       ),
       if (isLandscape) const SizedBox(),
@@ -433,7 +443,26 @@ class PreferencesPage extends StatelessWidget {
         child: PreferencesFieldWithDescription(
           label: 'Expiration time (sec):',
           description: 'Set the duration between 10 and 600 seconds',
-          child: Container(width: width / 3, child: CustomSpinBox()),
+          child: Container(
+            width: width / 3,
+            child: CustomSpinBox(
+              maxVal: AircraftExpirationCubit.maxTime,
+              minVal: AircraftExpirationCubit.minTime,
+              step: AircraftExpirationCubit.timeStep,
+              value: context
+                  .watch<AircraftExpirationCubit>()
+                  .state
+                  .cleanTimeSec
+                  .toDouble(),
+              valueSetter: (value) {
+                final packs = context.read<AircraftCubit>().state.packHistory();
+                context.read<AircraftExpirationCubit>().setcleanTimeSec(
+                      value,
+                      packs,
+                    );
+              },
+            ),
+          ),
         ),
       ),
       Padding(
@@ -458,7 +487,28 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
-      if (isLandscape) const SizedBox(),
+      Padding(
+        padding: itemPadding / 2,
+        child: PreferencesFieldWithDescription(
+          label: 'My drone position in list:',
+          description: 'Choose how your drone should be positioned in a list '
+              'of all nearby drones',
+          child: CustomDropdownButton(
+            value:
+                context.watch<SlidersCubit>().state.myDronePositioningString(),
+            valueChangedCallback: (newValue) {
+              if (newValue != null) {
+                context.read<SlidersCubit>().setMyDronePositioning(newValue);
+              }
+            },
+            items: const [
+              'Default',
+              'Always First',
+              'Always Last',
+            ],
+          ),
+        ),
+      ),
       Align(
         child: Container(
           padding: itemPadding / 2,
@@ -470,6 +520,7 @@ class PreferencesPage extends StatelessWidget {
                 context,
                 'Are you sure you want to delete all gathered data?',
                 () {
+                  context.read<ProximityAlertsCubit>().clearFoundDrones();
                   context.read<SlidersCubit>().setShowDroneDetail(show: false);
                   context.read<AircraftCubit>().clear();
                   context.read<SelectedAircraftCubit>().unselectAircraft();

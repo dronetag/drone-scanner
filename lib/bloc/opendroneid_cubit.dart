@@ -239,7 +239,11 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     initBtListener();
     if (restart) {
       final res = await start(usedT);
-      if (res.success) emit(state.copyWith(usedTechnologies: usedT));
+      if (res.success) {
+        emit(state.copyWith(usedTechnologies: usedT));
+      } else {
+        emit(state);
+      }
       return res;
     }
     emit(state.copyWith(usedTechnologies: usedT));

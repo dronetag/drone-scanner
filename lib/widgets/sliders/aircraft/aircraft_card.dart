@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 
 import '../../../../extensions/string_extensions.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -109,6 +109,10 @@ class AircraftCard extends StatelessWidget {
   Widget buildLeading(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final status = messagePack.locationMessage?.status;
+    final proximityAlertsActive = context
+        .read<ProximityAlertsCubit>()
+        .state
+        .isAlertActiveForId(messagePack.basicIdMessage?.uasId);
 
     final icon = status == pigeon.AircraftStatus.Undeclared
         ? null
@@ -118,6 +122,7 @@ class AircraftCard extends StatelessWidget {
                 : 'assets/images/plane_grounded.png',
             width: Sizes.cardIconSize,
             height: Sizes.cardIconSize,
+            color: proximityAlertsActive ? AppColors.green : null,
           );
 
     final aircraftText = _getAircraftText();
@@ -141,9 +146,11 @@ class AircraftCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 11.0,
-                color: status == pigeon.AircraftStatus.Airborne
-                    ? AppColors.highlightBlue
-                    : AppColors.dark,
+                color: proximityAlertsActive
+                    ? AppColors.green
+                    : status == pigeon.AircraftStatus.Airborne
+                        ? AppColors.highlightBlue
+                        : AppColors.dark,
               ),
             ),
           ],

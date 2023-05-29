@@ -9,11 +9,13 @@ import '../../app/custom_about_dialog.dart';
 import '../../app/dialogs.dart';
 import '../../help/help_page.dart';
 import '../../preferences/preferences_page.dart';
+import '../../preferences/proximity_alerts_page.dart';
 import 'custom_popup_menu_divider.dart';
 
 enum ToolbarMenuAction {
   toggleBT,
   toggleWifi,
+  openDroneRadar,
   openSettings,
   openHelp,
   openAbout,
@@ -159,6 +161,16 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
+        value: ToolbarMenuAction.openDroneRadar,
+        child: Text(
+          'Drone Radar',
+          style: labelStyle,
+        ),
+      ),
+      PopupMenuItem(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
         value: ToolbarMenuAction.openSettings,
         child: Text(
           'Preferences',
@@ -197,6 +209,17 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
 
 void handleAction(BuildContext context, ToolbarMenuAction action) {
   switch (action) {
+    case ToolbarMenuAction.openDroneRadar:
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ProximityAlertsPage(),
+          settings: RouteSettings(
+            name: ProximityAlertsPage.routeName,
+          ),
+        ),
+      );
+      break;
     case ToolbarMenuAction.openSettings:
       Navigator.push(
         context,
@@ -208,6 +231,7 @@ void handleAction(BuildContext context, ToolbarMenuAction action) {
         ),
       );
       break;
+
     case ToolbarMenuAction.openHelp:
       Navigator.push(
         context,

@@ -36,7 +36,7 @@ class CustomAboutDialog extends StatelessWidget {
         boxShadow: const [
           BoxShadow(
             blurRadius: 5,
-            color: Color.fromARGB(200, 100, 100, 100),
+            color: AppColors.shadow,
           ),
         ],
       ),

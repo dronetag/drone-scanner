@@ -28,6 +28,9 @@ class AircraftExpirationState {
 
 class AircraftExpirationCubit extends Cubit<AircraftExpirationState> {
   Function(String mac)? deleteCallback;
+  static const maxTime = 600.0;
+  static const minTime = 10.0;
+  static const timeStep = 5.0;
 
   AircraftExpirationCubit()
       : super(AircraftExpirationState(

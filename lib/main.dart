@@ -10,6 +10,7 @@ import 'bloc/aircraft/selected_aircraft_cubit.dart';
 import 'bloc/help/help_cubit.dart';
 import 'bloc/map/map_cubit.dart';
 import 'bloc/opendroneid_cubit.dart';
+import 'bloc/proximity_alerts_cubit.dart';
 import 'bloc/screen_cubit.dart';
 import 'bloc/showcase_cubit.dart';
 import 'bloc/sliders_cubit.dart';
@@ -17,6 +18,7 @@ import 'bloc/standards_cubit.dart';
 import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
 import 'services/location_service.dart';
+import 'services/notification_service.dart';
 import 'utils/google_api_key_reader.dart';
 import 'utils/uasid_prefix_reader.dart';
 import 'widgets/app/app.dart';
@@ -53,7 +55,10 @@ void runAppWithSentry(void Function() appRunner) async {
 void main() async {
   // init high priority services
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize Google services
+  // init local notifications
+  final notificationService = NotificationService();
+  await notificationService.setup();
+  // Init Google services
   await GoogleApiKeyReader.initialize();
   await UASIDPrefixReader.initialize();
   final locationService = LocationService();
@@ -61,6 +66,9 @@ void main() async {
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
   final aircraftCubit = AircraftCubit(aircraftExpirationCubit);
+  final proximityAlertsCubit =
+      ProximityAlertsCubit(notificationService, aircraftCubit);
+
   runAppWithSentry(
     () => runApp(
       MultiBlocProvider(
@@ -99,6 +107,10 @@ void main() async {
           ),
           BlocProvider<AircraftExpirationCubit>(
             create: (context) => aircraftExpirationCubit,
+            lazy: false,
+          ),
+          BlocProvider<ProximityAlertsCubit>(
+            create: (context) => proximityAlertsCubit,
             lazy: false,
           ),
           BlocProvider<SelectedAircraftCubit>(

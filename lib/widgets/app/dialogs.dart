@@ -1,7 +1,9 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
+import 'proximity_alert_snackbar.dart';
 
 void showAlertDialog(
   BuildContext context,
@@ -44,10 +46,11 @@ void showSnackBar(
   BuildContext context,
   String snackBarText, {
   Color textColor = Colors.white,
+  int durationMs = 1500,
 }) {
   final snackBar = SnackBar(
     backgroundColor: AppColors.darkGray.withOpacity(AppColors.toolbarOpacity),
-    duration: const Duration(milliseconds: 1500),
+    duration: Duration(milliseconds: durationMs),
     behavior: SnackBarBehavior.floating,
     content: Text(
       snackBarText,
@@ -61,4 +64,19 @@ void showSnackBar(
   );
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+Flushbar createProximityAlertFlushBar(BuildContext context, int durationSec) {
+  return Flushbar(
+    duration: Duration(seconds: durationSec),
+    backgroundColor: Colors.transparent,
+    flushbarPosition: FlushbarPosition.TOP,
+    padding: EdgeInsets.symmetric(
+      horizontal: Sizes.mapContentMargin,
+      vertical: Sizes.standard,
+    ),
+    messageText: ProximityAlertSnackbar(
+      expirationTime: durationSec,
+    ),
+  );
 }
