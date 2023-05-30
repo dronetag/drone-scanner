@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
@@ -295,11 +296,26 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<bool> checkStoragePermission() async {
-    final perm = await Permission.storage.isGranted;
-    if (!perm) {
-      return await Permission.storage.request().isGranted;
+    // Check for relevant permissions.
+    // Since Android SDK 33, storage is not used
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
+    if (Platform.isIOS || androidInfo.version.sdkInt < 33) {
+      final storage = await Permission.storage.status.isGranted;
+      if (!storage) {
+        return await Permission.storage.request().isGranted;
+      }
+      return storage;
+    } else {
+      var videos = await Permission.videos.status.isGranted;
+      var photos = await Permission.photos.status.isGranted;
+      if (!videos || !photos) {
+        // request at once, will produce 1 dialog
+        videos = await Permission.videos.request().isGranted;
+        photos = await Permission.videos.request().isGranted;
+      }
+      return videos && photos;
     }
-    return perm;
   }
 
   Future<bool> _shareExportFile(String csv, String name) async {
