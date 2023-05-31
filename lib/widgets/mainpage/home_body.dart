@@ -40,7 +40,7 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     final alertsCubit = context.read<ProximityAlertsCubit>();
     alertsStreamSub = alertsCubit.alertStateStream.listen(
       (event) {
@@ -122,7 +122,7 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     currentContext = context;
     // rebuild home page when showcase active changes
-    context.read<ScreenCubit>().initScreen();
+    context.read<ScreenCubit>().initScreen(context);
     context.watch<ShowcaseCubit>().state.showcaseActive;
     context.read<ShowcaseCubit>().displayShowcase().then((status) {
       if (status) {

@@ -237,7 +237,15 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       currentExtent < minExtent;
   bool get isBottomSheetBelowMinExtent =>
       fromBottomSheet && currentExtent < minExtent;
-
+  final scrollMetrics = FixedScrollMetrics(
+    minScrollExtent: null,
+    maxScrollExtent: null,
+    pixels: null,
+    viewportDimension: null,
+    axisDirection: AxisDirection.down,
+    devicePixelRatio:
+        WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio,
+  );
   @override
   bool applyContentDimensions(double minScrollExtent, double maxScrollExtent) {
     // We need to provide some extra extent if we haven't yet reached the max or
@@ -416,7 +424,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     final simulation = ClampingScrollSimulation(
       position: currentExtent,
       velocity: velocity,
-      tolerance: physics.tolerance,
+      tolerance: physics.toleranceFor(scrollMetrics),
       friction: friction,
     );
 
@@ -442,7 +450,8 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
         // we just "bounce" off the top making it look like the list doesn't
         // have more to scroll.
         velocity = ballisticController.velocity +
-            (physics.tolerance.velocity * ballisticController.velocity.sign);
+            (physics.toleranceFor(scrollMetrics).velocity *
+                ballisticController.velocity.sign);
         super.goBallistic(shouldMakeSheetNonDismissable ? 0.0 : velocity);
         ballisticController.stop();
 

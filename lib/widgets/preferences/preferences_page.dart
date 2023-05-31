@@ -59,7 +59,7 @@ class PreferencesPage extends StatelessWidget {
                     'on your device and additional settings',
                 title: 'Preferences',
                 child: ColoredBox(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).colorScheme.background,
                   child: Padding(
                     padding: isLandscape
                         ? EdgeInsets.only(
@@ -430,11 +430,11 @@ class PreferencesPage extends StatelessWidget {
           child: PreferencesSlider(
               getValue: () =>
                   context.read<AircraftExpirationCubit>().state.cleanOldPacks,
-              setValue: (c) {
+              setValue: ({required value}) {
                 final packs = context.read<AircraftCubit>().state.packHistory();
                 context
                     .read<AircraftExpirationCubit>()
-                    .setCleanOldPacks(packs, clean: c);
+                    .setCleanOldPacks(packs, clean: value);
               }),
         ),
       ),

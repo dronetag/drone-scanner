@@ -44,7 +44,6 @@ class AppTheme {
 
     // Colors
     primaryColor: lightColorScheme.primary,
-    backgroundColor: lightColorScheme.background,
     shadowColor: AppColors.darkGray.withOpacity(0.33),
     canvasColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
@@ -52,79 +51,79 @@ class AppTheme {
 
     // Typography
     fontFamily: 'TitilliumWeb',
-    textTheme: const TextTheme(
-      headline1: TextStyle(
+    textTheme: TextTheme(
+      displayLarge: TextStyle(
         fontSize: 36,
         height: 1.1,
         fontWeight: FontWeight.w600,
         color: AppColors.dark,
       ),
-      headline2: TextStyle(
+      displayMedium: TextStyle(
         fontSize: 30,
         height: 1.2,
         fontWeight: FontWeight.w600,
         color: AppColors.dark,
       ),
-      headline3: TextStyle(
+      displaySmall: TextStyle(
         fontSize: 24,
         height: 1.4,
         fontWeight: FontWeight.w400,
         color: AppColors.dark,
       ),
-      headline4: TextStyle(
+      headlineMedium: TextStyle(
         fontSize: 18,
         height: 1.4,
         fontWeight: FontWeight.w600,
         color: AppColors.dark,
       ),
-      headline5: TextStyle(
+      headlineSmall: TextStyle(
         fontSize: 17,
         height: 1.25,
         fontWeight: FontWeight.w700,
         color: AppColors.dark,
       ),
-      headline6: TextStyle(
+      titleLarge: TextStyle(
         fontSize: 17,
         height: 1.25,
         fontWeight: FontWeight.w700,
         color: AppColors.dark,
       ),
-      subtitle1: TextStyle(
+      titleMedium: TextStyle(
         fontSize: 17,
         height: 1.3,
         fontWeight: FontWeight.normal,
         color: AppColors.dark,
       ),
-      subtitle2: TextStyle(
+      titleSmall: TextStyle(
         fontSize: 15,
         height: 1.3,
         fontWeight: FontWeight.w500,
         color: AppColors.lightGray,
       ),
-      button: TextStyle(
+      labelLarge: TextStyle(
         fontSize: 15,
         height: 1.3,
         fontWeight: FontWeight.w700,
       ),
-      bodyText1: TextStyle(
+      bodyLarge: TextStyle(
         fontSize: 16,
         height: 1.3,
         fontWeight: FontWeight.w600,
         color: AppColors.dark,
       ),
-      bodyText2: TextStyle(
+      bodyMedium: TextStyle(
         fontSize: 16,
         height: 1.3,
         fontWeight: FontWeight.normal,
         color: AppColors.dark,
       ),
-      caption: TextStyle(
+      bodySmall: TextStyle(
         fontSize: 13,
         height: 1.3,
         fontWeight: FontWeight.w500,
         color: AppColors.lightGray,
       ),
-      overline: TextStyle(
+      labelSmall: TextStyle(
         fontSize: 13,
         height: 1.3,
         fontWeight: FontWeight.w500,
@@ -211,7 +210,7 @@ class AppTheme {
     color: AppColors.lightGray,
   );
 
-  static final captionLinkTextStyle = lightTheme.textTheme.caption!.copyWith(
+  static final captionLinkTextStyle = lightTheme.textTheme.bodySmall!.copyWith(
     decoration: TextDecoration.underline,
   );
 

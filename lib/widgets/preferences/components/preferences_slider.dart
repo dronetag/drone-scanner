@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../constants/colors.dart';
 
 class PreferencesSlider extends StatefulWidget {
-  final Function(bool c) setValue;
+  final Function({required bool value}) setValue;
   final bool Function() getValue;
   final bool enabled;
   const PreferencesSlider({
@@ -40,7 +40,7 @@ class _CleanPacksCheckboxState extends State<PreferencesSlider> {
             ? (c) {
                 setState(() {
                   _value = c;
-                  widget.setValue(c);
+                  widget.setValue(value: c);
                 });
               }
             : null,

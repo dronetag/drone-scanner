@@ -77,7 +77,6 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
               cornerRadius: borderRadius,
               headerBuilder: (context, sheetState) => buildHeader(width, state),
               builder: (context, sheetState) {
-                final cubit = context.read<SlidersCubit>();
                 final height = MediaQuery.of(context).size.height;
                 final maxSliderHeight = height * SlidersCubit.topSnap;
                 final headerHeight = calcHeaderHeight(context);
