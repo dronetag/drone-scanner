@@ -45,7 +45,7 @@ class ScanningStatusField extends StatelessWidget {
                     children: [
                       PreferencesSlider(
                         getValue: () => odidState.isScanningBluetooth,
-                        setValue: (c) {
+                        setValue: ({required value}) {
                           context
                               .read<OpendroneIdCubit>()
                               .isBtTurnedOn()
@@ -121,7 +121,7 @@ class ScanningStatusField extends StatelessWidget {
                         children: [
                           PreferencesSlider(
                             getValue: () => odidState.isScanningWifi,
-                            setValue: (c) {
+                            setValue: ({required value}) {
                               context
                                   .read<OpendroneIdCubit>()
                                   .isWifiTurnedOn()

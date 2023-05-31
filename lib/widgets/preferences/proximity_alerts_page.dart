@@ -157,10 +157,10 @@ class ProximityAlertsPage extends StatelessWidget {
                         .read<ProximityAlertsCubit>()
                         .state
                         .proximityAlertActive,
-                    setValue: (c) {
+                    setValue: ({required value}) {
                       final cubit = context.read<ProximityAlertsCubit>();
                       if (cubit.state.usersAircraftUASID != null) {
-                        cubit.setProximityAlertsActive(active: c);
+                        cubit.setProximityAlertsActive(active: value);
                       }
                     },
                     enabled: context
@@ -348,7 +348,7 @@ class ProximityAlertsPage extends StatelessWidget {
               getValue: () =>
                   context.read<StandardsCubit>().state.notificationsEnabled &&
                   context.read<ProximityAlertsCubit>().state.sendNotifications,
-              setValue: (c) {
+              setValue: ({required value}) {
                 if (!context
                     .read<StandardsCubit>()
                     .state
@@ -359,7 +359,7 @@ class ProximityAlertsPage extends StatelessWidget {
                 }
                 context
                     .read<ProximityAlertsCubit>()
-                    .setSendNotifications(send: c);
+                    .setSendNotifications(send: value);
               }),
         ),
       ),
