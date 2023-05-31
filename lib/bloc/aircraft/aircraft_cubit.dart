@@ -81,7 +81,7 @@ class AircraftCubit extends Cubit<AircraftState> {
             aircraftLabels: <String, String>{},
           ),
         ) {
-    expirationCubit.setDeleteCallback(deletePack);
+    expirationCubit.deleteCallback = deletePack;
     fetchSavedAircraftLabels();
   }
 

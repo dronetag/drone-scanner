@@ -9,7 +9,8 @@ class HelpCubit extends Cubit<HelpState> {
   static const String _host = 'cms.dronetag.cz';
   static const String _path = 'items/drone_scanner_help_section';
   static const String _query =
-      'fields=*,displayed_questions.question.translations.*,displayed_questions.question.id';
+      'fields=*,displayed_questions.question.translations.*'
+      ',displayed_questions.question.id';
   static const iphoneWifiQuestionIndex = 9;
 
   HelpCubit()

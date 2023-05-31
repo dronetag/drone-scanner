@@ -47,7 +47,7 @@ class ProximityAlertsPage extends StatelessWidget {
                     'This page let you set proximity alerts for your device',
                 title: 'Proximity Alerts',
                 child: ColoredBox(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).colorScheme.background,
                   child: Padding(
                     padding: isLandscape
                         ? EdgeInsets.only(
@@ -342,8 +342,8 @@ class ProximityAlertsPage extends StatelessWidget {
         padding: itemPadding,
         child: PreferencesFieldWithDescription(
           label: 'Send proximity push notifications',
-          description:
-              'Notification will be sent when there is another drone close to yours',
+          description: 'Notification will be sent when there is another drone '
+              'close to yours',
           child: PreferencesSlider(
               getValue: () =>
                   context.read<StandardsCubit>().state.notificationsEnabled &&

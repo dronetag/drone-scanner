@@ -279,8 +279,10 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
               1000;
           if (_isNearby(value.last, distance)) {
             // refresh if not marked as expired
-            foundAlerts.add(DroneNearbyAlert(
-                uasId, distance, state.expirationTimeSec, DateTime.now()));
+            foundAlerts.add(
+              DroneNearbyAlert(
+                  uasId, distance, state.expirationTimeSec, DateTime.now()),
+            );
             // detected first time, show alert
             if (state.foundAircraft[uasId] == null) {
               _alertEventController.add(AlertShow());
@@ -288,7 +290,9 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
                 notificationService.addNotification(
                   'Proximity Alert',
                   foundAlerts.length == 1
-                      ? 'Drone ${foundAlerts.first.uasId} is ${foundAlerts.first.distance.toStringAsFixed(2)} meters from your drone'
+                      ? 'Drone ${foundAlerts.first.uasId} is '
+                          '${foundAlerts.first.distance.toStringAsFixed(2)} '
+                          'meters from your drone'
                       : '${foundAlerts.length} drones are flying close',
                   DateTime.now().millisecondsSinceEpoch + 1000,
                 );

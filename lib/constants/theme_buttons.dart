@@ -98,7 +98,7 @@ class ButtonsAppTheme {
 
   static final underlinedTextButtonStyle = textButtonStyle.copyWith(
     textStyle: MaterialStateProperty.all(
-      AppTheme.lightTheme.textTheme.bodyText2!.copyWith(
+      AppTheme.lightTheme.textTheme.bodyMedium!.copyWith(
         decoration: TextDecoration.underline,
       ),
     ),
@@ -118,7 +118,7 @@ class ButtonsAppTheme {
   static final primaryTextStyle = textButtonStyle.copyWith(
     foregroundColor: _resolveWithDisabled(AppColors.blue, AppColors.lightGray),
     textStyle: MaterialStateProperty.all(
-      AppTheme.lightTheme.textTheme.bodyText1!.copyWith(
+      AppTheme.lightTheme.textTheme.bodyLarge!.copyWith(
         fontWeight: FontWeight.w700,
       ),
     ),
@@ -137,7 +137,7 @@ class ButtonsAppTheme {
     style: textButtonStyle.copyWith(
       padding: MaterialStateProperty.all(EdgeInsets.zero),
       textStyle:
-          MaterialStateProperty.all(AppTheme.lightTheme.textTheme.bodyText1),
+          MaterialStateProperty.all(AppTheme.lightTheme.textTheme.bodyLarge),
       alignment: Alignment.centerRight,
     ),
   );

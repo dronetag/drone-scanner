@@ -59,7 +59,7 @@ class PreferencesPage extends StatelessWidget {
                     'on your device and additional settings',
                 title: 'Preferences',
                 child: ColoredBox(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).colorScheme.background,
                   child: Padding(
                     padding: isLandscape
                         ? EdgeInsets.only(

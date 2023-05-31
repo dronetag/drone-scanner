@@ -40,7 +40,7 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     final alertsCubit = context.read<ProximityAlertsCubit>();
     alertsStreamSub = alertsCubit.alertStateStream.listen(
       (event) {

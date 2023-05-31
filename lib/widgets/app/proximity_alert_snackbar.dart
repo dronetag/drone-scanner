@@ -90,7 +90,8 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                   final data = snapshot.data as List<ProximityAlert>;
                   final dronesText =
                       data.length > 1 ? '${data.length} drones' : '1 drone';
-
+                  final timeLeft =
+                      widget.expirationTime * (1 - controller.value);
                   return Column(
                     children: [
                       Padding(
@@ -121,8 +122,8 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                 ),
                                 children: [
                                   TextSpan(
-                                    text:
-                                        ' ${data.length > 1 ? 'are' : 'is'} flying close',
+                                    text: ' ${data.length > 1 ? 'are' : 'is'} '
+                                        'flying close',
                                     style: TextStyle(
                                       color: AppColors.red,
                                       fontSize: 14,
@@ -144,7 +145,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                   AnimatedBuilder(
                                     animation: controller,
                                     builder: (context, child) => Text(
-                                      '${(widget.expirationTime * (1 - controller.value)).toStringAsFixed(0)}',
+                                      '${timeLeft.toStringAsFixed(0)}',
                                       style: TextStyle(
                                         color: AppColors.red,
                                         fontSize: 12,

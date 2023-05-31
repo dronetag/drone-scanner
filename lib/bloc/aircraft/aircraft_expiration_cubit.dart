@@ -27,7 +27,7 @@ class AircraftExpirationState {
 }
 
 class AircraftExpirationCubit extends Cubit<AircraftExpirationState> {
-  Function(String mac)? deleteCallback;
+  void Function(String mac)? _deleteCallback;
   static const maxTime = 600.0;
   static const minTime = 10.0;
   static const timeStep = 5.0;
@@ -48,9 +48,11 @@ class AircraftExpirationCubit extends Cubit<AircraftExpirationState> {
     );
   }
 
-  void setDeleteCallback(Function(String mac) callback) {
-    deleteCallback = callback;
+  set deleteCallback(Function(String mac)? callback) {
+    _deleteCallback = callback;
   }
+
+  Function(String)? get deleteCallback => _deleteCallback;
 
   Future<void> setCleanOldPacks(Map<String, List<MessagePack>> packHistory,
       {required bool clean}) async {

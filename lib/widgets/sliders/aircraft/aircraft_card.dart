@@ -45,11 +45,12 @@ class AircraftCard extends StatelessWidget {
             messagePack.basicIdMessage?.uasId != ''
         ? messagePack.basicIdMessage!.uasId
         : 'Unknown UAS ID';
-
+    final opIdTrimmed =
+        messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric();
     final opIdText = messagePack.operatorIDSet()
         ? flag == null
-            ? messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric()
-            : ' ${messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric()}'
+            ? opIdTrimmed
+            : ' $opIdTrimmed'
         : 'Unknown Operator ID';
 
     return ListTile(
