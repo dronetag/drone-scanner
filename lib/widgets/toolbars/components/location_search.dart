@@ -19,11 +19,8 @@ class LocationSearch extends StatelessWidget {
     await context.read<MapCubit>().centerToLoc(location);
     await context.read<MapCubit>().setDroppedPinLocation(location);
     await context.read<MapCubit>().setDroppedPin(pinDropped: true);
-    if (context.read<SlidersCubit>().panelController.isPanelOpen) {
-      await context
-          .read<SlidersCubit>()
-          .panelController
-          .animatePanelToSnapPoint();
+    if (context.read<SlidersCubit>().isPanelOpened()) {
+      await context.read<SlidersCubit>().animatePanelToSnapPoint();
     }
   }
 
@@ -98,6 +95,11 @@ class LocationSearch extends StatelessWidget {
           focusNode: focusNode,
           autocorrect: false,
           cursorColor: Colors.white,
+          onTap: () {
+            if (context.read<SlidersCubit>().isPanelOpened()) {
+              context.read<SlidersCubit>().animatePanelToSnapPoint();
+            }
+          },
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
             border: InputBorder.none,

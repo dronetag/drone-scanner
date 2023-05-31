@@ -160,10 +160,7 @@ class LocationFields {
                             loc.longitude!,
                           );
                     }
-                    context
-                        .read<SlidersCubit>()
-                        .panelController
-                        .animatePanelToSnapPoint();
+                    context.read<SlidersCubit>().animatePanelToSnapPoint();
                   },
                 ),
             ],

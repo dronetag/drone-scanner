@@ -8,9 +8,7 @@ import 'package:wakelock/wakelock.dart';
 import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/screen_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
-import '../../bloc/standards_cubit.dart';
 import '../../constants/sizes.dart';
-import '../../utils/utils.dart';
 import '../app/dialogs.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/airspace_sliding_panel.dart';
@@ -110,14 +108,7 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
           right: Sizes.mapContentMargin,
           child: MapOptionsToolbar(),
         ),
-        AirspaceSlidingPanel(
-          maxSize: maxSliderSize(
-            height: height,
-            statusBarHeight: MediaQuery.of(context).viewPadding.top,
-            androidSystem: context.read<StandardsCubit>().state.androidSystem,
-          ),
-          minSize: calcHeaderHeight(context),
-        ),
+        AirspaceSlidingPanel(),
       ],
     );
   }

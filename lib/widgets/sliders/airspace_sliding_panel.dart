@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/zones/selected_zone_cubit.dart';
+import '../../utils/utils.dart';
 import 'aircraft/detail/aircraft_detail.dart';
 import 'aircraft/detail/aircraft_detail_header.dart';
 import 'common/airspace_list.dart';
 import 'common/airspace_list_header.dart';
 import 'common/chevron.dart';
+import 'sheet/sheet.dart';
+import 'sheet/specs.dart';
 import 'zones/zone_detail.dart';
 
 class AirspaceSlidingPanel extends StatefulWidget {
-  final double maxSize;
-  final double minSize;
-
   const AirspaceSlidingPanel({
-    required this.maxSize,
-    required this.minSize,
     Key? key,
   }) : super(key: key);
 
@@ -32,18 +29,10 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
   Chevron chevron = Chevron();
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        context.read<SlidersCubit>().panelController.animatePanelToSnapPoint());
-  }
-
-  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final sliderMaximized = context.watch<SlidersCubit>().state.sliderMaximized;
-    final borderRadius =
-        sliderMaximized ? Radius.zero : const Radius.circular(10);
+    final sliderMaximized = context.watch<SlidersCubit>().isPanelOpened();
+    final borderRadius = sliderMaximized ? 0.0 : 10.0;
     return BlocBuilder<SlidersCubit, SlidersState>(
       builder: (context, state) {
         // check if aircraft to be shown was not deleted
@@ -62,44 +51,49 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
         // use orientation builder to rebuild widget when orientation changes
         return OrientationBuilder(
           builder: (context, orientation) {
-            return SlidingUpPanel(
+            return SlidingSheet(
               controller: context.read<SlidersCubit>().panelController,
-              maxHeight: widget.maxSize,
-              minHeight: widget.minSize,
-              snapPoint: orientation == Orientation.landscape ? null : 0.3,
-              onPanelSlide: (_) {
-                if (context.read<SlidersCubit>().state.sliderMaximized) {
-                  context
-                      .read<SlidersCubit>()
-                      .setSliderMaximized(maximized: false);
-                }
-                if (chevron.direction != ChevronDirection.none) {
-                  setState(() {
-                    chevron.direction = ChevronDirection.none;
-                  });
-                }
-              },
-              borderRadius: BorderRadius.only(
-                topLeft: borderRadius,
-                topRight: borderRadius,
+              snapSpec: SnapSpec(
+                snap: true,
+                snappings: SlidersCubit.snappings,
+                initialSnap: SlidersCubit.middleSnap,
+                positioning: SnapPositioning.relativeToAvailableSpace,
+                onSnap: (p0, snap) {
+                  late final ChevronDirection dir;
+                  if (snap == SlidersCubit.bottomSnap) {
+                    dir = ChevronDirection.upwards;
+                  } else if (snap == SlidersCubit.topSnap) {
+                    dir = ChevronDirection.downwards;
+                  } else {
+                    dir = ChevronDirection.none;
+                  }
+                  if (chevron.direction != dir) {
+                    setState(() {
+                      chevron.direction = dir;
+                    });
+                  }
+                },
               ),
-              boxShadow: const [],
-              onPanelOpened: () {
-                chevron.direction = ChevronDirection.downwards;
-                context
-                    .read<SlidersCubit>()
-                    .setSliderMaximized(maximized: true);
+              cornerRadius: borderRadius,
+              headerBuilder: (context, sheetState) => buildHeader(width, state),
+              builder: (context, sheetState) {
+                final cubit = context.read<SlidersCubit>();
+                final height = MediaQuery.of(context).size.height;
+                final maxSliderHeight = height * SlidersCubit.topSnap;
+                final headerHeight = calcHeaderHeight(context);
+                final snapHeight = height * SlidersCubit.middleSnap;
+                final contentHeight =
+                    sheetState.extent == SlidersCubit.middleSnap
+                        ? (snapHeight - headerHeight) + 1
+                        : maxSliderHeight - headerHeight;
+
+                return Container(
+                  height: contentHeight,
+                  child: state.showDroneDetail
+                      ? buildDetailPanel(context)
+                      : buildListPanel(context),
+                );
               },
-              onPanelClosed: () {
-                chevron.direction = ChevronDirection.upwards;
-                context
-                    .read<SlidersCubit>()
-                    .setSliderMaximized(maximized: false);
-              },
-              header: buildHeader(width, state),
-              panel: state.showDroneDetail
-                  ? buildDetailPanel(context)
-                  : buildListPanel(context),
             );
           },
         );
@@ -108,18 +102,18 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
   }
 
   void onHeaderTapPortrait() {
-    final controller = context.read<SlidersCubit>().panelController;
-    if (controller.isPanelClosed || controller.isPanelOpen) {
-      controller.animatePanelToSnapPoint();
+    final cubit = context.read<SlidersCubit>();
+    if (cubit.isPanelClosed() || cubit.isPanelOpened()) {
+      cubit.animatePanelToSnapPoint();
     }
   }
 
   void onHeaderTapLandscape() {
-    final controller = context.read<SlidersCubit>().panelController;
-    if (controller.isPanelClosed) {
-      controller.open();
+    final cubit = context.read<SlidersCubit>();
+    if (cubit.isPanelClosed()) {
+      cubit.openSlider();
     } else {
-      controller.close();
+      cubit.closeSlider();
     }
   }
 

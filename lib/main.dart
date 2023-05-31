@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -68,6 +70,13 @@ void main() async {
   final aircraftCubit = AircraftCubit(aircraftExpirationCubit);
   final proximityAlertsCubit =
       ProximityAlertsCubit(notificationService, aircraftCubit);
+  final sheetLicense = await rootBundle.loadString('assets/docs/SHEET-LICENSE');
+  LicenseRegistry.addLicense(() => Stream<LicenseEntry>.value(
+        LicenseEntryWithLineBreaks(
+          <String>['sliding_sheet'],
+          sheetLicense,
+        ),
+      ));
 
   runAppWithSentry(
     () => runApp(

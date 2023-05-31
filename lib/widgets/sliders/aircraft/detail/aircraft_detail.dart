@@ -6,9 +6,7 @@ import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
-import '../../../../bloc/standards_cubit.dart';
 import '../../../../constants/sizes.dart';
-import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import 'basic_fields.dart';
 import 'connection_fields.dart';
@@ -42,19 +40,8 @@ class AircraftDetail extends StatelessWidget {
       return Container();
     }
     final height = MediaQuery.of(context).size.height;
-    final maxSliderHeight = maxSliderSize(
-      height: height,
-      statusBarHeight: MediaQuery.of(context).viewPadding.top,
-      androidSystem: context.read<StandardsCubit>().state.androidSystem,
-    );
-    final headerHeight = calcHeaderHeight(context);
-    final minSliderHeight = headerHeight;
-    final snapHeight =
-        minSliderHeight + (maxSliderHeight - minSliderHeight) * 0.3;
-    final contentHeight = context.watch<SlidersCubit>().isAtSnapPoint()
-        ? snapHeight - headerHeight
-        : maxSliderHeight - headerHeight;
     final dataChildren = buildChildren(context, messagePackList);
+
     return ShowcaseItem(
       showcaseKey: context.read<ShowcaseCubit>().droneDetailPanelKey,
       description: context.read<ShowcaseCubit>().droneDetailPanelDescription,
@@ -71,7 +58,6 @@ class AircraftDetail extends StatelessWidget {
         ),
         child: MediaQuery.of(context).orientation == Orientation.landscape
             ? GridView.builder(
-                padding: EdgeInsets.only(top: headerHeight),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 5,
@@ -87,20 +73,11 @@ class AircraftDetail extends StatelessWidget {
                   );
                 },
               )
-            : Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: headerHeight),
-                    height: contentHeight,
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      padding:
-                          MediaQuery.of(context).padding.copyWith(top: 0.0),
-                      itemCount: dataChildren.length,
-                      itemBuilder: (context, index) => dataChildren[index],
-                    ),
-                  ),
-                ],
+            : ListView.builder(
+                physics: BouncingScrollPhysics(),
+                padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
+                itemCount: dataChildren.length,
+                itemBuilder: (context, index) => dataChildren[index],
               ),
       ),
     );

@@ -74,7 +74,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
     ],
     position: RelativeRect.fromLTRB(
       MediaQuery.of(context).size.width,
-      context.read<SlidersCubit>().panelController.isPanelOpen
+      context.read<SlidersCubit>().isPanelOpened()
           ? MediaQuery.of(context).size.height / 6
           : MediaQuery.of(context).size.height / 4 * 3,
       Sizes.screenSpacing,
@@ -137,7 +137,7 @@ void handleAction(BuildContext context, AircraftAction action) {
       late final String snackBarText;
       // if setting lock or centering to zone, hide slider to snap point
       if (!context.read<MapCubit>().state.lockOnPoint) {
-        context.read<SlidersCubit>().panelController.animatePanelToSnapPoint();
+        context.read<SlidersCubit>().animatePanelToSnapPoint();
         snackBarText = 'Map center locked on aircraft.';
       } else {
         snackBarText = 'Map center lock on aircraft was disabled.';

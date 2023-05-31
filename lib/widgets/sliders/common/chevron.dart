@@ -5,32 +5,23 @@ enum ChevronDirection { upwards, downwards, none, notset }
 class Chevron extends CustomPainter {
   BuildContext? context;
   Color? color;
-  ChevronDirection? _dir;
+  ChevronDirection direction = ChevronDirection.none;
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (context == null || _dir == null) return;
+    if (context == null) return;
     final paint = Paint();
     paint.color = color ?? Colors.white;
 
     final path = Path();
-    if (_dir == ChevronDirection.upwards) {
+    if (direction == ChevronDirection.upwards) {
       createUpwardPath(path, size);
-    } else if (_dir == ChevronDirection.downwards) {
+    } else if (direction == ChevronDirection.downwards) {
       createDownwardPath(path, size);
     } else {
       createRectPath(path, size);
     }
     canvas.drawPath(path, paint);
-  }
-
-  set direction(ChevronDirection dir) {
-    _dir = dir;
-  }
-
-  ChevronDirection get direction {
-    if (_dir == null) return ChevronDirection.notset;
-    return _dir!;
   }
 
   void createUpwardPath(Path path, Size size) {

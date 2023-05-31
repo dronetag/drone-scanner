@@ -8,16 +8,12 @@ import 'package:sprintf/sprintf.dart';
 import '../constants/sizes.dart';
 import '../extensions/string_extensions.dart';
 
-double maxSliderSize({
-  required double height,
-  required double statusBarHeight,
-  required bool androidSystem,
-}) {
-  if (androidSystem) {
-    return height - (statusBarHeight + 10);
-  } else {
-    return height - (statusBarHeight + height / 20);
-  }
+T swapSign<T extends num>(T value) {
+  return value.isNegative ? value.abs() as T : value * -1 as T;
+}
+
+double toPrecision(double value, [int precision = 3]) {
+  return double.parse(value.toStringAsFixed(precision));
 }
 
 double calcHeaderHeight(BuildContext context) {

@@ -150,7 +150,7 @@ class StandardsCubit extends Cubit<StandardsState> {
       phoneManufacturer = 'Apple';
     }
     // flogs
-    if (phoneModel != null && phoneManufacturer != null) {
+    if (phoneModel != null) {
       FLog.info(text: 'phoneModel $phoneManufacturer $phoneModel');
     }
     FLog.info(text: 'os $platform $osVersion');

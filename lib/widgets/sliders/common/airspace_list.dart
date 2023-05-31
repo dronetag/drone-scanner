@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_pack.dart';
 
-import '../../../../utils/utils.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/showcase_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
-import '../../../bloc/standards_cubit.dart';
 import '../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../bloc/zones/zones_cubit.dart';
 import '../../../constants/colors.dart';
@@ -30,20 +28,6 @@ class AirspaceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final maxSliderHeight = maxSliderSize(
-      height: height,
-      statusBarHeight: MediaQuery.of(context).viewPadding.top,
-      androidSystem: context.read<StandardsCubit>().state.androidSystem,
-    );
-    final headerHeight = calcHeaderHeight(context);
-    final minSliderHeight = headerHeight;
-    final snapHeight =
-        minSliderHeight + (maxSliderHeight - minSliderHeight) * 0.3;
-    final contentHeight = context.watch<SlidersCubit>().isAtSnapPoint()
-        ? snapHeight - headerHeight
-        : maxSliderHeight - headerHeight;
-
     final children = buildListChildren(context);
     return ShowcaseItem(
       showcaseKey: context.read<ShowcaseCubit>().droneListKey,
@@ -58,33 +42,26 @@ class AirspaceList extends StatelessWidget {
                 context.read<SlidersCubit>().closeSlider();
                 return true;
               },
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: headerHeight),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.mapContentMargin),
-                    height: contentHeight,
-                    child: ListView.separated(
-                      padding:
-                          MediaQuery.of(context).padding.copyWith(top: 0.0),
-                      itemCount: children.length,
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: children[index],
-                        );
-                      },
-                      separatorBuilder: (context, _) {
-                        return Divider(
-                          color: AppColors.lightGray,
-                        );
-                      },
-                    ),
-                  ),
-                ],
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.mapContentMargin),
+                child: ListView.separated(
+                  padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
+                  itemCount: children.length,
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: children[index],
+                    );
+                  },
+                  separatorBuilder: (context, _) {
+                    return Divider(
+                      color: AppColors.lightGray,
+                    );
+                  },
+                ),
               ),
             ),
           ),

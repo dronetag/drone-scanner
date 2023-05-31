@@ -30,11 +30,6 @@ class AirspaceListHeader extends StatelessWidget {
     final headerHeight = calcHeaderHeight(context);
     chevron.context = context;
     chevron.color = AppColors.lightGray;
-    if (chevron.direction != ChevronDirection.none) {
-      chevron.direction = context.watch<SlidersCubit>().state.sliderMaximized
-          ? ChevronDirection.downwards
-          : ChevronDirection.upwards;
-    }
     final screenCubit = context.read<ScreenCubit>();
 
     const labelStyle = TextStyle(
@@ -66,7 +61,7 @@ class AirspaceListHeader extends StatelessWidget {
               ),
             ),
           ),
-          if (context.read<SlidersCubit>().panelController.isAttached)
+          if (context.read<SlidersCubit>().panelController.state != null)
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Sizes.mapContentMargin,
@@ -99,10 +94,7 @@ class AirspaceListHeader extends StatelessWidget {
                         ],
                       ),
                     ),*/
-                  if (!context
-                      .read<SlidersCubit>()
-                      .panelController
-                      .isPanelClosed)
+                  if (!context.read<SlidersCubit>().isPanelClosed())
                     Row(
                       children: [
                         const SizedBox(),

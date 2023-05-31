@@ -32,17 +32,13 @@ class MyHomePage extends StatelessWidget {
             value: SystemUiOverlayStyle.dark,
             child: WillPopScope(
               onWillPop: () async {
-                final state = context.read<SlidersCubit>().state;
+                final cubit = context.read<SlidersCubit>();
+                final state = cubit.state;
                 if (state.showDroneDetail) {
-                  await context
-                      .read<SlidersCubit>()
-                      .setShowDroneDetail(show: false);
+                  await cubit.setShowDroneDetail(show: false);
                   return false;
-                } else if (state.sliderMaximized) {
-                  await context
-                      .read<SlidersCubit>()
-                      .panelController
-                      .animatePanelToSnapPoint();
+                } else if (cubit.isPanelOpened()) {
+                  await context.read<SlidersCubit>().animatePanelToSnapPoint();
                   return false;
                 }
                 return true;
