@@ -89,7 +89,15 @@ class BasicFields {
                 onPressed: () {
                   final alertsCubit = context.read<ProximityAlertsCubit>();
                   if (uasId != null &&
-                      alertsCubit.state.usersAircraftUASID != uasId) {
+                      alertsCubit.state.usersAircraftUASID == uasId) {
+                    alertsCubit.clearUsersAircraftUASID();
+                    showSnackBar(context, 'Owned aircaft was unset');
+                  } else {
+                    if (uasId == null) {
+                      showSnackBar(context,
+                          'Cannot set aircraft as owned: Unknown UAS ID');
+                      return;
+                    }
                     final validationError = validateUASID(uasId);
                     if (validationError != null) {
                       showSnackBar(
@@ -99,10 +107,6 @@ class BasicFields {
                     }
                     alertsCubit.setUsersAircraftUASID(uasId);
                     showSnackBar(context, 'Aircaft set as owned');
-                  } else {
-                    showSnackBar(context,
-                        'Cannot set aircraft as owned: Unknown UAS ID');
-                    alertsCubit.clearUsersAircraftUASID();
                   }
                 },
                 style: ButtonStyle(
