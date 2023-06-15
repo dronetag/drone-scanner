@@ -75,7 +75,7 @@ Future<bool> showLocationPermissionDialog(
             'Bluetooth devices.\n\n',
         children: [
           TextSpan(
-              text: 'On Android version 11 and newer, please choose the\n'),
+              text: 'On Android version 11 and newer, please choose\nthe '),
           TextSpan(
             text: '\"While using the app\"\n',
             style: TextStyle(fontWeight: FontWeight.w700),
@@ -84,8 +84,8 @@ Future<bool> showLocationPermissionDialog(
             text: 'option to enable scans in the background.\n\n',
           ),
           TextSpan(
-              text:
-                  'If you already denied the permission request, please go to the\n '),
+              text: 'If you already denied the permission request,'
+                  ' please go to\nthe '),
           TextSpan(
             text: '\"App settings\"\n',
             style: TextStyle(fontWeight: FontWeight.w700),

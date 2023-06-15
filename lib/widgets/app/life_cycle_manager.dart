@@ -44,14 +44,14 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
 
   @override
   void didChangeDependencies() {
+    // schedule init after showcase finishes
     SchedulerBinding.instance.addPostFrameCallback(
       (_) {
         final showcaseState = context.read<ShowcaseCubit>().state;
+        // if showcase was not init or is running, listen for finish
         if (showcaseState is ShowcaseStateNotInitialized ||
             showcaseState.showcaseActive) {
           showcaseSub = context.read<ShowcaseCubit>().stream.listen((event) {
-            print(
-                'taggs showcase sub $event active: ${event.showcaseActive} already played: ${event.showcaseAlreadyPlayed}');
             if (event is ShowcaseStateInitialized && !event.showcaseActive) {
               initPlatformState(context);
               showcaseSub?.cancel();
