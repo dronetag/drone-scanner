@@ -85,7 +85,7 @@ Future<bool> showLocationPermissionDialog(
           ),
           TextSpan(
               text:
-                  'If you already denied the permission request, please go to the '),
+                  'If you already denied the permission request, please go to the\n '),
           TextSpan(
             text: '\"App settings\"\n',
             style: TextStyle(fontWeight: FontWeight.w700),

@@ -9,30 +9,7 @@ import 'aircraft/selected_aircraft_cubit.dart';
 import 'opendroneid_cubit.dart';
 import 'sliders_cubit.dart';
 
-class ShowcaseState {
-  bool showcaseActive;
-  bool showcaseAlreadyPlayed;
-  // keep aircraft state and apply it after showcase ends
-  // so user wont lose data when starting showcase with data already gathered
-  AircraftState? aircraftState;
-
-  ShowcaseState(
-      {required this.showcaseActive,
-      required this.showcaseAlreadyPlayed,
-      this.aircraftState});
-
-  ShowcaseState copyWith({
-    bool? showcaseActive,
-    bool? showcaseAlreadyPlayed,
-    AircraftState? aircraftState,
-  }) =>
-      ShowcaseState(
-        showcaseActive: showcaseActive ?? this.showcaseActive,
-        showcaseAlreadyPlayed:
-            showcaseAlreadyPlayed ?? this.showcaseAlreadyPlayed,
-        aircraftState: aircraftState ?? this.aircraftState,
-      );
-}
+part 'showcase_state.dart';
 
 class ShowcaseCubit extends Cubit<ShowcaseState> {
   final GlobalKey rootKey = GlobalKey();
@@ -92,7 +69,8 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       'You can replay this showcase from the About page. Enjoy!';
   ShowcaseCubit()
       : super(
-          ShowcaseState(showcaseActive: false, showcaseAlreadyPlayed: false),
+          ShowcaseStateNotInitialized(
+              showcaseActive: false, showcaseAlreadyPlayed: false),
         );
 
   List<GlobalKey> get keys {
@@ -115,21 +93,27 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     ];
   }
 
-  Future<bool> displayShowcase() async {
+  Future<bool> shouldDisplayShowcase() async {
     final preferences = await SharedPreferences.getInstance();
     final showcasePlayed = preferences.getBool('showcasePlayed');
+    var shouldDisplayShowcase = false;
+    // emit initialized if was not read before
+    if (state is ShowcaseStateNotInitialized) {
+      emit(ShowcaseStateInitialized(
+        showcaseActive: showcasePlayed == null ? true : !showcasePlayed,
+        showcaseAlreadyPlayed: showcasePlayed ?? false,
+      ));
+    }
     if (showcasePlayed == null || !showcasePlayed) {
       await preferences.setBool('showcasePlayed', true);
-      emit(state.copyWith(showcaseAlreadyPlayed: true));
-      return true;
+      shouldDisplayShowcase = true;
     }
-    return false;
+    return shouldDisplayShowcase;
   }
 
   Future<void> restartShowcase() async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setBool('showcasePlayed', false);
-    emit(state.copyWith(showcaseActive: true));
   }
 
   Future<void> setShowcaseActive({
@@ -175,14 +159,16 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     );
   }
 
-  void onShowcaseFinish(BuildContext context) {
-    context.read<AircraftCubit>().removeShowcaseDummyPack();
+  void onShowcaseFinish(BuildContext context) async {
+    await context.read<AircraftCubit>().removeShowcaseDummyPack();
     if (state.aircraftState != null) {
       context.read<AircraftCubit>().applyState(state.aircraftState!);
     }
     final odidCubit = context.read<OpendroneIdCubit>();
-    odidCubit.start(odidCubit.state.usedTechnologies);
-    emit(state.copyWith(showcaseActive: false));
+    await odidCubit.start(odidCubit.state.usedTechnologies);
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setBool('showcasePlayed', true);
+    emit(state.copyWith(showcaseActive: false, showcaseAlreadyPlayed: true));
   }
 
   void onKeyComplete(

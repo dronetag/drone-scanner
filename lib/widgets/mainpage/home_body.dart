@@ -123,8 +123,7 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
     currentContext = context;
     // rebuild home page when showcase active changes
     context.read<ScreenCubit>().initScreen(context);
-    context.watch<ShowcaseCubit>().state.showcaseActive;
-    context.read<ShowcaseCubit>().displayShowcase().then((status) {
+    context.read<ShowcaseCubit>().shouldDisplayShowcase().then((status) {
       if (status) {
         context.read<ShowcaseCubit>().startShowcase(context);
       }

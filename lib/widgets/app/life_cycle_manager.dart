@@ -28,6 +28,7 @@ class LifeCycleManager extends StatefulWidget {
 
 class _LifeCycleManagerState extends State<LifeCycleManager>
     with WidgetsBindingObserver {
+  StreamSubscription? showcaseSub;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -43,8 +44,25 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
 
   @override
   void didChangeDependencies() {
-    SchedulerBinding.instance
-        .addPostFrameCallback((_) => initPlatformState(context));
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) {
+        final showcaseState = context.read<ShowcaseCubit>().state;
+        if (showcaseState is ShowcaseStateNotInitialized ||
+            showcaseState.showcaseActive) {
+          showcaseSub = context.read<ShowcaseCubit>().stream.listen((event) {
+            print(
+                'taggs showcase sub $event active: ${event.showcaseActive} already played: ${event.showcaseAlreadyPlayed}');
+            if (event is ShowcaseStateInitialized && !event.showcaseActive) {
+              initPlatformState(context);
+              showcaseSub?.cancel();
+            }
+          });
+          return;
+        } else {
+          initPlatformState(context);
+        }
+      },
+    );
 
     context.read<StandardsCubit>().fetchAndSetStandards();
     context.read<AircraftExpirationCubit>().fetchSavedSettings();
@@ -133,6 +151,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
               .setLocationEnabled(enabled: true);
         }
       }
+    } else if (locStatus.isGranted) {
+      initLocation();
+      if (!mounted) return;
+      await context.read<StandardsCubit>().setLocationEnabled(enabled: true);
     }
     final btStatus = await Permission.bluetooth.request();
     // scan makes sense just on android
@@ -254,6 +276,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    showcaseSub?.cancel();
     super.dispose();
   }
 
