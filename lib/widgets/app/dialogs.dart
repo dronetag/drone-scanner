@@ -43,9 +43,10 @@ void showAlertDialog(
   );
 }
 
-Future<bool> showLocationPermissionDialog(
-  BuildContext context,
-) async {
+Future<bool> showLocationPermissionDialog({
+  required BuildContext context,
+  required bool showWhileUsingPermissionExplanation,
+}) async {
   // set up the buttons
   final Widget cancelButton = TextButton(
     child: const Text('Cancel'),
@@ -74,15 +75,16 @@ Future<bool> showLocationPermissionDialog(
         text: 'Drone Scanner requires a location permission to scan for '
             'Bluetooth devices.\n\n',
         children: [
-          TextSpan(
-              text: 'On Android version 11 and newer, please choose\nthe '),
-          TextSpan(
-            text: '\"While using the app\"\n',
-            style: TextStyle(fontWeight: FontWeight.w700),
-          ),
-          TextSpan(
-            text: 'option to enable scans in the background.\n\n',
-          ),
+          if (showWhileUsingPermissionExplanation) ...[
+            TextSpan(text: 'Please choose\nthe '),
+            TextSpan(
+              text: '\"While using the app\"\n',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+            TextSpan(
+              text: 'option to enable scans in the background.\n\n',
+            ),
+          ],
           TextSpan(
               text: 'If you already denied the permission request,'
                   ' please go to\nthe '),

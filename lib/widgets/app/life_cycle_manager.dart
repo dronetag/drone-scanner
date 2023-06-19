@@ -132,11 +132,16 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   }
 
   Future<void> _initPermissionsAndroid(BuildContext context) async {
+    final version = await getAndroidVersionNumber();
+    if (version == null) return;
     final locStatus = await Permission.location.status;
     // show dialog before asking for location
     // when already granted or pernamently denied, request is not needed
     if (!(locStatus.isGranted || locStatus.isPermanentlyDenied)) {
-      if (await showLocationPermissionDialog(context)) {
+      if (await showLocationPermissionDialog(
+        context: context,
+        showWhileUsingPermissionExplanation: version >= 11,
+      )) {
         final status = await Permission.location.request();
         if (status.isDenied) {
           if (!mounted) return;
@@ -174,8 +179,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     if (!mounted) {
       return;
     }
-    final version = await getAndroidVersionNumber();
-    if (version == null) return;
+
     if ((version >= 13 &&
             await Permission.nearbyWifiDevices.request().isGranted) ||
         version < 13) {
