@@ -29,13 +29,13 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return LifeCycleManager(
-      child: MaterialApp(
-        theme: AppTheme.lightTheme,
-        themeMode: ThemeMode.light,
-        home: const MyHomePage(),
-        navigatorObservers: [NavigationHistoryObserver()],
+    return MaterialApp(
+      theme: AppTheme.lightTheme,
+      themeMode: ThemeMode.light,
+      home: LifeCycleManager(
+        child: const MyHomePage(),
       ),
+      navigatorObservers: [NavigationHistoryObserver()],
     );
   }
 }

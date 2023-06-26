@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:location/location.dart';
@@ -15,6 +16,7 @@ import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
+import 'dialogs.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget child;
@@ -26,6 +28,7 @@ class LifeCycleManager extends StatefulWidget {
 
 class _LifeCycleManagerState extends State<LifeCycleManager>
     with WidgetsBindingObserver {
+  StreamSubscription? showcaseSub;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -41,18 +44,37 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
 
   @override
   void didChangeDependencies() {
-    initPlatformState();
+    // schedule init after showcase finishes
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) {
+        final showcaseState = context.read<ShowcaseCubit>().state;
+        // if showcase was not init or is running, listen for finish
+        if (showcaseState is ShowcaseStateNotInitialized ||
+            showcaseState.showcaseActive) {
+          showcaseSub = context.read<ShowcaseCubit>().stream.listen((event) {
+            if (event is ShowcaseStateInitialized && !event.showcaseActive) {
+              initPlatformState(context);
+              showcaseSub?.cancel();
+            }
+          });
+          return;
+        } else {
+          initPlatformState(context);
+        }
+      },
+    );
+
     context.read<StandardsCubit>().fetchAndSetStandards();
     context.read<AircraftExpirationCubit>().fetchSavedSettings();
     context.read<SlidersCubit>().fetchAndSetPreference();
     super.didChangeDependencies();
   }
 
-  Future<void> initPlatformState() async {
+  Future<void> initPlatformState(BuildContext context) async {
     if (Platform.isAndroid) {
-      await _initPermissionsAndroid();
+      await _initPermissionsAndroid(context);
     } else if (Platform.isIOS) {
-      await _initPermissionsIOS();
+      await _initPermissionsIOS(context);
     } else {
       return;
     }
@@ -77,7 +99,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     }
   }
 
-  Future<void> _initPermissionsIOS() async {
+  Future<void> _initPermissionsIOS(BuildContext context) async {
     final btStatus = await Permission.bluetooth.request();
     if (btStatus.isGranted) {
       if (!mounted) return;
@@ -109,12 +131,32 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     }
   }
 
-  Future<void> _initPermissionsAndroid() async {
-    final status = await Permission.location.request();
-    if (status.isDenied) {
-      if (!mounted) return;
-      await context.read<StandardsCubit>().setLocationEnabled(enabled: false);
-    } else {
+  Future<void> _initPermissionsAndroid(BuildContext context) async {
+    final version = await getAndroidVersionNumber();
+    if (version == null) return;
+    final locStatus = await Permission.location.status;
+    // show dialog before asking for location
+    // when already granted or pernamently denied, request is not needed
+    if (!(locStatus.isGranted || locStatus.isPermanentlyDenied)) {
+      if (await showLocationPermissionDialog(
+        context: context,
+        showWhileUsingPermissionExplanation: version >= 11,
+      )) {
+        final status = await Permission.location.request();
+        if (status.isDenied) {
+          if (!mounted) return;
+          await context
+              .read<StandardsCubit>()
+              .setLocationEnabled(enabled: false);
+        } else {
+          initLocation();
+          if (!mounted) return;
+          await context
+              .read<StandardsCubit>()
+              .setLocationEnabled(enabled: true);
+        }
+      }
+    } else if (locStatus.isGranted) {
       initLocation();
       if (!mounted) return;
       await context.read<StandardsCubit>().setLocationEnabled(enabled: true);
@@ -137,8 +179,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     if (!mounted) {
       return;
     }
-    final version = await getAndroidVersionNumber();
-    if (version == null) return;
+
     if ((version >= 13 &&
             await Permission.nearbyWifiDevices.request().isGranted) ||
         version < 13) {
@@ -239,6 +280,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    showcaseSub?.cancel();
     super.dispose();
   }
 
