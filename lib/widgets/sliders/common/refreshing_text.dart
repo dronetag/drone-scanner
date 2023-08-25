@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 import '../../../bloc/aircraft/aircraft_expiration_cubit.dart';
@@ -11,7 +11,7 @@ import '../../../constants/colors.dart';
 
 class RefreshingText extends StatefulWidget {
   final String? leadingText;
-  final MessagePack pack;
+  final MessageContainer pack;
   final double scaleFactor;
   final bool short;
   final FontWeight fontWeight;

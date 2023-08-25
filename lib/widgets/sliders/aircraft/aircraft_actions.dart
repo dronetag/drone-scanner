@@ -101,9 +101,8 @@ void handleAction(BuildContext context, AircraftAction action) {
         context,
         'Are you sure you want to delete aircraft data?',
         () {
-          context
-              .read<ProximityAlertsCubit>()
-              .clearFoundDrone(messagePackList.last.basicIdMessage?.uasId);
+          context.read<ProximityAlertsCubit>().clearFoundDrone(
+              messagePackList.last.basicIdMessage?.uasID.toString());
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
           context.read<AircraftCubit>().deletePack(selectedMac);
           context.read<SelectedAircraftCubit>().unselectAircraft();
@@ -146,8 +145,8 @@ void handleAction(BuildContext context, AircraftAction action) {
       if (messagePackList.isNotEmpty && messagePackList.last.locationValid()) {
         context.read<MapCubit>().toggleLockOnPoint();
         context.read<MapCubit>().centerToLocDouble(
-              messagePackList.last.locationMessage!.latitude!,
-              messagePackList.last.locationMessage!.longitude!,
+              messagePackList.last.locationMessage!.location!.latitude,
+              messagePackList.last.locationMessage!.location!.longitude,
             );
       } else {
         if (zoneItem != null) {

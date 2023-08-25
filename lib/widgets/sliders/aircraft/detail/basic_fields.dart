@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
+import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../bloc/proximity_alerts_cubit.dart';
 import '../../../../constants/colors.dart';
@@ -16,28 +17,29 @@ import 'aircraft_label_text.dart';
 class BasicFields {
   static List<Widget> buildBasicFields(
     BuildContext context,
-    List<MessagePack> messagePackList,
+    List<MessageContainer> messagePackList,
   ) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final idTypeString = messagePackList.last.basicIdMessage?.idType.toString();
-    final uaTypeString = messagePackList.last.basicIdMessage?.uaType.toString();
+    final idTypeString =
+        messagePackList.last.basicIdMessage?.uasID.type.asString();
+    final uaTypeString = messagePackList.last.basicIdMessage?.uaType.asString();
+
     String? manufacturer;
     Image? logo;
     if (messagePackList.isNotEmpty &&
-        messagePackList.last.basicIdMessage != null) {
+        messagePackList.last.basicIdMessage?.uasID.asString() != null) {
       manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
-          messagePackList.last.basicIdMessage!.uasId);
+          messagePackList.last.basicIdMessage!.uasID.asString()!);
       logo = getManufacturerLogo(
           manufacturer: manufacturer, color: AppColors.lightGray);
     }
-    final idTypeLabel =
-        idTypeString?.replaceAll('IdType.', '').replaceAll('_', ' ');
-    final uaTypeLabel =
-        uaTypeString?.replaceAll('UaType.', '').replaceAll('_', ' ');
-    final uasId = messagePackList.last.basicIdMessage?.uasId;
-    final proximityAlertsActive =
-        context.watch<ProximityAlertsCubit>().state.isAlertActiveForId(uasId);
+
+    final uasId = messagePackList.last.basicIdMessage?.uasID;
+    final proximityAlertsActive = context
+        .watch<ProximityAlertsCubit>()
+        .state
+        .isAlertActiveForId(uasId?.asString());
 
     return [
       const Headline(text: 'AIRCRAFT'),
@@ -46,11 +48,11 @@ class BasicFields {
         children: [
           AircraftDetailField(
             headlineText: 'UA ID Type',
-            fieldText: idTypeLabel,
+            fieldText: idTypeString,
           ),
           AircraftDetailField(
             headlineText: 'UA Type',
-            fieldText: uaTypeLabel,
+            fieldText: uaTypeString,
           ),
         ],
       ),
@@ -65,9 +67,9 @@ class BasicFields {
                 child: logo != null && manufacturer != null
                     ? Text.rich(
                         TextSpan(
-                          text: messagePackList.last.basicIdMessage == null
-                              ? 'Unknown'
-                              : '${messagePackList.last.basicIdMessage?.uasId}',
+                          text: messagePackList.last.basicIdMessage?.uasID
+                                  .asString() ??
+                              'Unknown',
                           style: const TextStyle(
                             color: AppColors.lightGray,
                           ),
@@ -88,24 +90,25 @@ class BasicFields {
               ElevatedButton(
                 onPressed: () {
                   final alertsCubit = context.read<ProximityAlertsCubit>();
-                  if (uasId != null &&
-                      alertsCubit.state.usersAircraftUASID == uasId) {
+                  if (uasId?.asString() != null &&
+                      alertsCubit.state.usersAircraftUASID ==
+                          uasId!.asString()) {
                     alertsCubit.clearUsersAircraftUASID();
                     showSnackBar(context, 'Owned aircaft was unset');
                   } else {
-                    if (uasId == null) {
+                    if (uasId?.asString() == null) {
                       showSnackBar(context,
                           'Cannot set aircraft as owned: Unknown UAS ID');
                       return;
                     }
-                    final validationError = validateUASID(uasId);
+                    final validationError = validateUASID(uasId!.asString()!);
                     if (validationError != null) {
                       showSnackBar(
                           context, 'Error parsing UAS ID: $validationError');
                       FocusManager.instance.primaryFocus?.unfocus();
                       return;
                     }
-                    alertsCubit.setUsersAircraftUASID(uasId);
+                    alertsCubit.setUsersAircraftUASID(uasId.asString()!);
                     showSnackBar(context, 'Aircaft set as owned');
                   }
                 },
@@ -169,10 +172,10 @@ class BasicFields {
         ],
       ),
       if (messagePackList.last.selfIdMessage != null &&
-          messagePackList.last.selfIdMessage?.operationDescription != null)
+          messagePackList.last.selfIdMessage?.description != null)
         AircraftDetailField(
           headlineText: 'Operation Description',
-          fieldText: messagePackList.last.selfIdMessage!.operationDescription,
+          fieldText: messagePackList.last.selfIdMessage!.description,
         ),
       if (isLandscape) const SizedBox(),
     ];

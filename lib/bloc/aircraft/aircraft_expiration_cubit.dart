@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AircraftExpirationState {
@@ -54,7 +54,7 @@ class AircraftExpirationCubit extends Cubit<AircraftExpirationState> {
 
   Function(String)? get deleteCallback => _deleteCallback;
 
-  Future<void> setCleanOldPacks(Map<String, List<MessagePack>> packHistory,
+  Future<void> setCleanOldPacks(Map<String, List<MessageContainer>> packHistory,
       {required bool clean}) async {
     // persistently save this settings
     final preferences = await SharedPreferences.getInstance();
@@ -81,7 +81,7 @@ class AircraftExpirationCubit extends Cubit<AircraftExpirationState> {
   }
 
   Future<void> setcleanTimeSec(
-      double s, Map<String, List<MessagePack>> packHistory) async {
+      double s, Map<String, List<MessageContainer>> packHistory) async {
     // persistently save this setting
     final preferences = await SharedPreferences.getInstance();
     await preferences.setDouble('cleanTimeSec', s);
@@ -94,12 +94,12 @@ class AircraftExpirationCubit extends Cubit<AircraftExpirationState> {
     resetExpiryTimers(packHistory);
   }
 
-  void resetExpiryTimers(Map<String, List<MessagePack>> packHistory) {
+  void resetExpiryTimers(Map<String, List<MessageContainer>> packHistory) {
     var timers = state.expiryTimers;
     final toDelete = <String>[];
     packHistory.forEach((key, value) {
       final lastTStamp =
-          packHistory[key]!.last.locationMessage!.receivedTimestamp;
+          packHistory[key]!.last.lastUpdate.millisecondsSinceEpoch;
       final packAgeSec =
           (DateTime.now().millisecondsSinceEpoch - lastTStamp) / 1000;
       final duration = state.cleanTimeSec - packAgeSec.toInt();

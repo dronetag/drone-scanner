@@ -1,12 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
+import 'package:dart_opendroneid/src/types.dart';
+import 'package:dart_opendroneid/src/types/description_type.dart';
+import 'package:dart_opendroneid/src/types/operator_id_type.dart';
+import 'package:dart_opendroneid/src/types/uas_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
+import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,48 +35,49 @@ class AircraftCubit extends Cubit<AircraftState> {
   static const uiUpdateIntervalMs = 200;
 
   // data for showcase
-  final List<MessagePack> _packs = [
-    MessagePack(
+  // TODO: find better way
+  final List<MessageContainer> _packs = [
+    MessageContainer(
       macAddress: '00:00:5e:00:53:ae',
       lastUpdate: DateTime.now(),
-      locationMessage: pigeon.LocationMessage(
-        receivedTimestamp: DateTime.now().microsecondsSinceEpoch,
-        macAddress: '00:00:5e:00:53:ae',
-        latitude: 50.073058,
-        heightType: pigeon.HeightType.Ground,
+      lastMessageRssi: -100,
+      source: pigeon.MessageSource.BluetoothLegacy,
+      locationMessage: LocationMessage(
+        location: Location(latitude: 50.073058, longitude: 14.411540),
+        heightType: HeightType.aboveGroundLevel,
         direction: 1,
-        speedAccuracy: pigeon.SpeedAccuracy.meter_per_second_0_3,
-        verticalAccuracy: pigeon.VerticalAccuracy.meters_1,
-        horizontalAccuracy: pigeon.HorizontalAccuracy.kilometers_18_52,
-        speedHorizontal: 0.2,
-        speedVertical: 0.5,
-        longitude: 14.411540,
+        speedAccuracy: SpeedAccuracy.meterPerSecond_0_3,
+        verticalAccuracy: VerticalAccuracy.meters_1,
+        horizontalAccuracy: HorizontalAccuracy.kilometers_18_52,
+        horizontalSpeed: 0.2,
+        verticalSpeed: 0.5,
         height: 10,
-        status: pigeon.AircraftStatus.Airborne,
-        rssi: -100,
-        source: pigeon.MessageSource.BluetoothLegacy,
+        status: OperationalStatus.airborne,
+        protocolVersion: 1,
+        rawContent: Uint8List(0),
+        altitudePressure: null,
+        timestamp: Duration(seconds: 20),
+        altitudeGeodetic: null,
+        baroAltitudeAccuracy: VerticalAccuracy.meters_150,
+        timestampAccuracy: null,
       ),
-      basicIdMessage: pigeon.BasicIdMessage(
-        macAddress: '00:00:5e:00:53:ae',
-        receivedTimestamp: DateTime.now().microsecondsSinceEpoch,
-        uasId: '52426900931WDHW83',
-        idType: pigeon.IdType.UTM_Assigned_ID,
-        uaType: pigeon.UaType.Helicopter_or_Multirotor,
-        rssi: -90,
-        source: pigeon.MessageSource.BluetoothLegacy,
+      basicIdMessage: BasicIDMessage(
+        protocolVersion: 1,
+        uasID: SerialNumber(serialNumber: '52426900931WDHW83'),
+        rawContent: Uint8List(0),
+        uaType: UAType.helicopterOrMultirotor,
       ),
-      operatorIdMessage: pigeon.OperatorIdMessage(
-        macAddress: '00:00:5e:00:53:ae',
-        receivedTimestamp: DateTime.now().microsecondsSinceEpoch,
-        operatorId: 'FIN87astrdge12k8-xyz',
-        rssi: -60,
-        source: pigeon.MessageSource.BluetoothLegacy,
+      operatorIdMessage: OperatorIDMessage(
+        protocolVersion: 1,
+        operatorID: 'FIN87astrdge12k8-xyz',
+        rawContent: Uint8List(0),
+        operatorIDType: OperatorIDTypeOperatorID(),
       ),
-      selfIdMessage: pigeon.SelfIdMessage(
-        macAddress: '00:00:5e:00:53:ae',
-        receivedTimestamp: DateTime.now().microsecondsSinceEpoch,
-        descriptionType: 0,
-        operationDescription: 'This is very secret operation!',
+      selfIdMessage: SelfIDMessage(
+        protocolVersion: 1,
+        rawContent: Uint8List(0),
+        description: 'This is very secret operation!',
+        descriptionType: DescriptionTypeText(),
       ),
     ),
   ];
@@ -78,7 +85,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   AircraftCubit(this.expirationCubit)
       : super(
           AircraftState(
-            packHistory: <String, List<MessagePack>>{},
+            packHistory: <String, List<MessageContainer>>{},
             aircraftLabels: <String, String>{},
           ),
         ) {
@@ -162,19 +169,19 @@ class AircraftCubit extends Cubit<AircraftState> {
     await fetchSavedAircraftLabels();
   }
 
-  MessagePack? findByMacAddress(String mac) {
+  MessageContainer? findByMacAddress(String mac) {
     return state.packHistory()[mac]?.last;
   }
 
-  MessagePack? findByUasID(String uasId) {
+  MessageContainer? findByUasID(String uasId) {
     final packs = state.packHistory().values.firstWhere(
-        (packList) =>
-            packList.any((element) => element.basicIdMessage?.uasId == uasId),
+        (packList) => packList.any(
+            (element) => element.basicIdMessage?.uasID.asString() == uasId),
         orElse: () => []);
     return packs.isEmpty ? null : packs.last;
   }
 
-  List<MessagePack>? packsForDevice(String mac) {
+  List<MessageContainer>? packsForDevice(String mac) {
     return state.packHistory()[mac];
   }
 
@@ -187,11 +194,8 @@ class AircraftCubit extends Cubit<AircraftState> {
     );
   }
 
-  Future<void> addPack(MessagePack pack) async {
+  Future<void> addPack(MessageContainer pack) async {
     try {
-      // set received time
-      pack.locationMessage?.receivedTimestamp =
-          DateTime.now().millisecondsSinceEpoch;
       final data = state._packHistory;
       // new pack
       if (!data.containsKey(pack.macAddress)) {
@@ -218,11 +222,9 @@ class AircraftCubit extends Cubit<AircraftState> {
     return _packs[0].macAddress;
   }
 
-  Future<MessagePack?> addShowcaseDummyPack() async {
+  Future<MessageContainer?> addShowcaseDummyPack() async {
     await clear();
     final pack = _packs[0];
-    pack.locationMessage?.receivedTimestamp =
-        DateTime.now().millisecondsSinceEpoch;
     try {
       final data = state.packHistory();
       data[pack.macAddress] = [pack];
@@ -284,11 +286,12 @@ class AircraftCubit extends Cubit<AircraftState> {
     if (csv.isEmpty) return false;
 
     /// Write to a file
+    /// TODO: check work with uas id in dart-odid
     late final String uasId;
     if (state.packHistory()[mac]!.isNotEmpty &&
         state.packHistory()[mac]?.last.basicIdMessage != null &&
-        state.packHistory()[mac]?.last.basicIdMessage?.uasId != null) {
-      uasId = state.packHistory()[mac]!.last.basicIdMessage!.uasId;
+        state.packHistory()[mac]?.last.basicIdMessage?.uasID != null) {
+      uasId = state.packHistory()[mac]!.last.basicIdMessage!.uasID.toString();
     } else {
       uasId = mac;
     }

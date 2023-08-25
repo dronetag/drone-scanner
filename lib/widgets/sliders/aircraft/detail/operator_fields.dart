@@ -1,8 +1,9 @@
+import 'package:dart_opendroneid/src/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
-import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
+import 'package:flutter_opendroneid/models/message_container.dart';
+import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
@@ -17,25 +18,27 @@ import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
 
 class OperatorFields {
-  static bool locValid(pigeon.SystemDataMessage? sys) {
+  static bool locValid(SystemMessage? sys) {
     return sys != null &&
-        sys.operatorLatitude != INV_LAT &&
-        sys.operatorLongitude != INV_LON &&
-        sys.operatorLatitude <= MAX_LAT &&
-        sys.operatorLongitude <= MAX_LON &&
-        sys.operatorLatitude >= MIN_LAT &&
-        sys.operatorLongitude >= MIN_LON;
+        sys.operatorLocation?.latitude != null &&
+        sys.operatorLocation?.longitude != null &&
+        sys.operatorLocation!.latitude != INV_LAT &&
+        sys.operatorLocation!.longitude != INV_LON &&
+        sys.operatorLocation!.latitude <= MAX_LAT &&
+        sys.operatorLocation!.longitude <= MAX_LON &&
+        sys.operatorLocation!.latitude >= MIN_LAT &&
+        sys.operatorLocation!.longitude >= MIN_LON;
   }
 
   static List<Widget> buildOperatorFields(
     BuildContext context,
-    MessagePack pack,
+    MessageContainer pack,
   ) {
     final systemMessage = pack.systemDataMessage;
     final opMessage = pack.operatorIdMessage;
     String? countryCode;
     if (opMessage != null) {
-      countryCode = getCountryCode(opMessage.operatorId);
+      countryCode = getCountryCode(opMessage.operatorID);
     }
     double? distanceFromMe;
     late final String distanceText;
@@ -45,8 +48,8 @@ class OperatorFields {
         systemDataValid &&
         locValid(systemMessage)) {
       distanceFromMe = calculateDistance(
-        systemMessage.operatorLatitude,
-        systemMessage.operatorLongitude,
+        systemMessage.operatorLocation!.latitude,
+        systemMessage.operatorLocation!.longitude,
         context.read<MapCubit>().state.userLocation.latitude,
         context.read<MapCubit>().state.userLocation.longitude,
       );
@@ -59,8 +62,8 @@ class OperatorFields {
       distanceText = 'Unknown';
     }
     final locationText = systemMessage != null && locValid(systemMessage)
-        ? '${systemMessage.operatorLatitude.toStringAsFixed(4)}, '
-            '${systemMessage.operatorLongitude.toStringAsFixed(4)}'
+        ? '${systemMessage.operatorLocation!.latitude.toStringAsFixed(4)}, '
+            '${systemMessage.operatorLocation!.longitude.toStringAsFixed(4)}'
         : 'Unknown';
 
     Widget? flag;
@@ -72,8 +75,8 @@ class OperatorFields {
     }
     final opIdText = pack.operatorIDSet()
         ? flag == null
-            ? opMessage!.operatorId.removeNonAlphanumeric()
-            : ' ${opMessage!.operatorId.removeNonAlphanumeric()}'
+            ? opMessage!.operatorID.removeNonAlphanumeric()
+            : ' ${opMessage!.operatorID.removeNonAlphanumeric()}'
         : 'Unknown';
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -158,10 +161,12 @@ class OperatorFields {
               if (systemDataValid && locValid(systemMessage))
                 IconCenterToLoc(
                   onPressedCallback: () {
-                    context.read<MapCubit>().centerToLocDouble(
-                          systemMessage.operatorLatitude,
-                          systemMessage.operatorLongitude,
-                        );
+                    if (locValid(systemMessage)) {
+                      context.read<MapCubit>().centerToLocDouble(
+                            systemMessage.operatorLocation!.latitude,
+                            systemMessage.operatorLocation!.longitude,
+                          );
+                    }
                     context.read<SlidersCubit>().animatePanelToSnapPoint();
                   },
                 ),
@@ -174,16 +179,15 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Altitude Geod.',
             fieldText: systemDataValid &&
-                    systemMessage.operatorAltitudeGeo.toInt() != INV_ALT
-                ? '${systemMessage.operatorAltitudeGeo.toString()}  m'
+                    systemMessage.operatorAltitude != null &&
+                    systemMessage.operatorAltitude?.toInt() != INV_ALT
+                ? '${systemMessage.operatorAltitude?.toStringAsFixed(2)}  m'
                 : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Location Type',
             fieldText: systemDataValid
-                ? systemMessage.operatorLocationType
-                    .toString()
-                    .replaceAll('OperatorLocationType.', '')
+                ? systemMessage.operatorLocationType.asString()
                 : 'Unknown',
           ),
         ],
@@ -225,19 +229,13 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Category',
             fieldText: systemDataValid
-                ? systemMessage.category
-                    .toString()
-                    .replaceAll('AircraftCategory.', '')
-                    .replaceAll('_', ' ')
+                ? systemMessage.uaClassification.uaCategoryEuropeString()
                 : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Class',
             fieldText: systemDataValid
-                ? systemMessage.classValue
-                    .toString()
-                    .replaceAll('AircraftClass.', '')
-                    .replaceAll('_', ' ')
+                ? systemMessage.uaClassification.uaClassEuropeString()
                 : 'Unknown',
           ),
         ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
@@ -72,7 +72,7 @@ class AirspaceList extends StatelessWidget {
 
   List<Widget> buildListChildren(BuildContext context) {
     final state = context.watch<AircraftCubit>().state;
-    Map<String, List<MessagePack>> aircraft;
+    Map<String, List<MessageContainer>> aircraft;
     final userAircraftUasId =
         context.watch<ProximityAlertsCubit>().state.usersAircraftUASID;
     final userDronePositioning =
@@ -124,8 +124,8 @@ class AirspaceList extends StatelessWidget {
                     context.read<SelectedZoneCubit>().unselectZone();
                     if (value.last.locationValid()) {
                       context.read<MapCubit>().centerToLocDouble(
-                            value.last.locationMessage!.latitude!,
-                            value.last.locationMessage!.longitude!,
+                            value.last.locationMessage!.location!.latitude,
+                            value.last.locationMessage!.location!.longitude,
                           );
                     }
                     context.read<SlidersCubit>().setShowDroneDetail(show: true);

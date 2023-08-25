@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
+import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
@@ -33,7 +34,7 @@ class AircraftDetailHeader extends StatelessWidget {
     final selectedMac =
         context.watch<SelectedAircraftCubit>().state.selectedAircraftMac;
     // ignore: omit_local_variable_types
-    final List<MessagePack> messagePackList = selectedMac != null &&
+    final List<MessageContainer> messagePackList = selectedMac != null &&
             context.watch<AircraftCubit>().packsForDevice(
                       selectedMac,
                     ) !=
@@ -88,7 +89,7 @@ class AircraftDetailHeader extends StatelessWidget {
 
   Widget buildHeaderButtonsRow(
     BuildContext context,
-    List<MessagePack> messagePackList,
+    List<MessageContainer> messagePackList,
     ZoneItem? zoneItem,
   ) {
     final width = MediaQuery.of(context).size.width;
@@ -204,13 +205,14 @@ class AircraftDetailHeader extends StatelessWidget {
     );
   }
 
-  Widget buildTitle(BuildContext context, List<MessagePack> messagePackList) {
+  Widget buildTitle(
+      BuildContext context, List<MessageContainer> messagePackList) {
     String? manufacturer;
     Image? logo;
     if (messagePackList.isNotEmpty &&
-        messagePackList.last.basicIdMessage != null) {
+        messagePackList.last.basicIdMessage?.uasID.asString() != null) {
       manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
-          messagePackList.last.basicIdMessage!.uasId);
+          messagePackList.last.basicIdMessage!.uasID.asString()!);
       logo =
           getManufacturerLogo(manufacturer: manufacturer, color: Colors.white);
     }
@@ -227,8 +229,8 @@ class AircraftDetailHeader extends StatelessWidget {
               child: logo,
             ),
           TextSpan(
-            text:
-                messagePackList.last.basicIdMessage?.uasId ?? 'Unknown UAS ID',
+            text: messagePackList.last.basicIdMessage?.uasID.asString() ??
+                'Unknown UAS ID',
           ),
         ],
       ),
@@ -237,12 +239,12 @@ class AircraftDetailHeader extends StatelessWidget {
 
   Widget buildSubtitle(
     BuildContext context,
-    List<MessagePack> messagePackList,
+    List<MessageContainer> messagePackList,
   ) {
     String? countryCode;
     final opIdMessage = messagePackList.last.operatorIdMessage;
     if (opIdMessage != null) {
-      countryCode = getCountryCode(opIdMessage.operatorId);
+      countryCode = getCountryCode(opIdMessage.operatorID);
     }
     Widget? flag;
     if (context.read<StandardsCubit>().state.internetAvailable &&
@@ -253,8 +255,8 @@ class AircraftDetailHeader extends StatelessWidget {
     }
     final opIdText = messagePackList.last.operatorIDSet()
         ? flag == null
-            ? opIdMessage!.operatorId.removeNonAlphanumeric()
-            : ' ${opIdMessage!.operatorId.removeNonAlphanumeric()} '
+            ? opIdMessage!.operatorID.removeNonAlphanumeric()
+            : ' ${opIdMessage!.operatorID.removeNonAlphanumeric()} '
         : '';
     return Text.rich(
       TextSpan(
