@@ -12,16 +12,22 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.10.0"
 
+# # Uncomment to use flutter_opendroneid from local repository
+# dependency_overrides: 
+#   flutter_opendroneid:
+#     path: ../flutter-opendroneid
+
+
 dependencies:
   flutter:
     sdk: flutter
-  flutter_opendroneid: 0.12.0
+  flutter_opendroneid: 0.13.0
   flutter_local_notifications: ^14.0.0
-  another_flushbar: ^1.12.29
+  another_flushbar: ^1.12.30
   sprintf: "^6.0.0"
   google_api_headers: ^1.1.1
-  google_maps_flutter: ^2.1.1
-  location: ^4.2.0
+  google_maps_flutter: ^2.4.0
+  location: ^5.0.3
   http: ^0.13.4
   permission_handler: ^10.0.0
   flutter_spinbox: ^0.8.0
@@ -37,7 +43,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   package_info: ^2.0.2
   localstorage: ^4.0.0+1
-  sentry_flutter: ^6.9.1
+  sentry_flutter: ^7.9.0 
   rxdart: ^0.27.5
   vector_math: ^2.1.2
   wakelock: ^0.6.2
