@@ -43,7 +43,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
         ),
         value: AircraftAction.mapLock,
         enabled:
-            messagePackList.isNotEmpty && messagePackList.last.locationValid(),
+            messagePackList.isNotEmpty && messagePackList.last.locationValid,
         child: Text(
           context.read<MapCubit>().state.lockOnPoint
               ? 'Unfollow'
@@ -142,7 +142,7 @@ void handleAction(BuildContext context, AircraftAction action) {
         snackBarText = 'Map center lock on aircraft was disabled.';
       }
       // aircraft
-      if (messagePackList.isNotEmpty && messagePackList.last.locationValid()) {
+      if (messagePackList.isNotEmpty && messagePackList.last.locationValid) {
         context.read<MapCubit>().toggleLockOnPoint();
         context.read<MapCubit>().centerToLocDouble(
               messagePackList.last.locationMessage!.location!.latitude,

@@ -276,7 +276,7 @@ class MapCubit extends Cubit<GMapState> {
                 .packHistory()
                 .values
                 .where(
-                  (e) => e.isNotEmpty && e.last.locationValid(),
+                  (e) => e.isNotEmpty && e.last.locationValid,
                 )
                 .map(
                 (e) {
@@ -294,7 +294,7 @@ class MapCubit extends Cubit<GMapState> {
                   } else {
                     markerHue = gmap.BitmapDescriptor.hueBlue;
                   }
-                  var haslocation = (e.isNotEmpty && e.last.locationValid());
+                  var haslocation = (e.isNotEmpty && e.last.locationValid);
                   final uasIdText = e.last.basicIdMessage != null
                       ? e.last.basicIdMessage?.uasID.asString()
                       : 'Unknown UAS ID';
@@ -344,7 +344,7 @@ class MapCubit extends Cubit<GMapState> {
             .read<AircraftCubit>()
             .packsForDevice(selItemMac)!
             .last
-            .systemDataValid()) {
+            .systemDataValid) {
       final systemData = context
           .read<AircraftCubit>()
           .packsForDevice(selItemMac)!
@@ -410,7 +410,7 @@ class MapCubit extends Cubit<GMapState> {
         }
       }
     }
-    final polylineData = filteredList.where((e) => e.locationValid()).map(
+    final polylineData = filteredList.where((e) => e.locationValid).map(
       (e) {
         return gmap.LatLng(
           e.locationMessage!.location!.latitude,

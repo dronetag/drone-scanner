@@ -131,7 +131,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     aircraftCubit.addPack(pack);
     if (mapCubit.state.lockOnPoint &&
         pack.macAddress == selectedAircraftCubit.state.selectedAircraftMac &&
-        pack.locationValid()) {
+        pack.locationValid) {
       mapCubit.centerToLocDouble(
         pack.locationMessage!.location!.latitude,
         pack.locationMessage!.location!.longitude,

@@ -17,7 +17,7 @@ class ConnectionFields {
     BuildContext context,
     List<MessageContainer> messagePackList,
   ) {
-    final source = messagePackList.last.getPackSource();
+    final source = messagePackList.last.packSource;
     final sourceText = getSourceText(source);
     final sourceShortcut = getSourceShortcut(source);
 

@@ -245,7 +245,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
       state.proximityAlertActive &&
       pack.basicIdMessage?.uasID != null &&
       pack.basicIdMessage?.uasID.asString() == state.usersAircraftUASID &&
-      pack.locationValid();
+      pack.locationValid;
 
   // check distance, consider just packs not older than expiration time
   bool _isNearby(MessageContainer pack, double distance) =>
@@ -270,7 +270,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
         final uasId = value.last.basicIdMessage?.uasID;
         if (uasId != null &&
             uasId.asString() != state.usersAircraftUASID &&
-            value.last.locationValid()) {
+            value.last.locationValid) {
           // calc distance and convert to meters
           final distance = calculateDistance(
                   pack.locationMessage!.location!.latitude,

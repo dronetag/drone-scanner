@@ -37,10 +37,10 @@ class AircraftCard extends StatelessWidget {
     Widget? flag;
 
     if (context.read<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDSet() &&
+        messagePack.operatorIDSet &&
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDValid()) {
+        messagePack.operatorIDValid) {
       flag = getFlag(countryCode);
     }
     final uasIdText = messagePack.basicIdMessage != null &&
@@ -49,7 +49,7 @@ class AircraftCard extends StatelessWidget {
         : 'Unknown UAS ID';
     final opIdTrimmed =
         messagePack.operatorIdMessage?.operatorID.removeNonAlphanumeric();
-    final opIdText = messagePack.operatorIDSet()
+    final opIdText = messagePack.operatorIDSet
         ? flag == null
             ? opIdTrimmed
             : ' $opIdTrimmed'
@@ -78,7 +78,7 @@ class AircraftCard extends StatelessWidget {
               children: [
                 if (countryCode != null &&
                     flag != null &&
-                    messagePack.operatorIDSet())
+                    messagePack.operatorIDSet)
                   WidgetSpan(
                     child: flag,
                     alignment: PlaceholderAlignment.middle,
@@ -86,8 +86,8 @@ class AircraftCard extends StatelessWidget {
                 TextSpan(
                   text: opIdText,
                 ),
-                if (messagePack.operatorIDSet() &&
-                    !messagePack.operatorIDValid()) ...[
+                if (messagePack.operatorIDSet &&
+                    !messagePack.operatorIDValid) ...[
                   TextSpan(text: ' '),
                   WidgetSpan(
                     child: Icon(
@@ -168,7 +168,7 @@ class AircraftCard extends StatelessWidget {
       // to-do: icon according to basic.uaType
     }
     final rssi = messagePack.lastMessageRssi;
-    final source = messagePack.getPackSource();
+    final source = messagePack.packSource;
     final standardText = getSourceShortcut(source);
     final width = MediaQuery.of(context).size.width;
     final iconSize = Sizes.iconSize / 3 * 2;

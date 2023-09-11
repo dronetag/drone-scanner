@@ -70,10 +70,10 @@ class OperatorFields {
     if (countryCode != null &&
         context.read<StandardsCubit>().state.internetAvailable &&
         opMessage != null &&
-        pack.operatorIDValid()) {
+        pack.operatorIDValid) {
       flag = getFlag(countryCode);
     }
-    final opIdText = pack.operatorIDSet()
+    final opIdText = pack.operatorIDSet
         ? flag == null
             ? opMessage!.operatorID.removeNonAlphanumeric()
             : ' ${opMessage!.operatorID.removeNonAlphanumeric()}'
@@ -105,7 +105,7 @@ class OperatorFields {
               ),
             ),
           ),
-          if (pack.operatorIDSet() && !pack.operatorIDValid())
+          if (pack.operatorIDSet && !pack.operatorIDValid)
             AircraftDetailField(
               headlineText: '',
               child: Text.rich(
