@@ -12,6 +12,7 @@ class HelpCubit extends Cubit<HelpState> {
       'fields=*,displayed_questions.question.translations.*'
       ',displayed_questions.question.id';
   static const iphoneWifiQuestionIndex = 9;
+  static const droneRadarQuestionIndex = 39;
 
   HelpCubit()
       : super(

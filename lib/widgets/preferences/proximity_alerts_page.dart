@@ -263,8 +263,7 @@ class ProximityAlertsPage extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => const HelpPage(
-                  // TODO: connect to actual question
-                  highlightedQuestionIndex: HelpCubit.iphoneWifiQuestionIndex,
+                  highlightedQuestionIndex: HelpCubit.droneRadarQuestionIndex,
                 ),
                 settings: RouteSettings(
                   name: HelpPage.routeName,
