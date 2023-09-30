@@ -1,6 +1,6 @@
-import 'package:dart_opendroneid/src/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:vector_math/vector_math.dart';

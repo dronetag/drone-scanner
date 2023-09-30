@@ -1,6 +1,6 @@
-import 'package:dart_opendroneid/src/types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:flutter_opendroneid/utils/conversions.dart';

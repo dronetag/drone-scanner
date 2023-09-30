@@ -4,12 +4,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
-import 'package:dart_opendroneid/src/types.dart';
-import 'package:dart_opendroneid/src/types/description_type.dart';
-import 'package:dart_opendroneid/src/types/operator_id_type.dart';
-import 'package:dart_opendroneid/src/types/uas_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:flutter_opendroneid/utils/conversions.dart';
