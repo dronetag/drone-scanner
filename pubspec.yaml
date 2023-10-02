@@ -21,7 +21,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_opendroneid: 0.14.1
+  flutter_opendroneid: 0.15.0
   flutter_local_notifications: ^14.0.0
   another_flushbar: ^1.12.30
   sprintf: "^6.0.0"

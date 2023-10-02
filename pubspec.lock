@@ -133,10 +133,10 @@ packages:
     dependency: transitive
     description:
       name: dart_opendroneid
-      sha256: "501322902e6103b6be85562f11f740adfb473d78edc8b1dc19816d318e97e38b"
+      sha256: "86c874bca901a816c019820c020db33ccabd552980e334207380fd50c2f7bef8"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.6"
+    version: "0.3.0"
   dbus:
     dependency: transitive
     description:
@@ -250,10 +250,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_opendroneid
-      sha256: "729c0fb047e6c8fb5a65bf1513d8ad3e42d3b51ea0fc7be561af1de45c3cb8a4"
+      sha256: "225d6bdb3098a18c15f2341e76f8cb6ceb9b4714bb90050b3c6302039e8eb15e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.1"
+    version: "0.15.0"
   flutter_osm_interface:
     dependency: transitive
     description:
