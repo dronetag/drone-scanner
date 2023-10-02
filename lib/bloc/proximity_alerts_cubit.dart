@@ -243,7 +243,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   // check if owned drone has location, expected uasid
   bool _alertsReady(MessageContainer pack) =>
       state.proximityAlertActive &&
-      pack.basicIdMessage?.uasID != null &&
+      pack.basicIdMessage?.uasID.asString() != null &&
       pack.basicIdMessage?.uasID.asString() == state.usersAircraftUASID &&
       pack.locationValid;
 
@@ -268,8 +268,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     packHistory.forEach(
       (key, value) {
         final uasId = value.last.basicIdMessage?.uasID;
-        if (uasId != null &&
-            uasId.asString() != state.usersAircraftUASID &&
+        if (uasId?.asString() != null &&
+            uasId!.asString()! != state.usersAircraftUASID &&
             value.last.locationValid) {
           // calc distance and convert to meters
           final distance = calculateDistance(
@@ -281,11 +281,11 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           if (_isNearby(value.last, distance)) {
             // refresh if not marked as expired
             foundAlerts.add(
-              DroneNearbyAlert(uasId.toString(), distance,
+              DroneNearbyAlert(uasId.asString()!, distance,
                   state.expirationTimeSec, DateTime.now()),
             );
             // detected first time, show alert
-            if (state.foundAircraft[uasId] == null) {
+            if (state.foundAircraft[uasId.asString()] == null) {
               _alertEventController.add(AlertShow());
               if (state.sendNotifications) {
                 notificationService.addNotification(

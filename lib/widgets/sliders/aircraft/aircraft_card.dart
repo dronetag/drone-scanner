@@ -115,7 +115,7 @@ class AircraftCard extends StatelessWidget {
     final proximityAlertsActive = context
         .read<ProximityAlertsCubit>()
         .state
-        .isAlertActiveForId(messagePack.basicIdMessage?.uasID.toString());
+        .isAlertActiveForId(messagePack.basicIdMessage?.uasID.asString());
 
     final icon = status == OperationalStatus.none
         ? null

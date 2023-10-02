@@ -32,7 +32,6 @@ class AircraftCubit extends Cubit<AircraftState> {
   static const uiUpdateIntervalMs = 200;
 
   // data for showcase
-  // TODO: find better way
   final List<MessageContainer> _packs = [
     MessageContainer(
       macAddress: '00:00:5e:00:53:ae',
@@ -283,12 +282,11 @@ class AircraftCubit extends Cubit<AircraftState> {
     if (csv.isEmpty) return false;
 
     /// Write to a file
-    /// TODO: check work with uas id in dart-odid
     late final String uasId;
     if (state.packHistory()[mac]!.isNotEmpty &&
-        state.packHistory()[mac]?.last.basicIdMessage != null &&
-        state.packHistory()[mac]?.last.basicIdMessage?.uasID != null) {
-      uasId = state.packHistory()[mac]!.last.basicIdMessage!.uasID.toString();
+        state.packHistory()[mac]?.last.basicIdMessage?.uasID.asString() !=
+            null) {
+      uasId = state.packHistory()[mac]!.last.basicIdMessage!.uasID.asString()!;
     } else {
       uasId = mac;
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
@@ -102,7 +103,7 @@ void handleAction(BuildContext context, AircraftAction action) {
         'Are you sure you want to delete aircraft data?',
         () {
           context.read<ProximityAlertsCubit>().clearFoundDrone(
-              messagePackList.last.basicIdMessage?.uasID.toString());
+              messagePackList.last.basicIdMessage?.uasID.asString());
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
           context.read<AircraftCubit>().deletePack(selectedMac);
           context.read<SelectedAircraftCubit>().unselectAircraft();

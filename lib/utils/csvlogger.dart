@@ -58,16 +58,26 @@ class CSVLogger {
     'Class Value',
   ];
 
-  static void addEmptyFields(List<dynamic> list, int numFields) {
+  static List<List<dynamic>> createCSV(List<MessageContainer> list,
+      {bool includeHeader = true}) {
+    final csvData = <List<dynamic>>[];
+    if (includeHeader) csvData.add(commonHeader);
+    for (var i = 0; i < list.length; ++i) {
+      csvData.addAll(_logMessagesInContainer(list[i]));
+    }
+    return csvData;
+  }
+
+  static void _addEmptyFields(List<dynamic> list, int numFields) {
     for (var i = 0; i < numFields; ++i) {
       list.add('');
     }
   }
 
-  static String? logMessageSource(MessageSource? type) =>
+  static String? _logMessageSource(MessageSource? type) =>
       type?.toString().replaceAll('MessageSource.', '');
 
-  static List<dynamic> logLocationMessage(LocationMessage loc) {
+  static List<dynamic> _logLocationMessage(LocationMessage loc) {
     final row = <dynamic>[];
     row.add(loc.status.asString() ?? '');
     row.add(loc.location?.latitude ?? '');
@@ -88,34 +98,34 @@ class CSVLogger {
     row.add(verticalAccuracyToString(loc.baroAltitudeAccuracy));
     row.add(speedAccuracyToString(loc.speedAccuracy));
     row.add(timeAccuracyToString(loc.timestampAccuracy));
-    addEmptyFields(
+    _addEmptyFields(
       row,
       basicFields + operatorFields + authFields + selfIdFields + systemFields,
     );
     return row;
   }
 
-  static List<dynamic> logBasicMessage(BasicIDMessage message) {
+  static List<dynamic> _logBasicMessage(BasicIDMessage message) {
     final row = <dynamic>[];
-    addEmptyFields(row, locationFields);
+    _addEmptyFields(row, locationFields);
     row.add(message.uasID.type.asString() ?? '');
     row.add(message.uaType.asString() ?? '');
     row.add(message.uasID.asString());
-    addEmptyFields(
+    _addEmptyFields(
       row,
       operatorFields + authFields + selfIdFields + systemFields,
     );
     return row;
   }
 
-  static List<dynamic> logOperatorMessage(OperatorIDMessage message) {
+  static List<dynamic> _logOperatorMessage(OperatorIDMessage message) {
     final row = <dynamic>[];
-    addEmptyFields(row, locationFields + basicFields);
+    _addEmptyFields(row, locationFields + basicFields);
 
     row.add(message.operatorID != OPERATOR_ID_NOT_SET
         ? message.operatorID
         : 'Unknown');
-    addEmptyFields(
+    _addEmptyFields(
       row,
       authFields + selfIdFields + systemFields,
     );
@@ -123,9 +133,9 @@ class CSVLogger {
   }
 
   // TODO: implement
-  static List<dynamic> logAuthMessage(AuthMessage message) {
+  static List<dynamic> _logAuthMessage(AuthMessage message) {
     final row = <dynamic>[];
-    addEmptyFields(
+    _addEmptyFields(
         row,
         locationFields +
             basicFields +
@@ -135,22 +145,22 @@ class CSVLogger {
     return row;
   }
 
-  static List<dynamic> logSelfIdMessage(SelfIDMessage message) {
+  static List<dynamic> _logSelfIdMessage(SelfIDMessage message) {
     final row = <dynamic>[];
-    addEmptyFields(
+    _addEmptyFields(
         row, locationFields + basicFields + operatorFields + authFields);
     row.add(message.descriptionType);
     row.add(message.description);
-    addEmptyFields(
+    _addEmptyFields(
       row,
       systemFields,
     );
     return row;
   }
 
-  static List<dynamic> logSystemDataMessage(SystemMessage message) {
+  static List<dynamic> _logSystemDataMessage(SystemMessage message) {
     final row = <dynamic>[];
-    addEmptyFields(
+    _addEmptyFields(
         row,
         locationFields +
             basicFields +
@@ -179,54 +189,44 @@ class CSVLogger {
       MessageContainer container, String messageType) {
     final row = <dynamic>[];
     row.add(messageType);
-    row.add(logMessageSource(container.source) ?? 'Unknown');
+    row.add(_logMessageSource(container.source) ?? 'Unknown');
     row.add(container.lastUpdate);
     row.add(container.macAddress);
     return row;
   }
 
-  static List<List<dynamic>> logMessagesInContainer(
+  static List<List<dynamic>> _logMessagesInContainer(
       MessageContainer container) {
     final csvData = <List<dynamic>>[];
     if (container.locationMessage != null) {
       final row = logMetadata(container, 'Location');
-      row.addAll(logLocationMessage(container.locationMessage!));
+      row.addAll(_logLocationMessage(container.locationMessage!));
       csvData.add(row);
     }
     if (container.basicIdMessage != null) {
       final row = logMetadata(container, 'Basic ID');
-      row.addAll(logBasicMessage(container.basicIdMessage!));
+      row.addAll(_logBasicMessage(container.basicIdMessage!));
       csvData.add(row);
     }
     if (container.operatorIdMessage != null) {
       final row = logMetadata(container, 'Operator ID');
-      row.addAll(logOperatorMessage(container.operatorIdMessage!));
+      row.addAll(_logOperatorMessage(container.operatorIdMessage!));
       csvData.add(row);
     }
     if (container.selfIdMessage != null) {
       final row = logMetadata(container, 'Self ID');
-      row.addAll(logSelfIdMessage(container.selfIdMessage!));
+      row.addAll(_logSelfIdMessage(container.selfIdMessage!));
       csvData.add(row);
     }
     if (container.authenticationMessage != null) {
       final row = logMetadata(container, 'Authentication');
-      row.addAll(logAuthMessage(container.authenticationMessage!));
+      row.addAll(_logAuthMessage(container.authenticationMessage!));
       csvData.add(row);
     }
     if (container.systemDataMessage != null) {
       final row = logMetadata(container, 'System Data');
-      row.addAll(logSystemDataMessage(container.systemDataMessage!));
+      row.addAll(_logSystemDataMessage(container.systemDataMessage!));
       csvData.add(row);
-    }
-    return csvData;
-  }
-
-  static List<List<dynamic>> createCSV(List<MessageContainer> list,
-      {bool includeHeader = true}) {
-    final csvData = <List<dynamic>>[];
-    if (includeHeader) csvData.add(commonHeader);
-    for (var i = 0; i < list.length; ++i) {
-      csvData.addAll(logMessagesInContainer(list[i]));
     }
     return csvData;
   }

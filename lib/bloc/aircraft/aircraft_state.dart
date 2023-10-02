@@ -41,11 +41,15 @@ class AircraftState {
         _packHistory.entries.toList()
           ..sort(
             (e1, e2) {
-              if (e1.value.last.basicIdMessage == null) return 1;
-              if (e2.value.last.basicIdMessage == null) return -1;
+              if (e1.value.last.basicIdMessage?.uasID.asString() == null) {
+                return 1;
+              }
+              if (e2.value.last.basicIdMessage?.uasID.asString() == null) {
+                return -1;
+              }
               return e1.value.last.basicIdMessage!.uasID
                   .toString()
-                  .compareTo(e2.value.last.basicIdMessage!.uasID.toString());
+                  .compareTo(e2.value.last.basicIdMessage!.uasID.asString()!);
             },
           ),
       ),
