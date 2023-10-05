@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
@@ -43,7 +44,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
         ),
         value: AircraftAction.mapLock,
         enabled:
-            messagePackList.isNotEmpty && messagePackList.last.locationValid(),
+            messagePackList.isNotEmpty && messagePackList.last.locationValid,
         child: Text(
           context.read<MapCubit>().state.lockOnPoint
               ? 'Unfollow'
@@ -101,9 +102,8 @@ void handleAction(BuildContext context, AircraftAction action) {
         context,
         'Are you sure you want to delete aircraft data?',
         () {
-          context
-              .read<ProximityAlertsCubit>()
-              .clearFoundDrone(messagePackList.last.basicIdMessage?.uasId);
+          context.read<ProximityAlertsCubit>().clearFoundDrone(
+              messagePackList.last.basicIdMessage?.uasID.asString());
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
           context.read<AircraftCubit>().deletePack(selectedMac);
           context.read<SelectedAircraftCubit>().unselectAircraft();
@@ -143,11 +143,11 @@ void handleAction(BuildContext context, AircraftAction action) {
         snackBarText = 'Map center lock on aircraft was disabled.';
       }
       // aircraft
-      if (messagePackList.isNotEmpty && messagePackList.last.locationValid()) {
+      if (messagePackList.isNotEmpty && messagePackList.last.locationValid) {
         context.read<MapCubit>().toggleLockOnPoint();
         context.read<MapCubit>().centerToLocDouble(
-              messagePackList.last.locationMessage!.latitude!,
-              messagePackList.last.locationMessage!.longitude!,
+              messagePackList.last.locationMessage!.location!.latitude,
+              messagePackList.last.locationMessage!.location!.longitude,
             );
       } else {
         if (zoneItem != null) {

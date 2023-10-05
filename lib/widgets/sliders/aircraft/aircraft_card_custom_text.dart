@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
@@ -8,7 +8,7 @@ import '../../../bloc/standards_cubit.dart';
 import '../../../utils/utils.dart';
 
 class AircraftCardCustomText extends StatelessWidget {
-  final MessagePack messagePack;
+  final MessageContainer messagePack;
   const AircraftCardCustomText({
     Key? key,
     required this.messagePack,
@@ -28,10 +28,10 @@ class AircraftCardCustomText extends StatelessWidget {
     if (preference == ListFieldPreference.distance) {
       if (context.read<StandardsCubit>().state.locationEnabled &&
           loc != null &&
-          messagePack.locationValid()) {
+          messagePack.locationValid) {
         distanceFromMe = calculateDistance(
-          loc.latitude!,
-          loc.longitude!,
+          loc.location!.latitude,
+          loc.location!.longitude,
           context.read<MapCubit>().state.userLocation.latitude,
           context.read<MapCubit>().state.userLocation.longitude,
         );
@@ -43,20 +43,20 @@ class AircraftCardCustomText extends StatelessWidget {
         }
       }
     } else if (preference == ListFieldPreference.location) {
-      if (loc == null || !messagePack.locationValid()) {
+      if (loc == null || !messagePack.locationValid) {
         return emptyText;
       } else {
-        final latText = loc.latitude!.toStringAsFixed(6);
-        final longText = loc.longitude!.toStringAsFixed(6);
+        final latText = loc.location!.latitude.toStringAsFixed(6);
+        final longText = loc.location!.longitude.toStringAsFixed(6);
         text = '$latText, $longText';
       }
     } else if (preference == ListFieldPreference.speed) {
       if (loc == null ||
-          loc.speedHorizontal == null ||
-          loc.speedVertical == null) {
+          loc.horizontalSpeed == null ||
+          loc.verticalSpeed == null) {
         return emptyText;
       } else {
-        text = '${loc.speedHorizontal} m/s, ${loc.speedVertical} m/s';
+        text = '${loc.horizontalSpeed} m/s, ${loc.verticalSpeed} m/s';
       }
     }
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
-import 'package:flutter_opendroneid/pigeon.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
+import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 import '../../constants/theme_map.dart';
@@ -275,7 +276,7 @@ class MapCubit extends Cubit<GMapState> {
                 .packHistory()
                 .values
                 .where(
-                  (e) => e.isNotEmpty && e.last.locationValid(),
+                  (e) => e.isNotEmpty && e.last.locationValid,
                 )
                 .map(
                 (e) {
@@ -283,17 +284,19 @@ class MapCubit extends Cubit<GMapState> {
                   if (selItemMac != null && e.last.macAddress == selItemMac) {
                     markerHue = gmap.BitmapDescriptor.hueRed;
                   } else if (userAircraftUasId != null &&
-                      e.last.basicIdMessage?.uasId == userAircraftUasId) {
+                      e.last.basicIdMessage?.uasID.asString() ==
+                          userAircraftUasId) {
                     markerHue = 110;
                   } else if (e.last.locationMessage == null ||
-                      e.last.locationMessage?.status == AircraftStatus.Ground) {
+                      e.last.locationMessage?.status ==
+                          OperationalStatus.ground) {
                     markerHue = 195;
                   } else {
                     markerHue = gmap.BitmapDescriptor.hueBlue;
                   }
-                  var haslocation = (e.isNotEmpty && e.last.locationValid());
+                  var haslocation = (e.isNotEmpty && e.last.locationValid);
                   final uasIdText = e.last.basicIdMessage != null
-                      ? e.last.basicIdMessage?.uasId
+                      ? e.last.basicIdMessage?.uasID.asString()
                       : 'Unknown UAS ID';
                   final givenLabel = context
                       .read<AircraftCubit>()
@@ -307,8 +310,8 @@ class MapCubit extends Cubit<GMapState> {
                     ),
                     position: haslocation
                         ? gmap.LatLng(
-                            e.last.locationMessage!.latitude!,
-                            e.last.locationMessage!.longitude!,
+                            e.last.locationMessage!.location!.latitude,
+                            e.last.locationMessage!.location!.longitude,
                           )
                         : const gmap.LatLng(0, 0),
                     onTap: () {
@@ -318,8 +321,8 @@ class MapCubit extends Cubit<GMapState> {
                       context.read<SelectedZoneCubit>().unselectZone();
                       if (haslocation) {
                         context.read<MapCubit>().centerToLocDouble(
-                              e.last.locationMessage!.latitude!,
-                              e.last.locationMessage!.longitude!,
+                              e.last.locationMessage!.location!.latitude,
+                              e.last.locationMessage!.location!.longitude,
                             );
                       }
                       context
@@ -341,7 +344,7 @@ class MapCubit extends Cubit<GMapState> {
             .read<AircraftCubit>()
             .packsForDevice(selItemMac)!
             .last
-            .systemDataValid()) {
+            .systemDataValid) {
       final systemData = context
           .read<AircraftCubit>()
           .packsForDevice(selItemMac)!
@@ -358,8 +361,8 @@ class MapCubit extends Cubit<GMapState> {
               gmap.BitmapDescriptor.hueYellow,
             ),
             position: gmap.LatLng(
-              systemData.operatorLatitude,
-              systemData.operatorLongitude,
+              systemData.operatorLocation!.latitude,
+              systemData.operatorLocation!.longitude,
             ),
           ),
         );
@@ -389,12 +392,12 @@ class MapCubit extends Cubit<GMapState> {
   Set<gmap.Polyline> buildPolylines(BuildContext context, String? selItemMac) {
     // ignore: omit_local_variable_types
     final Set<gmap.Polyline> polylines = {};
-    List<MessagePack>? selItemHistory;
+    List<MessageContainer>? selItemHistory;
     if (selItemMac == null) return {};
     selItemHistory =
         context.read<AircraftCubit>().state.packHistory()[selItemMac];
     if (selItemHistory == null) return {};
-    var filteredList = <MessagePack>[];
+    var filteredList = <MessageContainer>[];
     // calc portion of history that will be filtered out
     final skip = (selItemHistory.length / maxPolylinePoints);
 
@@ -407,11 +410,11 @@ class MapCubit extends Cubit<GMapState> {
         }
       }
     }
-    final polylineData = filteredList.where((e) => e.locationValid()).map(
+    final polylineData = filteredList.where((e) => e.locationValid).map(
       (e) {
         return gmap.LatLng(
-          e.locationMessage!.latitude!,
-          e.locationMessage!.longitude!,
+          e.locationMessage!.location!.latitude,
+          e.locationMessage!.location!.longitude,
         );
       },
     ).toList();

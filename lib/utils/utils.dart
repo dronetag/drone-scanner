@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
@@ -64,7 +65,7 @@ String getSourceShortcut(MessageSource source) {
 String horizontalAccuracyToString(HorizontalAccuracy? acc) {
   if (acc == null) return 'Unknown';
   switch (acc) {
-    case HorizontalAccuracy.Unknown:
+    case HorizontalAccuracy.unknown:
       return 'Unknown';
     case HorizontalAccuracy.meters_30:
       return '< 30 m';
@@ -116,25 +117,25 @@ String verticalAccuracyToString(VerticalAccuracy? acc) {
 String speedAccuracyToString(SpeedAccuracy? acc) {
   if (acc == null) return 'Unknown';
   switch (acc) {
-    case SpeedAccuracy.meter_per_second_10:
+    case SpeedAccuracy.meterPerSecond_10:
       return '< 10 m/s';
-    case SpeedAccuracy.meter_per_second_3:
+    case SpeedAccuracy.meterPerSecond_3:
       return '< 3 m/s';
-    case SpeedAccuracy.meter_per_second_1:
+    case SpeedAccuracy.meterPerSecond_1:
       return '< 1 m/s';
-    case SpeedAccuracy.meter_per_second_0_3:
+    case SpeedAccuracy.meterPerSecond_0_3:
       return '< 0.3 m/s';
     default:
       return 'Unknown';
   }
 }
 
-String timeAccuracyToString(double? acc) {
+String timeAccuracyToString(Duration? acc) {
   if (acc == null) return 'Unknown';
-  if (acc == 0) {
+  if (acc.inMilliseconds == 0) {
     return 'Unknown';
   } else {
-    return sprintf('<= %1.1f s', [acc]);
+    return sprintf('<= %1.1f s', [acc.inMilliseconds / 1000.0]);
   }
 }
 

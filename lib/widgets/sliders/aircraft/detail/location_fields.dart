@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
-import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
+import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:vector_math/vector_math.dart';
 
 import '../../../../bloc/map/map_cubit.dart';
@@ -15,21 +16,21 @@ import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
 
 class LocationFields {
-  static bool locValid(pigeon.LocationMessage? loc) {
+  static bool locValid(LocationMessage? loc) {
     return loc != null &&
-        loc.latitude != null &&
-        loc.longitude != null &&
-        loc.latitude != INV_LAT &&
-        loc.longitude != INV_LON &&
-        loc.latitude! <= MAX_LAT &&
-        loc.longitude! <= MAX_LON &&
-        loc.latitude! >= MIN_LAT &&
-        loc.longitude! >= MIN_LON;
+        loc.location?.latitude != null &&
+        loc.location?.longitude != null &&
+        loc.location!.latitude != INV_LAT &&
+        loc.location!.longitude != INV_LON &&
+        loc.location!.latitude <= MAX_LAT &&
+        loc.location!.longitude <= MAX_LON &&
+        loc.location!.latitude >= MIN_LAT &&
+        loc.location!.longitude >= MIN_LON;
   }
 
   static List<Widget> buildLocationFields(
     BuildContext context,
-    pigeon.LocationMessage? loc,
+    LocationMessage? loc,
   ) {
     double? distanceFromMe;
     late final String distanceText;
@@ -38,8 +39,8 @@ class LocationFields {
         loc != null &&
         locValid(loc)) {
       distanceFromMe = calculateDistance(
-        loc.latitude!,
-        loc.longitude!,
+        loc.location!.latitude,
+        loc.location!.longitude,
         context.read<MapCubit>().state.userLocation.latitude,
         context.read<MapCubit>().state.userLocation.longitude,
       );
@@ -58,18 +59,18 @@ class LocationFields {
       if (isLandscape) const SizedBox(),
       AircraftDetailRow(
         children: [
-          if (loc != null && loc.status != null)
+          if (loc != null)
             AircraftDetailField(
               headlineText: 'Status',
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (loc.status != pigeon.AircraftStatus.Undeclared) ...[
+                  if (loc.status != OperationalStatus.none) ...[
                     Icon(
-                      loc.status == pigeon.AircraftStatus.Airborne
+                      loc.status == OperationalStatus.airborne
                           ? Icons.flight_takeoff
                           : Icons.flight_land,
-                      color: loc.status == pigeon.AircraftStatus.Airborne
+                      color: loc.status == OperationalStatus.airborne
                           ? AppColors.highlightBlue
                           : AppColors.dark,
                     ),
@@ -78,9 +79,9 @@ class LocationFields {
                     ),
                   ],
                   Text(
-                    _getStatusText(loc),
+                    loc.status.asString() ?? 'Unknown',
                     style: TextStyle(
-                      color: loc.status == pigeon.AircraftStatus.Airborne
+                      color: loc.status == OperationalStatus.airborne
                           ? AppColors.highlightBlue
                           : AppColors.detailFieldColor,
                     ),
@@ -95,26 +96,24 @@ class LocationFields {
               children: [
                 if (loc != null &&
                     loc.direction != null &&
-                    loc.direction != INV_DIR)
+                    loc.direction != INV_DIR) ...[
                   Transform.rotate(
-                    angle: radians(loc.direction!),
+                    angle: radians(loc.direction!.toDouble()),
                     child: const Icon(
                       Icons.navigation_sharp,
                       size: 20,
                     ),
                   ),
-                if (loc != null &&
-                    loc.direction != null &&
-                    loc.direction != INV_DIR)
                   const SizedBox(
                     width: 10,
                   ),
-                Text(
-                  directionAsString(loc?.direction),
-                  style: const TextStyle(
-                    color: AppColors.detailFieldColor,
+                  Text(
+                    directionAsString(loc.direction!.toDouble()),
+                    style: const TextStyle(
+                      color: AppColors.detailFieldColor,
+                    ),
                   ),
-                ),
+                ]
               ],
             ),
           ),
@@ -142,8 +141,8 @@ class LocationFields {
                   ),
                   Text(
                     loc != null && locValid(loc)
-                        ? '${loc.latitude?.toStringAsFixed(4)}, '
-                            '${loc.longitude?.toStringAsFixed(4)}'
+                        ? '${loc.location!.latitude.toStringAsFixed(4)}, '
+                            '${loc.location!.longitude.toStringAsFixed(4)}'
                         : 'Unknown',
                     style: const TextStyle(
                       color: AppColors.detailFieldColor,
@@ -156,8 +155,8 @@ class LocationFields {
                   onPressedCallback: () {
                     if (loc != null && locValid(loc)) {
                       context.read<MapCubit>().centerToLocDouble(
-                            loc.latitude!,
-                            loc.longitude!,
+                            loc.location!.latitude,
+                            loc.location!.longitude,
                           );
                     }
                     context.read<SlidersCubit>().animatePanelToSnapPoint();
@@ -174,11 +173,10 @@ class LocationFields {
               headlineText: 'Height',
               fieldText: getAltitudeAsString(loc.height),
             ),
-          if (loc != null && loc.heightType != null)
+          if (loc != null)
             AircraftDetailField(
               headlineText: 'Height Type',
-              fieldText:
-                  loc.heightType.toString().replaceAll('HeightType.', ''),
+              fieldText: loc.heightType.asString(),
             ),
         ],
       ),
@@ -199,11 +197,11 @@ class LocationFields {
           if (loc != null)
             AircraftDetailField(
                 headlineText: 'Horizontal Speed',
-                fieldText: getSpeedHorAsString(loc.speedHorizontal)),
+                fieldText: getSpeedHorAsString(loc.horizontalSpeed)),
           if (loc != null)
             AircraftDetailField(
               headlineText: 'Vertical Speed',
-              fieldText: getSpeedVertAsString(loc.speedVertical),
+              fieldText: getSpeedVertAsString(loc.verticalSpeed),
             ),
         ],
       ),
@@ -227,24 +225,14 @@ class LocationFields {
           ),
           AircraftDetailField(
             headlineText: 'Baro Accuracy',
-            fieldText: verticalAccuracyToString(loc?.baroAccuracy),
+            fieldText: verticalAccuracyToString(loc?.baroAltitudeAccuracy),
           ),
         ],
       ),
       AircraftDetailField(
         headlineText: 'Time Accuracy',
-        fieldText: timeAccuracyToString(loc?.timeAccuracy),
+        fieldText: timeAccuracyToString(loc?.timestampAccuracy),
       ),
     ];
-  }
-
-  static String _getStatusText(pigeon.LocationMessage? loc) {
-    if (loc == null) return 'Unknown';
-    final status = loc.status;
-    return status == pigeon.AircraftStatus.Ground
-        ? 'Grounded'
-        : status == pigeon.AircraftStatus.Airborne
-            ? 'Airborne'
-            : 'Unknown';
   }
 }

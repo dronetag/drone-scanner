@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 
 import '../../../../bloc/standards_cubit.dart';
@@ -15,9 +15,9 @@ import 'aircraft_detail_row.dart';
 class ConnectionFields {
   static List<Widget> buildConnectionFields(
     BuildContext context,
-    List<MessagePack> messagePackList,
+    List<MessageContainer> messagePackList,
   ) {
-    final source = messagePackList.last.getPackSource();
+    final source = messagePackList.last.packSource;
     final sourceText = getSourceText(source);
     final sourceShortcut = getSourceShortcut(source);
 

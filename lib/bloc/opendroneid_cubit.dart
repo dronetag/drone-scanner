@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/models/permissions_missing_exception.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:rxdart/rxdart.dart';
@@ -127,14 +127,14 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     );
   }
 
-  void scanCallback(MessagePack pack) {
+  void scanCallback(MessageContainer pack) {
     aircraftCubit.addPack(pack);
     if (mapCubit.state.lockOnPoint &&
         pack.macAddress == selectedAircraftCubit.state.selectedAircraftMac &&
-        pack.locationValid()) {
+        pack.locationValid) {
       mapCubit.centerToLocDouble(
-        pack.locationMessage!.latitude!,
-        pack.locationMessage!.longitude!,
+        pack.locationMessage!.location!.latitude,
+        pack.locationMessage!.location!.longitude,
       );
     }
   }

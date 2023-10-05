@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
+import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../extensions/string_extensions.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
@@ -15,7 +17,7 @@ import 'aircraft_card_custom_text.dart';
 import 'aircraft_card_title.dart';
 
 class AircraftCard extends StatelessWidget {
-  final MessagePack messagePack;
+  final MessageContainer messagePack;
 
   const AircraftCard({
     Key? key,
@@ -26,7 +28,7 @@ class AircraftCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String? countryCode;
     if (messagePack.operatorIdMessage != null) {
-      countryCode = getCountryCode(messagePack.operatorIdMessage!.operatorId);
+      countryCode = getCountryCode(messagePack.operatorIdMessage!.operatorID);
     }
 
     final givenLabel =
@@ -35,19 +37,19 @@ class AircraftCard extends StatelessWidget {
     Widget? flag;
 
     if (context.read<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDSet() &&
+        messagePack.operatorIDSet &&
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDValid()) {
+        messagePack.operatorIDValid) {
       flag = getFlag(countryCode);
     }
     final uasIdText = messagePack.basicIdMessage != null &&
-            messagePack.basicIdMessage?.uasId != ''
-        ? messagePack.basicIdMessage!.uasId
+            messagePack.basicIdMessage?.uasID.asString() != null
+        ? messagePack.basicIdMessage!.uasID.asString()!
         : 'Unknown UAS ID';
     final opIdTrimmed =
-        messagePack.operatorIdMessage?.operatorId.removeNonAlphanumeric();
-    final opIdText = messagePack.operatorIDSet()
+        messagePack.operatorIdMessage?.operatorID.removeNonAlphanumeric();
+    final opIdText = messagePack.operatorIDSet
         ? flag == null
             ? opIdTrimmed
             : ' $opIdTrimmed'
@@ -76,7 +78,7 @@ class AircraftCard extends StatelessWidget {
               children: [
                 if (countryCode != null &&
                     flag != null &&
-                    messagePack.operatorIDSet())
+                    messagePack.operatorIDSet)
                   WidgetSpan(
                     child: flag,
                     alignment: PlaceholderAlignment.middle,
@@ -84,8 +86,8 @@ class AircraftCard extends StatelessWidget {
                 TextSpan(
                   text: opIdText,
                 ),
-                if (messagePack.operatorIDSet() &&
-                    !messagePack.operatorIDValid()) ...[
+                if (messagePack.operatorIDSet &&
+                    !messagePack.operatorIDValid) ...[
                   TextSpan(text: ' '),
                   WidgetSpan(
                     child: Icon(
@@ -113,12 +115,12 @@ class AircraftCard extends StatelessWidget {
     final proximityAlertsActive = context
         .read<ProximityAlertsCubit>()
         .state
-        .isAlertActiveForId(messagePack.basicIdMessage?.uasId);
+        .isAlertActiveForId(messagePack.basicIdMessage?.uasID.asString());
 
-    final icon = status == pigeon.AircraftStatus.Undeclared
+    final icon = status == OperationalStatus.none
         ? null
         : Image.asset(
-            status == pigeon.AircraftStatus.Airborne
+            status == OperationalStatus.airborne
                 ? 'assets/images/plane_airborne.png'
                 : 'assets/images/plane_grounded.png',
             width: Sizes.cardIconSize,
@@ -149,7 +151,7 @@ class AircraftCard extends StatelessWidget {
                 fontSize: 11.0,
                 color: proximityAlertsActive
                     ? AppColors.green
-                    : status == pigeon.AircraftStatus.Airborne
+                    : status == OperationalStatus.airborne
                         ? AppColors.highlightBlue
                         : AppColors.dark,
               ),
@@ -166,7 +168,7 @@ class AircraftCard extends StatelessWidget {
       // to-do: icon according to basic.uaType
     }
     final rssi = messagePack.lastMessageRssi;
-    final source = messagePack.getPackSource();
+    final source = messagePack.packSource;
     final standardText = getSourceShortcut(source);
     final width = MediaQuery.of(context).size.width;
     final iconSize = Sizes.iconSize / 3 * 2;
@@ -228,9 +230,9 @@ class AircraftCard extends StatelessWidget {
   String _getAircraftText() {
     if (messagePack.locationMessage == null) return 'Unknown';
     final status = messagePack.locationMessage!.status;
-    return status == pigeon.AircraftStatus.Ground
+    return status == OperationalStatus.ground
         ? 'Grounded'
-        : status == pigeon.AircraftStatus.Airborne
+        : status == OperationalStatus.airborne
             ? '${messagePack.locationMessage!.height.toString()}m AGL'
             : 'Unknown';
   }

@@ -177,10 +177,12 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                       .read<AircraftCubit>()
                                       .findByUasID(e.uasId);
                                   if (data == null) return;
-                                  if (data.locationValid()) {
+                                  if (data.locationValid) {
                                     context.read<MapCubit>().centerToLocDouble(
-                                          data.locationMessage!.latitude!,
-                                          data.locationMessage!.longitude!,
+                                          data.locationMessage!.location!
+                                              .latitude,
+                                          data.locationMessage!.location!
+                                              .longitude,
                                         );
                                   }
                                   context

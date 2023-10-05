@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_opendroneid/models/message_pack.dart';
+import 'package:flutter_opendroneid/models/message_container.dart';
+import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -240,14 +241,14 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   }
 
   // check if owned drone has location, expected uasid
-  bool _alertsReady(MessagePack pack) =>
+  bool _alertsReady(MessageContainer pack) =>
       state.proximityAlertActive &&
-      pack.basicIdMessage?.uasId != null &&
-      pack.basicIdMessage?.uasId == state.usersAircraftUASID &&
-      pack.locationValid();
+      pack.basicIdMessage?.uasID.asString() != null &&
+      pack.basicIdMessage?.uasID.asString() == state.usersAircraftUASID &&
+      pack.locationValid;
 
   // check distance, consider just packs not older than expiration time
-  bool _isNearby(MessagePack pack, double distance) =>
+  bool _isNearby(MessageContainer pack, double distance) =>
       distance <= state.proximityAlertDistance &&
       pack.lastUpdate.isAfter(
         DateTime.now().subtract(
@@ -266,25 +267,25 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     }
     packHistory.forEach(
       (key, value) {
-        final uasId = value.last.basicIdMessage?.uasId;
-        if (uasId != null &&
-            uasId != state.usersAircraftUASID &&
-            value.last.locationValid()) {
+        final uasId = value.last.basicIdMessage?.uasID;
+        if (uasId?.asString() != null &&
+            uasId!.asString()! != state.usersAircraftUASID &&
+            value.last.locationValid) {
           // calc distance and convert to meters
           final distance = calculateDistance(
-                  pack.locationMessage!.latitude!,
-                  pack.locationMessage!.longitude!,
-                  value.last.locationMessage!.latitude!,
-                  value.last.locationMessage!.longitude!) *
+                  pack.locationMessage!.location!.latitude,
+                  pack.locationMessage!.location!.longitude,
+                  value.last.locationMessage!.location!.latitude,
+                  value.last.locationMessage!.location!.longitude) *
               1000;
           if (_isNearby(value.last, distance)) {
             // refresh if not marked as expired
             foundAlerts.add(
-              DroneNearbyAlert(
-                  uasId, distance, state.expirationTimeSec, DateTime.now()),
+              DroneNearbyAlert(uasId.asString()!, distance,
+                  state.expirationTimeSec, DateTime.now()),
             );
             // detected first time, show alert
-            if (state.foundAircraft[uasId] == null) {
+            if (state.foundAircraft[uasId.asString()] == null) {
               _alertEventController.add(AlertShow());
               if (state.sendNotifications) {
                 notificationService.addNotification(
