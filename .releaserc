@@ -1,6 +1,7 @@
 {
 	"branches": [
-		"master"
+		"master",
+		"production"
 	],
 	"plugins": [
 		[
