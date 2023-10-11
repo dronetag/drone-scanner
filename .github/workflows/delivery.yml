@@ -62,8 +62,6 @@ jobs:
         uses: dronetag/gha-shared/.github/actions/flutter-install@master
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-      - name: Set-up Codemagic CLI Tools
-        run: pip3 install codemagic-cli-tools
       - name: Obtain iOS signing files
         uses: dronetag/gha-shared/.github/actions/setup-ios-signing@master
         with:
