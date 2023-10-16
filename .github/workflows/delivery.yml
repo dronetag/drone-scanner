@@ -7,7 +7,8 @@ name: Delivery
 env:
   FLUTTER_VERSION: '3.10.x'
   DEPLOYMENT_ENV_NAME: production
-  APP_BUNDLE_NAME: cz.dronetag.drone-scanner
+  IOS_BUNDLE_NAME: cz.dronetag.drone-scanner
+  ANDROID_BUNDLE_NAME: cz.dronetag.dronescanner
   ANDROID_TARGET_TRACK: internal
   FLUTTER_BUILD_NUMBER: '10${{ github.run_number }}'
 
@@ -65,7 +66,7 @@ jobs:
       - name: Obtain iOS signing files
         uses: dronetag/gha-shared/.github/actions/setup-ios-signing@master
         with:
-          app-bundle-name: ${{ env.APP_BUNDLE_NAME }}
+          app-bundle-name: ${{ env.IOS_BUNDLE_NAME }}
           appstore-private-key: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
           appstore-key-id: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
           appstore-issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
@@ -142,7 +143,7 @@ jobs:
         if: ${{ !contains(github.event.head_commit.message, '[skip publish]') && !contains(github.event.head_commit.message, '[skip android publish]') }}
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_API_KEY_JSON }} 
-          packageName: ${{ env.APP_BUNDLE_NAME }}
+          packageName: ${{ env.ANDROID_BUNDLE_NAME }}
           releaseFiles: build/app/outputs/bundle/*/*.aab
           track: ${{ env.ANDROID_TARGET_TRACK }}
           mappingFile: build/app/outputs/mapping/release/mapping.txt
