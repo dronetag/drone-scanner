@@ -114,11 +114,11 @@ jobs:
           setup-java: true
       - name: Make Android keystore file
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > ~/toolbox-upload-keystore.jks
-          echo "keyAlias=key0" >> ./android/key.properties
+          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > $HOME/android-keystore.jks
+          echo "keyAlias=${{ secrets.ANDROID_KEYSTORE_KEYALIAS }}" >> ./android/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASS }}" >> ./android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASS }}" >> ./android/key.properties
-          echo "storeFile=$HOME/toolbox-upload-keystore.jks" >> ./android/key.properties
+          echo "storeFile=$HOME/android-keystore.jks" >> ./android/key.properties
       - name: Install Google Maps API key
         env:
           API_KEY: ${{ secrets.GMAPS_API_KEY_ANDROID }}
