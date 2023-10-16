@@ -115,7 +115,7 @@ jobs:
       - name: Make Android keystore file
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > ~/toolbox-upload-keystore.jks
-          echo "keyAlias=upload" >> ./android/key.properties
+          echo "keyAlias=key0" >> ./android/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASS }}" >> ./android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASS }}" >> ./android/key.properties
           echo "storeFile=$HOME/toolbox-upload-keystore.jks" >> ./android/key.properties
