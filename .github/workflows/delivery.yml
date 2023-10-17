@@ -5,12 +5,13 @@ name: Delivery
 # later published, for both iOS and Android platforms
 
 env:
-  FLUTTER_VERSION: '3.10.x'
+  FLUTTER_VERSION: "3.10.x"
   DEPLOYMENT_ENV_NAME: production
   IOS_BUNDLE_NAME: cz.dronetag.drone-scanner
   ANDROID_BUNDLE_NAME: cz.dronetag.dronescanner
   ANDROID_TARGET_TRACK: internal
-  FLUTTER_BUILD_NUMBER: '10${{ github.run_number }}'
+  FLUTTER_BUILD_NUMBER: "10${{ github.run_number }}"
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 on:
   push:
@@ -39,17 +40,17 @@ jobs:
     outputs:
       deployment-id: ${{ steps.start.outputs.deployment_id }}
     steps:
-    - name: Start a new deployment
-      uses: bobheadxi/deployments@9d4477fdaa4120020cd10ab7e97f68c801422e73
-      id: start
-      with:
-        step: start
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: ${{ env.DEPLOYMENT_ENV_NAME }}
+      - name: Start a new deployment
+        uses: bobheadxi/deployments@9d4477fdaa4120020cd10ab7e97f68c801422e73
+        id: start
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ env.DEPLOYMENT_ENV_NAME }}
 
   build-publish-ios:
     name: Build & publish iOS bundle
-    needs: 
+    needs:
       - release-version
       - start-deployment
     runs-on: macos-12
@@ -82,6 +83,8 @@ jobs:
           --build-name=$FLUTTER_BUILD_NAME
           --build-number=$FLUTTER_BUILD_NUMBER
           --export-options-plist="$HOME/export_options.plist"
+      - name: Upload debug symbols
+        run: dart run sentry_dart_plugin
       - name: Upload built bundle as artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -98,7 +101,7 @@ jobs:
 
   build-publish-android:
     name: Build & publish Android bundle
-    needs: 
+    needs:
       - release-version
       - start-deployment
     runs-on: ubuntu-22.04
@@ -130,6 +133,8 @@ jobs:
           --release
           --build-name=$FLUTTER_BUILD_NAME
           --build-number=$FLUTTER_BUILD_NUMBER
+      - name: Upload debug symbols
+        run: dart run sentry_dart_plugin
       - name: Upload built bundle as artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -142,7 +147,7 @@ jobs:
         uses: r0adkll/upload-google-play@7406d2c7a1db943b737d959bdefdd7f6d9731f99
         if: ${{ !contains(github.event.head_commit.message, '[skip publish]') && !contains(github.event.head_commit.message, '[skip android publish]') }}
         with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_API_KEY_JSON }} 
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_API_KEY_JSON }}
           packageName: ${{ env.ANDROID_BUNDLE_NAME }}
           releaseFiles: build/app/outputs/bundle/*/*.aab
           track: ${{ env.ANDROID_TARGET_TRACK }}
@@ -159,16 +164,16 @@ jobs:
       - build-publish-ios
       - build-publish-android
     steps:
-    - name: Finish the deployment
-      uses: bobheadxi/deployments@9d4477fdaa4120020cd10ab7e97f68c801422e73
-      id: deployment
-      with:
-        step: finish
-        deployment_id: ${{ needs.start-deployment.outputs.deployment-id }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: ${{ env.DEPLOYMENT_ENV_NAME }}
-        status: ${{ job.status }}
-        env_url: ${{ inputs.url }}
+      - name: Finish the deployment
+        uses: bobheadxi/deployments@9d4477fdaa4120020cd10ab7e97f68c801422e73
+        id: deployment
+        with:
+          step: finish
+          deployment_id: ${{ needs.start-deployment.outputs.deployment-id }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ env.DEPLOYMENT_ENV_NAME }}
+          status: ${{ job.status }}
+          env_url: ${{ inputs.url }}
 
   announce:
     name: Announce to Slack

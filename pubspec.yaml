@@ -13,10 +13,9 @@ environment:
   flutter: ">=3.10.0"
 
 # # Uncomment to use flutter_opendroneid from local repository
-# dependency_overrides: 
+# dependency_overrides:
 #   flutter_opendroneid:
 #     path: ../flutter-opendroneid
-
 
 dependencies:
   flutter:
@@ -35,7 +34,7 @@ dependencies:
   showcaseview: ^1.1.7
   shared_preferences: ^2.0.13
   device_info_plus: ^8.0.0
-  f_logs: ^2.0.0 
+  f_logs: ^2.0.0
   timer_builder: ^2.0.0
   csv: ^5.0.1
   app_settings: ^4.1.3
@@ -43,7 +42,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   package_info: ^2.0.2
   localstorage: ^4.0.0+1
-  sentry_flutter: ^7.9.0 
+  sentry_flutter: ^7.9.0
   rxdart: ^0.27.5
   vector_math: ^2.1.2
   wakelock: ^0.6.2
@@ -56,6 +55,7 @@ dependencies:
 dev_dependencies:
   dependency_validator: ^3.0.0
   pedantic: ^1.11.0
+  sentry_dart_plugin: ^1.6.2
 
 # The following section is specific to Flutter.
 flutter:
@@ -85,9 +85,19 @@ flutter:
         - asset: assets/fonts/RobotoMono-Regular.ttf
         - asset: assets/fonts/RobotoMono-Bold.ttf
           weight: 700
-    - family:  DroneScannerIcon
+    - family: DroneScannerIcon
       fonts:
         - asset: assets/fonts/DroneScannerIcon.ttf
           weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: true
+  project: drone-scanner
+  org: dronetag
+  url: https://sentry.dronetag.cz
+  wait_for_processing: false
+  commits: auto
+  ignore_missing: true
