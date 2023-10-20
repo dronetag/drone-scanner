@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (5.7.1)
-  - "app_settings (3.0.0+1)":
+  - app_settings (5.1.1):
     - Flutter
   - device_info_plus (0.0.1):
     - Flutter
@@ -118,7 +118,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
-  app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
+  app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
@@ -143,4 +143,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5393230c672d3a74e2eae365640a3f251271ea30
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

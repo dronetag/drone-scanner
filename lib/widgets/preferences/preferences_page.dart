@@ -375,7 +375,8 @@ class PreferencesPage extends StatelessWidget {
           padding: itemPadding,
           width: width / 2,
           child: ElevatedButton(
-            onPressed: AppSettings.openDeviceSettings,
+            onPressed: () =>
+                AppSettings.openAppSettings(type: AppSettingsType.device),
             style: buttonStyle,
             child: const Text(
               'Open phone settings',

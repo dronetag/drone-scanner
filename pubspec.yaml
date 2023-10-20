@@ -37,7 +37,7 @@ dependencies:
   f_logs: ^2.0.0
   timer_builder: ^2.0.0
   csv: ^5.0.1
-  app_settings: ^4.1.3
+  app_settings: ^5.1.1
   share_plus: ^6.3.2
   flutter_bloc: ^8.0.1
   package_info: ^2.0.2
