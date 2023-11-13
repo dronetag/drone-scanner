@@ -5,6 +5,8 @@ class AircraftState {
   // map of aircraft labels given by user
   // keys are aircraft mac adresses, values are labels
   final Map<String, String> aircraftLabels;
+  // map of model info for given aicraft fetched from ornithology service
+  final Map<String, AircraftModelInfo> aircraftModelInfo;
 
   Map<String, List<MessageContainer>> packHistory(
       [String? userAircraftUasId, MyDronePositioning? myDronePositioning]) {
@@ -120,15 +122,18 @@ class AircraftState {
   AircraftState({
     required Map<String, List<MessageContainer>> packHistory,
     required this.aircraftLabels,
+    required this.aircraftModelInfo,
   }) : _packHistory = packHistory;
 
   AircraftState copyWith({
     Map<String, List<MessageContainer>>? packHistory,
     Map<String, String>? aircraftLabels,
+    Map<String, AircraftModelInfo>? aircraftModelInfo,
   }) =>
       AircraftState(
         packHistory: packHistory ?? _packHistory,
         aircraftLabels: aircraftLabels ?? this.aircraftLabels,
+        aircraftModelInfo: aircraftModelInfo ?? this.aircraftModelInfo,
       );
 }
 
@@ -136,9 +141,11 @@ class AircraftStateUpdate extends AircraftState {
   AircraftStateUpdate({
     required Map<String, List<MessageContainer>> packHistory,
     required Map<String, String> aircraftLabels,
+    required Map<String, AircraftModelInfo> aircraftModelInfo,
   }) : super(
           packHistory: packHistory,
           aircraftLabels: aircraftLabels,
+          aircraftModelInfo: aircraftModelInfo,
         );
 }
 
@@ -146,8 +153,10 @@ class AircraftStateBuffering extends AircraftState {
   AircraftStateBuffering({
     required Map<String, List<MessageContainer>> packHistory,
     required Map<String, String> aircraftLabels,
+    required Map<String, AircraftModelInfo> aircraftModelInfo,
   }) : super(
           packHistory: packHistory,
           aircraftLabels: aircraftLabels,
+          aircraftModelInfo: aircraftModelInfo,
         );
 }

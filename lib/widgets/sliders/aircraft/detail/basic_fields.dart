@@ -6,7 +6,7 @@ import 'package:flutter_opendroneid/utils/conversions.dart';
 import '../../../../bloc/proximity_alerts_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
-import '../../../../utils/uasid_prefix_reader.dart';
+import '../../../../models/aircraft_model_info.dart';
 import '../../../../utils/utils.dart';
 import '../../../app/dialogs.dart';
 import '../../common/headline.dart';
@@ -18,6 +18,7 @@ class BasicFields {
   static List<Widget> buildBasicFields(
     BuildContext context,
     List<MessageContainer> messagePackList,
+    AircraftModelInfo? modelInfo,
   ) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -25,15 +26,8 @@ class BasicFields {
         messagePackList.last.basicIdMessage?.uasID.type.asString();
     final uaTypeString = messagePackList.last.basicIdMessage?.uaType.asString();
 
-    String? manufacturer;
-    Image? logo;
-    if (messagePackList.isNotEmpty &&
-        messagePackList.last.basicIdMessage?.uasID.asString() != null) {
-      manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
-          messagePackList.last.basicIdMessage!.uasID.asString()!);
-      logo = getManufacturerLogo(
-          manufacturer: manufacturer, color: AppColors.lightGray);
-    }
+    final logo = getManufacturerLogo(
+        manufacturer: modelInfo?.maker, color: AppColors.lightGray);
 
     final uasId = messagePackList.last.basicIdMessage?.uasID;
     final proximityAlertsActive = context
@@ -64,7 +58,7 @@ class BasicFields {
             children: [
               AircraftDetailField(
                 headlineText: 'UAS ID',
-                child: logo != null && manufacturer != null
+                child: modelInfo != null
                     ? Text.rich(
                         TextSpan(
                           text: messagePackList.last.basicIdMessage?.uasID
@@ -75,12 +69,16 @@ class BasicFields {
                           ),
                           children: [
                             TextSpan(text: '\n'),
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: logo,
+                            if (logo != null)
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: logo,
+                              ),
+                            TextSpan(
+                              text: '${modelInfo.maker} ',
                             ),
                             TextSpan(
-                              text: manufacturer,
+                              text: modelInfo.model,
                             ),
                           ],
                         ),

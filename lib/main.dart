@@ -21,8 +21,8 @@ import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
 import 'services/location_service.dart';
 import 'services/notification_service.dart';
+import 'services/ornithology_rest_client.dart';
 import 'utils/google_api_key_reader.dart';
-import 'utils/uasid_prefix_reader.dart';
 import 'widgets/app/app.dart';
 
 const sentryDsn = String.fromEnvironment(
@@ -57,12 +57,13 @@ void main() async {
   await notificationService.setup();
   // Init Google services
   await GoogleApiKeyReader.initialize();
-  await UASIDPrefixReader.initialize();
   final locationService = LocationService();
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
-  final aircraftCubit = AircraftCubit(aircraftExpirationCubit);
+  final aircraftCubit = AircraftCubit(
+      expirationCubit: aircraftExpirationCubit,
+      ornithologyRestClient: OrnithologyRestClient());
   final proximityAlertsCubit =
       ProximityAlertsCubit(notificationService, aircraftCubit);
   final sheetLicense = await rootBundle.loadString('assets/docs/SHEET-LICENSE');
