@@ -90,6 +90,7 @@ class AircraftCubit extends Cubit<AircraftState> {
             packHistory: <String, List<MessageContainer>>{},
             aircraftLabels: <String, String>{},
             aircraftModelInfo: <String, AircraftModelInfo>{},
+            fetchInProgress: false,
           ),
         ) {
     expirationCubit.deleteCallback = deletePack;
@@ -116,6 +117,7 @@ class AircraftCubit extends Cubit<AircraftState> {
         packHistory: state.packHistory(),
         aircraftLabels: state.aircraftLabels,
         aircraftModelInfo: state.aircraftModelInfo,
+        fetchInProgress: state.fetchInProgress,
       ),
     );
   }
@@ -165,12 +167,15 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<void> fetchModelInfo(String serialNumber) async {
+    emit(state.copyWith(fetchInProgress: true));
     final modelInfo = await ornithologyRestClient.fetchAircraftModelInfo(
         serialNumber: serialNumber);
-    emit(state.copyWith(aircraftModelInfo: {
-      ...state.aircraftModelInfo,
-      serialNumber: modelInfo
-    }));
+    emit(
+      state.copyWith(aircraftModelInfo: {
+        ...state.aircraftModelInfo,
+        serialNumber: modelInfo
+      }, fetchInProgress: false),
+    );
     await _saveModelInfo();
   }
 
@@ -218,14 +223,23 @@ class AircraftCubit extends Cubit<AircraftState> {
     return state.packHistory()[mac];
   }
 
-  Future<void> clear() async {
+  Future<void> clearAircraft() async {
     emit(
       AircraftStateUpdate(
         packHistory: {},
         aircraftLabels: state.aircraftLabels,
         aircraftModelInfo: state.aircraftModelInfo,
+        fetchInProgress: false,
       ),
     );
+  }
+
+  Future<void> clearModelInfo() async {
+    final ready = await storage.ready;
+    if (ready) {
+      await storage.deleteItem(_modelInfoKey);
+      emit(state.copyWith(aircraftModelInfo: {}));
+    }
   }
 
   Future<void> addPack(MessageContainer pack) async {
@@ -246,6 +260,7 @@ class AircraftCubit extends Cubit<AircraftState> {
           packHistory: data,
           aircraftLabels: state.aircraftLabels,
           aircraftModelInfo: state.aircraftModelInfo,
+          fetchInProgress: state.fetchInProgress,
         ),
       );
     } on Exception {
@@ -258,7 +273,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<MessageContainer?> addShowcaseDummyPack() async {
-    await clear();
+    await clearAircraft();
     final pack = _packs[0];
     try {
       final data = state.packHistory();
@@ -268,6 +283,7 @@ class AircraftCubit extends Cubit<AircraftState> {
           packHistory: data,
           aircraftLabels: state.aircraftLabels,
           aircraftModelInfo: state.aircraftModelInfo,
+          fetchInProgress: state.fetchInProgress,
         ),
       );
     } on Exception {
@@ -291,6 +307,7 @@ class AircraftCubit extends Cubit<AircraftState> {
         packHistory: data,
         aircraftLabels: state.aircraftLabels,
         aircraftModelInfo: state.aircraftModelInfo,
+        fetchInProgress: state.fetchInProgress,
       ),
     );
   }

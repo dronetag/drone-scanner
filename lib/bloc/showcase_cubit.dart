@@ -142,7 +142,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     context.read<OpendroneIdCubit>().stop().then((value) {
       context
           .read<AircraftCubit>()
-          .clear()
+          .clearAircraft()
           .then((value) => _startShowcaseRoutine(context));
       emit(state.copyWith(
           showcaseActive: true,

@@ -18,6 +18,7 @@ import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
 import '../app/app_scaffold.dart';
+import '../app/custom_tooltip.dart';
 import '../app/dialogs.dart';
 import '../help/help_page.dart';
 import '../showcase/showcase_item.dart';
@@ -139,9 +140,7 @@ class PreferencesPage extends StatelessWidget {
       ),
     );
     final itemPadding = EdgeInsets.only(bottom: 10);
-    final tooltipMargin =
-        EdgeInsets.symmetric(horizontal: Sizes.preferencesMargin);
-    final tooltipPadding = EdgeInsets.all(5);
+
     return [
       Align(
         alignment: Alignment.centerLeft,
@@ -215,18 +214,11 @@ class PreferencesPage extends StatelessWidget {
       ),
       Headline(
         text: 'Standards',
-        child: Tooltip(
-          padding: tooltipPadding,
-          margin: tooltipMargin,
-          triggerMode: TooltipTriggerMode.tap,
+        child: CustomTooltip(
           message: 'Each phone may support different standards which the '
               'application attemps to use. See which standards are supported '
               'on your device.',
-          child: const Icon(
-            Icons.help_outline,
-            color: AppColors.lightGray,
-            size: Sizes.textIconSize,
-          ),
+          color: AppColors.lightGray,
         ),
       ),
       if (isLandscape) const SizedBox(),
@@ -246,17 +238,11 @@ class PreferencesPage extends StatelessWidget {
           color: state.btExtended ? AppColors.orange : AppColors.red,
           text: btExtendedText,
           icon: state.btExtended
-              ? Tooltip(
-                  triggerMode: TooltipTriggerMode.tap,
-                  padding: tooltipPadding,
-                  margin: tooltipMargin,
+              ? CustomTooltip(
                   message:
                       'Warning: Support claimed by manufacturer does not fully '
                       'guarantee that Bluetooth Extended will actually work.',
-                  child: const Icon(
-                    Icons.error_outline,
-                    color: AppColors.orange,
-                  ),
+                  color: AppColors.orange,
                 )
               : negativeIcon,
         ),
@@ -303,18 +289,11 @@ class PreferencesPage extends StatelessWidget {
       ),
       Headline(
         text: 'Permissions',
-        child: Tooltip(
-          triggerMode: TooltipTriggerMode.tap,
-          padding: tooltipPadding,
-          margin: tooltipMargin,
+        child: CustomTooltip(
           message:
               'See what permissions are currently granted with a possibility '
               'to change them from the system settings.',
-          child: const Icon(
-            Icons.help_outline,
-            color: AppColors.lightGray,
-            size: Sizes.textIconSize,
-          ),
+          color: AppColors.lightGray,
         ),
       ),
       if (isLandscape) const SizedBox(),
@@ -387,17 +366,10 @@ class PreferencesPage extends StatelessWidget {
       ),
       Headline(
         text: 'Data Preferences',
-        child: Tooltip(
-          triggerMode: TooltipTriggerMode.tap,
-          padding: tooltipPadding,
-          margin: tooltipMargin,
+        child: CustomTooltip(
           message: 'The application can delete old records after certain time '
               'passes after the last message from device is received.',
-          child: const Icon(
-            Icons.help_outline,
-            color: AppColors.lightGray,
-            size: Sizes.textIconSize,
-          ),
+          color: AppColors.lightGray,
         ),
       ),
       if (isLandscape) const SizedBox(),
@@ -523,13 +495,32 @@ class PreferencesPage extends StatelessWidget {
                 () {
                   context.read<ProximityAlertsCubit>().clearFoundDrones();
                   context.read<SlidersCubit>().setShowDroneDetail(show: false);
-                  context.read<AircraftCubit>().clear();
+                  context.read<AircraftCubit>().clearAircraft();
                   context.read<SelectedAircraftCubit>().unselectAircraft();
                   context.read<MapCubit>().turnOffLockOnPoint();
                 },
               );
             },
             child: const Text('Clean packs'),
+          ),
+        ),
+      ),
+      Align(
+        child: Container(
+          padding: itemPadding / 2,
+          width: width / 2,
+          child: ElevatedButton(
+            style: buttonStyle,
+            onPressed: () {
+              showAlertDialog(
+                context,
+                'Are you sure you want to delete manufacturer and model data?',
+                () {
+                  context.read<AircraftCubit>().clearModelInfo();
+                },
+              );
+            },
+            child: const Text('Clean model info'),
           ),
         ),
       ),

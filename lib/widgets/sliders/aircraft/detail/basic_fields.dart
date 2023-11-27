@@ -15,11 +15,12 @@ import 'aircraft_detail_row.dart';
 import 'aircraft_label_text.dart';
 
 class BasicFields {
-  static List<Widget> buildBasicFields(
-    BuildContext context,
-    List<MessageContainer> messagePackList,
-    AircraftModelInfo? modelInfo,
-  ) {
+  static List<Widget> buildBasicFields({
+    required BuildContext context,
+    required List<MessageContainer> messagePackList,
+    required AircraftModelInfo? modelInfo,
+    required bool modelInfoFetchInProgress,
+  }) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final idTypeString =
@@ -27,7 +28,7 @@ class BasicFields {
     final uaTypeString = messagePackList.last.basicIdMessage?.uaType.asString();
 
     final logo = getManufacturerLogo(
-        manufacturer: modelInfo?.maker, color: AppColors.lightGray);
+        manufacturer: modelInfo?.maker, color: AppColors.detailFieldColor);
 
     final uasId = messagePackList.last.basicIdMessage?.uasID;
     final proximityAlertsActive = context
@@ -41,11 +42,53 @@ class BasicFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'UA ID Type',
+            headlineText: 'Manufacturer',
+            tooltipMessage: 'Manufacturer of your drone or RID device',
+            child: modelInfoFetchInProgress
+                ? _buildProgressIndicator(context)
+                : Text.rich(
+                    TextSpan(
+                      children: [
+                        if (logo != null)
+                          TextSpan(
+                            children: [
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: logo,
+                              ),
+                              TextSpan(
+                                text: ' ',
+                              ),
+                            ],
+                          ),
+                        TextSpan(
+                          text: modelInfo?.maker ?? '-',
+                          style: const TextStyle(
+                            color: AppColors.detailFieldColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+          ),
+          AircraftDetailField(
+            headlineText: 'Model',
+            fieldText: modelInfo?.model,
+            tooltipMessage: 'Model name of your drone or RID device',
+            child: modelInfoFetchInProgress
+                ? _buildProgressIndicator(context)
+                : null,
+          ),
+        ],
+      ),
+      AircraftDetailRow(
+        children: [
+          AircraftDetailField(
+            headlineText: 'ID Type',
             fieldText: idTypeString,
           ),
           AircraftDetailField(
-            headlineText: 'UA Type',
+            headlineText: 'Type',
             fieldText: uaTypeString,
           ),
         ],
@@ -58,32 +101,8 @@ class BasicFields {
             children: [
               AircraftDetailField(
                 headlineText: 'UAS ID',
-                child: modelInfo != null
-                    ? Text.rich(
-                        TextSpan(
-                          text: messagePackList.last.basicIdMessage?.uasID
-                                  .asString() ??
-                              'Unknown',
-                          style: const TextStyle(
-                            color: AppColors.lightGray,
-                          ),
-                          children: [
-                            TextSpan(text: '\n'),
-                            if (logo != null)
-                              WidgetSpan(
-                                alignment: PlaceholderAlignment.middle,
-                                child: logo,
-                              ),
-                            TextSpan(
-                              text: '${modelInfo.maker} ',
-                            ),
-                            TextSpan(
-                              text: modelInfo.model,
-                            ),
-                          ],
-                        ),
-                      )
-                    : null,
+                fieldText:
+                    messagePackList.last.basicIdMessage?.uasID.asString(),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -178,4 +197,17 @@ class BasicFields {
       if (isLandscape) const SizedBox(),
     ];
   }
+
+  static Widget _buildProgressIndicator(BuildContext context) => Container(
+      margin: EdgeInsets.only(
+        left: Sizes.standard / 2,
+        top: Sizes.standard / 2,
+        bottom: Sizes.standard / 2,
+      ),
+      height: Sizes.standard * 1.5,
+      width: Sizes.standard * 1.5,
+      child: CircularProgressIndicator(
+        strokeWidth: 1.5,
+        color: Theme.of(context).colorScheme.onPrimary,
+      ));
 }

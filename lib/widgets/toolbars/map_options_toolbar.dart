@@ -66,7 +66,7 @@ class MapOptionsToolbar extends StatelessWidget {
             () {
               context.read<ProximityAlertsCubit>().clearFoundDrones();
               context.read<SlidersCubit>().setShowDroneDetail(show: false);
-              context.read<AircraftCubit>().clear();
+              context.read<AircraftCubit>().clearAircraft();
               context.read<SelectedAircraftCubit>().unselectAircraft();
               context.read<MapCubit>().turnOffLockOnPoint();
               showSnackBar(

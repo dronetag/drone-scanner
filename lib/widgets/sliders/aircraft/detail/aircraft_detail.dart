@@ -98,9 +98,16 @@ class AircraftDetail extends StatelessWidget {
     AircraftModelInfo? modelInfo,
   ) {
     final loc = messagePackList.last.locationMessage;
+    final fetchInProgress = context
+        .select<AircraftCubit, bool>((cubit) => cubit.state.fetchInProgress);
     return [
       ...ConnectionFields.buildConnectionFields(context, messagePackList),
-      ...BasicFields.buildBasicFields(context, messagePackList, modelInfo),
+      ...BasicFields.buildBasicFields(
+        context: context,
+        messagePackList: messagePackList,
+        modelInfo: modelInfo,
+        modelInfoFetchInProgress: fetchInProgress,
+      ),
       ...LocationFields.buildLocationFields(context, loc),
       ...OperatorFields.buildOperatorFields(context, messagePackList.last),
     ];
