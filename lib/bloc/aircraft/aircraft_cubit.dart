@@ -167,16 +167,21 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<void> fetchModelInfo(String serialNumber) async {
-    emit(state.copyWith(fetchInProgress: true));
-    final modelInfo = await ornithologyRestClient.fetchAircraftModelInfo(
-        serialNumber: serialNumber);
-    emit(
-      state.copyWith(aircraftModelInfo: {
-        ...state.aircraftModelInfo,
-        serialNumber: modelInfo
-      }, fetchInProgress: false),
-    );
-    await _saveModelInfo();
+    try {
+      emit(state.copyWith(fetchInProgress: true));
+      final modelInfo = await ornithologyRestClient.fetchAircraftModelInfo(
+          serialNumber: serialNumber);
+      emit(
+        state.copyWith(aircraftModelInfo: {
+          ...state.aircraftModelInfo,
+          serialNumber: modelInfo
+        }, fetchInProgress: false),
+      );
+      await _saveModelInfo();
+    } catch (err) {
+      print('Failed to fetch aircraft model info for $serialNumber, $err');
+      emit(state.copyWith(fetchInProgress: false));
+    }
   }
 
   // Stores the label persistently locally on the device

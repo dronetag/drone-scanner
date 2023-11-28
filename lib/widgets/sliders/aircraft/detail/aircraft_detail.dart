@@ -15,10 +15,44 @@ import 'connection_fields.dart';
 import 'location_fields.dart';
 import 'operator_fields.dart';
 
-class AircraftDetail extends StatelessWidget {
+class AircraftDetail extends StatefulWidget {
   const AircraftDetail({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<AircraftDetail> createState() => _AircraftDetailState();
+}
+
+class _AircraftDetailState extends State<AircraftDetail> {
+  String? uasId;
+
+  @override
+  void initState() {
+    super.initState();
+    final selectedMac =
+        context.read<SelectedAircraftCubit>().state.selectedAircraftMac;
+    if (selectedMac == null) return;
+    setState(
+      () {
+        // check if model info for current aircraft exists and fetch if not
+        uasId = context
+            .read<AircraftCubit>()
+            .findByMacAddress(selectedMac)
+            ?.basicIdMessage
+            ?.uasID
+            .asString();
+
+        if (uasId == null) return;
+
+        final modelInfo =
+            context.read<AircraftCubit>().state.aircraftModelInfo[uasId];
+        if (modelInfo == null) {
+          context.read<AircraftCubit>().fetchModelInfo(uasId!);
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +76,9 @@ class AircraftDetail extends StatelessWidget {
       return Container();
     }
     final height = MediaQuery.of(context).size.height;
-    // todo
-    final uasId = messagePackList.last.basicIdMessage?.uasID.asString();
+
     final modelInfo =
         context.watch<AircraftCubit>().state.aircraftModelInfo[uasId];
-    if (modelInfo == null && uasId != null) {
-      context.read<AircraftCubit>().fetchModelInfo(uasId);
-    }
     final dataChildren = buildChildren(context, messagePackList, modelInfo);
 
     return ShowcaseItem(

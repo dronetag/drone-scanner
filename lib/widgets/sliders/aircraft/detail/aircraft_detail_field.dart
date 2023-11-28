@@ -23,7 +23,7 @@ class AircraftDetailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = fieldText ?? 'Unknown';
+    final text = fieldText ?? '-';
     return Wrap(
       direction: Axis.vertical,
       children: [
