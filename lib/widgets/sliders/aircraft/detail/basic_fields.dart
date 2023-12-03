@@ -43,7 +43,7 @@ class BasicFields {
         children: [
           AircraftDetailField(
             headlineText: 'Manufacturer',
-            tooltipMessage: 'Manufacturer of your drone or RID device',
+            tooltipMessage: 'Aircraft manufacturer, estimated from the UAS ID',
             child: modelInfoFetchInProgress
                 ? _buildProgressIndicator(context)
                 : Text.rich(
@@ -74,7 +74,7 @@ class BasicFields {
           AircraftDetailField(
             headlineText: 'Model',
             fieldText: modelInfo?.model,
-            tooltipMessage: 'Model name of your drone or RID device',
+            tooltipMessage: 'Aircraft model, estimated from the UAS ID',
             child: modelInfoFetchInProgress
                 ? _buildProgressIndicator(context)
                 : null,
