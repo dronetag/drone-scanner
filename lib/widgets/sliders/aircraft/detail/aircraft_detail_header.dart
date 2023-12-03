@@ -15,7 +15,6 @@ import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../extensions/string_extensions.dart';
-import '../../../../utils/uasid_prefix_reader.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import '../../common/chevron.dart';
@@ -135,7 +134,10 @@ class AircraftDetailHeader extends StatelessWidget {
                   ? MainAxisAlignment.start
                   : MainAxisAlignment.center,
               children: [
-                buildTitle(context, messagePackList),
+                buildTitle(
+                  context,
+                  messagePackList.last.basicIdMessage?.uasID.asString(),
+                ),
                 if (messagePackList.last.operatorIDSet)
                   buildSubtitle(context, messagePackList),
               ],
@@ -205,17 +207,13 @@ class AircraftDetailHeader extends StatelessWidget {
     );
   }
 
-  Widget buildTitle(
-      BuildContext context, List<MessageContainer> messagePackList) {
-    String? manufacturer;
-    Image? logo;
-    if (messagePackList.isNotEmpty &&
-        messagePackList.last.basicIdMessage?.uasID.asString() != null) {
-      manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
-          messagePackList.last.basicIdMessage!.uasID.asString()!);
-      logo =
-          getManufacturerLogo(manufacturer: manufacturer, color: Colors.white);
-    }
+  Widget buildTitle(BuildContext context, String? uasId) {
+    final manufacturer = uasId == null
+        ? null
+        : context.read<AircraftCubit>().getModelInfo(uasId)?.maker;
+
+    final logo =
+        getManufacturerLogo(manufacturer: manufacturer, color: Colors.white);
     return Text.rich(
       TextSpan(
         style: const TextStyle(
@@ -229,8 +227,7 @@ class AircraftDetailHeader extends StatelessWidget {
               child: logo,
             ),
           TextSpan(
-            text: messagePackList.last.basicIdMessage?.uasID.asString() ??
-                'Unknown UAS ID',
+            text: uasId ?? 'Unknown UAS ID',
           ),
         ],
       ),

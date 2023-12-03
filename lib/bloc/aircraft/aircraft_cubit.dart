@@ -17,6 +17,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '/utils/csvlogger.dart';
+import '../../models/aircraft_model_info.dart';
+import '../../services/ornithology_rest_client.dart';
 import '../../utils/utils.dart';
 import '../sliders_cubit.dart';
 import 'aircraft_expiration_cubit.dart';
@@ -28,8 +30,11 @@ class AircraftCubit extends Cubit<AircraftState> {
   final AircraftExpirationCubit expirationCubit;
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
+  final OrnithologyRestClient ornithologyRestClient;
 
   static const uiUpdateIntervalMs = 200;
+  static const _labelsKey = 'labels';
+  static const _modelInfoKey = 'model_info';
 
   // data for showcase
   final List<MessageContainer> _packs = [
@@ -78,15 +83,19 @@ class AircraftCubit extends Cubit<AircraftState> {
     ),
   ];
 
-  AircraftCubit(this.expirationCubit)
+  AircraftCubit(
+      {required this.expirationCubit, required this.ornithologyRestClient})
       : super(
           AircraftState(
             packHistory: <String, List<MessageContainer>>{},
             aircraftLabels: <String, String>{},
+            aircraftModelInfo: <String, AircraftModelInfo>{},
+            fetchInProgress: false,
           ),
         ) {
     expirationCubit.deleteCallback = deletePack;
     fetchSavedAircraftLabels();
+    fetchSavedModelInfo();
   }
 
   // timer used to notify UI
@@ -107,6 +116,8 @@ class AircraftCubit extends Cubit<AircraftState> {
       AircraftStateUpdate(
         packHistory: state.packHistory(),
         aircraftLabels: state.aircraftLabels,
+        aircraftModelInfo: state.aircraftModelInfo,
+        fetchInProgress: state.fetchInProgress,
       ),
     );
   }
@@ -122,7 +133,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   Future<void> fetchSavedAircraftLabels() async {
     final ready = await storage.ready;
     if (ready) {
-      var labels = storage.getItem('labels');
+      var labels = storage.getItem(_labelsKey);
       final labelsMap = <String, String>{};
       if (labels != null) {
         (json.decode(labels as String) as Map<String, dynamic>)
@@ -133,6 +144,43 @@ class AircraftCubit extends Cubit<AircraftState> {
           aircraftLabels: labelsMap,
         ),
       );
+    }
+  }
+
+  //Retrieves the model info stored persistently locally on the device
+  Future<void> fetchSavedModelInfo() async {
+    final ready = await storage.ready;
+    if (ready) {
+      var storedModelInfo = storage.getItem(_modelInfoKey);
+      final modelInfo = <String, AircraftModelInfo>{};
+      if (storedModelInfo != null) {
+        (json.decode(storedModelInfo as String) as Map<String, dynamic>)
+            .forEach((key, value) =>
+                modelInfo[key] = AircraftModelInfo.fromJson(value));
+      }
+      emit(
+        state.copyWith(
+          aircraftModelInfo: modelInfo,
+        ),
+      );
+    }
+  }
+
+  Future<void> fetchModelInfo(String serialNumber) async {
+    try {
+      emit(state.copyWith(fetchInProgress: true));
+      final modelInfo = await ornithologyRestClient.fetchAircraftModelInfo(
+          serialNumber: serialNumber);
+      emit(
+        state.copyWith(aircraftModelInfo: {
+          ...state.aircraftModelInfo,
+          serialNumber: modelInfo
+        }, fetchInProgress: false),
+      );
+      await _saveModelInfo();
+    } catch (err) {
+      print('Failed to fetch aircraft model info for $serialNumber, $err');
+      emit(state.copyWith(fetchInProgress: false));
     }
   }
 
@@ -160,9 +208,8 @@ class AircraftCubit extends Cubit<AircraftState> {
     return state.aircraftLabels[mac];
   }
 
-  Future<void> _saveLabels() async {
-    await storage.setItem('labels', json.encode(state.aircraftLabels));
-    await fetchSavedAircraftLabels();
+  AircraftModelInfo? getModelInfo(String uasId) {
+    return state.aircraftModelInfo[uasId];
   }
 
   MessageContainer? findByMacAddress(String mac) {
@@ -181,13 +228,23 @@ class AircraftCubit extends Cubit<AircraftState> {
     return state.packHistory()[mac];
   }
 
-  Future<void> clear() async {
+  Future<void> clearAircraft() async {
     emit(
       AircraftStateUpdate(
         packHistory: {},
         aircraftLabels: state.aircraftLabels,
+        aircraftModelInfo: state.aircraftModelInfo,
+        fetchInProgress: false,
       ),
     );
+  }
+
+  Future<void> clearModelInfo() async {
+    final ready = await storage.ready;
+    if (ready) {
+      await storage.deleteItem(_modelInfoKey);
+      emit(state.copyWith(aircraftModelInfo: {}));
+    }
   }
 
   Future<void> addPack(MessageContainer pack) async {
@@ -207,6 +264,8 @@ class AircraftCubit extends Cubit<AircraftState> {
         AircraftStateBuffering(
           packHistory: data,
           aircraftLabels: state.aircraftLabels,
+          aircraftModelInfo: state.aircraftModelInfo,
+          fetchInProgress: state.fetchInProgress,
         ),
       );
     } on Exception {
@@ -219,7 +278,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   }
 
   Future<MessageContainer?> addShowcaseDummyPack() async {
-    await clear();
+    await clearAircraft();
     final pack = _packs[0];
     try {
       final data = state.packHistory();
@@ -228,6 +287,8 @@ class AircraftCubit extends Cubit<AircraftState> {
         AircraftStateUpdate(
           packHistory: data,
           aircraftLabels: state.aircraftLabels,
+          aircraftModelInfo: state.aircraftModelInfo,
+          fetchInProgress: state.fetchInProgress,
         ),
       );
     } on Exception {
@@ -250,6 +311,8 @@ class AircraftCubit extends Cubit<AircraftState> {
       AircraftStateUpdate(
         packHistory: data,
         aircraftLabels: state.aircraftLabels,
+        aircraftModelInfo: state.aircraftModelInfo,
+        fetchInProgress: state.fetchInProgress,
       ),
     );
   }
@@ -307,6 +370,18 @@ class AircraftCubit extends Cubit<AircraftState> {
       }
     }
   }
+
+  Future<void> _saveLabels() async =>
+      await storage.setItem(_labelsKey, json.encode(state.aircraftLabels));
+
+  Future<void> _saveModelInfo() async => await storage.setItem(
+        _modelInfoKey,
+        json.encode(
+          state.aircraftModelInfo.map(
+            (key, value) => MapEntry(key, value.toJson()),
+          ),
+        ),
+      );
 
   Future<bool> _storagePermissionCheck() async {
     final storage = await Permission.storage.status.isGranted;

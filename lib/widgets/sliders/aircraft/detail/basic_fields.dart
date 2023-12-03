@@ -6,7 +6,7 @@ import 'package:flutter_opendroneid/utils/conversions.dart';
 import '../../../../bloc/proximity_alerts_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
-import '../../../../utils/uasid_prefix_reader.dart';
+import '../../../../models/aircraft_model_info.dart';
 import '../../../../utils/utils.dart';
 import '../../../app/dialogs.dart';
 import '../../common/headline.dart';
@@ -15,25 +15,20 @@ import 'aircraft_detail_row.dart';
 import 'aircraft_label_text.dart';
 
 class BasicFields {
-  static List<Widget> buildBasicFields(
-    BuildContext context,
-    List<MessageContainer> messagePackList,
-  ) {
+  static List<Widget> buildBasicFields({
+    required BuildContext context,
+    required List<MessageContainer> messagePackList,
+    required AircraftModelInfo? modelInfo,
+    required bool modelInfoFetchInProgress,
+  }) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final idTypeString =
         messagePackList.last.basicIdMessage?.uasID.type.asString();
     final uaTypeString = messagePackList.last.basicIdMessage?.uaType.asString();
 
-    String? manufacturer;
-    Image? logo;
-    if (messagePackList.isNotEmpty &&
-        messagePackList.last.basicIdMessage?.uasID.asString() != null) {
-      manufacturer = UASIDPrefixReader.getManufacturerFromUASID(
-          messagePackList.last.basicIdMessage!.uasID.asString()!);
-      logo = getManufacturerLogo(
-          manufacturer: manufacturer, color: AppColors.lightGray);
-    }
+    final logo = getManufacturerLogo(
+        manufacturer: modelInfo?.maker, color: AppColors.detailFieldColor);
 
     final uasId = messagePackList.last.basicIdMessage?.uasID;
     final proximityAlertsActive = context
@@ -47,11 +42,53 @@ class BasicFields {
       AircraftDetailRow(
         children: [
           AircraftDetailField(
-            headlineText: 'UA ID Type',
+            headlineText: 'Manufacturer',
+            tooltipMessage: 'Aircraft manufacturer, estimated from the UAS ID',
+            child: modelInfoFetchInProgress
+                ? _buildProgressIndicator(context)
+                : Text.rich(
+                    TextSpan(
+                      children: [
+                        if (logo != null)
+                          TextSpan(
+                            children: [
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: logo,
+                              ),
+                              TextSpan(
+                                text: ' ',
+                              ),
+                            ],
+                          ),
+                        TextSpan(
+                          text: modelInfo?.maker ?? '-',
+                          style: const TextStyle(
+                            color: AppColors.detailFieldColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+          ),
+          AircraftDetailField(
+            headlineText: 'Model',
+            fieldText: modelInfo?.model,
+            tooltipMessage: 'Aircraft model, estimated from the UAS ID',
+            child: modelInfoFetchInProgress
+                ? _buildProgressIndicator(context)
+                : null,
+          ),
+        ],
+      ),
+      AircraftDetailRow(
+        children: [
+          AircraftDetailField(
+            headlineText: 'ID Type',
             fieldText: idTypeString,
           ),
           AircraftDetailField(
-            headlineText: 'UA Type',
+            headlineText: 'Type',
             fieldText: uaTypeString,
           ),
         ],
@@ -64,28 +101,8 @@ class BasicFields {
             children: [
               AircraftDetailField(
                 headlineText: 'UAS ID',
-                child: logo != null && manufacturer != null
-                    ? Text.rich(
-                        TextSpan(
-                          text: messagePackList.last.basicIdMessage?.uasID
-                                  .asString() ??
-                              'Unknown',
-                          style: const TextStyle(
-                            color: AppColors.lightGray,
-                          ),
-                          children: [
-                            TextSpan(text: '\n'),
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: logo,
-                            ),
-                            TextSpan(
-                              text: manufacturer,
-                            ),
-                          ],
-                        ),
-                      )
-                    : null,
+                fieldText:
+                    messagePackList.last.basicIdMessage?.uasID.asString(),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -180,4 +197,17 @@ class BasicFields {
       if (isLandscape) const SizedBox(),
     ];
   }
+
+  static Widget _buildProgressIndicator(BuildContext context) => Container(
+      margin: EdgeInsets.only(
+        left: Sizes.standard / 2,
+        top: Sizes.standard / 2,
+        bottom: Sizes.standard / 2,
+      ),
+      height: Sizes.standard * 1.5,
+      width: Sizes.standard * 1.5,
+      child: CircularProgressIndicator(
+        strokeWidth: 1.5,
+        color: Theme.of(context).colorScheme.onPrimary,
+      ));
 }

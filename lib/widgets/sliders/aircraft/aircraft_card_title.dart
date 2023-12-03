@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
-import '../../../utils/uasid_prefix_reader.dart';
 import '../../../utils/utils.dart';
 
 class AircraftCardTitle extends StatelessWidget {
@@ -19,7 +19,10 @@ class AircraftCardTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final proximityAlertsActive =
         context.read<ProximityAlertsCubit>().state.isAlertActiveForId(uasId);
-    final manufacturer = UASIDPrefixReader.getManufacturerFromUASID(uasId);
+
+    final manufacturer =
+        context.read<AircraftCubit>().getModelInfo(uasId)?.maker;
+
     final logo = getManufacturerLogo(
         manufacturer: manufacturer,
         color: proximityAlertsActive ? AppColors.green : Colors.black);
