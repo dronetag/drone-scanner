@@ -6,6 +6,7 @@ import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
+import '../../bloc/aircraft/export_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
@@ -531,7 +532,7 @@ class PreferencesPage extends StatelessWidget {
           child: ElevatedButton(
             style: buttonStyle,
             onPressed: () {
-              context.read<AircraftCubit>().exportPacksToCSV().then(
+              context.read<ExportCubit>().exportAllPacksToCSV().then(
                 (value) {
                   if (value) {
                     showSnackBar(context, 'CSV shared successfuly.');
