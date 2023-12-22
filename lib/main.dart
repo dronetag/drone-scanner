@@ -23,7 +23,6 @@ import 'bloc/zones/zones_cubit.dart';
 import 'services/location_service.dart';
 import 'services/notification_service.dart';
 import 'services/ornithology_rest_client.dart';
-import 'utils/google_api_key_reader.dart';
 import 'widgets/app/app.dart';
 
 const sentryDsn = String.fromEnvironment(
@@ -57,7 +56,6 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.setup();
   // Init Google services
-  await GoogleApiKeyReader.initialize();
   final locationService = LocationService();
   final mapCubit = MapCubit(locationService);
   final selectedCubit = SelectedAircraftCubit();
