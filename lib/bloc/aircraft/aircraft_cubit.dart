@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:csv/csv.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
@@ -12,11 +9,7 @@ import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:share_plus/share_plus.dart';
 
-import '/utils/csvlogger.dart';
 import '../../models/aircraft_model_info.dart';
 import '../../services/ornithology_rest_client.dart';
 import '../../utils/utils.dart';
@@ -317,58 +310,8 @@ class AircraftCubit extends Cubit<AircraftState> {
     );
   }
 
-  Future<bool> exportPacksToCSV() async {
-    final hasPerm = await checkStoragePermission();
-    if (!hasPerm) {
-      return false;
-    }
-    var csv = '';
-    state.packHistory().forEach((key, value) {
-      final csvData = CSVLogger.createCSV(value, includeHeader: csv == '');
-      csv += '\n';
-      csv += const ListToCsvConverter().convert(csvData);
-    });
-    if (csv.isEmpty) return false;
-    return await _shareExportFile(csv, 'all');
-  }
-
-  Future<bool> exportPackToCSV({
-    required String mac,
-  }) async {
-    if (state.packHistory()[mac] == null) return false;
-    // request permission
-    final hasPermission = await checkStoragePermission();
-    if (!hasPermission) return false;
-
-    final csvData = CSVLogger.createCSV(state.packHistory()[mac]!);
-    final csv = const ListToCsvConverter().convert(csvData);
-    if (csv.isEmpty) return false;
-
-    /// Write to a file
-    late final String uasId;
-    if (state.packHistory()[mac]!.isNotEmpty &&
-        state.packHistory()[mac]?.last.basicIdMessage?.uasID.asString() !=
-            null) {
-      uasId = state.packHistory()[mac]!.last.basicIdMessage!.uasID.asString()!;
-    } else {
-      uasId = mac;
-    }
-    return await _shareExportFile(csv, uasId);
-  }
-
-  Future<bool> checkStoragePermission() async {
-    if (Platform.isIOS) {
-      return _storagePermissionCheck();
-    } else {
-      final deviceInfo = DeviceInfoPlugin();
-      final androidInfo = await deviceInfo.androidInfo;
-      // Since Android SDK 33, storage is not used
-      if (androidInfo.version.sdkInt >= 33) {
-        return await _mediaStoragePermissionCheck();
-      } else {
-        return await _storagePermissionCheck();
-      }
-    }
+  void applyState(AircraftState state) {
+    emit(state);
   }
 
   Future<void> _saveLabels() async =>
@@ -382,49 +325,4 @@ class AircraftCubit extends Cubit<AircraftState> {
           ),
         ),
       );
-
-  Future<bool> _storagePermissionCheck() async {
-    final storage = await Permission.storage.status.isGranted;
-    if (!storage) {
-      return await Permission.storage.request().isGranted;
-    }
-    return storage;
-  }
-
-  Future<bool> _mediaStoragePermissionCheck() async {
-    var videos = await Permission.videos.status.isGranted;
-    var photos = await Permission.photos.status.isGranted;
-    if (!videos || !photos) {
-      // request at once, will produce 1 dialog
-      videos = await Permission.videos.request().isGranted;
-      photos = await Permission.videos.request().isGranted;
-    }
-    return videos && photos;
-  }
-
-  Future<bool> _shareExportFile(String csv, String name) async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    final pathOfTheFileToWrite =
-        '${directory.path}/drone_scanner_export_$name.csv';
-    var file = File(pathOfTheFileToWrite);
-    file = await file.writeAsString(csv);
-
-    late final result;
-    if (Platform.isAndroid) {
-      result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)],
-          subject: 'Drone Scanner Export', text: 'Your Remote ID Data');
-    } else {
-      result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)]);
-    }
-    if (result.status == ShareResultStatus.success) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void applyState(AircraftState state) {
-    emit(state);
-  }
 }

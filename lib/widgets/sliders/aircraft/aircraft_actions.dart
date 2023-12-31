@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/aircraft/export_cubit.dart';
 import '../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
@@ -13,7 +14,8 @@ import '../../app/dialogs.dart';
 
 enum AircraftAction {
   delete,
-  share,
+  shareCsv,
+  shareGpx,
   mapLock,
 }
 
@@ -56,9 +58,19 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
         padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
-        value: AircraftAction.share,
+        value: AircraftAction.shareCsv,
         child: Text(
-          'Export Data',
+          'Export to CSV',
+          style: labelStyle,
+        ),
+      ),
+      PopupMenuItem(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        value: AircraftAction.shareGpx,
+        child: Text(
+          'Export to GPX',
           style: labelStyle,
         ),
       ),
@@ -116,14 +128,33 @@ void handleAction(BuildContext context, AircraftAction action) {
         },
       );
       break;
-    case AircraftAction.share:
+    case AircraftAction.shareCsv:
       context
-          .read<AircraftCubit>()
-          .exportPackToCSV(mac: messagePackList.last.macAddress)
+          .read<ExportCubit>()
+          .exportPack(
+              format: ExportFormat.csv, mac: messagePackList.last.macAddress)
           .then(
         (value) {
           if (value) {
             showSnackBar(context, 'CSV shared successfuly.');
+          } else {
+            showSnackBar(
+              context,
+              'Sharing data was not succesful.',
+            );
+          }
+        },
+      );
+      break;
+    case AircraftAction.shareGpx:
+      context
+          .read<ExportCubit>()
+          .exportPack(
+              format: ExportFormat.gpx, mac: messagePackList.last.macAddress)
+          .then(
+        (value) {
+          if (value) {
+            showSnackBar(context, 'GPX shared successfuly.');
           } else {
             showSnackBar(
               context,
