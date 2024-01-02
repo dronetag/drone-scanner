@@ -249,9 +249,12 @@ class _LocationSearchState extends State<LocationSearch> {
   }
 
   void _disposeOverlayEntry(BuildContext context) {
-    if (resultsOverlay != null && resultsOverlay!.mounted) {
+    if (Overlay.of(context).mounted &&
+        resultsOverlay != null &&
+        resultsOverlay!.mounted) {
       resultsOverlay!.remove();
       resultsOverlay!.dispose();
+      resultsOverlay = null;
       context.read<GeocodingCubit>().clearResults();
     }
   }
