@@ -64,10 +64,16 @@ class _LocationSearchState extends State<LocationSearch> {
           _autocomplete(context, textEditingController.text);
         },
         onChanged: (text) => _autocomplete(context, text),
-        // use first suggestion on submit, stop when no results
         onSubmitted: (_) {
-          final results = context.read<GeocodingCubit>().state.results;
-          if (results != null && results.isNotEmpty) {
+          final state = context.read<GeocodingCubit>().state;
+          final results = state.results;
+          // continue loading if currently loading
+          if ((querySubmitDelay != null && querySubmitDelay!.isActive) ||
+              state.isLoading) {
+            return;
+          }
+          // use first suggestion if available
+          else if (results != null && results.isNotEmpty) {
             _selectResult(results.first);
           } else {
             querySubmitDelay?.cancel();
@@ -160,7 +166,8 @@ class _LocationSearchState extends State<LocationSearch> {
           strokeWidth: 2.0,
         ),
       );
-    } else if (focusNode.hasFocus && textEditingController.text.isNotEmpty) {
+    } else if ((focusNode.hasFocus && textEditingController.text.isNotEmpty) ||
+        (resultsOverlay != null && resultsOverlay!.mounted)) {
       return IconButton(
         onPressed: () {
           querySubmitDelay?.cancel();
