@@ -10,6 +10,7 @@ import 'bloc/aircraft/aircraft_cubit.dart';
 import 'bloc/aircraft/aircraft_expiration_cubit.dart';
 import 'bloc/aircraft/export_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
+import 'bloc/geocoding_cubit.dart';
 import 'bloc/help/help_cubit.dart';
 import 'bloc/map/map_cubit.dart';
 import 'bloc/opendroneid_cubit.dart';
@@ -20,6 +21,7 @@ import 'bloc/sliders_cubit.dart';
 import 'bloc/standards_cubit.dart';
 import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
+import 'services/geocoding_rest_client.dart';
 import 'services/location_service.dart';
 import 'services/notification_service.dart';
 import 'services/ornithology_rest_client.dart';
@@ -137,6 +139,12 @@ void main() async {
           ),
           BlocProvider<HelpCubit>(
             create: (context) => HelpCubit(),
+            lazy: false,
+          ),
+          BlocProvider<GeocodingCubit>(
+            create: (context) => GeocodingCubit(
+              geocodingRestClient: NominatimGeocodingRestClient(),
+            ),
             lazy: false,
           ),
         ],

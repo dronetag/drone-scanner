@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (5.7.1)
   - app_settings (5.1.1):
     - Flutter
   - device_info_plus (0.0.1):
@@ -9,11 +8,6 @@ PODS:
     - Flutter
   - flutter_opendroneid (1.0.0):
     - Flutter
-  - flutter_osm_plugin (0.0.1):
-    - Alamofire
-    - Flutter
-    - Polyline
-    - Tangram-es
   - google_maps_flutter_ios (0.0.1):
     - Flutter
     - GoogleMaps (< 8.0)
@@ -33,20 +27,18 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
-  - Polyline (5.1.0)
-  - Sentry/HybridSDK (8.9.1):
-    - SentryPrivate (= 8.9.1)
+  - Sentry/HybridSDK (8.15.2):
+    - SentryPrivate (= 8.15.2)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.9.1)
-  - SentryPrivate (8.9.1)
+    - Sentry/HybridSDK (= 8.15.2)
+  - SentryPrivate (8.15.2)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - Tangram-es (0.17.1)
   - url_launcher_ios (0.0.1):
     - Flutter
   - wakelock (0.0.1):
@@ -58,7 +50,6 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_opendroneid (from `.symlinks/plugins/flutter_opendroneid/ios`)
-  - flutter_osm_plugin (from `.symlinks/plugins/flutter_osm_plugin/ios`)
   - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -73,12 +64,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - GoogleMaps
-    - Polyline
     - Sentry
     - SentryPrivate
-    - Tangram-es
 
 EXTERNAL SOURCES:
   app_settings:
@@ -91,8 +79,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_opendroneid:
     :path: ".symlinks/plugins/flutter_opendroneid/ios"
-  flutter_osm_plugin:
-    :path: ".symlinks/plugins/flutter_osm_plugin/ios"
   google_maps_flutter_ios:
     :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
   location:
@@ -117,13 +103,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
-  Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
   app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_opendroneid: 92e28add32d6bf2b5705fdad0666657476de2e15
-  flutter_osm_plugin: f06ae1e854af57270c61ae27bdb8a386cfd4afa5
   google_maps_flutter_ios: abdac20d6ce8931f6ebc5f46616df241bfaa2cfd
   GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
@@ -131,16 +115,14 @@ SPEC CHECKSUMS:
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
-  Polyline: 2a1f29f87f8d9b7de868940f4f76deb8c678a5b1
-  Sentry: e3203780941722a1fcfee99e351de14244c7f806
-  sentry_flutter: 8f0ffd53088e6a4d50c095852c5cad9e4405025c
-  SentryPrivate: 5e3683390f66611fc7c6215e27645873adb55d13
+  Sentry: 6f5742b4c47c17c9adcf265f6f328cf4a0ed1923
+  sentry_flutter: 2c309a1d4b45e59d02cfa15795705687f1e2081b
+  SentryPrivate: b2f7996f37781080f04a946eb4e377ff63c64195
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
-  Tangram-es: 628b634f7fc09d2217469b9914de00d9de49ff9d
-  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
 PODFILE CHECKSUM: 5393230c672d3a74e2eae365640a3f251271ea30
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.2

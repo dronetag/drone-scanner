@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:f_logs/f_logs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -149,16 +148,16 @@ class StandardsCubit extends Cubit<StandardsState> {
       phoneModel = iosInfo.name;
       phoneManufacturer = 'Apple';
     }
-    // flogs
+    // TODO: use this information
     if (phoneModel != null) {
-      FLog.info(text: 'phoneModel $phoneManufacturer $phoneModel');
+      print('phoneModel $phoneManufacturer $phoneModel');
     }
-    FLog.info(text: 'os $platform $osVersion');
-    FLog.info(text: 'btLegacy $btLegacy');
-    FLog.info(text: 'btExtended $btExtended');
-    FLog.info(text: 'wifiBeacon $wifiBeacon');
-    FLog.info(text: 'wifiNan $wifiNaN');
-    FLog.info(text: 'maxAdvDataLen $maxAdvDataLen');
+    print('os $platform $osVersion');
+    print('btLegacy $btLegacy');
+    print('btExtended $btExtended');
+    print('wifiBeacon $wifiBeacon');
+    print('wifiNan $wifiNaN');
+    print('maxAdvDataLen $maxAdvDataLen');
 
     // set that platforms standards were already logged
     await preferences.setBool('logPlatformStandards', true);

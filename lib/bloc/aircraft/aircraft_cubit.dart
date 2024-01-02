@@ -8,6 +8,7 @@ import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 
 import '../../models/aircraft_model_info.dart';
@@ -171,7 +172,7 @@ class AircraftCubit extends Cubit<AircraftState> {
         }, fetchInProgress: false),
       );
       await _saveModelInfo();
-    } catch (err) {
+    } on ClientException catch (err) {
       print('Failed to fetch aircraft model info for $serialNumber, $err');
       emit(state.copyWith(fetchInProgress: false));
     }
