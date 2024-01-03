@@ -35,7 +35,7 @@ The application uses [Google Maps Platform](https://cloud.google.com/maps-platfo
 
 For more details, see [Getting started with Google Maps Platform](https://developers.google.com/maps/gmp-get-started).
 
-In the project folder, create files *ios/Runner/Secrets.plist* and *android/app/res/values/secrets.xml* by making a copy of the example files present in the directories. Paste your key to both files. Then create a file *google_map_api.json* in *assets/config*, see the example file to see the required structure.
+In the project folder, create files *ios/Runner/Secrets.plist* and *android/app/src/main/res/values/secrets.xml* by making a copy of the example files present in the directories. Paste your key to both files.
 
 The files which contain Google Maps API are added to .gitignore, so your key will not be accidentally committed. Make sure you don't put your API keys anywhere else before pushing your work.
 

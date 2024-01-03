@@ -61,7 +61,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/config/
     - assets/google_maps/
     - assets/docs/
   # An image asset can refer to one or more resolution-specific "variants", see

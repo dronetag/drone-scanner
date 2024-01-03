@@ -1,5 +1,4 @@
 # Files with google api key are ignored, so your key wont get accidentaly pushed to repository
-/assets/config/google_map_api.json
 **/android/app/src/main/res/values/secrets.xml
 **/ios/Runner/Secrets.plist
 
