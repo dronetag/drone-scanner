@@ -22,7 +22,7 @@ class AircraftCardCustomText extends StatelessWidget {
 
     const emptyText = Text(
       'Unknown Location',
-      textScaleFactor: 0.9,
+      textScaler: TextScaler.linear(0.9),
     );
     var text = 'Unknown Location';
     if (preference == ListFieldPreference.distance) {
@@ -62,7 +62,7 @@ class AircraftCardCustomText extends StatelessWidget {
 
     return Text(
       text,
-      textScaleFactor: 0.9,
+      textScaler: TextScaler.linear(0.9),
     );
   }
 }

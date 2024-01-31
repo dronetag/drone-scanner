@@ -73,7 +73,7 @@ class _RefreshingTextState extends State<RefreshingText> {
         }
         return Text(
           text,
-          textScaleFactor: widget.scaleFactor,
+          textScaler: TextScaler.linear(widget.scaleFactor),
           style: TextStyle(
             color: expiresSoon && widget.showExpiryWarning
                 ? AppColors.red

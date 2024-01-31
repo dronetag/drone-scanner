@@ -40,7 +40,7 @@ class NumDronesText extends StatelessWidget {
         ),
         Text(
           numPacksText,
-          textScaleFactor: 0.9,
+          textScaler: TextScaler.linear(0.9),
         ),
       ],
     );

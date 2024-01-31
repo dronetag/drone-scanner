@@ -208,7 +208,7 @@ class AircraftCard extends StatelessWidget {
           ),
           Text(
             "${rssi ?? "?"} dBm",
-            textScaleFactor: 0.7,
+            textScaler: TextScaler.linear(0.7),
             style: TextStyle(
               fontWeight: FontWeight.w600,
               color: AppColors.slate,

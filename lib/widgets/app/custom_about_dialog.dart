@@ -76,7 +76,7 @@ class CustomAboutDialog extends StatelessWidget {
                     ),
                     const Text(
                       'Drone Scanner',
-                      textScaleFactor: 1.6,
+                      textScaler: TextScaler.linear(1.6),
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Colors.white,

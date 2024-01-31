@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import './components/toolbar_actions.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../constants/colors.dart' as colors;
 import '../../constants/sizes.dart';
 import '../showcase/showcase_item.dart';
+import './components/toolbar_actions.dart';
 import 'components/location_search.dart';
 import 'components/scanning_state_icons.dart';
 

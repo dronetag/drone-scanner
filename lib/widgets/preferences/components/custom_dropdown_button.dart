@@ -38,7 +38,7 @@ class CustomDropdownButton extends StatelessWidget {
                 value: value,
                 child: Text(
                   value,
-                  textScaleFactor: 0.9,
+                  textScaler: TextScaler.linear(0.9),
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                   ),
