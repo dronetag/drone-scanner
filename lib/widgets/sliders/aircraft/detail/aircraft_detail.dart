@@ -10,6 +10,7 @@ import '../../../../bloc/sliders_cubit.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../models/aircraft_model_info.dart';
 import '../../../showcase/showcase_item.dart';
+import 'auth_fields.dart';
 import 'basic_fields.dart';
 import 'connection_fields.dart';
 import 'location_fields.dart';
@@ -140,6 +141,7 @@ class _AircraftDetailState extends State<AircraftDetail> {
       ),
       ...LocationFields.buildLocationFields(context, loc),
       ...OperatorFields.buildOperatorFields(context, messagePackList.last),
+      ...AuthFields.buildAuthFields(context, messagePackList.last),
     ];
   }
 }

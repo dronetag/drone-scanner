@@ -24,8 +24,8 @@ class AircraftDetailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = fieldText ?? '-';
-    return Wrap(
-      direction: Axis.vertical,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Wrap(
           direction: Axis.horizontal,
