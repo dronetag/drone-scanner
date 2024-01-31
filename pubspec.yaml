@@ -20,7 +20,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_opendroneid: 0.15.2
+  flutter_opendroneid:
+    git:
+      url: git@github.com:dronetag/flutter-opendroneid.git
+      ref: feat/DT-2852-auth-type-conversion
   flutter_local_notifications: ^14.0.0
   another_flushbar: ^1.12.30
   sprintf: "^7.0.0"

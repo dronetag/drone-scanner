@@ -148,10 +148,11 @@ packages:
   dart_opendroneid:
     dependency: transitive
     description:
-      name: dart_opendroneid
-      sha256: "86c874bca901a816c019820c020db33ccabd552980e334207380fd50c2f7bef8"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "feat/DT-2852-parse-auth-message"
+      resolved-ref: b6d6b8f2d3adb91db90660f4c884142c0eb981ba
+      url: "git@github.com:dronetag/dart-opendroneid.git"
+    source: git
     version: "0.3.0"
   dbus:
     dependency: transitive
@@ -249,10 +250,11 @@ packages:
   flutter_opendroneid:
     dependency: "direct main"
     description:
-      name: flutter_opendroneid
-      sha256: "478cb8945794d6e06a47820347f2e127a1690cc9b3bbbf053fedb9487e4a6ce0"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "feat/DT-2852-auth-type-conversion"
+      resolved-ref: "85dd37e4bafb94cd018aff4284f449e62d456b10"
+      url: "git@github.com:dronetag/flutter-opendroneid.git"
+    source: git
     version: "0.15.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
