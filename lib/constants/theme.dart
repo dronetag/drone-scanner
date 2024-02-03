@@ -27,6 +27,7 @@ class AppTheme {
 
   // Light UI Theme
   static final lightTheme = ThemeData(
+    useMaterial3: false,
     // Color scheme
     colorScheme: lightColorScheme,
     brightness: Brightness.light,

@@ -164,7 +164,7 @@ class HelpPage extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 15.0),
           child: Text(
             'Help',
-            textScaleFactor: 2,
+            textScaler: TextScaler.linear(2),
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),

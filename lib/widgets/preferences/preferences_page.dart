@@ -162,7 +162,7 @@ class PreferencesPage extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 15.0),
           child: Text(
             'Preferences',
-            textScaleFactor: 2,
+            textScaler: TextScaler.linear(2),
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
@@ -254,7 +254,7 @@ class PreferencesPage extends StatelessWidget {
           child: Padding(
             padding: itemPadding,
             child: RichText(
-              textScaleFactor: 0.75,
+              textScaler: TextScaler.linear(0.75),
               text: TextSpan(
                 style: const TextStyle(color: AppColors.lightGray),
                 children: <TextSpan>[

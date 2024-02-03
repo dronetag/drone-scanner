@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '/utils/utils.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../bloc/zones/zone_item.dart';
+import '/utils/utils.dart';
 
 class ZoneDetail extends StatelessWidget {
   const ZoneDetail({

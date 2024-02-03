@@ -34,7 +34,7 @@ class PreferencesFieldWithDescription extends StatelessWidget {
               ),
               Text(
                 description,
-                textScaleFactor: 0.8,
+                textScaler: TextScaler.linear(0.8),
                 style: const TextStyle(
                   color: AppColors.lightGray,
                 ),
