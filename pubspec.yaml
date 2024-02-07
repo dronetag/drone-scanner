@@ -39,7 +39,7 @@ dependencies:
   app_settings: ^5.1.1
   share_plus: ^6.3.2
   flutter_bloc: ^8.0.1
-  package_info: ^2.0.2
+  package_info_plus: ^5.0.1
   localstorage: ^4.0.0+1
   sentry_flutter: ^7.9.0
   rxdart: ^0.27.5
