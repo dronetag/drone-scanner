@@ -52,7 +52,7 @@ dependencies:
 
 dev_dependencies:
   dependency_validator: ^3.0.0
-  pedantic: ^1.11.0
+  flutter_lints: ^3.0.1
   sentry_dart_plugin: ^1.6.2
 
 # The following section is specific to Flutter.
