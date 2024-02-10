@@ -51,7 +51,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
     final width =
         MediaQuery.of(context).size.width - 2 * Sizes.mapContentMargin;
 
-    final progressBarHeight = 8.0;
+    const progressBarHeight = 8.0;
     alertsCubit = context.read<ProximityAlertsCubit>();
     controller.animateTo(1);
     return Container(

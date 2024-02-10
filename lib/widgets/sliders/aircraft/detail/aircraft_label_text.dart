@@ -26,7 +26,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
           widget.aircraftMac,
         )
         .then((value) => setState(() {
-              final snackBarText = 'Label deleted.';
+              const snackBarText = 'Label deleted.';
               showSnackBar(
                 context,
                 snackBarText,

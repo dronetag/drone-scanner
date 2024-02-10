@@ -42,7 +42,7 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
 
   void _delete(BuildContext context) {
     context.read<ProximityAlertsCubit>().clearUsersAircraftUASID().then((_) {
-      final snackBarText = 'Users aircraft UAS ID was cleared.';
+      const snackBarText = 'Users aircraft UAS ID was cleared.';
       showSnackBar(
         context,
         snackBarText,

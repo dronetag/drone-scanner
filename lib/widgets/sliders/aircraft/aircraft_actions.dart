@@ -20,7 +20,7 @@ enum AircraftAction {
 }
 
 Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
-  final labelStyle = const TextStyle(
+  const labelStyle = TextStyle(
     fontSize: 16,
   );
   final selectedMac =

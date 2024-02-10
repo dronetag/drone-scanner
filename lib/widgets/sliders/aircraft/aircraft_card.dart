@@ -171,7 +171,7 @@ class AircraftCard extends StatelessWidget {
     final source = messagePack.packSource;
     final standardText = getSourceShortcut(source);
     final width = MediaQuery.of(context).size.width;
-    final iconSize = Sizes.iconSize / 3 * 2;
+    const iconSize = Sizes.iconSize / 3 * 2;
     return SizedBox(
       width: width / 7,
       child: Column(

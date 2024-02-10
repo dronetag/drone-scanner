@@ -24,9 +24,9 @@ class ScanningStatusField extends StatelessWidget {
       ),
     );
     final odidState = context.watch<OpendroneIdCubit>().state;
-    final textStyle = const TextStyle(fontSize: 14);
+    const textStyle = TextStyle(fontSize: 14);
     final wifiEnabled = context.read<StandardsCubit>().state.androidSystem;
-    final contentPadding = const EdgeInsets.all(15.0);
+    const contentPadding = EdgeInsets.all(15.0);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(

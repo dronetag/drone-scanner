@@ -24,7 +24,7 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
   _QuestionWidgetState({this.showAnswer = false});
   @override
   Widget build(BuildContext context) {
-    final questionStyle = const TextStyle(
+    const questionStyle = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w600,
       color: AppColors.highlightBlue,

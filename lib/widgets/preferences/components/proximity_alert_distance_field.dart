@@ -27,8 +27,8 @@ class ProximityAlertDistanceField extends StatelessWidget {
             TextSelection.fromPosition(TextPosition(offset: text.length - 1)),
       ),
     );
-    final minValue = ProximityAlertsCubit.minProximityAlertDistance;
-    final maxValue = ProximityAlertsCubit.maxProximityAlertDistance;
+    const minValue = ProximityAlertsCubit.minProximityAlertDistance;
+    const maxValue = ProximityAlertsCubit.maxProximityAlertDistance;
     const defaultTextFieldWidth = 90.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +134,7 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
     bool isEnabled = false,
     bool isDiscrete = false,
   }) {
-    final thumbSize = 10;
+    const thumbSize = 10;
     final trackHeight = sliderTheme.trackHeight;
     final trackLeft = offset.dx + thumbSize;
     final trackTop = offset.dy + (parentBox.size.height - trackHeight!) / 2;

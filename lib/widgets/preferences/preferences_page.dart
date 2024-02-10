@@ -140,7 +140,7 @@ class PreferencesPage extends StatelessWidget {
         AppColors.preferencesButtonColor,
       ),
     );
-    final itemPadding = const EdgeInsets.only(bottom: 10);
+    const itemPadding = EdgeInsets.only(bottom: 10);
 
     return [
       Align(

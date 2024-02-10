@@ -106,9 +106,9 @@ class ProximityAlertsPage extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    final itemPadding = const EdgeInsets.symmetric(vertical: Sizes.standard);
+    const itemPadding = EdgeInsets.symmetric(vertical: Sizes.standard);
     final alertsState = context.watch<ProximityAlertsCubit>().state;
-    final radarIconSize = 50.0;
+    const radarIconSize = 50.0;
     return [
       Align(
         alignment: Alignment.centerLeft,
@@ -391,7 +391,7 @@ class ProximityAlertsPage extends StatelessWidget {
   }
 
   Widget _buildExpirationTimeField(BuildContext context) {
-    final items = const [
+    const items = [
       '5 seconds',
       '10 seconds',
       '30 seconds',

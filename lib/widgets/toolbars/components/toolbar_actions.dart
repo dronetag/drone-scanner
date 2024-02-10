@@ -82,7 +82,7 @@ void showBtSnackBar(BuildContext context, {bool? started, String? errorText}) {
 }
 
 Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
-  final labelStyle = const TextStyle(
+  const labelStyle = TextStyle(
     fontSize: 16,
   );
   return showMenu<ToolbarMenuAction>(
