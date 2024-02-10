@@ -75,9 +75,9 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Label',
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             color: AppColors.detailFieldHeaderColor,
           ),
@@ -89,7 +89,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
           children: [
             Expanded(
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Enter label for an aircraft',
                 ),

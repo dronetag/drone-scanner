@@ -20,14 +20,14 @@ class ProximityAlertWidget extends StatelessWidget {
         border: Border.all(color: AppColors.pink),
         borderRadius: BorderRadius.circular(Sizes.panelBorderRadius),
       ),
-      padding: EdgeInsets.all(
+      padding: const EdgeInsets.all(
         Sizes.mapContentMargin / 2,
       ),
       child: Column(
         children: [
           Row(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(right: Sizes.iconPadding),
                 child: Icon(
                   Icons.location_searching,
@@ -39,16 +39,16 @@ class ProximityAlertWidget extends StatelessWidget {
                 aircraftCubit.state.aircraftLabels.containsKey(droneMac)
                     ? aircraftCubit.state.aircraftLabels[droneMac]!
                     : alert.uasId,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
                   color: Colors.black,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Text(
                 '~${alert.distance.toStringAsFixed(1)}m away',
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,
                   color: AppColors.red,

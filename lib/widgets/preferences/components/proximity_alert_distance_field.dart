@@ -38,14 +38,14 @@ class ProximityAlertDistanceField extends StatelessWidget {
           children: [
             Container(
               width: MediaQuery.of(context).size.width / 2,
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Proximity alerts distance'),
                   Text(
                     'Set horizontal distance threshold for proximity alerts',
                     textScaler: TextScaler.linear(0.8),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.lightGray,
                     ),
                   ),
@@ -60,11 +60,11 @@ class ProximityAlertDistanceField extends StatelessWidget {
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                 ],
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   contentPadding: EdgeInsets.all(Sizes.standard),
                   isDense: true,
                 ),
-                keyboardType: TextInputType.numberWithOptions(),
+                keyboardType: const TextInputType.numberWithOptions(),
                 textInputAction: TextInputAction.go,
                 controller: _controller,
                 onFieldSubmitted: (value) {
@@ -104,14 +104,14 @@ class ProximityAlertDistanceField extends StatelessWidget {
               children: [
                 Text(
                   '${minValue.toStringAsFixed(0)}m',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 10,
                     color: AppColors.lightGray,
                   ),
                 ),
                 Text(
                   '${(maxValue / 1000).toStringAsFixed(0)}km',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 10,
                     color: AppColors.lightGray,
                   ),

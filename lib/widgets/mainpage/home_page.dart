@@ -43,7 +43,7 @@ class MyHomePage extends StatelessWidget {
                 }
                 return true;
               },
-              child: AppScaffold(
+              child: const AppScaffold(
                 child: HomeBody(),
               ),
             ),

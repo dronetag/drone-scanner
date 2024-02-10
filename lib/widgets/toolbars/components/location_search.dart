@@ -127,7 +127,7 @@ class _LocationSearchState extends State<LocationSearch> {
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   itemCount: autocompleteResult.length,
-                  separatorBuilder: (context, index) => Divider(
+                  separatorBuilder: (context, index) => const Divider(
                     indent: 0,
                     endIndent: 0,
                     height: Sizes.half,
@@ -137,7 +137,7 @@ class _LocationSearchState extends State<LocationSearch> {
                     return ListTile(
                       dense: true,
                       visualDensity: VisualDensity.compact,
-                      contentPadding: EdgeInsets.all(Sizes.standard),
+                      contentPadding: const EdgeInsets.all(Sizes.standard),
                       onTap: () => _selectResult(option),
                       title: Text(
                         option.address ?? 'Uknown address',
@@ -158,7 +158,7 @@ class _LocationSearchState extends State<LocationSearch> {
     if (context.watch<GeocodingCubit>().state.isLoading ||
         (querySubmitDelay != null && querySubmitDelay!.isActive)) {
       return Container(
-        padding: EdgeInsets.all(Sizes.standard * 2),
+        padding: const EdgeInsets.all(Sizes.standard * 2),
         width: Sizes.iconSize,
         height: Sizes.iconSize,
         child: const CircularProgressIndicator(
@@ -174,7 +174,7 @@ class _LocationSearchState extends State<LocationSearch> {
           _disposeOverlayEntry(context);
           setState(textEditingController.clear);
         },
-        icon: Icon(
+        icon: const Icon(
           Icons.delete,
           color: Colors.white,
         ),

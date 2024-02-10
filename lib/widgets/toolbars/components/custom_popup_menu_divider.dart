@@ -22,7 +22,7 @@ class CustomPopupMenuDivider extends PopupMenuEntry<Never> {
 class _CustomPopupMenuDividerState extends State<CustomPopupMenuDivider> {
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         child: Divider(

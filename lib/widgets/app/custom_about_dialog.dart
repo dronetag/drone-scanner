@@ -154,7 +154,7 @@ class CustomAboutDialog extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Align(
                       alignment: Alignment.bottomLeft,
                       child: Column(

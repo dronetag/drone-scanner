@@ -90,7 +90,7 @@ class _AircraftDetailState extends State<AircraftDetail> {
       textColor: Colors.white,
       opacity: 0,
       child: Padding(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 0,
           left: Sizes.detailMargin,
           right: Sizes.detailMargin,
@@ -103,7 +103,7 @@ class _AircraftDetailState extends State<AircraftDetail> {
                   mainAxisExtent: 50,
                 ),
                 shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: dataChildren.length,
                 itemBuilder: (context, index) {
                   return Container(
@@ -113,7 +113,7 @@ class _AircraftDetailState extends State<AircraftDetail> {
                 },
               )
             : ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
                 itemCount: dataChildren.length,
                 itemBuilder: (context, index) => dataChildren[index],

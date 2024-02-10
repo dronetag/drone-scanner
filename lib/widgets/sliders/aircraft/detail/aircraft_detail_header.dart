@@ -276,8 +276,8 @@ class AircraftDetailHeader extends StatelessWidget {
               text: opIdText,
             ),
           if (!messagePackList.last.operatorIDValid) ...[
-            TextSpan(text: ' '),
-            WidgetSpan(
+            const TextSpan(text: ' '),
+            const WidgetSpan(
               child: Icon(
                 Icons.warning_amber_sharp,
                 size: Sizes.flagSize,

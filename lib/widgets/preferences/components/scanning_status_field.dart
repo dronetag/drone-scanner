@@ -19,12 +19,12 @@ class ScanningStatusField extends StatelessWidget {
       border: Border.all(
         color: AppColors.borderGray,
       ),
-      borderRadius: BorderRadius.all(
+      borderRadius: const BorderRadius.all(
         Radius.circular(5.0),
       ),
     );
     final odidState = context.watch<OpendroneIdCubit>().state;
-    final textStyle = TextStyle(fontSize: 14);
+    final textStyle = const TextStyle(fontSize: 14);
     final wifiEnabled = context.read<StandardsCubit>().state.androidSystem;
     final contentPadding = const EdgeInsets.all(15.0);
     return Padding(
@@ -34,7 +34,7 @@ class ScanningStatusField extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: 5),
+              margin: const EdgeInsets.only(right: 5),
               padding: contentPadding,
               decoration: decoration,
               child: Column(
@@ -90,13 +90,13 @@ class ScanningStatusField extends StatelessWidget {
                           });
                         },
                       ),
-                      Icon(
+                      const Icon(
                         Icons.bluetooth,
                         color: AppColors.detailFieldHeaderColor,
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text('Bluetooth', style: textStyle),
@@ -111,7 +111,7 @@ class ScanningStatusField extends StatelessWidget {
                 opacity: wifiEnabled ? 1 : 0.5,
                 child: Container(
                   decoration: decoration,
-                  margin: EdgeInsets.only(left: 5),
+                  margin: const EdgeInsets.only(left: 5),
                   padding: contentPadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +169,7 @@ class ScanningStatusField extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Text(

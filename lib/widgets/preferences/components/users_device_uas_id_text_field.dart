@@ -71,8 +71,8 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: Sizes.standard * 2),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: Sizes.standard * 2),
             child: Text(
               'Select from the list of visible drones or insert a serial number'
               ' of your drone or Remote ID add-on in the ANSI CTA format'
@@ -85,7 +85,7 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
             children: [
               Expanded(
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'UAS ID',
                   ),

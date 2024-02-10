@@ -24,7 +24,7 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
   _QuestionWidgetState({this.showAnswer = false});
   @override
   Widget build(BuildContext context) {
-    final questionStyle = TextStyle(
+    final questionStyle = const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w600,
       color: AppColors.highlightBlue,
@@ -86,7 +86,7 @@ class _QuestionWidgetState extends State<HelpQuestionWidget> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => const PreferencesPage(),
-                          settings: RouteSettings(
+                          settings: const RouteSettings(
                             name: PreferencesPage.routeName,
                           ),
                         ),

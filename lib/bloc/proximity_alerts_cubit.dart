@@ -208,7 +208,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   void _startAlerts() {
     _refreshTimer = Timer.periodic(
-      Duration(seconds: alertsUpdateIntervalSec),
+      const Duration(seconds: alertsUpdateIntervalSec),
       (_) => checkProximityAlerts(),
     );
     checkProximityAlerts();

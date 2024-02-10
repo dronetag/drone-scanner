@@ -69,7 +69,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
       child: Column(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(Sizes.panelBorderRadius),
                 topRight: Radius.circular(Sizes.panelBorderRadius),
@@ -77,7 +77,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
               color: AppColors.lightRed,
             ),
             width: width,
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: Sizes.standard * 2,
               vertical: Sizes.standard,
             ),
@@ -102,8 +102,8 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
+                            const Padding(
+                              padding: EdgeInsets.only(
                                 right: Sizes.iconPadding,
                               ),
                               child: Icon(
@@ -115,7 +115,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                             Text.rich(
                               TextSpan(
                                 text: dronesText,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: AppColors.red,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
@@ -124,7 +124,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                   TextSpan(
                                     text: ' ${data.length > 1 ? 'are' : 'is'} '
                                         'flying close',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: AppColors.red,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -133,7 +133,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                 ],
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             GestureDetector(
                               onTap: () {
                                 if (!active) return;
@@ -146,14 +146,14 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                     animation: controller,
                                     builder: (context, child) => Text(
                                       '${timeLeft.toStringAsFixed(0)}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: AppColors.red,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
-                                  Icon(
+                                  const Icon(
                                     Icons.close_rounded,
                                     color: AppColors.red,
                                     size: Sizes.textIconSize * 1.2,
@@ -212,14 +212,14 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                     ],
                   );
                 }
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
           Container(
             height: progressBarHeight,
             width: width,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(Sizes.panelBorderRadius),
                 bottomRight: Radius.circular(Sizes.panelBorderRadius),

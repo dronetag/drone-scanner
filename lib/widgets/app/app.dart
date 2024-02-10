@@ -32,8 +32,8 @@ class _AppState extends State<App> {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.light,
-      home: LifeCycleManager(
-        child: const MyHomePage(),
+      home: const LifeCycleManager(
+        child: MyHomePage(),
       ),
       navigatorObservers: [NavigationHistoryObserver()],
     );

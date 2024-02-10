@@ -106,9 +106,9 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
               Sizes.mapContentMargin +
               context.read<ScreenCubit>().scaleHeight * 25,
           right: Sizes.mapContentMargin,
-          child: MapOptionsToolbar(),
+          child: const MapOptionsToolbar(),
         ),
-        AirspaceSlidingPanel(),
+        const AirspaceSlidingPanel(),
       ],
     );
   }

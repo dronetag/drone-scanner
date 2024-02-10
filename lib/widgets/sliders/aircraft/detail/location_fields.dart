@@ -132,9 +132,9 @@ class LocationFields {
                 direction: Axis.vertical,
                 alignment: WrapAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Location',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: AppColors.detailFieldHeaderColor,
                     ),

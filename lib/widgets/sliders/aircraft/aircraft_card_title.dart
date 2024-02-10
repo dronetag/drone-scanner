@@ -40,10 +40,10 @@ class AircraftCardTitle extends StatelessWidget {
               alignment: PlaceholderAlignment.middle,
               child: logo,
             ),
-            TextSpan(text: ' '),
+            const TextSpan(text: ' '),
           ],
           if (proximityAlertsActive)
-            WidgetSpan(
+            const WidgetSpan(
               child: Icon(
                 Icons.person,
                 color: AppColors.green,
@@ -59,7 +59,7 @@ class AircraftCardTitle extends StatelessWidget {
                 color: proximityAlertsActive ? AppColors.green : Colors.black,
               ),
             ),
-            TextSpan(text: ' '),
+            const TextSpan(text: ' '),
           ],
           TextSpan(
             text: givenLabel == null ? '$uasId' : '$givenLabel',

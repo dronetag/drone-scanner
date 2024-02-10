@@ -57,7 +57,7 @@ class AirspaceList extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (context, _) {
-                    return Divider(
+                    return const Divider(
                       color: AppColors.lightGray,
                     );
                   },
