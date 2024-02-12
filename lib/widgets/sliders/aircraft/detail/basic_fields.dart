@@ -157,8 +157,7 @@ class BasicFields {
                     ),
                     if (proximityAlertsActive)
                       const Padding(
-                        padding:
-                            EdgeInsets.only(right: Sizes.iconPadding),
+                        padding: EdgeInsets.only(right: Sizes.iconPadding),
                         child: Icon(
                           Icons.done,
                           color: Colors.white,

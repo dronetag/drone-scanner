@@ -128,7 +128,8 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
       ),
       if (context.read<StandardsCubit>().state.androidSystem)
         PopupMenuItem(
-          padding: const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+          padding:
+              const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
           value: ToolbarMenuAction.toggleWifi,
           child: StatefulBuilder(
             builder: (context, setState) => Row(
