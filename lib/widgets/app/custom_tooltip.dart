@@ -10,9 +10,9 @@ class CustomTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tooltipMargin =
+    const tooltipMargin =
         EdgeInsets.symmetric(horizontal: Sizes.preferencesMargin);
-    final tooltipPadding = EdgeInsets.all(5);
+    const tooltipPadding = EdgeInsets.all(5);
 
     return Tooltip(
       triggerMode: TooltipTriggerMode.tap,

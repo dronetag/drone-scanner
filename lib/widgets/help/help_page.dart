@@ -56,7 +56,7 @@ class HelpPage extends StatelessWidget {
       padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
       itemBuilder: (context, index) => itemList[index],
       itemCount: itemList.length,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       initialScrollIndex: highlightedQuestionIndex ?? 0,
     );
   }
@@ -70,7 +70,7 @@ class HelpPage extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: Sizes.preferencesMargin),
         child: Text(
           state.helpText,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w400,
           ),
@@ -80,7 +80,7 @@ class HelpPage extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: Sizes.preferencesMargin),
         child: Text(
           state.helpSubtext,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
           ),
@@ -93,13 +93,13 @@ class HelpPage extends StatelessWidget {
   Widget buildLoading(BuildContext context) {
     final itemList = [
       ...buildHeader(context),
-      Center(child: CircularProgressIndicator()),
+      const Center(child: CircularProgressIndicator()),
     ];
     return ListView.builder(
       padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
       itemBuilder: (context, index) => itemList[index],
       itemCount: itemList.length,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
     );
   }
 
@@ -111,12 +111,12 @@ class HelpPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(
+            const Icon(
               Icons.error,
               color: AppColors.redIcon,
               size: 36,
             ),
-            Text(
+            const Text(
               'Failed to load help section.',
               style: TextStyle(fontSize: 18),
             ),
@@ -126,10 +126,10 @@ class HelpPage extends StatelessWidget {
                   AppColors.preferencesButtonColor,
                 ),
               ),
-              icon: Icon(
+              icon: const Icon(
                 Icons.refresh,
               ),
-              label: Text('Retry'),
+              label: const Text('Retry'),
               onPressed: context.read<HelpCubit>().fetchHelp,
             )
           ],
@@ -140,7 +140,7 @@ class HelpPage extends StatelessWidget {
       padding: MediaQuery.of(context).padding.copyWith(top: 0.0),
       itemBuilder: (context, index) => itemList[index],
       itemCount: itemList.length,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
     );
   }
 

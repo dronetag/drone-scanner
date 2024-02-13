@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:navigation_history_observer/navigation_history_observer.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../constants/theme.dart';
 import '../mainpage/home_page.dart';
@@ -32,8 +32,8 @@ class _AppState extends State<App> {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.light,
-      home: LifeCycleManager(
-        child: const MyHomePage(),
+      home: const LifeCycleManager(
+        child: MyHomePage(),
       ),
       navigatorObservers: [NavigationHistoryObserver()],
     );

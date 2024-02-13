@@ -31,7 +31,7 @@ class AppTheme {
     // Color scheme
     colorScheme: lightColorScheme,
     brightness: Brightness.light,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
@@ -52,7 +52,7 @@ class AppTheme {
 
     // Typography
     fontFamily: 'TitilliumWeb',
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 36,
         height: 1.1,

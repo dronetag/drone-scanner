@@ -31,7 +31,7 @@ class _ProximityAlertsIconState extends State<ProximityAlertsIcon>
   void initState() {
     super.initState();
     motionController = AnimationController(
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       vsync: this,
       lowerBound: lowerBound,
       upperBound: upperBound,
@@ -87,7 +87,7 @@ class _ProximityAlertsIconState extends State<ProximityAlertsIcon>
             color: AppColors.red,
             iconSize: iconSize,
             padding: EdgeInsets.zero,
-            constraints: BoxConstraints(),
+            constraints: const BoxConstraints(),
             onPressed: () =>
                 context.read<ProximityAlertsCubit>().showExpiredAlerts(),
           ),
@@ -96,7 +96,7 @@ class _ProximityAlertsIconState extends State<ProximityAlertsIcon>
             right: 0,
             child: Text(
               '${state.foundAircraft.length}',
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.red,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

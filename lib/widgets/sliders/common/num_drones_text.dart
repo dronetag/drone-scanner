@@ -35,12 +35,12 @@ class NumDronesText extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 5.0,
         ),
         Text(
           numPacksText,
-          textScaler: TextScaler.linear(0.9),
+          textScaler: const TextScaler.linear(0.9),
         ),
       ],
     );

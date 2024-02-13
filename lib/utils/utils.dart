@@ -164,7 +164,7 @@ String getSpeedHorAsString(double? speed) {
 }
 
 Widget? getFlag(String countryCode) {
-  final size = Sizes.flagSize;
+  const size = Sizes.flagSize;
   Widget? flag;
   NetworkImage? image;
   try {

@@ -143,7 +143,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     try {
       await FlutterOpenDroneId.startScan(usedTechnology);
       listener = FlutterOpenDroneId.allMessages
-          .debounceTime(Duration(milliseconds: messageDebounceMs))
+          .debounceTime(const Duration(milliseconds: messageDebounceMs))
           .listen(scanCallback);
       aircraftCubit.initEmitTimer();
     } on PermissionsMissingException catch (e) {

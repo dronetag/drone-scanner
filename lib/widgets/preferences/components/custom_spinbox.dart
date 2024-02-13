@@ -30,18 +30,18 @@ class CustomSpinBox extends StatelessWidget {
               valueSetter(value - step);
             }
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.remove,
             color: AppColors.preferencesButtonColor,
           ),
           padding: EdgeInsets.zero,
-          constraints: BoxConstraints(),
+          constraints: const BoxConstraints(),
         ),
         Align(
           child: SizedBox(
             width: width / 6,
             child: SpinBox(
-              keyboardType: TextInputType.numberWithOptions(signed: true),
+              keyboardType: const TextInputType.numberWithOptions(signed: true),
               min: minVal,
               max: maxVal,
               value: value,
@@ -66,13 +66,13 @@ class CustomSpinBox extends StatelessWidget {
           ),
         ),
         IconButton(
-          constraints: BoxConstraints(),
+          constraints: const BoxConstraints(),
           onPressed: () {
             if (value + step <= maxVal) {
               valueSetter(value + step);
             }
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.add,
             color: AppColors.preferencesButtonColor,
           ),

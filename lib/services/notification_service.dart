@@ -23,7 +23,7 @@ class NotificationService {
     tz_data.initializeTimeZones();
     final scheduleTime =
         tz.TZDateTime.fromMillisecondsSinceEpoch(tz.local, endTime);
-    final iosDetail = DarwinNotificationDetails(
+    const iosDetail = DarwinNotificationDetails(
       presentAlert: false,
       presentBadge: false,
     );

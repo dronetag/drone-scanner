@@ -20,7 +20,7 @@ enum AircraftAction {
 }
 
 Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
-  final labelStyle = TextStyle(
+  const labelStyle = TextStyle(
     fontSize: 16,
   );
   final selectedMac =
@@ -34,14 +34,14 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
   }
   return showMenu<AircraftAction>(
     context: context,
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(10),
       ),
     ),
     items: [
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: AircraftAction.mapLock,
@@ -55,7 +55,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
         ),
       ),
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: AircraftAction.shareCsv,
@@ -65,7 +65,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
         ),
       ),
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: AircraftAction.shareGpx,
@@ -75,7 +75,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
         ),
       ),
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: AircraftAction.delete,

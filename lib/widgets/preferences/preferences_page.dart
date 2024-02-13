@@ -86,7 +86,7 @@ class PreferencesPage extends StatelessWidget {
                             ),
                             shrinkWrap: true,
                             itemCount: itemList.length,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Container(
                                 margin:
@@ -101,7 +101,7 @@ class PreferencesPage extends StatelessWidget {
                                 .copyWith(top: 0.0),
                             itemBuilder: (context, index) => itemList[index],
                             itemCount: itemList.length,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                           ),
                   ),
                 ),
@@ -140,7 +140,7 @@ class PreferencesPage extends StatelessWidget {
         AppColors.preferencesButtonColor,
       ),
     );
-    final itemPadding = EdgeInsets.only(bottom: 10);
+    const itemPadding = EdgeInsets.only(bottom: 10);
 
     return [
       Align(
@@ -168,12 +168,12 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       if (isLandscape) const SizedBox(),
-      Headline(
+      const Headline(
         text: 'Enabled Technologies',
       ),
       Padding(
         padding: itemPadding,
-        child: ScanningStatusField(),
+        child: const ScanningStatusField(),
       ),
       Padding(
         padding: itemPadding,
@@ -185,13 +185,13 @@ class PreferencesPage extends StatelessWidget {
                 builder: (context) => const HelpPage(
                   highlightedQuestionIndex: HelpCubit.iphoneWifiQuestionIndex,
                 ),
-                settings: RouteSettings(
+                settings: const RouteSettings(
                   name: HelpPage.routeName,
                 ),
               ),
             );
           }),
-          child: Row(
+          child: const Row(
             children: [
               Icon(
                 Icons.help_outline,
@@ -213,7 +213,7 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
-      Headline(
+      const Headline(
         text: 'Standards',
         child: CustomTooltip(
           message: 'Each phone may support different standards which the '
@@ -239,7 +239,7 @@ class PreferencesPage extends StatelessWidget {
           color: state.btExtended ? AppColors.orange : AppColors.red,
           text: btExtendedText,
           icon: state.btExtended
-              ? CustomTooltip(
+              ? const CustomTooltip(
                   message:
                       'Warning: Support claimed by manufacturer does not fully '
                       'guarantee that Bluetooth Extended will actually work.',
@@ -254,7 +254,7 @@ class PreferencesPage extends StatelessWidget {
           child: Padding(
             padding: itemPadding,
             child: RichText(
-              textScaler: TextScaler.linear(0.75),
+              textScaler: const TextScaler.linear(0.75),
               text: TextSpan(
                 style: const TextStyle(color: AppColors.lightGray),
                 children: <TextSpan>[
@@ -288,7 +288,7 @@ class PreferencesPage extends StatelessWidget {
           icon: state.wifiNaN ? positiveIcon : negativeIcon,
         ),
       ),
-      Headline(
+      const Headline(
         text: 'Permissions',
         child: CustomTooltip(
           message:
@@ -365,7 +365,7 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
-      Headline(
+      const Headline(
         text: 'Data Preferences',
         child: CustomTooltip(
           message: 'The application can delete old records after certain time '
@@ -549,7 +549,7 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
-      Headline(
+      const Headline(
         text: 'Misc',
       ),
       Padding(

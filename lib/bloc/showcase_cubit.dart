@@ -201,7 +201,7 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
         context,
         MaterialPageRoute(
           builder: (context) => const PreferencesPage(),
-          settings: RouteSettings(
+          settings: const RouteSettings(
             name: PreferencesPage.routeName,
           ),
         ),

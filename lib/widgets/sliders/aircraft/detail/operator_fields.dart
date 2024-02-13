@@ -106,7 +106,7 @@ class OperatorFields {
             ),
           ),
           if (pack.operatorIDSet && !pack.operatorIDValid)
-            AircraftDetailField(
+            const AircraftDetailField(
               headlineText: '',
               child: Text.rich(
                 TextSpan(
@@ -120,7 +120,7 @@ class OperatorFields {
                       alignment: PlaceholderAlignment.middle,
                     ),
                     TextSpan(
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.red,
                       ),
                       text: ' Invalid data',
@@ -143,9 +143,9 @@ class OperatorFields {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Location',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: AppColors.detailFieldHeaderColor,
                     ),

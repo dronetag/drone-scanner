@@ -88,8 +88,8 @@ class AircraftCard extends StatelessWidget {
                 ),
                 if (messagePack.operatorIDSet &&
                     !messagePack.operatorIDValid) ...[
-                  TextSpan(text: ' '),
-                  WidgetSpan(
+                  const TextSpan(text: ' '),
+                  const WidgetSpan(
                     child: Icon(
                       Icons.warning_amber_sharp,
                       size: Sizes.flagSize,
@@ -131,7 +131,7 @@ class AircraftCard extends StatelessWidget {
     final aircraftText = _getAircraftText();
     return Container(
       width: width / 6,
-      margin: EdgeInsets.only(right: 2.0),
+      margin: const EdgeInsets.only(right: 2.0),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Column(
@@ -139,7 +139,7 @@ class AircraftCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             icon ??
-                Icon(
+                const Icon(
                   Icons.help_outline,
                   size: Sizes.cardIconSize,
                 ),
@@ -171,7 +171,7 @@ class AircraftCard extends StatelessWidget {
     final source = messagePack.packSource;
     final standardText = getSourceShortcut(source);
     final width = MediaQuery.of(context).size.width;
-    final iconSize = Sizes.iconSize / 3 * 2;
+    const iconSize = Sizes.iconSize / 3 * 2;
     return SizedBox(
       width: width / 7,
       child: Column(
@@ -208,8 +208,8 @@ class AircraftCard extends StatelessWidget {
           ),
           Text(
             "${rssi ?? "?"} dBm",
-            textScaler: TextScaler.linear(0.7),
-            style: TextStyle(
+            textScaler: const TextScaler.linear(0.7),
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               color: AppColors.slate,
             ),

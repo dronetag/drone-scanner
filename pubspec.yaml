@@ -20,31 +20,30 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_opendroneid: 0.15.2
+  flutter_opendroneid: ^0.16.0
   flutter_local_notifications: ^14.0.0
   another_flushbar: ^1.12.30
-  sprintf: "^7.0.0"
-  google_api_headers: ^1.1.1
+  sprintf: ^7.0.0
   google_maps_flutter: ^2.4.0
   location: ^5.0.3
-  http: ^0.13.4
-  permission_handler: ^11.0.1
+  http: ^1.2.0
+  permission_handler: ^11.2.0
   flutter_spinbox: ^0.8.0
   path_provider: ^2.0.9
   showcaseview: ^1.1.7
   shared_preferences: ^2.0.13
-  device_info_plus: ^8.0.0
+  device_info_plus: ^9.1.2
   timer_builder: ^2.0.0
   csv: ^5.0.1
   app_settings: ^5.1.1
-  share_plus: ^6.3.2
+  share_plus: ^7.2.2
   flutter_bloc: ^8.0.1
-  package_info: ^2.0.2
+  package_info_plus: ^5.0.1
   localstorage: ^4.0.0+1
   sentry_flutter: ^7.9.0
   rxdart: ^0.27.5
   vector_math: ^2.1.2
-  wakelock: ^0.6.2
+  wakelock_plus: ^1.1.4
   scrollable_positioned_list: ^0.3.5
   flutter_markdown: ^0.6.13
   url_launcher: ^6.1.6
@@ -52,7 +51,7 @@ dependencies:
 
 dev_dependencies:
   dependency_validator: ^3.0.0
-  pedantic: ^1.11.0
+  flutter_lints: ^3.0.1
   sentry_dart_plugin: ^1.6.2
 
 # The following section is specific to Flutter.

@@ -56,7 +56,7 @@ class BasicFields {
                                 alignment: PlaceholderAlignment.middle,
                                 child: logo,
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: ' ',
                               ),
                             ],
@@ -156,9 +156,8 @@ class BasicFields {
                       ),
                     ),
                     if (proximityAlertsActive)
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(right: Sizes.iconPadding),
+                      const Padding(
+                        padding: EdgeInsets.only(right: Sizes.iconPadding),
                         child: Icon(
                           Icons.done,
                           color: Colors.white,
@@ -199,7 +198,7 @@ class BasicFields {
   }
 
   static Widget _buildProgressIndicator(BuildContext context) => Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: Sizes.standard / 2,
         top: Sizes.standard / 2,
         bottom: Sizes.standard / 2,

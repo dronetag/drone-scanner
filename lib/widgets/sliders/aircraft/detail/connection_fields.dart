@@ -39,7 +39,7 @@ class ConnectionFields {
                   children: [
                     if (source == MessageSource.BluetoothLegacy ||
                         source == MessageSource.BluetoothLongRange)
-                      Icon(
+                      const Icon(
                         Icons.bluetooth,
                         size: Sizes.iconSize / 3 * 2,
                       ),

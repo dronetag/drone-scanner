@@ -22,9 +22,9 @@ class CustomDropdownButton extends StatelessWidget {
         alignment: Alignment.centerRight,
         value: value,
         isDense: true,
-        icon: RotatedBox(
+        icon: const RotatedBox(
           quarterTurns: 3,
-          child: const Icon(
+          child: Icon(
             Icons.chevron_left,
             color: AppColors.darkGray,
             size: Sizes.iconSize,
@@ -38,7 +38,7 @@ class CustomDropdownButton extends StatelessWidget {
                 value: value,
                 child: Text(
                   value,
-                  textScaler: TextScaler.linear(0.9),
+                  textScaler: const TextScaler.linear(0.9),
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                   ),

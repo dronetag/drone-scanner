@@ -34,7 +34,7 @@ class ShowcaseStartWidget extends StatelessWidget {
               children: [
                 Text(
                   heading,
-                  textScaler: TextScaler.linear(1.5),
+                  textScaler: const TextScaler.linear(1.5),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: AppColors.purple,

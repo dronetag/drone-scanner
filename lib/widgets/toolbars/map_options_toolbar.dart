@@ -31,7 +31,7 @@ class MapOptionsToolbar extends StatelessWidget {
     final toolbarWidth = MediaQuery.of(context).size.width / 8;
     final items = [
       IconButton(
-        constraints: BoxConstraints(),
+        constraints: const BoxConstraints(),
         padding: EdgeInsets.zero,
         iconSize: Sizes.iconSize,
         onPressed: () {
@@ -44,7 +44,7 @@ class MapOptionsToolbar extends StatelessWidget {
         ),
       ),
       IconButton(
-        constraints: BoxConstraints(),
+        constraints: const BoxConstraints(),
         padding: EdgeInsets.zero,
         onPressed: () {
           if (context.read<MapCubit>().state.mapStyle == MapType.normal) {
@@ -57,7 +57,7 @@ class MapOptionsToolbar extends StatelessWidget {
         icon: const Icon(Icons.layers),
       ),
       IconButton(
-        constraints: BoxConstraints(),
+        constraints: const BoxConstraints(),
         padding: EdgeInsets.zero,
         onPressed: () {
           showAlertDialog(
@@ -84,14 +84,14 @@ class MapOptionsToolbar extends StatelessWidget {
         description: context.read<ShowcaseCubit>().droneRadarDescription,
         title: 'Drone Radar',
         child: IconButton(
-          constraints: BoxConstraints(),
+          constraints: const BoxConstraints(),
           padding: EdgeInsets.zero,
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const ProximityAlertsPage(),
-                settings: RouteSettings(
+                settings: const RouteSettings(
                   name: ProximityAlertsPage.routeName,
                 ),
               ),
@@ -108,7 +108,7 @@ class MapOptionsToolbar extends StatelessWidget {
           ),
         ),
       ),
-      if (showAlertIcon) ProximityAlertsIcon(),
+      if (showAlertIcon) const ProximityAlertsIcon(),
     ];
     return ShowcaseItem(
       showcaseKey: context.read<ShowcaseCubit>().mapToolbarKey,

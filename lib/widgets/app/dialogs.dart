@@ -76,23 +76,23 @@ Future<bool> showLocationPermissionDialog({
             'Bluetooth devices.\n\n',
         children: [
           if (showWhileUsingPermissionExplanation) ...[
-            TextSpan(text: 'Please choose\nthe '),
-            TextSpan(
+            const TextSpan(text: 'Please choose\nthe '),
+            const TextSpan(
               text: '\"While using the app\"\n',
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
-            TextSpan(
+            const TextSpan(
               text: 'option to enable scans in the background.\n\n',
             ),
           ],
-          TextSpan(
+          const TextSpan(
               text: 'If you already denied the permission request,'
                   ' please go to\nthe '),
-          TextSpan(
+          const TextSpan(
             text: '\"App settings\"\n',
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
-          TextSpan(text: 'and enable location manually.'),
+          const TextSpan(text: 'and enable location manually.'),
         ],
       ),
     ),
@@ -141,7 +141,7 @@ Flushbar createProximityAlertFlushBar(BuildContext context, int durationSec) {
     duration: Duration(seconds: durationSec),
     backgroundColor: Colors.transparent,
     flushbarPosition: FlushbarPosition.TOP,
-    padding: EdgeInsets.symmetric(
+    padding: const EdgeInsets.symmetric(
       horizontal: Sizes.mapContentMargin,
       vertical: Sizes.standard,
     ),

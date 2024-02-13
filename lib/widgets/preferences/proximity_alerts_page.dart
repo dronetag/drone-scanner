@@ -72,7 +72,7 @@ class ProximityAlertsPage extends StatelessWidget {
                             ),
                             shrinkWrap: true,
                             itemCount: itemList.length,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Container(
                                 margin:
@@ -87,7 +87,7 @@ class ProximityAlertsPage extends StatelessWidget {
                                 .copyWith(top: 0.0),
                             itemBuilder: (context, index) => itemList[index],
                             itemCount: itemList.length,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                           ),
                   ),
                 ),
@@ -106,9 +106,9 @@ class ProximityAlertsPage extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    final itemPadding = EdgeInsets.symmetric(vertical: Sizes.standard);
+    const itemPadding = EdgeInsets.symmetric(vertical: Sizes.standard);
     final alertsState = context.watch<ProximityAlertsCubit>().state;
-    final radarIconSize = 50.0;
+    const radarIconSize = 50.0;
     return [
       Align(
         alignment: Alignment.centerLeft,
@@ -139,11 +139,11 @@ class ProximityAlertsPage extends StatelessWidget {
           border: Border.all(
             color: AppColors.borderGray,
           ),
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(5.0),
           ),
         ),
-        padding: EdgeInsets.all(Sizes.standard * 2),
+        padding: const EdgeInsets.all(Sizes.standard * 2),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -171,7 +171,7 @@ class ProximityAlertsPage extends StatelessWidget {
                   ),
                 ),
                 if (alertsState.usersAircraftUASID == null)
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(bottom: Sizes.standard / 2),
                     child: Text(
                       '\"My Drone\" is not selected',
@@ -183,7 +183,7 @@ class ProximityAlertsPage extends StatelessWidget {
                   ),
                 RichText(
                   text: TextSpan(
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.toolbarColor,
                       fontWeight: FontWeight.w400,
@@ -201,8 +201,8 @@ class ProximityAlertsPage extends StatelessWidget {
                         )
                       ] else ...[
                         if (alertsState.proximityAlertActive) ...[
-                          TextSpan(text: 'Radar is '),
-                          TextSpan(
+                          const TextSpan(text: 'Radar is '),
+                          const TextSpan(
                             text: 'enabled',
                             style: TextStyle(
                               fontSize: 14,
@@ -212,7 +212,7 @@ class ProximityAlertsPage extends StatelessWidget {
                             ),
                           ),
                         ] else
-                          TextSpan(text: 'Radar is disabled')
+                          const TextSpan(text: 'Radar is disabled')
                       ]
                     ],
                   ),
@@ -237,7 +237,7 @@ class ProximityAlertsPage extends StatelessWidget {
                   Transform.rotate(
                     angle: math.pi / 4,
                     child: Container(
-                      padding: EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2),
                       width: Sizes.iconSize / 3,
                       height: radarIconSize * 1.3,
                       color: Colors.white,
@@ -265,13 +265,13 @@ class ProximityAlertsPage extends StatelessWidget {
                 builder: (context) => const HelpPage(
                   highlightedQuestionIndex: HelpCubit.droneRadarQuestionIndex,
                 ),
-                settings: RouteSettings(
+                settings: const RouteSettings(
                   name: HelpPage.routeName,
                 ),
               ),
             );
           }),
-          child: Row(
+          child: const Row(
             children: [
               Icon(
                 Icons.help_outline,
@@ -293,11 +293,11 @@ class ProximityAlertsPage extends StatelessWidget {
           ),
         ),
       ),
-      Headline(
+      const Headline(
         text: 'My Drone',
         color: AppColors.green,
         fontSize: 12,
-        leading: const Icon(
+        leading: Icon(
           Icons.person,
           color: AppColors.green,
           size: 16,
@@ -306,7 +306,7 @@ class ProximityAlertsPage extends StatelessWidget {
       UsersDeviceUASIDTextField(),
       Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: Sizes.standard * 2,
           bottom: Sizes.standard * 4,
         ),
@@ -321,7 +321,7 @@ class ProximityAlertsPage extends StatelessWidget {
               AppColors.preferencesButtonColor,
             ),
             padding: MaterialStateProperty.all(
-              EdgeInsets.symmetric(
+              const EdgeInsets.symmetric(
                 horizontal: Sizes.standard * 4,
                 vertical: Sizes.standard * 1.5,
               ),
@@ -333,7 +333,7 @@ class ProximityAlertsPage extends StatelessWidget {
           ),
         ),
       ),
-      Headline(
+      const Headline(
         text: 'Options',
         fontSize: 12,
       ),
@@ -362,13 +362,13 @@ class ProximityAlertsPage extends StatelessWidget {
               }),
         ),
       ),
-      Padding(
+      const Padding(
         padding:
             EdgeInsets.only(top: Sizes.standard, bottom: Sizes.standard * 4),
         child: ProximityAlertDistanceField(),
       ),
       Padding(
-        padding: EdgeInsets.only(bottom: Sizes.standard),
+        padding: const EdgeInsets.only(bottom: Sizes.standard),
         child: _buildExpirationTimeField(context),
       ),
       // TODO: put back when there are more data sources available
@@ -391,7 +391,7 @@ class ProximityAlertsPage extends StatelessWidget {
   }
 
   Widget _buildExpirationTimeField(BuildContext context) {
-    final items = const [
+    const items = [
       '5 seconds',
       '10 seconds',
       '30 seconds',

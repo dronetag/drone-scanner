@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/screen_cubit.dart';
@@ -85,7 +85,7 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
   Stack buildMapView(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     // acc to doc, wakelock should not be used in main but in widgets build m
-    Wakelock.toggle(
+    WakelockPlus.toggle(
         enable: context.watch<ScreenCubit>().state.screenSleepDisabled);
     return Stack(
       children: <Widget>[
@@ -106,9 +106,9 @@ class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
               Sizes.mapContentMargin +
               context.read<ScreenCubit>().scaleHeight * 25,
           right: Sizes.mapContentMargin,
-          child: MapOptionsToolbar(),
+          child: const MapOptionsToolbar(),
         ),
-        AirspaceSlidingPanel(),
+        const AirspaceSlidingPanel(),
       ],
     );
   }

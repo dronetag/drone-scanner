@@ -62,7 +62,7 @@ class AircraftCardCustomText extends StatelessWidget {
 
     return Text(
       text,
-      textScaler: TextScaler.linear(0.9),
+      textScaler: const TextScaler.linear(0.9),
     );
   }
 }

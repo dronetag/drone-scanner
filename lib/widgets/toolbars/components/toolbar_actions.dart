@@ -82,13 +82,13 @@ void showBtSnackBar(BuildContext context, {bool? started, String? errorText}) {
 }
 
 Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
-  final labelStyle = TextStyle(
+  const labelStyle = TextStyle(
     fontSize: 16,
   );
   return showMenu<ToolbarMenuAction>(
-    constraints: BoxConstraints(),
+    constraints: const BoxConstraints(),
     context: context,
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(10),
       ),
@@ -96,7 +96,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
     items: [
       PopupMenuItem(
         value: ToolbarMenuAction.toggleBT,
-        padding: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
         child: StatefulBuilder(
           builder: (context, setState) => Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -128,7 +128,8 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
       ),
       if (context.read<StandardsCubit>().state.androidSystem)
         PopupMenuItem(
-          padding: EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
+          padding:
+              const EdgeInsets.symmetric(horizontal: Sizes.mapContentMargin),
           value: ToolbarMenuAction.toggleWifi,
           child: StatefulBuilder(
             builder: (context, setState) => Row(
@@ -158,7 +159,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         ),
       const CustomPopupMenuDivider(),
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openDroneRadar,
@@ -168,7 +169,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         ),
       ),
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openSettings,
@@ -178,7 +179,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         ),
       ),
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openHelp,
@@ -188,7 +189,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
         ),
       ),
       PopupMenuItem(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openAbout,
@@ -214,7 +215,7 @@ void handleAction(BuildContext context, ToolbarMenuAction action) {
         context,
         MaterialPageRoute(
           builder: (context) => const ProximityAlertsPage(),
-          settings: RouteSettings(
+          settings: const RouteSettings(
             name: ProximityAlertsPage.routeName,
           ),
         ),
@@ -225,7 +226,7 @@ void handleAction(BuildContext context, ToolbarMenuAction action) {
         context,
         MaterialPageRoute(
           builder: (context) => const PreferencesPage(),
-          settings: RouteSettings(
+          settings: const RouteSettings(
             name: PreferencesPage.routeName,
           ),
         ),
@@ -237,7 +238,7 @@ void handleAction(BuildContext context, ToolbarMenuAction action) {
         context,
         MaterialPageRoute(
           builder: (context) => const HelpPage(),
-          settings: RouteSettings(
+          settings: const RouteSettings(
             name: HelpPage.routeName,
           ),
         ),

@@ -42,7 +42,7 @@ class _ToolbarState extends State<Toolbar> {
         vertical: statusBarHeight + Sizes.mapContentMargin,
         horizontal: Sizes.mapContentMargin,
       ),
-      padding: EdgeInsets.symmetric(horizontal: Sizes.toolbarMargin),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.toolbarMargin),
       height: Sizes.toolbarHeight,
       child: ShowcaseItem(
         showcaseKey: context.read<ShowcaseCubit>().searchKey,
@@ -51,7 +51,7 @@ class _ToolbarState extends State<Toolbar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(
+            const Expanded(
               flex: 2,
               child: LocationSearch(),
             ),

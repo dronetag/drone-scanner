@@ -38,7 +38,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       lastMessageRssi: -100,
       source: pigeon.MessageSource.BluetoothLegacy,
       locationMessage: LocationMessage(
-        location: Location(latitude: 50.073058, longitude: 14.411540),
+        location: const Location(latitude: 50.073058, longitude: 14.411540),
         heightType: HeightType.aboveGroundLevel,
         direction: 1,
         speedAccuracy: SpeedAccuracy.meterPerSecond_0_3,
@@ -51,7 +51,7 @@ class AircraftCubit extends Cubit<AircraftState> {
         protocolVersion: 1,
         rawContent: Uint8List(0),
         altitudePressure: null,
-        timestamp: Duration(seconds: 20),
+        timestamp: const Duration(seconds: 20),
         altitudeGeodetic: null,
         baroAltitudeAccuracy: VerticalAccuracy.meters_150,
         timestampAccuracy: null,
@@ -72,7 +72,7 @@ class AircraftCubit extends Cubit<AircraftState> {
         protocolVersion: 1,
         rawContent: Uint8List(0),
         description: 'This is very secret operation!',
-        descriptionType: DescriptionTypeText(),
+        descriptionType: const DescriptionTypeText(),
       ),
     ),
   ];
