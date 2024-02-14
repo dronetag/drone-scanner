@@ -19,7 +19,7 @@ class RefreshingText extends StatefulWidget {
   final Color textColor;
 
   const RefreshingText({
-    Key? key,
+    super.key,
     required this.pack,
     this.leadingText,
     this.scaleFactor = 0.9,
@@ -27,7 +27,7 @@ class RefreshingText extends StatefulWidget {
     this.showExpiryWarning = false,
     this.fontWeight = FontWeight.normal,
     this.textColor = AppColors.detailFieldColor,
-  }) : super(key: key);
+  });
 
   @override
   State<RefreshingText> createState() => _RefreshingTextState();

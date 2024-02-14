@@ -149,9 +149,7 @@ class StandardsCubit extends Cubit<StandardsState> {
       phoneManufacturer = 'Apple';
     }
     // TODO: use this information
-    if (phoneModel != null) {
-      print('phoneModel $phoneManufacturer $phoneModel');
-    }
+    print('phoneModel $phoneManufacturer $phoneModel');
     print('os $platform $osVersion');
     print('btLegacy $btLegacy');
     print('btExtended $btExtended');

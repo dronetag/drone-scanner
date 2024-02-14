@@ -6,8 +6,8 @@ import '../../../constants/colors.dart';
 
 class NumDronesText extends StatelessWidget {
   const NumDronesText({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

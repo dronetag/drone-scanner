@@ -9,7 +9,7 @@ import '../../../constants/sizes.dart';
 class ProximityAlertWidget extends StatelessWidget {
   final DroneNearbyAlert alert;
 
-  const ProximityAlertWidget({Key? key, required this.alert}) : super(key: key);
+  const ProximityAlertWidget({super.key, required this.alert});
 
   @override
   Widget build(BuildContext context) {

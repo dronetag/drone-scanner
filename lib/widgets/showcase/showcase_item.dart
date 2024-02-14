@@ -14,7 +14,7 @@ class ShowcaseItem extends StatelessWidget {
   final Color? textColor;
 
   const ShowcaseItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.showcaseKey,
@@ -23,7 +23,7 @@ class ShowcaseItem extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

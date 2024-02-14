@@ -8,13 +8,14 @@ class ShowcaseStartWidget extends StatelessWidget {
   final String text;
   final VoidCallback? startCallback;
   final VoidCallback? skipCallback;
+
   const ShowcaseStartWidget({
+    super.key,
     required this.heading,
     required this.text,
     this.startCallback,
     this.skipCallback,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

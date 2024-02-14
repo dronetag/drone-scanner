@@ -18,11 +18,11 @@ import 'map_ui_google.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _HomeBodyState createState() => _HomeBodyState();
+  State<HomeBody> createState() => _HomeBodyState();
 }
 
 class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {

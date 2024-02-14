@@ -13,7 +13,8 @@ class HelpPage extends StatelessWidget {
   static const routeName = 'HelpPage';
 
   final int? highlightedQuestionIndex;
-  const HelpPage({Key? key, this.highlightedQuestionIndex}) : super(key: key);
+
+  const HelpPage({super.key, this.highlightedQuestionIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +107,7 @@ class HelpPage extends StatelessWidget {
   Widget buildFailed(BuildContext context) {
     final itemList = [
       ...buildHeader(context),
-      Container(
+      SizedBox(
         height: MediaQuery.of(context).size.height / 5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

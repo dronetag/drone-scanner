@@ -11,13 +11,14 @@ class CustomSpinBox extends StatelessWidget {
   final double value;
 
   const CustomSpinBox({
-    Key? key,
+    super.key,
     required this.maxVal,
     required this.minVal,
     required this.step,
     required this.value,
     required this.valueSetter,
-  }) : super(key: key);
+  });
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;

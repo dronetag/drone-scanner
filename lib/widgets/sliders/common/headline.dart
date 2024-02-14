@@ -9,14 +9,15 @@ class Headline extends StatelessWidget {
   final Widget? leading;
   final Color? color;
   final double? fontSize;
+
   const Headline({
-    Key? key,
+    super.key,
     required this.text,
     this.child,
     this.leading,
     this.color,
     this.fontSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

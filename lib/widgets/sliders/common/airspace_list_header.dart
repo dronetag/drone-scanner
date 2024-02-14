@@ -17,12 +17,13 @@ class AirspaceListHeader extends StatelessWidget {
   final Chevron chevron;
   final Function(SortValue) setSortCallback;
   final Function(FilterValue) setFilterCallback;
+
   const AirspaceListHeader({
-    Key? key,
+    super.key,
     required this.chevron,
     required this.setFilterCallback,
     required this.setSortCallback,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

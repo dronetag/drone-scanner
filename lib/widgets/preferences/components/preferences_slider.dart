@@ -6,12 +6,13 @@ class PreferencesSlider extends StatefulWidget {
   final Function({required bool value}) setValue;
   final bool Function() getValue;
   final bool enabled;
+
   const PreferencesSlider({
-    Key? key,
+    super.key,
     required this.setValue,
     required this.getValue,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   @override
   State<PreferencesSlider> createState() => _CleanPacksCheckboxState();

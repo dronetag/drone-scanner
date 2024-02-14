@@ -14,12 +14,12 @@ class AircraftDetailField extends StatelessWidget {
   final String? tooltipMessage;
 
   const AircraftDetailField({
-    Key? key,
+    super.key,
     required this.headlineText,
     this.fieldText,
     this.child,
     this.tooltipMessage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,7 @@ import '../../../utils/utils.dart';
 import '../../app/dialogs.dart';
 
 class UsersDeviceUASIDTextField extends StatefulWidget {
-  UsersDeviceUASIDTextField({Key? key}) : super(key: key);
+  const UsersDeviceUASIDTextField({super.key});
 
   @override
   State<UsersDeviceUASIDTextField> createState() =>

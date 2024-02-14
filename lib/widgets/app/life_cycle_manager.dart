@@ -20,10 +20,10 @@ import 'dialogs.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget child;
-  const LifeCycleManager({Key? key, required this.child}) : super(key: key);
+  const LifeCycleManager({super.key, required this.child});
 
   @override
-  _LifeCycleManagerState createState() => _LifeCycleManagerState();
+  State<LifeCycleManager> createState() => _LifeCycleManagerState();
 }
 
 class _LifeCycleManagerState extends State<LifeCycleManager>
@@ -100,81 +100,78 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   }
 
   Future<void> _initPermissionsIOS(BuildContext context) async {
+    final odidCubit = context.read<OpendroneIdCubit>();
+    final standardsCubit = context.read<StandardsCubit>();
     final btStatus = await Permission.bluetooth.request();
+
     if (btStatus.isGranted) {
       if (!mounted) return;
-      await context.read<StandardsCubit>().setBluetoothEnabled(enabled: true);
+      await standardsCubit.setBluetoothEnabled(enabled: true);
       if (!mounted) return;
-      final btTurnedOn = await context.read<OpendroneIdCubit>().isBtTurnedOn();
+      final btTurnedOn = await odidCubit.isBtTurnedOn();
 
       if (btTurnedOn) {
-        await context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
+        await odidCubit.setBtUsed(btUsed: true);
       }
     } else {
       if (!mounted) return;
-      await context.read<StandardsCubit>().setBluetoothEnabled(enabled: false);
+      await standardsCubit.setBluetoothEnabled(enabled: false);
     }
+
     final status = await Permission.location.request();
     if (status.isGranted) {
       initLocation();
       if (!mounted) return;
-      await context.read<StandardsCubit>().setLocationEnabled(enabled: true);
+      await standardsCubit.setLocationEnabled(enabled: true);
     } else {
       if (!mounted) return;
-      await context.read<StandardsCubit>().setLocationEnabled(enabled: false);
+      await standardsCubit.setLocationEnabled(enabled: false);
     }
+
     final notificationStatus = await Permission.notification.request();
     if (notificationStatus.isGranted) {
-      await context
-          .read<StandardsCubit>()
-          .setNotificationsEnabled(enabled: true);
+      await standardsCubit.setNotificationsEnabled(enabled: true);
     }
   }
 
   Future<void> _initPermissionsAndroid(BuildContext context) async {
+    final odidCubit = context.read<OpendroneIdCubit>();
+    final standardsCubit = context.read<StandardsCubit>();
+
     final version = await getAndroidVersionNumber();
     if (version == null) return;
     final locStatus = await Permission.location.status;
     // show dialog before asking for location
     // when already granted or pernamently denied, request is not needed
-    if (!(locStatus.isGranted || locStatus.isPermanentlyDenied)) {
+    if (!(locStatus.isGranted || locStatus.isPermanentlyDenied) &&
+        context.mounted) {
       if (await showLocationPermissionDialog(
         context: context,
         showWhileUsingPermissionExplanation: version >= 11,
       )) {
         final status = await Permission.location.request();
         if (status.isDenied) {
-          if (!mounted) return;
-          await context
-              .read<StandardsCubit>()
-              .setLocationEnabled(enabled: false);
+          await standardsCubit.setLocationEnabled(enabled: false);
         } else {
           initLocation();
-          if (!mounted) return;
-          await context
-              .read<StandardsCubit>()
-              .setLocationEnabled(enabled: true);
+          await standardsCubit.setLocationEnabled(enabled: true);
         }
       }
     } else if (locStatus.isGranted) {
       initLocation();
-      if (!mounted) return;
-      await context.read<StandardsCubit>().setLocationEnabled(enabled: true);
+      await standardsCubit.setLocationEnabled(enabled: true);
     }
     final btStatus = await Permission.bluetooth.request();
     // scan makes sense just on android
     final btScanStatus = await Permission.bluetoothScan.request();
     if (btStatus.isGranted && btScanStatus.isGranted) {
-      if (!mounted) return;
-      await context.read<StandardsCubit>().setBluetoothEnabled(enabled: true);
-      if (!mounted) return;
-      final btTurnedOn = await context.read<OpendroneIdCubit>().isBtTurnedOn();
+      await standardsCubit.setBluetoothEnabled(enabled: true);
+      final btTurnedOn = await odidCubit.isBtTurnedOn();
       if (btTurnedOn) {
-        await context.read<OpendroneIdCubit>().setBtUsed(btUsed: true);
+        await odidCubit.setBtUsed(btUsed: true);
       }
     } else {
-      if (!mounted) return;
-      await context.read<StandardsCubit>().setBluetoothEnabled(enabled: false);
+      await standardsCubit.setBluetoothEnabled(enabled: false);
     }
     if (!mounted) {
       return;
@@ -183,7 +180,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     if ((version >= 13 &&
             await Permission.nearbyWifiDevices.request().isGranted) ||
         version < 13) {
-      await context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: true);
+      await odidCubit.setWifiUsed(wifiUsed: true);
     }
     // local notifications
     var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -191,9 +188,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestPermission();
-    await context
-        .read<StandardsCubit>()
-        .setNotificationsEnabled(enabled: result ?? false);
+    await standardsCubit.setNotificationsEnabled(enabled: result ?? false);
   }
 
   Future<int?> getAndroidVersionNumber() async {
@@ -210,39 +205,39 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
 
   // check permission status without requests
   Future<void> checkPermissions() async {
+    final standardsCubit = context.read<StandardsCubit>();
     if (!mounted) return;
     final loc = await Permission.location.isGranted;
     // check loc, if was not set before, init listener
-    if (loc && !context.read<StandardsCubit>().state.locationEnabled) {
+    if (loc && !standardsCubit.state.locationEnabled) {
       initLocation();
     }
-    await context.read<StandardsCubit>().setLocationEnabled(enabled: loc);
+    await standardsCubit.setLocationEnabled(enabled: loc);
     final bt = await Permission.bluetooth.isGranted;
     if (Platform.isAndroid) {
       final btScan = await Permission.bluetoothScan.isGranted;
-      await context
-          .read<StandardsCubit>()
-          .setBluetoothEnabled(enabled: bt && btScan);
+      await standardsCubit.setBluetoothEnabled(enabled: bt && btScan);
     } else {
-      await context.read<StandardsCubit>().setBluetoothEnabled(enabled: bt);
+      await standardsCubit.setBluetoothEnabled(enabled: bt);
     }
 
-    await context.read<StandardsCubit>().setNotificationsEnabled(
+    await standardsCubit.setNotificationsEnabled(
         enabled: await Permission.notification.isGranted);
   }
 
   void userLocationChanged(LocationData currentLocation) {
     void updateLoc() {
+      final mapCubit = context.read<MapCubit>();
       if (currentLocation.latitude != null &&
           currentLocation.longitude != null) {
-        context.read<MapCubit>().setUserLocationDouble(
-              currentLocation.latitude!,
-              currentLocation.longitude!,
-            );
+        mapCubit.setUserLocationDouble(
+          currentLocation.latitude!,
+          currentLocation.longitude!,
+        );
       }
       // force centering only of first startup
-      if (!context.read<MapCubit>().state.wasCenteredOnUser) {
-        context.read<MapCubit>().centerToUser();
+      if (!mapCubit.state.wasCenteredOnUser) {
+        mapCubit.centerToUser();
       }
     }
 
@@ -265,9 +260,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
             .setInternetAvailable(available: true);
       }
     } on SocketException catch (_) {
-      await context
-          .read<StandardsCubit>()
-          .setInternetAvailable(available: false);
+      if (context.mounted) {
+        await context
+            .read<StandardsCubit>()
+            .setInternetAvailable(available: false);
+      }
     }
   }
 

@@ -18,8 +18,8 @@ import 'components/proximity_alerts_icon.dart';
 
 class MapOptionsToolbar extends StatelessWidget {
   const MapOptionsToolbar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

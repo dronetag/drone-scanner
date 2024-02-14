@@ -20,9 +20,9 @@ class AircraftCard extends StatelessWidget {
   final MessageContainer messagePack;
 
   const AircraftCard({
-    Key? key,
+    super.key,
     required this.messagePack,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +183,7 @@ class AircraftCard extends StatelessWidget {
             children: [
               if (source == pigeon.MessageSource.BluetoothLegacy ||
                   source == pigeon.MessageSource.BluetoothLongRange)
-                Icon(
+                const Icon(
                   Icons.bluetooth,
                   size: iconSize,
                   color: AppColors.slate,

@@ -9,8 +9,8 @@ import '/utils/utils.dart';
 
 class ZoneDetail extends StatelessWidget {
   const ZoneDetail({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -155,30 +155,28 @@ class ZoneDetail extends StatelessWidget {
             ),
           ],
         ),
-        ...zoneItem.coordinates
-            .map(
-              (e) => TableRow(
-                children: [
-                  TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.middle,
-                    child: Center(
-                      child: Text(
-                        e.latitude.toStringAsFixed(6),
-                      ),
-                    ),
+        ...zoneItem.coordinates.map(
+          (e) => TableRow(
+            children: [
+              TableCell(
+                verticalAlignment: TableCellVerticalAlignment.middle,
+                child: Center(
+                  child: Text(
+                    e.latitude.toStringAsFixed(6),
                   ),
-                  TableCell(
-                    verticalAlignment: TableCellVerticalAlignment.top,
-                    child: Center(
-                      child: Text(
-                        e.longitude.toStringAsFixed(5),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            )
-            .toList(),
+              TableCell(
+                verticalAlignment: TableCellVerticalAlignment.top,
+                child: Center(
+                  child: Text(
+                    e.longitude.toStringAsFixed(5),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }

@@ -8,11 +8,11 @@ class PreferencesFieldWithDescription extends StatelessWidget {
   final String description;
 
   const PreferencesFieldWithDescription({
-    Key? key,
+    super.key,
     required this.child,
     required this.label,
     required this.description,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class PreferencesFieldWithDescription extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
+        SizedBox(
           width: isLandscape
               ? MediaQuery.of(context).size.width / 16 * 5
               : MediaQuery.of(context).size.width / 2,

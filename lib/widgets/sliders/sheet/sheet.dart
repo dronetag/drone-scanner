@@ -156,7 +156,7 @@ class SlidingSheet extends StatefulWidget {
   final double liftOnScrollFooterElevation;
 
   //  SlidingSheetDialog fields
-  final _SlidingSheetRoute? route;
+  final SlidingSheetRoute? route;
 
   /// If false, the `SlidingSheetDialog` will not be dismissable.
   ///
@@ -271,7 +271,7 @@ class SlidingSheet extends StatefulWidget {
         );
 
   SlidingSheet._({
-    Key? key,
+    super.key,
     required this.builder,
     required this.customBuilder,
     required this.headerBuilder,
@@ -313,11 +313,10 @@ class SlidingSheet extends StatefulWidget {
             'The min and max snaps cannot be equal.'),
         assert(axisAlignment >= -1.0 && axisAlignment <= 1.0),
         assert(liftOnScrollHeaderElevation >= 0.0),
-        assert(liftOnScrollFooterElevation >= 0.0),
-        super(key: key);
+        assert(liftOnScrollFooterElevation >= 0.0);
 
   @override
-  _SlidingSheetState createState() => _SlidingSheetState();
+  State<SlidingSheet> createState() => _SlidingSheetState();
 }
 
 class _SlidingSheetState extends State<SlidingSheet>
@@ -344,7 +343,7 @@ class _SlidingSheetState extends State<SlidingSheet>
   // Whether the drag on a delegating widget (such as the backdrop)
   // did start, when the sheet was not fully collapsed
   bool didStartDragWhenNotCollapsed = false;
-  _SheetExtent? extent;
+  SheetExtent? extent;
   SheetController? sheetController;
   late final _SlidingSheetScrollController controller;
 
@@ -434,7 +433,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       this,
     )..addListener(_listener);
 
-    extent = _SheetExtent(
+    extent = SheetExtent(
       controller,
       isDialog: isDialog,
       snappings: snappings,
@@ -1179,7 +1178,7 @@ class SheetState {
   /// at the time this [SheetState] was emitted.
   final double scrollOffset;
 
-  final _SheetExtent? _extent;
+  final SheetExtent? _extent;
 
   /// A data class containing state information about the [SlidingSheet]
   /// at the time this state was emitted.
@@ -1314,10 +1313,10 @@ class Invisible extends StatelessWidget {
   final bool invisible;
   final Widget? child;
   const Invisible({
-    Key? key,
+    super.key,
     this.invisible = false,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1334,16 +1333,16 @@ class Invisible extends StatelessWidget {
 }
 
 /// A transparent route for a bottom sheet dialog.
-class _SlidingSheetRoute<T> extends PageRoute<T> {
-  final Widget Function(BuildContext, Animation<double>, _SlidingSheetRoute<T>)
+class SlidingSheetRoute<T> extends PageRoute<T> {
+  final Widget Function(BuildContext, Animation<double>, SlidingSheetRoute<T>)
       builder;
   final Duration duration;
-  _SlidingSheetRoute({
+
+  SlidingSheetRoute({
     required this.builder,
     required this.duration,
-    RouteSettings? settings,
+    super.settings,
   }) : super(
-          settings: settings,
           fullscreenDialog: false,
         );
 

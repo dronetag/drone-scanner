@@ -1,6 +1,6 @@
 part of 'sheet.dart';
 
-class _SheetExtent {
+class SheetExtent {
   final bool isDialog;
   final _SlidingSheetScrollController? controller;
   List<double> snappings;
@@ -9,7 +9,7 @@ class _SheetExtent {
   double headerHeight = 0;
   double footerHeight = 0;
   double availableHeight = 0;
-  _SheetExtent(
+  SheetExtent(
     this.controller, {
     required this.isDialog,
     required this.snappings,
@@ -72,7 +72,7 @@ class _SlidingSheetScrollController extends ScrollController {
 
   SlidingSheet get widget => sheet.widget;
 
-  _SheetExtent get extent => sheet.extent!;
+  SheetExtent get extent => sheet.extent!;
   void Function(double) get onPop => sheet._pop;
   Duration get duration => sheet.widget.duration;
   SnapSpec get snapSpec => sheet.snapSpec;
@@ -195,16 +195,10 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
   final _SlidingSheetScrollController scrollController;
   _SlidingSheetScrollPosition(
     this.scrollController, {
-    required ScrollPhysics physics,
-    required ScrollContext context,
-    ScrollPosition? oldPosition,
-    String? debugLabel,
-  }) : super(
-          physics: physics,
-          context: context,
-          oldPosition: oldPosition,
-          debugLabel: debugLabel,
-        );
+    required super.physics,
+    required super.context,
+    super.oldPosition,
+  });
 
   VoidCallback? _dragCancelCallback;
   bool isMovingUp = true;
@@ -213,7 +207,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
   bool get inDrag => scrollController.inDrag;
   set inDrag(bool value) => scrollController.inDrag = value;
 
-  _SheetExtent get extent => scrollController.extent;
+  SheetExtent get extent => scrollController.extent;
   _SlidingSheetState get sheet => scrollController.sheet;
   void Function(double) get onPop => scrollController.onPop;
   SnapSpec get snapBehavior => sheet.snapSpec;
@@ -434,7 +428,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     );
 
     var lastDelta = 0.0;
-    void _tick() {
+    void tick() {
       final delta = ballisticController.value - lastDelta;
       lastDelta = ballisticController.value;
       extent.addPixelDelta(delta);
@@ -464,7 +458,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       }
     }
 
-    ballisticController.addListener(_tick);
+    ballisticController.addListener(tick);
     await ballisticController.animateWith(simulation);
     ballisticController.dispose();
 

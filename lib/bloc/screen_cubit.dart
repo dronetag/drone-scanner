@@ -73,6 +73,7 @@ class ScreenCubit extends Cubit<ScreenState> {
         ));
 
   void initScreen(BuildContext context) async {
+    final view = View.of(context);
     final preferences = await SharedPreferences.getInstance();
     final screenSleepDisable = preferences.getBool('screenSleepDisable');
     if (screenSleepDisable != null) {
@@ -82,11 +83,11 @@ class ScreenCubit extends Cubit<ScreenState> {
     }
 
     emit(state.copyWith(
-      pixelRatio: View.of(context).devicePixelRatio,
-      screenWidth: View.of(context).physicalSize.width,
-      screenHeight: View.of(context).physicalSize.height,
-      statusBarHeight: View.of(context).padding.top,
-      bottomBarHeight: View.of(context).padding.bottom,
+      pixelRatio: view.devicePixelRatio,
+      screenWidth: view.physicalSize.width,
+      screenHeight: view.physicalSize.height,
+      statusBarHeight: view.padding.top,
+      bottomBarHeight: view.padding.bottom,
       textScaleFactor:
           WidgetsBinding.instance.platformDispatcher.textScaleFactor,
     ));

@@ -7,7 +7,7 @@ import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 
 class ProximityAlertDistanceField extends StatelessWidget {
-  const ProximityAlertDistanceField({Key? key}) : super(key: key);
+  const ProximityAlertDistanceField({super.key});
 
   void _onChange(BuildContext context, double value) =>
       context.read<ProximityAlertsCubit>().setProximityAlertsDistance(value);
@@ -20,7 +20,7 @@ class ProximityAlertDistanceField extends StatelessWidget {
     final distance =
         context.read<ProximityAlertsCubit>().state.proximityAlertDistance;
     final text = '${distance.round()}m';
-    final _controller = TextEditingController.fromValue(
+    final controller = TextEditingController.fromValue(
       TextEditingValue(
         text: text,
         selection:
@@ -36,7 +36,7 @@ class ProximityAlertDistanceField extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width / 2,
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +66,7 @@ class ProximityAlertDistanceField extends StatelessWidget {
                 ),
                 keyboardType: const TextInputType.numberWithOptions(),
                 textInputAction: TextInputAction.go,
-                controller: _controller,
+                controller: controller,
                 onFieldSubmitted: (value) {
                   var newValue = double.parse(value.replaceAll('m', ''));
                   if (newValue < minValue) {

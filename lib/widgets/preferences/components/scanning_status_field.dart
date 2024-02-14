@@ -11,7 +11,7 @@ import '../../app/dialogs.dart';
 import 'preferences_slider.dart';
 
 class ScanningStatusField extends StatelessWidget {
-  const ScanningStatusField({Key? key}) : super(key: key);
+  const ScanningStatusField({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class ScanningStatusField extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  Text('Bluetooth', style: textStyle),
+                  const Text('Bluetooth', style: textStyle),
                 ],
               ),
             ),
@@ -172,7 +172,7 @@ class ScanningStatusField extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
+                      const Text(
                         'Wi-Fi Beacon & NaN',
                         style: textStyle,
                       ),

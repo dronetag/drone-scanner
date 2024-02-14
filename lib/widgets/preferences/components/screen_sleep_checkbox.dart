@@ -6,8 +6,8 @@ import '../../../constants/colors.dart';
 
 class ScreenSleepCheckbox extends StatefulWidget {
   const ScreenSleepCheckbox({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ScreenSleepCheckbox> createState() => _ScreenSleepCheckboxState();

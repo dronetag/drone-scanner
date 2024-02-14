@@ -9,9 +9,7 @@ import 'life_cycle_manager.dart';
 PackageInfo? packageInfo;
 
 class App extends StatefulWidget {
-  App({
-    Key? key,
-  }) : super(key: key) {
+  App({super.key}) {
     _retirevePackageInfo();
   }
 

@@ -17,8 +17,8 @@ import 'zones/zone_detail.dart';
 
 class AirspaceSlidingPanel extends StatefulWidget {
   const AirspaceSlidingPanel({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AirspaceSlidingPanel> createState() => _AircraftSlidingPanelState();
@@ -86,7 +86,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
                         ? (snapHeight - headerHeight) + 1
                         : maxSliderHeight - headerHeight;
 
-                return Container(
+                return SizedBox(
                   height: contentHeight,
                   child: state.showDroneDetail
                       ? buildDetailPanel(context)

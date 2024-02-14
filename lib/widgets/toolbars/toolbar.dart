@@ -11,8 +11,8 @@ import 'components/scanning_state_icons.dart';
 
 class Toolbar extends StatefulWidget {
   const Toolbar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<Toolbar> createState() => _ToolbarState();

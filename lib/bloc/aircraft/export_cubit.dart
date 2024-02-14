@@ -139,7 +139,7 @@ class ExportCubit extends Cubit<ExportState> {
     var file = File(pathOfTheFileToWrite);
     file = await file.writeAsString(data);
 
-    late final result;
+    late final ShareResult result;
     if (Platform.isAndroid) {
       result = await Share.shareXFiles([XFile(pathOfTheFileToWrite)],
           subject: 'Drone Scanner Export', text: 'Your Remote ID Data');

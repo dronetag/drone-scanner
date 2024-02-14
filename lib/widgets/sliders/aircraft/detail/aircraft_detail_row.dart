@@ -4,9 +4,9 @@ class AircraftDetailRow extends StatelessWidget {
   final List<Widget> children;
 
   const AircraftDetailRow({
-    Key? key,
+    super.key,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
