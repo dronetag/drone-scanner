@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'bloc/aircraft/aircraft_cubit.dart';
@@ -39,7 +40,7 @@ const bool kDebugMode = !kReleaseMode && !kProfileMode;
 /// Runs app with Sentry monitoring (only for production environment)
 void runAppWithSentry(void Function() appRunner) async {
   if (sentryDsn == '') {
-    print('There is no Sentry DSN specified!');
+    Logger.root.info('There is no Sentry DSN specified!');
     appRunner();
   }
   await SentryFlutter.init(
@@ -54,6 +55,14 @@ void runAppWithSentry(void Function() appRunner) async {
 void main() async {
   // init high priority services
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Set-up logging to console
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    debugPrint('${record.time} [${record.level.name}] ${record.loggerName}: '
+        '${record.message}');
+  });
+
   // init local notifications
   final notificationService = NotificationService();
   await notificationService.setup();

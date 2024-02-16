@@ -31,7 +31,7 @@ class MapUIGoogle extends StatefulWidget {
   bool get _myTrafficEnabled => false;
   bool get _myLocationButtonEnabled => false;
 
-  const MapUIGoogle({Key? key}) : super(key: key);
+  const MapUIGoogle({super.key});
 
   @override
   State<MapUIGoogle> createState() => _MapUIGoogleState();

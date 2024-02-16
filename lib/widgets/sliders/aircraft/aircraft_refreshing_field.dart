@@ -10,11 +10,11 @@ class AircraftRefresingField extends StatelessWidget {
   final bool showExpiryWarning;
 
   const AircraftRefresingField({
-    Key? key,
+    super.key,
     required this.pack,
     required this.label,
     this.showExpiryWarning = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,9 @@ class ShowcaseWidget extends StatelessWidget {
   final EdgeInsets? overlayPadding;
   final VoidCallback? nextCallback;
   final VoidCallback? skipCallback;
+
   const ShowcaseWidget({
+    super.key,
     required this.heading,
     required this.text,
     this.nextCallback,
@@ -21,8 +23,7 @@ class ShowcaseWidget extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.overlayPadding,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

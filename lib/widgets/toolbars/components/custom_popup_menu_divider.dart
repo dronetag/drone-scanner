@@ -4,7 +4,7 @@ class CustomPopupMenuDivider extends PopupMenuEntry<Never> {
   /// Creates a horizontal divider for a popup menu.
   ///
   /// By default, the divider has a height of 16 logical pixels.
-  const CustomPopupMenuDivider({Key? key, this.height = 20}) : super(key: key);
+  const CustomPopupMenuDivider({super.key, this.height = 20});
 
   /// The height of the divider entry.
   ///

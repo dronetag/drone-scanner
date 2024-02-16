@@ -34,7 +34,7 @@ import 'components/screen_sleep_checkbox.dart';
 
 class PreferencesPage extends StatelessWidget {
   static const routeName = 'PreferencesPage';
-  const PreferencesPage({Key? key}) : super(key: key);
+  const PreferencesPage({super.key});
 
   static const scanPriorityMapping = {
     'High': pigeon.ScanPriority.High,
@@ -171,9 +171,9 @@ class PreferencesPage extends StatelessWidget {
       const Headline(
         text: 'Enabled Technologies',
       ),
-      Padding(
+      const Padding(
         padding: itemPadding,
-        child: const ScanningStatusField(),
+        child: ScanningStatusField(),
       ),
       Padding(
         padding: itemPadding,
@@ -417,7 +417,7 @@ class PreferencesPage extends StatelessWidget {
         child: PreferencesFieldWithDescription(
           label: 'Expiration time (sec):',
           description: 'Set the duration between 10 and 600 seconds',
-          child: Container(
+          child: SizedBox(
             width: width / 3,
             child: CustomSpinBox(
               maxVal: AircraftExpirationCubit.maxTime,
@@ -552,9 +552,9 @@ class PreferencesPage extends StatelessWidget {
       const Headline(
         text: 'Misc',
       ),
-      Padding(
+      const Padding(
         padding: itemPadding,
-        child: const PreferencesFieldWithDescription(
+        child: PreferencesFieldWithDescription(
           label: 'Prevent screen sleep:',
           description: 'Your display will not turn off while using the app.',
           child: ScreenSleepCheckbox(),

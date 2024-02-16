@@ -14,13 +14,14 @@ import '../preferences/components/proximity_alert_widget.dart';
 
 class ProximityAlertSnackbar extends StatefulWidget {
   final int expirationTime;
+
   const ProximityAlertSnackbar({
-    Key? key,
+    super.key,
     required this.expirationTime,
-  }) : super(key: key);
+  });
 
   @override
-  _ProximityAlertSnackbarState createState() => _ProximityAlertSnackbarState();
+  State<ProximityAlertSnackbar> createState() => _ProximityAlertSnackbarState();
 }
 
 class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
@@ -145,7 +146,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                   AnimatedBuilder(
                                     animation: controller,
                                     builder: (context, child) => Text(
-                                      '${timeLeft.toStringAsFixed(0)}',
+                                      timeLeft.toStringAsFixed(0),
                                       style: const TextStyle(
                                         color: AppColors.red,
                                         fontSize: 12,
@@ -207,8 +208,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                 ),
                               ),
                             ),
-                          )
-                          .toList(),
+                          ),
                     ],
                   );
                 }
@@ -299,9 +299,9 @@ class CustomTimerPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomTimerPainter old) {
-    return animation.value != old.animation.value ||
-        color != old.color ||
-        backgroundColor != old.backgroundColor;
+  bool shouldRepaint(CustomTimerPainter oldDelegate) {
+    return animation.value != oldDelegate.animation.value ||
+        color != oldDelegate.color ||
+        backgroundColor != oldDelegate.backgroundColor;
   }
 }

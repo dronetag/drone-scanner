@@ -13,8 +13,8 @@ import '../../app/dialogs.dart';
 
 class ScanningStateIcons extends StatelessWidget {
   const ScanningStateIcons({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

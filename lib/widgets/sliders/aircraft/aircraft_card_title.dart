@@ -10,11 +10,13 @@ import '../../../utils/utils.dart';
 class AircraftCardTitle extends StatelessWidget {
   final String uasId;
   final String? givenLabel;
+
   const AircraftCardTitle({
-    Key? key,
+    super.key,
     required this.uasId,
     required this.givenLabel,
-  }) : super(key: key);
+  });
+
   @override
   Widget build(BuildContext context) {
     final proximityAlertsActive =
@@ -62,7 +64,7 @@ class AircraftCardTitle extends StatelessWidget {
             const TextSpan(text: ' '),
           ],
           TextSpan(
-            text: givenLabel == null ? '$uasId' : '$givenLabel',
+            text: givenLabel ?? uasId,
           ),
         ],
       ),

@@ -8,8 +8,8 @@ import 'app.dart';
 
 class CustomAboutDialog extends StatelessWidget {
   const CustomAboutDialog({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

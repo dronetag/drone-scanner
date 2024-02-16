@@ -26,7 +26,8 @@ import 'components/users_device_uas_id_text_field.dart';
 
 class ProximityAlertsPage extends StatelessWidget {
   static const routeName = 'ProximityAlertsPage';
-  const ProximityAlertsPage({Key? key}) : super(key: key);
+
+  const ProximityAlertsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +175,7 @@ class ProximityAlertsPage extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.only(bottom: Sizes.standard / 2),
                     child: Text(
-                      '\"My Drone\" is not selected',
+                      '"My Drone" is not selected',
                       style: TextStyle(
                         color: AppColors.red,
                         fontSize: 10,
@@ -303,7 +304,7 @@ class ProximityAlertsPage extends StatelessWidget {
           size: 16,
         ),
       ),
-      UsersDeviceUASIDTextField(),
+      const UsersDeviceUASIDTextField(),
       Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.only(

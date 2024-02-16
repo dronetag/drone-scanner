@@ -8,7 +8,7 @@ import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 
 class ProximityAlertsIcon extends StatefulWidget {
-  const ProximityAlertsIcon({Key? key}) : super(key: key);
+  const ProximityAlertsIcon({super.key});
 
   @override
   State<ProximityAlertsIcon> createState() => _ProximityAlertsIconState();
@@ -70,7 +70,7 @@ class _ProximityAlertsIconState extends State<ProximityAlertsIcon>
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ProximityAlertsCubit>().state;
-    return Container(
+    return SizedBox(
       width: Sizes.iconSize * upperBound,
       height: Sizes.iconSize * upperBound,
       child: Stack(

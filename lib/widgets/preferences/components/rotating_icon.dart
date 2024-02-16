@@ -3,11 +3,12 @@ import 'package:flutter/widgets.dart';
 class RotatingIcon extends StatefulWidget {
   final Widget icon;
   final bool rotating;
+
   const RotatingIcon({
-    Key? key,
+    super.key,
     required this.icon,
     required this.rotating,
-  }) : super(key: key);
+  });
 
   @override
   State<RotatingIcon> createState() => _RotatingIconState();

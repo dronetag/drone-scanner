@@ -7,12 +7,12 @@ class PreferencesField extends StatelessWidget {
   final Color color;
 
   const PreferencesField({
-    Key? key,
+    super.key,
     required this.label,
     required this.icon,
     required this.color,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

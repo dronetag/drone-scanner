@@ -54,8 +54,8 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
           style: labelStyle,
         ),
       ),
-      PopupMenuItem(
-        padding: const EdgeInsets.symmetric(
+      const PopupMenuItem(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: AircraftAction.shareCsv,
@@ -64,8 +64,8 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
           style: labelStyle,
         ),
       ),
-      PopupMenuItem(
-        padding: const EdgeInsets.symmetric(
+      const PopupMenuItem(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: AircraftAction.shareGpx,
@@ -74,8 +74,8 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
           style: labelStyle,
         ),
       ),
-      PopupMenuItem(
-        padding: const EdgeInsets.symmetric(
+      const PopupMenuItem(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: AircraftAction.delete,

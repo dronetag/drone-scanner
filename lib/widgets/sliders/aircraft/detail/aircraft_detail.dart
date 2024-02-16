@@ -17,8 +17,8 @@ import 'operator_fields.dart';
 
 class AircraftDetail extends StatefulWidget {
   const AircraftDetail({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AircraftDetail> createState() => _AircraftDetailState();

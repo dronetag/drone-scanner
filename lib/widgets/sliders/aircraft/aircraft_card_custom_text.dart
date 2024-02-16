@@ -9,10 +9,11 @@ import '../../../utils/utils.dart';
 
 class AircraftCardCustomText extends StatelessWidget {
   final MessageContainer messagePack;
+
   const AircraftCardCustomText({
-    Key? key,
+    super.key,
     required this.messagePack,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

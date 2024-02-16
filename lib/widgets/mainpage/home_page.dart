@@ -10,8 +10,8 @@ import 'home_body.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

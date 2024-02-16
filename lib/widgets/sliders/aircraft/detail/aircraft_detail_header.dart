@@ -22,8 +22,7 @@ import '../aircraft_actions.dart';
 
 class AircraftDetailHeader extends StatelessWidget {
   final Chevron chevron;
-  const AircraftDetailHeader({Key? key, required this.chevron})
-      : super(key: key);
+  const AircraftDetailHeader({super.key, required this.chevron});
 
   @override
   Widget build(BuildContext context) {

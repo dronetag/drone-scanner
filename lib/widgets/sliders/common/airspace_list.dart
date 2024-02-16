@@ -18,10 +18,10 @@ import '../zones/zone_card.dart';
 
 class AirspaceList extends StatelessWidget {
   const AirspaceList({
-    Key? key,
+    super.key,
     required this.filterValue,
     required this.sortValue,
-  }) : super(key: key);
+  });
 
   final FilterValue filterValue;
   final SortValue sortValue;
@@ -109,9 +109,7 @@ class AirspaceList extends StatelessWidget {
       return [
         if (filterValue == FilterValue.aircraft ||
             filterValue == FilterValue.all)
-          ...aircraft.values
-              .where((element) => element.isNotEmpty)
-              .map(
+          ...aircraft.values.where((element) => element.isNotEmpty).map(
                 (value) => GestureDetector(
                   child: AircraftCard(
                     messagePack: value.last,
@@ -131,14 +129,9 @@ class AirspaceList extends StatelessWidget {
                     context.read<SlidersCubit>().setShowDroneDetail(show: true);
                   },
                 ),
-              )
-              .toList(),
+              ),
         if (filterValue == FilterValue.zones || filterValue == FilterValue.all)
-          ...context
-              .watch<ZonesCubit>()
-              .state
-              .zones
-              .map(
+          ...context.watch<ZonesCubit>().state.zones.map(
                 (z) => Column(
                   children: [
                     GestureDetector(
@@ -163,8 +156,7 @@ class AirspaceList extends StatelessWidget {
                     Divider(color: Theme.of(context).colorScheme.secondary),
                   ],
                 ),
-              )
-              .toList(),
+              ),
       ];
     }
   }

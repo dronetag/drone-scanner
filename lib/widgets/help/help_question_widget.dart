@@ -12,16 +12,22 @@ class HelpQuestionWidget extends StatefulWidget {
   final bool showAnswer;
 
   const HelpQuestionWidget(
-      {Key? key, required this.question, this.showAnswer = false})
-      : super(key: key);
+      {super.key, required this.question, this.showAnswer = false});
   @override
-  _QuestionWidgetState createState() =>
-      _QuestionWidgetState(showAnswer: showAnswer);
+  State<HelpQuestionWidget> createState() => _QuestionWidgetState();
 }
 
 class _QuestionWidgetState extends State<HelpQuestionWidget> {
-  bool showAnswer;
-  _QuestionWidgetState({this.showAnswer = false});
+  bool showAnswer = false;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      showAnswer = widget.showAnswer;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const questionStyle = TextStyle(

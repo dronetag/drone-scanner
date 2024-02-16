@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 // used as root of all pages
 class AppScaffold extends StatelessWidget {
   final Widget child;
-  const AppScaffold({required this.child, Key? key}) : super(key: key);
+
+  const AppScaffold({required this.child, super.key});
 
   @override
   Widget build(BuildContext context) {

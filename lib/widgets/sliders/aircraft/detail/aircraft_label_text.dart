@@ -9,7 +9,7 @@ import '../../../app/dialogs.dart';
 class AircraftLabelText extends StatefulWidget {
   final String aircraftMac;
 
-  AircraftLabelText({Key? key, required this.aircraftMac}) : super(key: key);
+  const AircraftLabelText({super.key, required this.aircraftMac});
 
   @override
   State<AircraftLabelText> createState() => _AircraftLabelTextState();
@@ -47,7 +47,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
               _controller.text,
             )
             .then((_) {
-          final snackBarText = 'Label  \"${_controller.text}\" saved.';
+          final snackBarText = 'Label  "${_controller.text}" saved.';
           showSnackBar(
             context,
             snackBarText,

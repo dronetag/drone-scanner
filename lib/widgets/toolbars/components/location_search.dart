@@ -13,7 +13,7 @@ import '../../../models/place_details.dart';
 import '../../app/dialogs.dart';
 
 class LocationSearch extends StatefulWidget {
-  const LocationSearch({Key? key}) : super(key: key);
+  const LocationSearch({super.key});
 
   @override
   State<LocationSearch> createState() => _LocationSearchState();
@@ -50,58 +50,56 @@ class _LocationSearchState extends State<LocationSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: TextField(
-        controller: textEditingController,
-        textAlignVertical: TextAlignVertical.center,
-        focusNode: focusNode,
-        autocorrect: false,
-        cursorColor: Colors.white,
-        onTap: () {
-          if (context.read<SlidersCubit>().isPanelOpened()) {
-            context.read<SlidersCubit>().animatePanelToSnapPoint();
-          }
-          _autocomplete(context, textEditingController.text);
-        },
-        onChanged: (text) => _autocomplete(context, text),
-        onSubmitted: (_) {
-          final state = context.read<GeocodingCubit>().state;
-          final results = state.results;
-          // continue loading if currently loading
-          if ((querySubmitDelay != null && querySubmitDelay!.isActive) ||
-              state.isLoading) {
-            return;
-          }
-          // use first suggestion if available
-          else if (results != null && results.isNotEmpty) {
-            _selectResult(results.first);
-          } else {
-            querySubmitDelay?.cancel();
-            _disposeOverlayEntry(context);
-          }
-        },
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.zero,
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintText: 'Search Locations',
-          hintStyle: const TextStyle(
-            fontSize: 14,
-            color: AppColors.lightGray,
-            fontWeight: FontWeight.w600,
-          ),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: Colors.transparent,
-          prefixIcon: _buildPrefixIcon(context),
-        ),
-        style: const TextStyle(
+    return TextField(
+      controller: textEditingController,
+      textAlignVertical: TextAlignVertical.center,
+      focusNode: focusNode,
+      autocorrect: false,
+      cursorColor: Colors.white,
+      onTap: () {
+        if (context.read<SlidersCubit>().isPanelOpened()) {
+          context.read<SlidersCubit>().animatePanelToSnapPoint();
+        }
+        _autocomplete(context, textEditingController.text);
+      },
+      onChanged: (text) => _autocomplete(context, text),
+      onSubmitted: (_) {
+        final state = context.read<GeocodingCubit>().state;
+        final results = state.results;
+        // continue loading if currently loading
+        if ((querySubmitDelay != null && querySubmitDelay!.isActive) ||
+            state.isLoading) {
+          return;
+        }
+        // use first suggestion if available
+        else if (results != null && results.isNotEmpty) {
+          _selectResult(results.first);
+        } else {
+          querySubmitDelay?.cancel();
+          _disposeOverlayEntry(context);
+        }
+      },
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        border: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        disabledBorder: InputBorder.none,
+        hintText: 'Search Locations',
+        hintStyle: const TextStyle(
           fontSize: 14,
-          color: Colors.white,
+          color: AppColors.lightGray,
           fontWeight: FontWeight.w600,
         ),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        fillColor: Colors.transparent,
+        prefixIcon: _buildPrefixIcon(context),
+      ),
+      style: const TextStyle(
+        fontSize: 14,
+        color: Colors.white,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -220,11 +218,13 @@ class _LocationSearchState extends State<LocationSearch> {
   }
 
   void _applyFoundLocation(BuildContext context, LatLng location) async {
-    await context.read<MapCubit>().centerToLoc(location);
-    await context.read<MapCubit>().setDroppedPinLocation(location);
-    await context.read<MapCubit>().setDroppedPin(pinDropped: true);
-    if (context.read<SlidersCubit>().isPanelOpened()) {
-      await context.read<SlidersCubit>().animatePanelToSnapPoint();
+    final mapCubit = context.read<MapCubit>();
+    final slidersCubit = context.read<SlidersCubit>();
+    await mapCubit.centerToLoc(location);
+    await mapCubit.setDroppedPinLocation(location);
+    await mapCubit.setDroppedPin(pinDropped: true);
+    if (slidersCubit.isPanelOpened()) {
+      await slidersCubit.animatePanelToSnapPoint();
     }
   }
 

@@ -117,7 +117,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
                       .isScanningBluetooth;
                   setBTUsed(context, setState, used: !value);
                 },
-                child: Text(
+                child: const Text(
                   'Enable Bluetooth',
                   style: labelStyle,
                 ),
@@ -148,7 +148,7 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
                         context.read<OpendroneIdCubit>().state.isScanningWifi;
                     setWifiUsed(context, setState, used: !value);
                   }),
-                  child: Text(
+                  child: const Text(
                     'Enable Wi-Fi',
                     style: labelStyle,
                   ),
@@ -158,8 +158,8 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
           ),
         ),
       const CustomPopupMenuDivider(),
-      PopupMenuItem(
-        padding: const EdgeInsets.symmetric(
+      const PopupMenuItem(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openDroneRadar,
@@ -168,8 +168,8 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
           style: labelStyle,
         ),
       ),
-      PopupMenuItem(
-        padding: const EdgeInsets.symmetric(
+      const PopupMenuItem(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openSettings,
@@ -178,8 +178,8 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
           style: labelStyle,
         ),
       ),
-      PopupMenuItem(
-        padding: const EdgeInsets.symmetric(
+      const PopupMenuItem(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openHelp,
@@ -188,8 +188,8 @@ Future<ToolbarMenuAction?> displayToolbarMenu(BuildContext context) async {
           style: labelStyle,
         ),
       ),
-      PopupMenuItem(
-        padding: const EdgeInsets.symmetric(
+      const PopupMenuItem(
+        padding: EdgeInsets.symmetric(
           horizontal: 20,
         ),
         value: ToolbarMenuAction.openAbout,

@@ -8,9 +8,9 @@ class ZoneCard extends StatelessWidget {
   final ZoneItem zone;
 
   const ZoneCard({
-    Key? key,
+    super.key,
     required this.zone,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

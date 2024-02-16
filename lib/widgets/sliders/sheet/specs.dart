@@ -115,15 +115,15 @@ class SnapSpec {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is SnapSpec &&
-        o.snap == snap &&
-        listEquals(o.snappings, snappings) &&
-        o.initialSnap == initialSnap &&
-        o.positioning == positioning &&
-        o.onSnap == onSnap;
+    return other is SnapSpec &&
+        other.snap == snap &&
+        listEquals(other.snappings, snappings) &&
+        other.initialSnap == initialSnap &&
+        other.positioning == positioning &&
+        other.onSnap == onSnap;
   }
 
   @override
@@ -173,14 +173,14 @@ class ScrollSpec {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is ScrollSpec &&
-        o.overscroll == overscroll &&
-        o.overscrollColor == overscrollColor &&
-        o.physics == physics &&
-        o.showScrollbar == showScrollbar;
+    return other is ScrollSpec &&
+        other.overscroll == overscroll &&
+        other.overscrollColor == overscrollColor &&
+        other.physics == physics &&
+        other.showScrollbar == showScrollbar;
   }
 
   @override
@@ -229,13 +229,13 @@ class ParallaxSpec {
       'ParallaxSpec(enabled: $enabled, amount: $amount, extent: $endExtent)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is ParallaxSpec &&
-        o.enabled == enabled &&
-        o.amount == amount &&
-        o.endExtent == endExtent;
+    return other is ParallaxSpec &&
+        other.enabled == enabled &&
+        other.amount == amount &&
+        other.endExtent == endExtent;
   }
 
   @override

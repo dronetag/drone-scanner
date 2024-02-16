@@ -160,11 +160,13 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
   }
 
   void onShowcaseFinish(BuildContext context) async {
-    await context.read<AircraftCubit>().removeShowcaseDummyPack();
-    if (state.aircraftState != null) {
-      context.read<AircraftCubit>().applyState(state.aircraftState!);
-    }
+    final aircraftCubit = context.read<AircraftCubit>();
     final odidCubit = context.read<OpendroneIdCubit>();
+    await aircraftCubit.removeShowcaseDummyPack();
+    if (state.aircraftState != null) {
+      aircraftCubit.applyState(state.aircraftState!);
+    }
+
     await odidCubit.start(odidCubit.state.usedTechnologies);
     final preferences = await SharedPreferences.getInstance();
     await preferences.setBool('showcasePlayed', true);
@@ -176,12 +178,13 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     int? index,
     GlobalKey<State<StatefulWidget>> key,
   ) async {
+    final slidersCubit = context.read<SlidersCubit>();
     if (key == lastKey) {
       context.read<SelectedAircraftCubit>().unselectAircraft();
-      await context.read<SlidersCubit>().setShowDroneDetail(show: false);
+      await slidersCubit.setShowDroneDetail(show: false);
     }
     if (key == droneDetailMoreKey) {
-      await context.read<SlidersCubit>().animatePanelToSnapPoint();
+      await slidersCubit.animatePanelToSnapPoint();
     }
   }
 
@@ -190,13 +193,15 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
     int? index,
     GlobalKey<State<StatefulWidget>> key,
   ) async {
+    final slidersCubit = context.read<SlidersCubit>();
+
     if (key == droneDetailPanelKey) {
       context
           .read<SelectedAircraftCubit>()
           .selectAircraft(context.read<AircraftCubit>().showcaseDummyMac);
-      await context.read<SlidersCubit>().setShowDroneDetail(show: true);
+      await slidersCubit.setShowDroneDetail(show: true);
     }
-    if (key == aboutPageKey) {
+    if (key == aboutPageKey && context.mounted) {
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -208,11 +213,11 @@ class ShowcaseCubit extends Cubit<ShowcaseState> {
       );
     }
     if (key == droneListItemKey) {
-      await context.read<SlidersCubit>().openSlider();
-      await context.read<SlidersCubit>().setShowDroneDetail(show: false);
+      await slidersCubit.openSlider();
+      await slidersCubit.setShowDroneDetail(show: false);
     }
     if (key == droneDetailPanelKey) {
-      await context.read<SlidersCubit>().setShowDroneDetail(show: true);
+      await slidersCubit.setShowDroneDetail(show: true);
     }
   }
 }

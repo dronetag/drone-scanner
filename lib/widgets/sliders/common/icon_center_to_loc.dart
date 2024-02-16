@@ -5,8 +5,8 @@ import '../../../constants/sizes.dart';
 
 class IconCenterToLoc extends StatelessWidget {
   final VoidCallback onPressedCallback;
-  const IconCenterToLoc({Key? key, required this.onPressedCallback})
-      : super(key: key);
+
+  const IconCenterToLoc({super.key, required this.onPressedCallback});
 
   @override
   Widget build(BuildContext context) {

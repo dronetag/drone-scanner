@@ -10,8 +10,8 @@ import 'showcase_start_widget.dart';
 
 class ShowcaseRoot extends StatelessWidget {
   const ShowcaseRoot({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

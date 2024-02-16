@@ -78,7 +78,7 @@ Future<bool> showLocationPermissionDialog({
           if (showWhileUsingPermissionExplanation) ...[
             const TextSpan(text: 'Please choose\nthe '),
             const TextSpan(
-              text: '\"While using the app\"\n',
+              text: '"While using the app"\n',
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
             const TextSpan(
@@ -89,7 +89,7 @@ Future<bool> showLocationPermissionDialog({
               text: 'If you already denied the permission request,'
                   ' please go to\nthe '),
           const TextSpan(
-            text: '\"App settings\"\n',
+            text: '"App settings"\n',
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
           const TextSpan(text: 'and enable location manually.'),
