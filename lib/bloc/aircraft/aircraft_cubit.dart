@@ -166,6 +166,11 @@ class AircraftCubit extends Cubit<AircraftState> {
       emit(state.copyWith(fetchInProgress: true));
       final modelInfo = await ornithologyRestClient.fetchAircraftModelInfo(
           serialNumber: serialNumber);
+      if (modelInfo == null) {
+        Logger.root.warning('Aircraft model info for $serialNumber is unknown');
+        emit(state.copyWith(fetchInProgress: false));
+        return;
+      }
       emit(
         state.copyWith(aircraftModelInfo: {
           ...state.aircraftModelInfo,
