@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/utils/conversions.dart';
 
@@ -8,11 +9,11 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../models/aircraft_model_info.dart';
 import '../../../../utils/utils.dart';
-import '../../../app/dialogs.dart';
 import '../../common/headline.dart';
 import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
 import 'aircraft_label_text.dart';
+import 'set_as_mine_button.dart';
 
 class BasicFields {
   static List<Widget> buildBasicFields({
@@ -23,18 +24,12 @@ class BasicFields {
   }) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-    final idTypeString =
-        messagePackList.last.basicIdMessage?.uasID.type.asString();
-    final uaTypeString = messagePackList.last.basicIdMessage?.uaType.asString();
 
     final logo = getManufacturerLogo(
         manufacturer: modelInfo?.maker, color: AppColors.detailFieldColor);
 
-    final uasId = messagePackList.last.basicIdMessage?.uasID;
-    final proximityAlertsActive = context
-        .watch<ProximityAlertsCubit>()
-        .state
-        .isAlertActiveForId(uasId?.asString());
+    final basicIdFields = _buildBasicIdMessages(
+        context: context, messageContainer: messagePackList.last);
 
     return [
       const Headline(text: 'AIRCRAFT'),
@@ -81,105 +76,7 @@ class BasicFields {
           ),
         ],
       ),
-      AircraftDetailRow(
-        children: [
-          AircraftDetailField(
-            headlineText: 'ID Type',
-            fieldText: idTypeString,
-          ),
-          AircraftDetailField(
-            headlineText: 'Type',
-            fieldText: uaTypeString,
-          ),
-        ],
-      ),
-      AircraftDetailRow(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              AircraftDetailField(
-                headlineText: 'UAS ID',
-                fieldText:
-                    messagePackList.last.basicIdMessage?.uasID.asString(),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final alertsCubit = context.read<ProximityAlertsCubit>();
-                  if (uasId?.asString() != null &&
-                      alertsCubit.state.usersAircraftUASID ==
-                          uasId!.asString()) {
-                    alertsCubit.clearUsersAircraftUASID();
-                    showSnackBar(context, 'Owned aircaft was unset');
-                  } else {
-                    if (uasId?.asString() == null) {
-                      showSnackBar(context,
-                          'Cannot set aircraft as owned: Unknown UAS ID');
-                      return;
-                    }
-                    final validationError = validateUASID(uasId!.asString()!);
-                    if (validationError != null) {
-                      showSnackBar(
-                          context, 'Error parsing UAS ID: $validationError');
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      return;
-                    }
-                    alertsCubit.setUsersAircraftUASID(uasId.asString()!);
-                    showSnackBar(context, 'Aircaft set as owned');
-                  }
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    proximityAlertsActive ? AppColors.green : Colors.white,
-                  ),
-                  side: MaterialStateProperty.all<BorderSide>(
-                    BorderSide(
-                        width: 2.0,
-                        color: proximityAlertsActive
-                            ? Colors.white
-                            : AppColors.green),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        right: proximityAlertsActive ? 0 : Sizes.iconPadding,
-                      ),
-                      child: Icon(
-                        Icons.person,
-                        size: Sizes.iconSize,
-                        color: proximityAlertsActive
-                            ? Colors.white
-                            : AppColors.green,
-                      ),
-                    ),
-                    if (proximityAlertsActive)
-                      const Padding(
-                        padding: EdgeInsets.only(right: Sizes.iconPadding),
-                        child: Icon(
-                          Icons.done,
-                          color: Colors.white,
-                          size: Sizes.iconSize * 0.75,
-                        ),
-                      ),
-                    Text(
-                      proximityAlertsActive ? 'MINE' : 'SET AS MINE',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: proximityAlertsActive
-                              ? Colors.white
-                              : AppColors.green),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      ...basicIdFields,
       AircraftDetailRow(
         children: [
           AircraftLabelText(
@@ -194,6 +91,86 @@ class BasicFields {
           fieldText: messagePackList.last.selfIdMessage!.description,
         ),
       if (isLandscape) const SizedBox(),
+    ];
+  }
+
+  static List<Widget> _buildBasicIdMessages({
+    required BuildContext context,
+    required MessageContainer messageContainer,
+  }) {
+    final basicIdFields = <Widget>[];
+    if (messageContainer.basicIdMessages != null &&
+        messageContainer.basicIdMessages!.isNotEmpty) {
+      for (final (index, basicIdMessage)
+          in messageContainer.basicIdMessages!.values.indexed) {
+        basicIdFields.addAll(
+          _buildBasicIdMessageFields(
+            context: context,
+            message: basicIdMessage,
+            isPreferredBasicId:
+                basicIdMessage == messageContainer.preferredBasicIdMessage,
+            basicIdIndex: index + 1,
+            shownHeadline: messageContainer.basicIdMessages!.length > 1,
+          ),
+        );
+      }
+    }
+    // if there are no basic id messages, build empty fields once
+    else {
+      basicIdFields.addAll(_buildBasicIdMessageFields(
+        context: context,
+        message: null,
+        isPreferredBasicId: false,
+        shownHeadline: false,
+      ));
+    }
+    return basicIdFields;
+  }
+
+  static List<Widget> _buildBasicIdMessageFields({
+    required BuildContext context,
+    required BasicIDMessage? message,
+    required bool isPreferredBasicId,
+    required bool shownHeadline,
+    int? basicIdIndex,
+  }) {
+    final uaTypeString = message?.uaType.asString();
+    final proximityAlertsActive = context
+        .watch<ProximityAlertsCubit>()
+        .state
+        .isAlertActiveForId(message?.uasID.asString());
+
+    return [
+      if (shownHeadline)
+        Headline(
+          text: 'Identification ${basicIdIndex ?? ''}',
+          dividerThickness: 0.5,
+          fontSize: 14,
+        ),
+      AircraftDetailRow(
+        children: [
+          AircraftDetailField(
+            headlineText: message?.uasID.type.asString() ?? 'UAS ID',
+            fieldText: message?.uasID.asString(),
+          ),
+        ],
+      ),
+      AircraftDetailRow(
+        children: [
+          AircraftDetailField(
+            headlineText: 'Type',
+            fieldText: uaTypeString,
+          ),
+          if (isPreferredBasicId && message != null)
+            Padding(
+              padding: const EdgeInsets.only(left: Sizes.standard * 2),
+              child: SetAsMineButton(
+                uasId: message.uasID,
+                proximityAlertsActive: proximityAlertsActive,
+              ),
+            )
+        ],
+      ),
     ];
   }
 

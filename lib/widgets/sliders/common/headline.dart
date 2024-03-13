@@ -9,6 +9,7 @@ class Headline extends StatelessWidget {
   final Widget? leading;
   final Color? color;
   final double? fontSize;
+  final double dividerThickness;
 
   const Headline({
     super.key,
@@ -17,6 +18,7 @@ class Headline extends StatelessWidget {
     this.leading,
     this.color,
     this.fontSize,
+    this.dividerThickness = 2,
   });
 
   @override
@@ -46,9 +48,9 @@ class Headline extends StatelessWidget {
           const SizedBox(
             width: 20,
           ),
-          const Expanded(
+          Expanded(
             child: Divider(
-              thickness: 2,
+              thickness: dividerThickness,
               color: AppColors.lightGray,
             ),
           ),

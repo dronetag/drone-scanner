@@ -57,12 +57,14 @@ class AircraftCubit extends Cubit<AircraftState> {
         baroAltitudeAccuracy: VerticalAccuracy.meters_150,
         timestampAccuracy: null,
       ),
-      basicIdMessage: BasicIDMessage(
-        protocolVersion: 1,
-        uasID: SerialNumber(serialNumber: '52426900931WDHW83'),
-        rawContent: Uint8List(0),
-        uaType: UAType.helicopterOrMultirotor,
-      ),
+      basicIdMessages: {
+        IDType.serialNumber: BasicIDMessage(
+          protocolVersion: 1,
+          uasID: SerialNumber(serialNumber: '52426900931WDHW83'),
+          rawContent: Uint8List(0),
+          uaType: UAType.helicopterOrMultirotor,
+        ),
+      },
       operatorIdMessage: OperatorIDMessage(
         protocolVersion: 1,
         operatorID: 'FIN87astrdge12k8-xyz',
@@ -220,7 +222,8 @@ class AircraftCubit extends Cubit<AircraftState> {
   MessageContainer? findByUasID(String uasId) {
     final packs = state.packHistory().values.firstWhere(
         (packList) => packList.any(
-            (element) => element.basicIdMessage?.uasID.asString() == uasId),
+              (element) => element.containsUasId(uasId),
+            ),
         orElse: () => []);
     return packs.isEmpty ? null : packs.last;
   }

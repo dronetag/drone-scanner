@@ -92,14 +92,14 @@ class ExportCubit extends Cubit<ExportState> {
         aircraftState
                 .packHistory()[mac]
                 ?.last
-                .basicIdMessage
+                .preferredBasicIdMessage
                 ?.uasID
                 .asString() !=
             null) {
       filename = aircraftState
           .packHistory()[mac]!
           .last
-          .basicIdMessage!
+          .preferredBasicIdMessage!
           .uasID
           .asString()!;
     } else {

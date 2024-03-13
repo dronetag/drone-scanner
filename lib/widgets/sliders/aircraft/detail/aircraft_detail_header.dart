@@ -135,7 +135,8 @@ class AircraftDetailHeader extends StatelessWidget {
               children: [
                 buildTitle(
                   context,
-                  messagePackList.last.basicIdMessage?.uasID.asString(),
+                  messagePackList.last.preferredBasicIdMessage?.uasID
+                      .asString(),
                 ),
                 if (messagePackList.last.operatorIDSet)
                   buildSubtitle(context, messagePackList),

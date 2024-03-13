@@ -114,8 +114,13 @@ void handleAction(BuildContext context, AircraftAction action) {
         context,
         'Are you sure you want to delete aircraft data?',
         () {
-          context.read<ProximityAlertsCubit>().clearFoundDrone(
-              messagePackList.last.basicIdMessage?.uasID.asString());
+          final alertsCubit = context.read<ProximityAlertsCubit>();
+          if (messagePackList.last.basicIdMessages != null) {
+            for (final basicIdMessage
+                in messagePackList.last.basicIdMessages!.values) {
+              alertsCubit.clearFoundDrone(basicIdMessage.uasID.asString());
+            }
+          }
           context.read<SlidersCubit>().setShowDroneDetail(show: false);
           context.read<AircraftCubit>().deletePack(selectedMac);
           context.read<SelectedAircraftCubit>().unselectAircraft();

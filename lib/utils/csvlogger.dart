@@ -203,10 +203,12 @@ class CSVLogger {
       row.addAll(_logLocationMessage(container.locationMessage!));
       csvData.add(row);
     }
-    if (container.basicIdMessage != null) {
-      final row = logMetadata(container, 'Basic ID');
-      row.addAll(_logBasicMessage(container.basicIdMessage!));
-      csvData.add(row);
+    if (container.basicIdMessages != null) {
+      for (final basicIdMessage in container.basicIdMessages!.values) {
+        final row = logMetadata(container, 'Basic ID');
+        row.addAll(_logBasicMessage(basicIdMessage));
+        csvData.add(row);
+      }
     }
     if (container.operatorIdMessage != null) {
       final row = logMetadata(container, 'Operator ID');
