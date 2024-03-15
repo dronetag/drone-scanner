@@ -43,10 +43,8 @@ class AircraftCard extends StatelessWidget {
         messagePack.operatorIDValid) {
       flag = getFlag(countryCode);
     }
-    final uasIdText = messagePack.basicIdMessage != null &&
-            messagePack.basicIdMessage?.uasID.asString() != null
-        ? messagePack.basicIdMessage!.uasID.asString()!
-        : 'Unknown UAS ID';
+    final uasId = messagePack.preferredBasicIdMessage?.uasID;
+    final uasIdText = uasId?.asString() ?? 'Unknown UAS ID';
     final opIdTrimmed =
         messagePack.operatorIdMessage?.operatorID.removeNonAlphanumeric();
     final opIdText = messagePack.operatorIDSet
@@ -112,10 +110,11 @@ class AircraftCard extends StatelessWidget {
   Widget buildLeading(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final status = messagePack.locationMessage?.status;
-    final proximityAlertsActive = context
-        .read<ProximityAlertsCubit>()
-        .state
-        .isAlertActiveForId(messagePack.basicIdMessage?.uasID.asString());
+    final proximityAlertsState = context.read<ProximityAlertsCubit>().state;
+    final proximityAlertsActive = messagePack.basicIdMessages?.values.any(
+            (element) => proximityAlertsState
+                .isAlertActiveForId(element.uasID.asString())) ??
+        false;
 
     final icon = status == OperationalStatus.none
         ? null
@@ -163,10 +162,8 @@ class AircraftCard extends StatelessWidget {
   }
 
   Widget buildTrailing(BuildContext context) {
-    if (messagePack.basicIdMessage != null &&
-        messagePack.basicIdMessage?.uaType != null) {
-      // to-do: icon according to basic.uaType
-    }
+    // TODO: icon according to basic.uaType
+
     final rssi = messagePack.lastMessageRssi;
     final source = messagePack.packSource;
     final standardText = getSourceShortcut(source);

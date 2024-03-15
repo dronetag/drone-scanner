@@ -87,7 +87,7 @@ class _UsersDeviceUASIDTextFieldState extends State<UsersDeviceUASIDTextField> {
                 child: TextField(
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'UAS ID',
+                    hintText: 'Serial Number',
                   ),
                   controller: _controller,
                   onSubmitted: (_) => _submit(context),

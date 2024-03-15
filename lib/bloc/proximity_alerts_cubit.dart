@@ -243,8 +243,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   // check if owned drone has location, expected uasid
   bool _alertsReady(MessageContainer pack) =>
       state.proximityAlertActive &&
-      pack.basicIdMessage?.uasID.asString() != null &&
-      pack.basicIdMessage?.uasID.asString() == state.usersAircraftUASID &&
+      state.usersAircraftUASID != null &&
+      pack.containsUasId(state.usersAircraftUASID!) &&
       pack.locationValid;
 
   // check distance, consider just packs not older than expiration time
@@ -267,37 +267,39 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     }
     packHistory.forEach(
       (key, value) {
-        final uasId = value.last.basicIdMessage?.uasID;
-        if (uasId?.asString() != null &&
-            uasId!.asString()! != state.usersAircraftUASID &&
-            value.last.locationValid) {
-          // calc distance and convert to meters
-          final distance = calculateDistance(
-                  pack.locationMessage!.location!.latitude,
-                  pack.locationMessage!.location!.longitude,
-                  value.last.locationMessage!.location!.latitude,
-                  value.last.locationMessage!.location!.longitude) *
-              1000;
-          if (_isNearby(value.last, distance)) {
-            // refresh if not marked as expired
-            foundAlerts.add(
-              DroneNearbyAlert(uasId.asString()!, distance,
-                  state.expirationTimeSec, DateTime.now()),
-            );
-            // detected first time, show alert
-            if (state.foundAircraft[uasId.asString()] == null) {
-              _alertEventController.add(AlertShow());
-              if (state.sendNotifications) {
-                notificationService.addNotification(
-                  'Proximity Alert',
-                  foundAlerts.length == 1
-                      ? 'Drone ${foundAlerts.first.uasId} is '
-                          '${foundAlerts.first.distance.toStringAsFixed(2)} '
-                          'meters from your drone'
-                      : '${foundAlerts.length} drones are flying close',
-                  DateTime.now().millisecondsSinceEpoch + 1000,
-                );
-              }
+        // check if one of uas ids matches with uas id of users aicraft
+        if (value.last.containsUasId(state.usersAircraftUASID!) ||
+            !value.last.locationValid) {
+          return;
+        }
+
+        // calc distance and convert to meters
+        final distance = calculateDistance(
+                pack.locationMessage!.location!.latitude,
+                pack.locationMessage!.location!.longitude,
+                value.last.locationMessage!.location!.latitude,
+                value.last.locationMessage!.location!.longitude) *
+            1000;
+        if (_isNearby(value.last, distance)) {
+          final uasId = value.last.preferredBasicIdMessage?.uasID;
+          // refresh if not marked as expired
+          foundAlerts.add(
+            DroneNearbyAlert(uasId?.asString() ?? 'Unknown UAS ID', distance,
+                state.expirationTimeSec, DateTime.now()),
+          );
+          // detected first time, show alert
+          if (state.foundAircraft[uasId?.asString()] == null) {
+            _alertEventController.add(AlertShow());
+            if (state.sendNotifications) {
+              notificationService.addNotification(
+                'Proximity Alert',
+                foundAlerts.length == 1
+                    ? 'Drone ${foundAlerts.first.uasId} is '
+                        '${foundAlerts.first.distance.toStringAsFixed(2)} '
+                        'meters from your drone'
+                    : '${foundAlerts.length} drones are flying close',
+                DateTime.now().millisecondsSinceEpoch + 1000,
+              );
             }
           }
         }

@@ -284,8 +284,7 @@ class MapCubit extends Cubit<GMapState> {
                   if (selItemMac != null && e.last.macAddress == selItemMac) {
                     markerHue = gmap.BitmapDescriptor.hueRed;
                   } else if (userAircraftUasId != null &&
-                      e.last.basicIdMessage?.uasID.asString() ==
-                          userAircraftUasId) {
+                      e.last.containsUasId(userAircraftUasId)) {
                     markerHue = 110;
                   } else if (e.last.locationMessage == null ||
                       e.last.locationMessage?.status ==
@@ -295,8 +294,8 @@ class MapCubit extends Cubit<GMapState> {
                     markerHue = gmap.BitmapDescriptor.hueBlue;
                   }
                   var haslocation = (e.isNotEmpty && e.last.locationValid);
-                  final uasIdText = e.last.basicIdMessage != null
-                      ? e.last.basicIdMessage?.uasID.asString()
+                  final uasIdText = e.last.preferredBasicIdMessage != null
+                      ? e.last.preferredBasicIdMessage?.uasID.asString()
                       : 'Unknown UAS ID';
                   final givenLabel = context
                       .read<AircraftCubit>()

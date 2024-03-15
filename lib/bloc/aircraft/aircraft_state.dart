@@ -45,15 +45,18 @@ class AircraftState {
         _packHistory.entries.toList()
           ..sort(
             (e1, e2) {
-              if (e1.value.last.basicIdMessage?.uasID.asString() == null) {
+              if (e1.value.last.preferredBasicIdMessage?.uasID.asString() ==
+                  null) {
                 return 1;
               }
-              if (e2.value.last.basicIdMessage?.uasID.asString() == null) {
+              if (e2.value.last.preferredBasicIdMessage?.uasID.asString() ==
+                  null) {
                 return -1;
               }
-              return e1.value.last.basicIdMessage!.uasID
+              return e1.value.last.preferredBasicIdMessage!.uasID
                   .toString()
-                  .compareTo(e2.value.last.basicIdMessage!.uasID.asString()!);
+                  .compareTo(
+                      e2.value.last.preferredBasicIdMessage!.uasID.asString()!);
             },
           ),
       ),
@@ -103,12 +106,10 @@ class AircraftState {
     if (myDronePositioning != null &&
         myDronePositioning != MyDronePositioning.defaultPosition &&
         userAircraftUasId != null &&
-        aircraft.values.any((e) =>
-            e.first.basicIdMessage?.uasID.asString() == userAircraftUasId)) {
+        aircraft.values.any((e) => e.last.containsUasId(userAircraftUasId))) {
       final entryList = aircraft.entries.toList();
-      final priorityData = entryList.firstWhere((element) =>
-          element.value.last.basicIdMessage?.uasID.asString() ==
-          userAircraftUasId);
+      final priorityData = entryList.firstWhere(
+          (element) => element.value.last.containsUasId(userAircraftUasId));
       entryList.remove(priorityData);
       entryList.insert(
         myDronePositioning == MyDronePositioning.alwaysFirst

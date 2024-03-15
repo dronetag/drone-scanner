@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
-import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
@@ -35,14 +34,8 @@ class _AircraftDetailState extends State<AircraftDetail> {
     if (selectedMac == null) return;
     setState(
       () {
-        // check if model info for current aircraft exists and fetch if not
-        uasId = context
-            .read<AircraftCubit>()
-            .findByMacAddress(selectedMac)
-            ?.basicIdMessage
-            ?.uasID
-            .asString();
-
+        final aircraftCubit = context.read<AircraftCubit>();
+        uasId = aircraftCubit.findByMacAddress(selectedMac)?.serialNumberUasId;
         if (uasId == null) return;
 
         final modelInfo =
