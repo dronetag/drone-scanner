@@ -298,10 +298,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_opendroneid
-      sha256: "034236de38697427793c04fc20326b8b51b62d07388058fc74f68ef2be990861"
+      sha256: b3ed2fafa474d0bad0eded4e8516c0524ccf33ba1a966f6d696e3765cce4c0bf
       url: "https://pub.dev"
     source: hosted
-    version: "0.16.0"
+    version: "0.17.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
