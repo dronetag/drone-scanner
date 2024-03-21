@@ -122,12 +122,12 @@ class SlidersCubit extends Cubit<SlidersState> {
     );
   }
 
-  bool isPanelClosed() {
+  bool get isPanelClosed {
     return panelController.state != null &&
         panelController.state!.extent == bottomSnap;
   }
 
-  bool isPanelOpened() {
+  bool get isPanelOpened {
     return panelController.state != null &&
         panelController.state!.extent == topSnap;
   }

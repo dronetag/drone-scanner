@@ -31,7 +31,7 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final sliderMaximized = context.watch<SlidersCubit>().isPanelOpened();
+    final sliderMaximized = context.watch<SlidersCubit>().isPanelOpened;
     final borderRadius = sliderMaximized ? 0.0 : 10.0;
     return BlocBuilder<SlidersCubit, SlidersState>(
       builder: (context, state) {
@@ -102,14 +102,14 @@ class _AircraftSlidingPanelState extends State<AirspaceSlidingPanel>
 
   void onHeaderTapPortrait() {
     final cubit = context.read<SlidersCubit>();
-    if (cubit.isPanelClosed() || cubit.isPanelOpened()) {
+    if (cubit.isPanelClosed || cubit.isPanelOpened) {
       cubit.animatePanelToSnapPoint();
     }
   }
 
   void onHeaderTapLandscape() {
     final cubit = context.read<SlidersCubit>();
-    if (cubit.isPanelClosed()) {
+    if (cubit.isPanelClosed) {
       cubit.openSlider();
     } else {
       cubit.closeSlider();

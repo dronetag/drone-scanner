@@ -327,7 +327,7 @@ class MapCubit extends Cubit<GMapState> {
                       context
                           .read<SlidersCubit>()
                           .setShowDroneDetail(show: true);
-                      if (context.read<SlidersCubit>().isPanelClosed()) {
+                      if (context.read<SlidersCubit>().isPanelClosed) {
                         context.read<SlidersCubit>().animatePanelToSnapPoint();
                       }
                     },

@@ -57,7 +57,7 @@ class _LocationSearchState extends State<LocationSearch> {
       autocorrect: false,
       cursorColor: Colors.white,
       onTap: () {
-        if (context.read<SlidersCubit>().isPanelOpened()) {
+        if (context.read<SlidersCubit>().isPanelOpened) {
           context.read<SlidersCubit>().animatePanelToSnapPoint();
         }
         _autocomplete(context, textEditingController.text);
@@ -223,7 +223,7 @@ class _LocationSearchState extends State<LocationSearch> {
     await mapCubit.centerToLoc(location);
     await mapCubit.setDroppedPinLocation(location);
     await mapCubit.setDroppedPin(pinDropped: true);
-    if (slidersCubit.isPanelOpened()) {
+    if (slidersCubit.isPanelOpened) {
       await slidersCubit.animatePanelToSnapPoint();
     }
   }

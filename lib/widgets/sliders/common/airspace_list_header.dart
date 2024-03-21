@@ -95,7 +95,7 @@ class AirspaceListHeader extends StatelessWidget {
                         ],
                       ),
                     ),*/
-                  if (!context.read<SlidersCubit>().isPanelClosed())
+                  if (!context.read<SlidersCubit>().isPanelClosed)
                     Row(
                       children: [
                         const SizedBox(),
