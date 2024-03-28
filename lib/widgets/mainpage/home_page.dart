@@ -28,26 +28,37 @@ class MyHomePage extends StatelessWidget {
           context.read<ShowcaseCubit>().onShowcaseFinish(context);
         },
         builder: Builder(
-          builder: (context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle.dark,
-            child: WillPopScope(
-              onWillPop: () async {
-                final cubit = context.read<SlidersCubit>();
-                final state = cubit.state;
-                if (state.showDroneDetail) {
-                  await cubit.setShowDroneDetail(show: false);
-                  return false;
-                } else if (cubit.isPanelOpened()) {
-                  await context.read<SlidersCubit>().animatePanelToSnapPoint();
-                  return false;
-                }
-                return true;
-              },
-              child: const AppScaffold(
-                child: HomeBody(),
+          builder: (context) {
+            final showDroneDetail = context.select<SlidersCubit, bool>(
+                (cubit) => cubit.state.showDroneDetail);
+            final isPanelOpened = context
+                .select<SlidersCubit, bool>((cubit) => cubit.isPanelOpened);
+
+            return AnnotatedRegion(
+              value: SystemUiOverlayStyle.dark,
+              child: PopScope(
+                canPop: !showDroneDetail && !isPanelOpened,
+                onPopInvoked: (_) async {
+                  if (showDroneDetail) {
+                    await context
+                        .read<SlidersCubit>()
+                        .setShowDroneDetail(show: false);
+                    return;
+                  }
+
+                  if (isPanelOpened) {
+                    await context
+                        .read<SlidersCubit>()
+                        .animatePanelToSnapPoint();
+                    return;
+                  }
+                },
+                child: const AppScaffold(
+                  child: HomeBody(),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

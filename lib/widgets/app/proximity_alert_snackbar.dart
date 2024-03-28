@@ -194,7 +194,7 @@ class _ProximityAlertSnackbarState extends State<ProximityAlertSnackbar>
                                       .setShowDroneDetail(show: true);
                                   if (context
                                       .read<SlidersCubit>()
-                                      .isPanelClosed()) {
+                                      .isPanelClosed) {
                                     context
                                         .read<SlidersCubit>()
                                         .animatePanelToSnapPoint();

@@ -87,7 +87,7 @@ Future<AircraftAction?> displayAircraftActionMenu(BuildContext context) async {
     ],
     position: RelativeRect.fromLTRB(
       MediaQuery.of(context).size.width,
-      context.read<SlidersCubit>().isPanelOpened()
+      context.read<SlidersCubit>().isPanelOpened
           ? MediaQuery.of(context).size.height / 6
           : MediaQuery.of(context).size.height / 4 * 3,
       Sizes.screenSpacing,

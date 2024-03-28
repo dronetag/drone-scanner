@@ -326,6 +326,7 @@ class _SlidingSheetState extends State<SlidingSheet>
   final GlobalKey footerKey = GlobalKey();
 
   bool get hasHeader => widget.headerBuilder != null;
+
   bool get hasFooter => widget.footerBuilder != null;
 
   late List<double> snappings;
@@ -337,9 +338,11 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   // Whether the dialog completed its initial fly in
   bool didCompleteInitialRoute = false;
+
   // Whether a dismiss was already triggered by the sheet itself
   // and thus further route pops can be safely ignored
   bool dismissUnderway = false;
+
   // Whether the drag on a delegating widget (such as the backdrop)
   // did start, when the sheet was not fully collapsed
   bool didStartDragWhenNotCollapsed = false;
@@ -351,6 +354,7 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   // Whether the sheet has drawn its first frame.
   bool isLaidOut = false;
+
   // The total height of all sheet components.
   double get sheetHeight =>
       childHeight +
@@ -358,30 +362,43 @@ class _SlidingSheetState extends State<SlidingSheet>
       footerHeight +
       padding.vertical +
       borderHeight;
+
   // The maxiumum height that this sheet will cover.
   double get maxHeight => math.min(sheetHeight, availableHeight);
+
   bool get isScrollable => sheetHeight >= availableHeight;
 
   double get currentExtent =>
       (extent?.currentExtent ?? minExtent).clamp(0.0, 1.0);
+
   set currentExtent(double value) => extent?.currentExtent = value;
+
   double get headerExtent =>
       isLaidOut ? (headerHeight + (borderHeight / 2)) / availableHeight : 0.0;
+
   double get footerExtent =>
       isLaidOut ? (footerHeight + (borderHeight / 2)) / availableHeight : 0.0;
+
   double get headerFooterExtent => headerExtent + footerExtent;
+
   double get minExtent => snappings[isDialog ? 1 : 0].clamp(0.0, 1.0);
+
   double get maxExtent => snappings.last.clamp(0.0, 1.0);
+
   double get initialExtent => snapSpec.initialSnap != null
       ? _normalizeSnap(snapSpec.initialSnap!)
       : minExtent;
 
   bool get isDialog => widget.route != null;
+
   ScrollSpec get scrollSpec => widget.scrollSpec;
+
   SnapSpec get snapSpec => widget.snapSpec;
+
   SnapPositioning get snapPositioning => snapSpec.positioning;
 
   double get borderHeight => (widget.border?.top.width ?? 0) * 2;
+
   EdgeInsets get padding {
     final begin = widget.padding ?? const EdgeInsets.all(0);
 
@@ -806,22 +823,18 @@ class _SlidingSheetState extends State<SlidingSheet>
       return result;
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (isDialog) {
-          if (!widget.isDismissable) {
-            _onDismissPrevented(backButton: true);
-            return false;
-          } else {
-            return true;
-          }
-        } else {
-          if (!state.isCollapsed) {
-            await snapToExtent(minExtent);
-            return false;
-          } else {
-            return true;
-          }
+    return PopScope(
+      canPop: (isDialog && widget.isDismissable) ||
+          (!isDialog && state.isCollapsed),
+      onPopInvoked: (_) async {
+        if (isDialog && !widget.isDismissable) {
+          _onDismissPrevented(backButton: true);
+          return;
+        }
+
+        if (!isDialog && !state.isCollapsed) {
+          await snapToExtent(minExtent);
+          return;
         }
       },
       child: result,
@@ -1232,6 +1245,7 @@ class SheetState {
 
 class _InheritedSheetState extends InheritedWidget {
   final ValueNotifier<SheetState> state;
+
   const _InheritedSheetState(
     this.state,
     Widget child,
@@ -1312,6 +1326,7 @@ class SheetController {
 class Invisible extends StatelessWidget {
   final bool invisible;
   final Widget? child;
+
   const Invisible({
     super.key,
     this.invisible = false,
