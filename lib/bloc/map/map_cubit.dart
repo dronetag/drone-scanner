@@ -10,6 +10,7 @@ import '../../constants/theme_map.dart';
 import '../../services/location_service.dart';
 import '../../utils/google_map_style_reader.dart';
 import '../aircraft/aircraft_cubit.dart';
+import '../aircraft/aircraft_metadata_cubit.dart';
 import '../aircraft/selected_aircraft_cubit.dart';
 import '../proximity_alerts_cubit.dart';
 import '../sliders_cubit.dart';
@@ -298,7 +299,7 @@ class MapCubit extends Cubit<GMapState> {
                       ? e.last.preferredBasicIdMessage?.uasID.asString()
                       : 'Unknown UAS ID';
                   final givenLabel = context
-                      .read<AircraftCubit>()
+                      .read<AircraftMetadataCubit>()
                       .getAircraftLabel(e.last.macAddress);
 
                   final infoWindowText = givenLabel ?? uasIdText;

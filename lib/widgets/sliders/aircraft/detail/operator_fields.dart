@@ -72,15 +72,17 @@ class OperatorFields {
         context.read<StandardsCubit>().state.internetAvailable &&
         opMessage != null &&
         pack.operatorIDValid) {
-      flag = Flag(countryCode: countryCode);
+      flag = Flag(
+        countryCode: countryCode,
+        margin: const EdgeInsets.only(right: Sizes.standard / 2),
+      );
     }
     final opIdText = pack.operatorIDSet
-        ? flag == null
-            ? opMessage!.operatorID.removeNonAlphanumeric()
-            : ' ${opMessage!.operatorID.removeNonAlphanumeric()}'
+        ? opMessage!.operatorID.removeNonAlphanumeric()
         : 'Unknown';
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+
     return [
       const Headline(text: 'OPERATOR'),
       if (isLandscape) const SizedBox(),

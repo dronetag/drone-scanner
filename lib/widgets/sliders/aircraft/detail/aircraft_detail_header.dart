@@ -4,6 +4,7 @@ import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/screen_cubit.dart';
@@ -212,7 +213,7 @@ class AircraftDetailHeader extends StatelessWidget {
   Widget buildTitle(BuildContext context, String? uasId) {
     final manufacturer = uasId == null
         ? null
-        : context.read<AircraftCubit>().getModelInfo(uasId)?.maker;
+        : context.read<AircraftMetadataCubit>().getModelInfo(uasId)?.maker;
 
     final logo = manufacturer != null
         ? ManufacturerLogo(manufacturer: manufacturer, color: Colors.white)
@@ -254,12 +255,11 @@ class AircraftDetailHeader extends StatelessWidget {
       flag = Flag(
         countryCode: countryCode,
         color: Colors.white,
+        margin: const EdgeInsets.only(right: Sizes.standard / 2),
       );
     }
     final opIdText = messagePackList.last.operatorIDSet
-        ? flag == null
-            ? opIdMessage!.operatorID.removeNonAlphanumeric()
-            : ' ${opIdMessage!.operatorID.removeNonAlphanumeric()} '
+        ? opIdMessage!.operatorID.removeNonAlphanumeric()
         : '';
     return Text.rich(
       TextSpan(

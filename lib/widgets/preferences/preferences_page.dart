@@ -6,6 +6,7 @@ import 'package:showcaseview/showcaseview.dart';
 
 import '../../bloc/aircraft/aircraft_cubit.dart';
 import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
+import '../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../bloc/aircraft/export_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
@@ -517,7 +518,7 @@ class PreferencesPage extends StatelessWidget {
                 context,
                 'Are you sure you want to delete manufacturer and model data?',
                 () {
-                  context.read<AircraftCubit>().clearModelInfo();
+                  context.read<AircraftMetadataCubit>().clearModelInfo();
                 },
               );
             },

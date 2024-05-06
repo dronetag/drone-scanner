@@ -6,7 +6,7 @@ import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../extensions/string_extensions.dart';
-import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
@@ -27,32 +27,12 @@ class AircraftCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? countryCode;
-    if (messagePack.operatorIdMessage != null) {
-      countryCode = getCountryCode(messagePack.operatorIdMessage!.operatorID);
-    }
+    final givenLabel = context
+        .read<AircraftMetadataCubit>()
+        .getAircraftLabel(messagePack.macAddress);
 
-    final givenLabel =
-        context.read<AircraftCubit>().getAircraftLabel(messagePack.macAddress);
-
-    Widget? flag;
-
-    if (context.read<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDSet &&
-        countryCode != null &&
-        context.watch<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDValid) {
-      flag = Flag(countryCode: countryCode);
-    }
     final uasId = messagePack.preferredBasicIdMessage?.uasID;
     final uasIdText = uasId?.asString() ?? 'Unknown UAS ID';
-    final opIdTrimmed =
-        messagePack.operatorIdMessage?.operatorID.removeNonAlphanumeric();
-    final opIdText = messagePack.operatorIDSet
-        ? flag == null
-            ? opIdTrimmed
-            : ' $opIdTrimmed'
-        : 'Unknown Operator ID';
 
     return ListTile(
       minLeadingWidth: 0,
@@ -65,46 +45,7 @@ class AircraftCard extends StatelessWidget {
         uasId: uasIdText,
         givenLabel: givenLabel,
       ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Operator ID row
-          Text.rich(
-            TextSpan(
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-              children: [
-                if (countryCode != null &&
-                    flag != null &&
-                    messagePack.operatorIDSet)
-                  WidgetSpan(
-                    child: flag,
-                    alignment: PlaceholderAlignment.middle,
-                  ),
-                TextSpan(
-                  text: opIdText,
-                ),
-                if (messagePack.operatorIDSet &&
-                    !messagePack.operatorIDValid) ...[
-                  const TextSpan(text: ' '),
-                  const WidgetSpan(
-                    child: Icon(
-                      Icons.warning_amber_sharp,
-                      size: Sizes.flagSize,
-                      color: AppColors.redIcon,
-                    ),
-                    alignment: PlaceholderAlignment.middle,
-                  ),
-                ],
-              ],
-            ),
-          ),
-          AircraftCardCustomText(
-            messagePack: messagePack,
-          ),
-        ],
-      ),
+      subtitle: buildSubtitle(context),
     );
   }
 
@@ -168,6 +109,7 @@ class AircraftCard extends StatelessWidget {
     final rssi = messagePack.lastMessageRssi;
     final source = messagePack.packSource;
     final standardText = getSourceShortcut(source);
+
     final width = MediaQuery.of(context).size.width;
     const iconSize = Sizes.iconSize / 3 * 2;
     return SizedBox(
@@ -222,6 +164,78 @@ class AircraftCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildSubtitle(BuildContext context) {
+    String? countryCode;
+    Widget? flag;
+
+    if (messagePack.operatorIdMessage != null) {
+      countryCode = getCountryCode(messagePack.operatorIdMessage!.operatorID);
+    }
+
+    if (context.read<StandardsCubit>().state.internetAvailable &&
+        messagePack.operatorIDSet &&
+        countryCode != null &&
+        context.watch<StandardsCubit>().state.internetAvailable &&
+        messagePack.operatorIDValid) {
+      flag = Flag(
+        countryCode: countryCode,
+        margin: const EdgeInsets.only(right: Sizes.standard / 2),
+      );
+    }
+    final containerAuthStatusText = messagePack.authenticityStatus.asString();
+
+    final opIdTrimmed =
+        messagePack.operatorIdMessage?.operatorID.removeNonAlphanumeric();
+    final opIdText =
+        messagePack.operatorIDSet ? opIdTrimmed : 'Unknown Operator ID';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Operator ID row
+        Text.rich(
+          TextSpan(
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+            children: [
+              if (countryCode != null &&
+                  flag != null &&
+                  messagePack.operatorIDSet)
+                WidgetSpan(
+                  child: flag,
+                  alignment: PlaceholderAlignment.middle,
+                ),
+              TextSpan(
+                text: opIdText,
+              ),
+              if (messagePack.operatorIDSet &&
+                  !messagePack.operatorIDValid) ...[
+                const TextSpan(text: ' '),
+                const WidgetSpan(
+                  child: Icon(
+                    Icons.warning_amber_sharp,
+                    size: Sizes.flagSize,
+                    color: AppColors.redIcon,
+                  ),
+                  alignment: PlaceholderAlignment.middle,
+                ),
+              ],
+            ],
+          ),
+        ),
+        AircraftCardCustomText(
+          messagePack: messagePack,
+        ),
+        if (containerAuthStatusText != null)
+          Text(
+            containerAuthStatusText,
+            textScaler: const TextScaler.linear(0.9),
+          )
+      ],
     );
   }
 

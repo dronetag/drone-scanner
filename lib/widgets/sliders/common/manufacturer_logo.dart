@@ -4,14 +4,17 @@ class ManufacturerLogo extends StatelessWidget {
   final String manufacturer;
   final Color color;
 
+  static const _manufacturerLogoMapping = {
+    'Dronetag': 'assets/images/dronetag.png',
+    'DJI': 'assets/images/dji_logo.png'
+  };
+
   const ManufacturerLogo(
       {super.key, required this.manufacturer, this.color = Colors.black});
 
   @override
   Widget build(BuildContext context) {
-    String? path;
-    if (manufacturer == 'Dronetag') path = 'assets/images/dronetag.png';
-    if (manufacturer == 'DJI') path = 'assets/images/dji_logo.png';
+    final path = _manufacturerLogoMapping[manufacturer];
 
     if (path == null) return const SizedBox.shrink();
 

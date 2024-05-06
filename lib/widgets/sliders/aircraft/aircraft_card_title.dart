@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
@@ -23,7 +23,7 @@ class AircraftCardTitle extends StatelessWidget {
         context.read<ProximityAlertsCubit>().state.isAlertActiveForId(uasId);
 
     final manufacturer =
-        context.read<AircraftCubit>().getModelInfo(uasId)?.maker;
+        context.read<AircraftMetadataCubit>().getModelInfo(uasId)?.maker;
 
     final logo = _getLogo(
         context: context,
@@ -43,7 +43,6 @@ class AircraftCardTitle extends StatelessWidget {
               alignment: PlaceholderAlignment.middle,
               child: logo,
             ),
-            const TextSpan(text: ' '),
           ],
           if (proximityAlertsActive)
             const WidgetSpan(
@@ -62,7 +61,6 @@ class AircraftCardTitle extends StatelessWidget {
                 color: proximityAlertsActive ? AppColors.green : Colors.black,
               ),
             ),
-            const TextSpan(text: ' '),
           ],
           TextSpan(
             text: givenLabel ?? uasId,
