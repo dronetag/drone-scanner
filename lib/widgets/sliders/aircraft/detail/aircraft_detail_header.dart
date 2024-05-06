@@ -18,6 +18,8 @@ import '../../../../extensions/string_extensions.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import '../../common/chevron.dart';
+import '../../common/flag.dart';
+import '../../common/manufacturer_logo.dart';
 import '../aircraft_actions.dart';
 
 class AircraftDetailHeader extends StatelessWidget {
@@ -212,8 +214,9 @@ class AircraftDetailHeader extends StatelessWidget {
         ? null
         : context.read<AircraftCubit>().getModelInfo(uasId)?.maker;
 
-    final logo =
-        getManufacturerLogo(manufacturer: manufacturer, color: Colors.white);
+    final logo = manufacturer != null
+        ? ManufacturerLogo(manufacturer: manufacturer, color: Colors.white)
+        : null;
     return Text.rich(
       TextSpan(
         style: const TextStyle(
@@ -248,7 +251,10 @@ class AircraftDetailHeader extends StatelessWidget {
         messagePackList.last.operatorIDSet &&
         messagePackList.last.operatorIDValid &&
         countryCode != null) {
-      flag = getFlag(countryCode);
+      flag = Flag(
+        countryCode: countryCode,
+        color: Colors.white,
+      );
     }
     final opIdText = messagePackList.last.operatorIDSet
         ? flag == null

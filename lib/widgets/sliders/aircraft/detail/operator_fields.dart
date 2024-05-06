@@ -12,6 +12,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../extensions/string_extensions.dart';
 import '../../../../utils/utils.dart';
+import '../../common/flag.dart';
 import '../../common/headline.dart';
 import '../../common/icon_center_to_loc.dart';
 import 'aircraft_detail_field.dart';
@@ -71,7 +72,7 @@ class OperatorFields {
         context.read<StandardsCubit>().state.internetAvailable &&
         opMessage != null &&
         pack.operatorIDValid) {
-      flag = getFlag(countryCode);
+      flag = Flag(countryCode: countryCode);
     }
     final opIdText = pack.operatorIDSet
         ? flag == null

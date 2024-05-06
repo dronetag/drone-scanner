@@ -12,6 +12,7 @@ import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../utils/utils.dart';
+import '../common/flag.dart';
 import '../common/refreshing_text.dart';
 import 'aircraft_card_custom_text.dart';
 import 'aircraft_card_title.dart';
@@ -41,7 +42,7 @@ class AircraftCard extends StatelessWidget {
         countryCode != null &&
         context.watch<StandardsCubit>().state.internetAvailable &&
         messagePack.operatorIDValid) {
-      flag = getFlag(countryCode);
+      flag = Flag(countryCode: countryCode);
     }
     final uasId = messagePack.preferredBasicIdMessage?.uasID;
     final uasIdText = uasId?.asString() ?? 'Unknown UAS ID';

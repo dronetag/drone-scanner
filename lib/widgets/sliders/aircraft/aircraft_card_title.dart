@@ -5,7 +5,7 @@ import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
-import '../../../utils/utils.dart';
+import '../common/manufacturer_logo.dart';
 
 class AircraftCardTitle extends StatelessWidget {
   final String uasId;
@@ -25,9 +25,10 @@ class AircraftCardTitle extends StatelessWidget {
     final manufacturer =
         context.read<AircraftCubit>().getModelInfo(uasId)?.maker;
 
-    final logo = getManufacturerLogo(
-        manufacturer: manufacturer,
-        color: proximityAlertsActive ? AppColors.green : Colors.black);
+    final logo = _getLogo(
+        context: context,
+        proximityAlertsActive: proximityAlertsActive,
+        manufacturer: manufacturer);
 
     return Text.rich(
       TextSpan(
@@ -70,5 +71,16 @@ class AircraftCardTitle extends StatelessWidget {
       ),
       textAlign: TextAlign.left,
     );
+  }
+
+  Widget? _getLogo(
+      {required BuildContext context,
+      required bool proximityAlertsActive,
+      required String? manufacturer}) {
+    return manufacturer != null
+        ? ManufacturerLogo(
+            manufacturer: manufacturer,
+            color: proximityAlertsActive ? AppColors.green : Colors.black)
+        : null;
   }
 }
