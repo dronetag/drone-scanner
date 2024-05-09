@@ -143,6 +143,7 @@ class AircraftDetailHeader extends StatelessWidget {
                 ),
                 if (messagePackList.last.operatorIDSet)
                   buildSubtitle(context, messagePackList),
+                buildAuthenticityStatus(messagePackList),
               ],
             ),
           ),
@@ -293,6 +294,20 @@ class AircraftDetailHeader extends StatelessWidget {
             ),
           ]
         ],
+      ),
+    );
+  }
+
+  Widget buildAuthenticityStatus(
+    List<MessageContainer> messagePackList,
+  ) {
+    final text = messagePackList.last.authenticityStatus.asString();
+    if (text == null) return const SizedBox.shrink();
+
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white,
       ),
     );
   }
