@@ -6,11 +6,13 @@ import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../extensions/string_extensions.dart';
+import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../models/message_container_authenticity_status.dart';
 import '../../../utils/utils.dart';
 import '../common/flag.dart';
 import '../common/refreshing_text.dart';
@@ -185,7 +187,12 @@ class AircraftCard extends StatelessWidget {
         margin: const EdgeInsets.only(right: Sizes.standard / 2),
       );
     }
-    final containerAuthStatusText = messagePack.authenticityStatus.asString();
+    final authenticityStatus =
+        context.select<AircraftCubit, MessageContainerAuthenticityStatus>(
+      (cubit) =>
+          cubit.state.dataAuthenticityStatuses[messagePack.macAddress] ??
+          MessageContainerAuthenticityStatus.untrusted,
+    );
 
     final opIdTrimmed =
         messagePack.operatorIdMessage?.operatorID.removeNonAlphanumeric();
@@ -230,11 +237,11 @@ class AircraftCard extends StatelessWidget {
         AircraftCardCustomText(
           messagePack: messagePack,
         ),
-        if (containerAuthStatusText != null)
-          Text(
-            containerAuthStatusText,
-            textScaler: const TextScaler.linear(0.9),
-          )
+
+        Text(
+          authenticityStatus.name.capitalize(),
+          textScaler: const TextScaler.linear(0.9),
+        )
       ],
     );
   }

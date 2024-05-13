@@ -152,6 +152,7 @@ void main() async {
               mapCubit: mapCubit,
               selectedAircraftCubit: selectedCubit,
               aircraftCubit: aircraftCubit,
+              aircraftMetadataCubit: aircraftMetadataCubit,
             ),
             lazy: false,
           ),

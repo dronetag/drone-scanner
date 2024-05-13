@@ -16,6 +16,7 @@ import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../extensions/string_extensions.dart';
+import '../../../../models/message_container_authenticity_status.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import '../../common/chevron.dart';
@@ -143,7 +144,8 @@ class AircraftDetailHeader extends StatelessWidget {
                 ),
                 if (messagePackList.last.operatorIDSet)
                   buildSubtitle(context, messagePackList),
-                buildAuthenticityStatus(messagePackList),
+                buildAuthenticityStatus(
+                    context, messagePackList.last.macAddress),
               ],
             ),
           ),
@@ -298,14 +300,16 @@ class AircraftDetailHeader extends StatelessWidget {
     );
   }
 
-  Widget buildAuthenticityStatus(
-    List<MessageContainer> messagePackList,
-  ) {
-    final text = messagePackList.last.authenticityStatus.asString();
-    if (text == null) return const SizedBox.shrink();
+  Widget buildAuthenticityStatus(BuildContext context, String macAddress) {
+    final authenticityStatus =
+        context.select<AircraftCubit, MessageContainerAuthenticityStatus>(
+      (cubit) =>
+          cubit.state.dataAuthenticityStatuses[macAddress] ??
+          MessageContainerAuthenticityStatus.untrusted,
+    );
 
     return Text(
-      text,
+      authenticityStatus.name.capitalize(),
       style: const TextStyle(
         color: Colors.white,
       ),

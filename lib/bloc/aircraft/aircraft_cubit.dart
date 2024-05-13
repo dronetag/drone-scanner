@@ -8,6 +8,8 @@ import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
 import 'package:flutter_opendroneid/utils/conversions.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../models/message_container_authenticity_status.dart';
+import '../../utils/message_container_authenticator.dart';
 import '../../utils/utils.dart';
 import '../sliders_cubit.dart';
 import 'aircraft_expiration_cubit.dart';
@@ -70,11 +72,7 @@ class AircraftCubit extends Cubit<AircraftState> {
   ];
 
   AircraftCubit({required this.expirationCubit})
-      : super(
-          AircraftState(
-            packHistory: <String, List<MessageContainer>>{},
-          ),
-        ) {
+      : super(AircraftState(packHistory: {}, dataAuthenticityStatuses: {})) {
     expirationCubit.deleteCallback = deletePack;
   }
 
@@ -95,6 +93,7 @@ class AircraftCubit extends Cubit<AircraftState> {
     emit(
       AircraftStateUpdate(
         packHistory: state.packHistory(),
+        dataAuthenticityStatuses: state.dataAuthenticityStatuses,
       ),
     );
   }
@@ -125,9 +124,7 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   Future<void> clearAircraft() async {
     emit(
-      AircraftStateUpdate(
-        packHistory: {},
-      ),
+      AircraftStateUpdate(packHistory: {}, dataAuthenticityStatuses: {}),
     );
   }
 
@@ -147,6 +144,13 @@ class AircraftCubit extends Cubit<AircraftState> {
       emit(
         AircraftStateBuffering(
           packHistory: data,
+          dataAuthenticityStatuses: state.dataAuthenticityStatuses
+            ..addAll({
+              pack.macAddress:
+                  MessageContainerAuthenticator.determineAuthenticityStatus(
+                pack,
+              )
+            }),
         ),
       );
     } on Exception {
@@ -167,6 +171,7 @@ class AircraftCubit extends Cubit<AircraftState> {
       emit(
         AircraftStateUpdate(
           packHistory: data,
+          dataAuthenticityStatuses: state.dataAuthenticityStatuses,
         ),
       );
     } on Exception {
@@ -183,11 +188,11 @@ class AircraftCubit extends Cubit<AircraftState> {
   Future<void> deletePack(String mac) async {
     expirationCubit.removeTimer(mac);
 
-    final data = state._packHistory;
-    data.removeWhere((key, _) => mac == key);
     emit(
       AircraftStateUpdate(
-        packHistory: data,
+        packHistory: state._packHistory..removeWhere((key, _) => mac == key),
+        dataAuthenticityStatuses: state.dataAuthenticityStatuses
+          ..removeWhere((key, _) => mac == key),
       ),
     );
   }

@@ -2,6 +2,8 @@ part of 'aircraft_cubit.dart';
 
 class AircraftState {
   final Map<String, List<MessageContainer>> _packHistory;
+  final Map<String, MessageContainerAuthenticityStatus>
+      dataAuthenticityStatuses;
 
   Map<String, List<MessageContainer>> packHistory(
       [String? userAircraftUasId, MyDronePositioning? myDronePositioning]) {
@@ -115,27 +117,31 @@ class AircraftState {
     return aircraft;
   }
 
-  AircraftState({
-    required Map<String, List<MessageContainer>> packHistory,
-  }) : _packHistory = packHistory;
+  AircraftState(
+      {required Map<String, List<MessageContainer>> packHistory,
+      required this.dataAuthenticityStatuses})
+      : _packHistory = packHistory;
 
   AircraftState copyWith({
     Map<String, List<MessageContainer>>? packHistory,
-    bool? fetchInProgress,
+    Map<String, MessageContainerAuthenticityStatus>? dataAuthenticityStatuses,
   }) =>
       AircraftState(
-        packHistory: packHistory ?? _packHistory,
-      );
+          packHistory: packHistory ?? _packHistory,
+          dataAuthenticityStatuses:
+              dataAuthenticityStatuses ?? this.dataAuthenticityStatuses);
 }
 
 class AircraftStateUpdate extends AircraftState {
   AircraftStateUpdate({
     required super.packHistory,
+    required super.dataAuthenticityStatuses,
   });
 }
 
 class AircraftStateBuffering extends AircraftState {
   AircraftStateBuffering({
     required super.packHistory,
+    required super.dataAuthenticityStatuses,
   });
 }
