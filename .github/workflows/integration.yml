@@ -4,7 +4,7 @@ name: Integration
 # and runs the unit test suite
 
 env:
-  FLUTTER_VERSION: '3.16.x'
+  FLUTTER_VERSION: "3.19.x"
 
 on:
   pull_request:

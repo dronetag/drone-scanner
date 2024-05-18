@@ -9,8 +9,8 @@ version: 1.6.0
 
 publish_to: none
 environment:
-  sdk: ">=3.2.4 <4.0.0"
-  flutter: ">=3.16.7"
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.19.2"
 
 # # Uncomment to use flutter_opendroneid from local repository
 # dependency_overrides:
@@ -56,7 +56,6 @@ dev_dependencies:
   flutter_lints: ^3.0.1
   sentry_dart_plugin: ^1.6.2
 
-# The following section is specific to Flutter.
 flutter:
   uses-material-design: true
 
@@ -64,11 +63,7 @@ flutter:
     - assets/images/
     - assets/google_maps/
     - assets/docs/
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
   fonts:
     - family: TitilliumWeb
       fonts:
@@ -87,8 +82,6 @@ flutter:
       fonts:
         - asset: assets/fonts/DroneScannerIcon.ttf
           weight: 700
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
 
 sentry:
   upload_debug_symbols: true
