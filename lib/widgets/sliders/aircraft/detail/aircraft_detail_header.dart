@@ -307,12 +307,14 @@ class AircraftDetailHeader extends StatelessWidget {
           cubit.state.dataAuthenticityStatuses[macAddress] ??
           MessageContainerAuthenticityStatus.untrusted,
     );
-
-    return Text(
-      authenticityStatus.name.capitalize(),
-      style: const TextStyle(
-        color: Colors.white,
-      ),
-    );
+    if (authenticityStatus.shouldBeDisplayed) {
+      return Text(
+        authenticityStatus.name.capitalize(),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      );
+    }
+    return const SizedBox.shrink();
   }
 }

@@ -173,20 +173,19 @@ class AircraftCard extends StatelessWidget {
     String? countryCode;
     Widget? flag;
 
-    if (messagePack.operatorIdMessage != null) {
+    if (messagePack.operatorIDSet && messagePack.operatorIDValid) {
       countryCode = getCountryCode(messagePack.operatorIdMessage!.operatorID);
     }
 
-    if (context.read<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDSet &&
-        countryCode != null &&
-        context.watch<StandardsCubit>().state.internetAvailable &&
-        messagePack.operatorIDValid) {
+    final internetAvailable = context
+        .select<StandardsCubit, bool>((cubit) => cubit.state.internetAvailable);
+    if (countryCode != null && internetAvailable) {
       flag = Flag(
         countryCode: countryCode,
         margin: const EdgeInsets.only(right: Sizes.standard / 2),
       );
     }
+
     final authenticityStatus =
         context.select<AircraftCubit, MessageContainerAuthenticityStatus>(
       (cubit) =>
@@ -237,11 +236,11 @@ class AircraftCard extends StatelessWidget {
         AircraftCardCustomText(
           messagePack: messagePack,
         ),
-
-        Text(
-          authenticityStatus.name.capitalize(),
-          textScaler: const TextScaler.linear(0.9),
-        )
+        if (authenticityStatus.shouldBeDisplayed)
+          Text(
+            authenticityStatus.name.capitalize(),
+            textScaler: const TextScaler.linear(0.9),
+          )
       ],
     );
   }
