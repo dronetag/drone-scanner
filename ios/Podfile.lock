@@ -10,11 +10,11 @@ PODS:
     - Flutter
   - google_maps_flutter_ios (0.0.1):
     - Flutter
-    - GoogleMaps (< 9.0)
-  - GoogleMaps (6.2.1):
-    - GoogleMaps/Maps (= 6.2.1)
-  - GoogleMaps/Base (6.2.1)
-  - GoogleMaps/Maps (6.2.1):
+    - GoogleMaps (< 9.0, >= 8.4)
+  - GoogleMaps (8.4.0):
+    - GoogleMaps/Maps (= 8.4.0)
+  - GoogleMaps/Base (8.4.0)
+  - GoogleMaps/Maps (8.4.0):
     - GoogleMaps/Base
   - location (0.0.1):
     - Flutter
@@ -25,13 +25,11 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
-  - Sentry/HybridSDK (8.19.0):
-    - SentryPrivate (= 8.19.0)
-  - sentry_flutter (0.0.1):
+  - Sentry/HybridSDK (8.25.0)
+  - sentry_flutter (7.20.2):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.19.0)
-  - SentryPrivate (8.19.0)
+    - Sentry/HybridSDK (= 8.25.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -63,7 +61,6 @@ SPEC REPOS:
   trunk:
     - GoogleMaps
     - Sentry
-    - SentryPrivate
 
 EXTERNAL SOURCES:
   app_settings:
@@ -103,20 +100,19 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_opendroneid: 92e28add32d6bf2b5705fdad0666657476de2e15
-  google_maps_flutter_ios: f135b968a67c05679e0a53538e900b5c174b0d99
-  GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4
+  google_maps_flutter_ios: c454f18e0e22df6ac0e9f2a4df340858f5a3680c
+  GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  permission_handler_apple: 036b856153a2b1f61f21030ff725f3e6fece2b78
-  Sentry: 1ebcaef678a27c8ac515f974cb5425dd1bbdec2f
-  sentry_flutter: ecdfbedee55337205561cfa782ee02d31ec83e1f
-  SentryPrivate: 765c9b4ebe9ac1a5fcdc067c5a1cfbf3f10e1677
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  Sentry: cd86fc55628f5b7c572cabe66cc8f95a9d2f165a
+  sentry_flutter: 0cf2507eb90ff7a6aa3304e900dd7f08edbbefdf
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
-  url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
 
-PODFILE CHECKSUM: 720df1fc368a389ed7da69cffcbc4f628f143930
+PODFILE CHECKSUM: a1259a7fc402ace8f6edaea2622af986625b8779
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.15.2
