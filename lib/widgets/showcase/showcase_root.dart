@@ -20,7 +20,7 @@ class ShowcaseRoot extends StatelessWidget {
         top: 150.0 * context.read<ScreenCubit>().scaleHeight,
       ),
       child: Showcase.withWidget(
-        shapeBorder: const CircleBorder(),
+        targetShapeBorder: const CircleBorder(),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         container: ShowcaseStartWidget(

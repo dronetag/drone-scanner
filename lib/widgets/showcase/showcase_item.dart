@@ -32,7 +32,7 @@ class ShowcaseItem extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 20,
       height: 0,
       overlayOpacity: opacity ?? 0.75,
-      overlayPadding: padding ?? EdgeInsets.zero,
+      targetPadding: padding ?? EdgeInsets.zero,
       container: ShowcaseWidget(
         heading: title,
         text: description,
