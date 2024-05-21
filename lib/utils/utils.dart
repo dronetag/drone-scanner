@@ -6,7 +6,6 @@ import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
 
-import '../constants/sizes.dart';
 import '../extensions/string_extensions.dart';
 
 T swapSign<T extends num>(T value) {
@@ -161,45 +160,6 @@ String getSpeedVertAsString(double? speed) {
 String getSpeedHorAsString(double? speed) {
   if (speed == null || speed == INV_SPEED_H) return 'Unknown';
   return sprintf('%3.2f m/s', [speed]);
-}
-
-Widget? getFlag(String countryCode) {
-  const size = Sizes.flagSize;
-  Widget? flag;
-  NetworkImage? image;
-  try {
-    image = NetworkImage(
-      'https://flagcdn.com/h20/${countryCode.toLowerCase()}.png',
-    );
-  } catch (_) {
-    return null;
-  }
-  flag = Container(
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-      ),
-      width: size,
-      height: size,
-      child: CircleAvatar(backgroundImage: image));
-
-  return flag;
-}
-
-Image? getManufacturerLogo({String? manufacturer, Color color = Colors.black}) {
-  if (manufacturer == null) return null;
-  String? path;
-  if (manufacturer == 'Dronetag') path = 'assets/images/dronetag.png';
-  if (manufacturer == 'DJI') path = 'assets/images/dji_logo.png';
-
-  if (path == null) return null;
-  return Image.asset(
-    path,
-    height: 16,
-    width: 20,
-    alignment: Alignment.centerLeft,
-    color: color,
-  );
 }
 
 String? getCountryCode(String operatorId) {

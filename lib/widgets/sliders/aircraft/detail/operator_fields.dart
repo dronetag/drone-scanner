@@ -12,6 +12,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../extensions/string_extensions.dart';
 import '../../../../utils/utils.dart';
+import '../../common/flag.dart';
 import '../../common/headline.dart';
 import '../../common/icon_center_to_loc.dart';
 import 'aircraft_detail_field.dart';
@@ -71,15 +72,17 @@ class OperatorFields {
         context.read<StandardsCubit>().state.internetAvailable &&
         opMessage != null &&
         pack.operatorIDValid) {
-      flag = getFlag(countryCode);
+      flag = Flag(
+        countryCode: countryCode,
+        margin: const EdgeInsets.only(right: Sizes.standard / 2),
+      );
     }
     final opIdText = pack.operatorIDSet
-        ? flag == null
-            ? opMessage!.operatorID.removeNonAlphanumeric()
-            : ' ${opMessage!.operatorID.removeNonAlphanumeric()}'
+        ? opMessage!.operatorID.removeNonAlphanumeric()
         : 'Unknown';
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+
     return [
       const Headline(text: 'OPERATOR'),
       if (isLandscape) const SizedBox(),

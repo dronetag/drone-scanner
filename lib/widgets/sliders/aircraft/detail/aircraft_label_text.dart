@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../app/dialogs.dart';
@@ -21,7 +21,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
 
   void deleteLabelCallback() {
     context
-        .read<AircraftCubit>()
+        .read<AircraftMetadataCubit>()
         .deleteAircraftLabel(
           widget.aircraftMac,
         )
@@ -41,7 +41,7 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
       // check if label is not just whitespaces
       if (_controller.text.trim() != '') {
         context
-            .read<AircraftCubit>()
+            .read<AircraftMetadataCubit>()
             .addAircraftLabel(
               widget.aircraftMac,
               _controller.text,
@@ -65,8 +65,9 @@ class _AircraftLabelTextState extends State<AircraftLabelText> {
   @override
   Widget build(BuildContext context) {
     if (!isInit) {
-      final text =
-          context.read<AircraftCubit>().getAircraftLabel(widget.aircraftMac);
+      final text = context
+          .read<AircraftMetadataCubit>()
+          .getAircraftLabel(widget.aircraftMac);
       if (text != null) {
         _controller.text = text;
       }

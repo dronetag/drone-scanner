@@ -8,8 +8,9 @@ import '../../../../bloc/proximity_alerts_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../models/aircraft_model_info.dart';
-import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
+import '../../common/manufacturer_logo.dart';
+import '../../common/small_circular_progress_indicator.dart';
 import 'aircraft_detail_field.dart';
 import 'aircraft_detail_row.dart';
 import 'aircraft_label_text.dart';
@@ -25,8 +26,10 @@ class BasicFields {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    final logo = getManufacturerLogo(
-        manufacturer: modelInfo?.maker, color: AppColors.detailFieldColor);
+    final logo = modelInfo?.maker != null
+        ? ManufacturerLogo(
+            manufacturer: modelInfo!.maker, color: AppColors.detailFieldColor)
+        : null;
 
     final basicIdFields = _buildBasicIdMessages(
         context: context, messageContainer: messagePackList.last);
@@ -174,16 +177,13 @@ class BasicFields {
     ];
   }
 
-  static Widget _buildProgressIndicator(BuildContext context) => Container(
-      margin: const EdgeInsets.only(
-        left: Sizes.standard / 2,
-        top: Sizes.standard / 2,
-        bottom: Sizes.standard / 2,
-      ),
-      height: Sizes.standard * 1.5,
-      width: Sizes.standard * 1.5,
-      child: CircularProgressIndicator(
-        strokeWidth: 1.5,
-        color: Theme.of(context).colorScheme.onPrimary,
-      ));
+  static Widget _buildProgressIndicator(BuildContext context) =>
+      const SmallCircularProgressIndicator(
+        size: Sizes.standard * 1.5,
+        margin: EdgeInsets.only(
+          left: Sizes.standard / 2,
+          top: Sizes.standard / 2,
+          bottom: Sizes.standard / 2,
+        ),
+      );
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/showcase_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
@@ -38,10 +39,12 @@ class _AircraftDetailState extends State<AircraftDetail> {
         uasId = aircraftCubit.findByMacAddress(selectedMac)?.serialNumberUasId;
         if (uasId == null) return;
 
-        final modelInfo =
-            context.read<AircraftCubit>().state.aircraftModelInfo[uasId];
+        final modelInfo = context
+            .read<AircraftMetadataCubit>()
+            .state
+            .aircraftModelInfo[uasId];
         if (modelInfo == null) {
-          context.read<AircraftCubit>().fetchModelInfo(uasId!);
+          context.read<AircraftMetadataCubit>().fetchModelInfo(uasId!);
         }
       },
     );
@@ -71,7 +74,7 @@ class _AircraftDetailState extends State<AircraftDetail> {
     final height = MediaQuery.of(context).size.height;
 
     final modelInfo =
-        context.watch<AircraftCubit>().state.aircraftModelInfo[uasId];
+        context.watch<AircraftMetadataCubit>().state.aircraftModelInfo[uasId];
     final dataChildren = buildChildren(context, messagePackList, modelInfo);
 
     return ShowcaseItem(
@@ -121,8 +124,8 @@ class _AircraftDetailState extends State<AircraftDetail> {
     AircraftModelInfo? modelInfo,
   ) {
     final loc = messagePackList.last.locationMessage;
-    final fetchInProgress = context
-        .select<AircraftCubit, bool>((cubit) => cubit.state.fetchInProgress);
+    final fetchInProgress = context.select<AircraftMetadataCubit, bool>(
+        (cubit) => cubit.state.fetchInProgress);
     return [
       ...ConnectionFields.buildConnectionFields(context, messagePackList),
       ...BasicFields.buildBasicFields(

@@ -9,6 +9,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/snackbar_messages.dart';
 import 'aircraft/aircraft_cubit.dart';
+import 'aircraft/aircraft_metadata_cubit.dart';
 import 'aircraft/selected_aircraft_cubit.dart';
 import 'map/map_cubit.dart';
 
@@ -52,6 +53,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   MapCubit mapCubit;
   SelectedAircraftCubit selectedAircraftCubit;
   AircraftCubit aircraftCubit;
+  AircraftMetadataCubit aircraftMetadataCubit;
 
   static const messageDebounceMs = 50;
 
@@ -59,6 +61,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     required this.mapCubit,
     required this.selectedAircraftCubit,
     required this.aircraftCubit,
+    required this.aircraftMetadataCubit,
   }) : super(
           ScanningState(
             isScanningBluetooth: false,

@@ -4,6 +4,7 @@ import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../../../../bloc/aircraft/aircraft_cubit.dart';
+import '../../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../../bloc/aircraft/selected_aircraft_cubit.dart';
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/screen_cubit.dart';
@@ -15,9 +16,12 @@ import '../../../../bloc/zones/zone_item.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../extensions/string_extensions.dart';
+import '../../../../models/message_container_authenticity_status.dart';
 import '../../../../utils/utils.dart';
 import '../../../showcase/showcase_item.dart';
 import '../../common/chevron.dart';
+import '../../common/flag.dart';
+import '../../common/manufacturer_logo.dart';
 import '../aircraft_actions.dart';
 
 class AircraftDetailHeader extends StatelessWidget {
@@ -140,6 +144,8 @@ class AircraftDetailHeader extends StatelessWidget {
                 ),
                 if (messagePackList.last.operatorIDSet)
                   buildSubtitle(context, messagePackList),
+                buildAuthenticityStatus(
+                    context, messagePackList.last.macAddress),
               ],
             ),
           ),
@@ -210,10 +216,11 @@ class AircraftDetailHeader extends StatelessWidget {
   Widget buildTitle(BuildContext context, String? uasId) {
     final manufacturer = uasId == null
         ? null
-        : context.read<AircraftCubit>().getModelInfo(uasId)?.maker;
+        : context.read<AircraftMetadataCubit>().getModelInfo(uasId)?.maker;
 
-    final logo =
-        getManufacturerLogo(manufacturer: manufacturer, color: Colors.white);
+    final logo = manufacturer != null
+        ? ManufacturerLogo(manufacturer: manufacturer, color: Colors.white)
+        : null;
     return Text.rich(
       TextSpan(
         style: const TextStyle(
@@ -248,12 +255,14 @@ class AircraftDetailHeader extends StatelessWidget {
         messagePackList.last.operatorIDSet &&
         messagePackList.last.operatorIDValid &&
         countryCode != null) {
-      flag = getFlag(countryCode);
+      flag = Flag(
+        countryCode: countryCode,
+        color: Colors.white,
+        margin: const EdgeInsets.only(right: Sizes.standard / 2),
+      );
     }
     final opIdText = messagePackList.last.operatorIDSet
-        ? flag == null
-            ? opIdMessage!.operatorID.removeNonAlphanumeric()
-            : ' ${opIdMessage!.operatorID.removeNonAlphanumeric()} '
+        ? opIdMessage!.operatorID.removeNonAlphanumeric()
         : '';
     return Text.rich(
       TextSpan(
@@ -289,5 +298,23 @@ class AircraftDetailHeader extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget buildAuthenticityStatus(BuildContext context, String macAddress) {
+    final authenticityStatus =
+        context.select<AircraftCubit, MessageContainerAuthenticityStatus>(
+      (cubit) =>
+          cubit.state.dataAuthenticityStatuses[macAddress] ??
+          MessageContainerAuthenticityStatus.untrusted,
+    );
+    if (authenticityStatus.shouldBeDisplayed) {
+      return Text(
+        authenticityStatus.name.capitalize(),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+      );
+    }
+    return const SizedBox.shrink();
   }
 }

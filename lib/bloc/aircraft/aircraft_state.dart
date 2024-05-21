@@ -2,13 +2,8 @@ part of 'aircraft_cubit.dart';
 
 class AircraftState {
   final Map<String, List<MessageContainer>> _packHistory;
-  // map of aircraft labels given by user
-  // keys are aircraft mac adresses, values are labels
-  final Map<String, String> aircraftLabels;
-  // map of model info for given aicraft fetched from ornithology service
-  final Map<String, AircraftModelInfo> aircraftModelInfo;
-
-  final bool fetchInProgress;
+  final Map<String, MessageContainerAuthenticityStatus>
+      dataAuthenticityStatuses;
 
   Map<String, List<MessageContainer>> packHistory(
       [String? userAircraftUasId, MyDronePositioning? myDronePositioning]) {
@@ -122,41 +117,31 @@ class AircraftState {
     return aircraft;
   }
 
-  AircraftState({
-    required Map<String, List<MessageContainer>> packHistory,
-    required this.aircraftLabels,
-    required this.aircraftModelInfo,
-    required this.fetchInProgress,
-  }) : _packHistory = packHistory;
+  AircraftState(
+      {required Map<String, List<MessageContainer>> packHistory,
+      required this.dataAuthenticityStatuses})
+      : _packHistory = packHistory;
 
   AircraftState copyWith({
     Map<String, List<MessageContainer>>? packHistory,
-    Map<String, String>? aircraftLabels,
-    Map<String, AircraftModelInfo>? aircraftModelInfo,
-    bool? fetchInProgress,
+    Map<String, MessageContainerAuthenticityStatus>? dataAuthenticityStatuses,
   }) =>
       AircraftState(
-        packHistory: packHistory ?? _packHistory,
-        aircraftLabels: aircraftLabels ?? this.aircraftLabels,
-        aircraftModelInfo: aircraftModelInfo ?? this.aircraftModelInfo,
-        fetchInProgress: fetchInProgress ?? this.fetchInProgress,
-      );
+          packHistory: packHistory ?? _packHistory,
+          dataAuthenticityStatuses:
+              dataAuthenticityStatuses ?? this.dataAuthenticityStatuses);
 }
 
 class AircraftStateUpdate extends AircraftState {
   AircraftStateUpdate({
     required super.packHistory,
-    required super.aircraftLabels,
-    required super.aircraftModelInfo,
-    required super.fetchInProgress,
+    required super.dataAuthenticityStatuses,
   });
 }
 
 class AircraftStateBuffering extends AircraftState {
   AircraftStateBuffering({
     required super.packHistory,
-    required super.aircraftLabels,
-    required super.aircraftModelInfo,
-    required super.fetchInProgress,
+    required super.dataAuthenticityStatuses,
   });
 }

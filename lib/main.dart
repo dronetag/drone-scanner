@@ -9,6 +9,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'bloc/aircraft/aircraft_cubit.dart';
 import 'bloc/aircraft/aircraft_expiration_cubit.dart';
+import 'bloc/aircraft/aircraft_metadata_cubit.dart';
 import 'bloc/aircraft/export_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
 import 'bloc/geocoding_cubit.dart';
@@ -22,6 +23,7 @@ import 'bloc/sliders_cubit.dart';
 import 'bloc/standards_cubit.dart';
 import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
+import 'services/flag_rest_client.dart';
 import 'services/geocoding_rest_client.dart';
 import 'services/location_service.dart';
 import 'services/notification_service.dart';
@@ -72,8 +74,13 @@ void main() async {
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
   final aircraftCubit = AircraftCubit(
-      expirationCubit: aircraftExpirationCubit,
-      ornithologyRestClient: OrnithologyRestClient());
+    expirationCubit: aircraftExpirationCubit,
+  );
+  final aircraftMetadataCubit = await AircraftMetadataCubit(
+          ornithologyRestClient: OrnithologyRestClient(),
+          flagRestClient: FlagCDNRestClient())
+      .create();
+
   final proximityAlertsCubit =
       ProximityAlertsCubit(notificationService, aircraftCubit);
   final sheetLicense = await rootBundle.loadString('assets/docs/SHEET-LICENSE');
@@ -120,6 +127,10 @@ void main() async {
             create: (context) => aircraftCubit,
             lazy: false,
           ),
+          BlocProvider<AircraftMetadataCubit>(
+            create: (context) => aircraftMetadataCubit,
+            lazy: false,
+          ),
           BlocProvider<ExportCubit>(
             create: (context) => ExportCubit(aircraftCubit: aircraftCubit),
             lazy: false,
@@ -141,6 +152,7 @@ void main() async {
               mapCubit: mapCubit,
               selectedAircraftCubit: selectedCubit,
               aircraftCubit: aircraftCubit,
+              aircraftMetadataCubit: aircraftMetadataCubit,
             ),
             lazy: false,
           ),
