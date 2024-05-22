@@ -9,13 +9,21 @@ version: 1.6.0
 
 publish_to: none
 environment:
-  sdk: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.2"
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 # # Uncomment to use flutter_opendroneid from local repository
 # dependency_overrides:
 #   flutter_opendroneid:
 #     path: ../flutter-opendroneid
+
+# temporary override until https://github.com/SimformSolutionsPvtLtd/flutter_showcaseview/pull/445
+# is merged
+dependency_overrides:
+  showcaseview:
+    git:
+      url: https://github.com/SimformSolutionsPvtLtd/flutter_showcaseview.git
+      ref: d1799034d6b6a61e5e173ae39416c24c1bccdfed
 
 dependencies:
   flutter:
@@ -28,9 +36,9 @@ dependencies:
   location: ^5.0.3
   http: ^1.2.0
   permission_handler: ^11.2.0
-  flutter_spinbox: ^0.8.0
+  flutter_spinbox: ^0.13.1
   path_provider: ^2.0.9
-  showcaseview: ^1.1.7
+  showcaseview: ^2.1.0
   shared_preferences: ^2.0.13
   device_info_plus: ^9.1.2
   timer_builder: ^2.0.0
@@ -38,12 +46,12 @@ dependencies:
   app_settings: ^5.1.1
   share_plus: ^7.2.2
   flutter_bloc: ^8.0.1
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.0.0
   localstorage: ^4.0.0+1
   sentry_flutter: ^7.9.0
   rxdart: ^0.27.5
   vector_math: ^2.1.2
-  wakelock_plus: ^1.1.4
+  wakelock_plus: ^1.2.0
   scrollable_positioned_list: ^0.3.5
   flutter_markdown: ^0.6.13
   url_launcher: ^6.1.6

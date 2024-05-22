@@ -43,7 +43,9 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    context.read<MapCubit>().controller?.dispose();
+    if (mounted && context.mounted) {
+      context.read<MapCubit>().controller?.dispose();
+    }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -200,9 +202,9 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
 
   Future<void> onMapCreated(GoogleMapController controller) async {
     await _waitForMapReady(controller);
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
     await context.read<MapCubit>().assignController(controller);
-    if (!mounted) return;
+    if (!mounted || !context.mounted) return;
     await context.read<MapCubit>().setMapStyle();
   }
 
