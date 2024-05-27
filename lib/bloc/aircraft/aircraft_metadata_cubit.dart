@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -203,10 +202,6 @@ class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
 
   AircraftModelInfo? getModelInfo(String uasId) {
     return state.aircraftModelInfo[uasId];
-  }
-
-  Uint8List? getFlag(String countryCode) {
-    return state.countryCodeFlags[countryCode];
   }
 
   Future<void> clearModelInfo() async {

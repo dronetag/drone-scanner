@@ -29,9 +29,7 @@ class _FlagState extends State<Flag> {
   Widget build(BuildContext context) {
     return BlocBuilder<AircraftMetadataCubit, AircraftMetadataState>(
       builder: (context, state) {
-        final bytes = context
-            .watch<AircraftMetadataCubit>()
-            .getFlag(widget.alpha3CountryCode);
+        final bytes = state.getFlag(widget.alpha3CountryCode);
         if (bytes != null) {
           return Container(
               margin: widget.margin,

@@ -18,6 +18,10 @@ class AircraftMetadataState {
     required this.fetchInProgress,
   });
 
+  Uint8List? getFlag(String countryCode) {
+    return countryCodeFlags[countryCode];
+  }
+
   AircraftMetadataState copyWith({
     Map<String, String>? aircraftLabels,
     Map<String, AircraftModelInfo>? aircraftModelInfo,
