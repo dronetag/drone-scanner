@@ -12,6 +12,7 @@ abstract class FlagRestClient extends RestClient {
   });
 }
 
+/// [FlagCDNRestClient] uses the flagcdn API to fetch flags from alpha-2 code.
 class FlagCDNRestClient extends FlagRestClient {
   FlagCDNRestClient({String? baseUrl})
       : super(Uri.parse(baseUrl ?? flagCDNRestApiEndpoint));

@@ -71,6 +71,7 @@ flutter:
     - assets/images/
     - assets/google_maps/
     - assets/docs/
+    - assets/country_codes/
 
   fonts:
     - family: TitilliumWeb

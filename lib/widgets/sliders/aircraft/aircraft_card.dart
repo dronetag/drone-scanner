@@ -181,7 +181,7 @@ class AircraftCard extends StatelessWidget {
         .select<StandardsCubit, bool>((cubit) => cubit.state.internetAvailable);
     if (countryCode != null && internetAvailable) {
       flag = Flag(
-        countryCode: countryCode,
+        alpha3CountryCode: countryCode,
         margin: const EdgeInsets.only(right: Sizes.standard / 2),
       );
     }

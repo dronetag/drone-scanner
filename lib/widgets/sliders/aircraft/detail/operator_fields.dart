@@ -73,7 +73,7 @@ class OperatorFields {
         opMessage != null &&
         pack.operatorIDValid) {
       flag = Flag(
-        countryCode: countryCode,
+        alpha3CountryCode: countryCode,
         margin: const EdgeInsets.only(right: Sizes.standard / 2),
       );
     }
