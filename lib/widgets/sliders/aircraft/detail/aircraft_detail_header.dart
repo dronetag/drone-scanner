@@ -256,7 +256,7 @@ class AircraftDetailHeader extends StatelessWidget {
         messagePackList.last.operatorIDValid &&
         countryCode != null) {
       flag = Flag(
-        countryCode: countryCode,
+        alpha3CountryCode: countryCode,
         color: Colors.white,
         margin: const EdgeInsets.only(right: Sizes.standard / 2),
       );

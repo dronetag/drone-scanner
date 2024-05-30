@@ -163,8 +163,8 @@ String getSpeedHorAsString(double? speed) {
 }
 
 String? getCountryCode(String operatorId) {
-  if (operatorId.length >= 2) {
-    return operatorId.substring(0, 2);
+  if (operatorId.length >= 3) {
+    return operatorId.substring(0, 3);
   }
   return null;
 }

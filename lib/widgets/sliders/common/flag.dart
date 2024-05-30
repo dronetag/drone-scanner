@@ -6,10 +6,11 @@ import '../../../constants/sizes.dart';
 import 'small_circular_progress_indicator.dart';
 
 class Flag extends StatefulWidget {
-  final String countryCode;
+  final String alpha3CountryCode;
   final Color? color;
   final EdgeInsets? margin;
-  const Flag({super.key, required this.countryCode, this.color, this.margin});
+  const Flag(
+      {super.key, required this.alpha3CountryCode, this.color, this.margin});
 
   @override
   State<Flag> createState() => _FlagState();
@@ -19,15 +20,16 @@ class _FlagState extends State<Flag> {
   @override
   void initState() {
     super.initState();
-    context.read<AircraftMetadataCubit>().fetchFlag(widget.countryCode);
+    context
+        .read<AircraftMetadataCubit>()
+        .fetchFlagForAlpha3Code(widget.alpha3CountryCode);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AircraftMetadataCubit, AircraftMetadataState>(
       builder: (context, state) {
-        final bytes =
-            context.watch<AircraftMetadataCubit>().getFlag(widget.countryCode);
+        final bytes = state.getFlag(widget.alpha3CountryCode);
         if (bytes != null) {
           return Container(
               margin: widget.margin,

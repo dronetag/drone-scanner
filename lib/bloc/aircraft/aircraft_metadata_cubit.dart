@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
@@ -15,12 +15,19 @@ part 'aircraft_metadata_state.dart';
 
 /// The [AircraftMetadataCubit] fetches and stores aircraft labes, aircraft
 /// manufacturer information and flags for country codes of Operator ID.
+///
+/// Needs to be initialized by calling the [create] method.
 class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
   // storage for user-given labels
   final LocalStorage storage = LocalStorage('dronescanner');
   final OrnithologyRestClient ornithologyRestClient;
   final FlagRestClient flagRestClient;
 
+  // alpha-3 to alpha-2 country code conversion
+  late Map<String, String> _countryCodeMapping;
+
+  static const _countryCodeMappingPath =
+      'assets/country_codes/country_codes.json';
   static const _labelsKey = 'labels';
   static const _modelInfoKey = 'model_info';
   static const _flagsKey = 'flags';
@@ -40,6 +47,12 @@ class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
     await fetchSavedAircraftLabels();
     await fetchSavedModelInfo();
     await fetchSavedFlags();
+
+    final countryCodesContent =
+        await rootBundle.loadString(_countryCodeMappingPath);
+    _countryCodeMapping =
+        (json.decode(countryCodesContent) as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, value as String));
 
     return this;
   }
@@ -127,31 +140,38 @@ class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
     }
   }
 
-  Future<void> fetchFlag(String countryCode) async {
-    if (state.countryCodeFlags.containsKey(countryCode)) {
+  Future<void> fetchFlagForAlpha3Code(String alpha3CountryCode) async {
+    if (state.countryCodeFlags.containsKey(alpha3CountryCode)) {
       return;
     }
     try {
       emit(state.copyWith(fetchInProgress: true));
-      final flag = await flagRestClient.fetchFlag(countryCode: countryCode);
+      final alpha2CountryCode = _countryCodeMapping[alpha3CountryCode];
+
+      if (alpha2CountryCode == null) {
+        throw Exception('Invalid country code parameter: $alpha3CountryCode');
+      }
+
+      final flag =
+          await flagRestClient.fetchFlag(countryCode: alpha2CountryCode);
       if (flag == null) {
         Logger.root
-            .warning('Flag for country code $countryCode does not exist');
+            .warning('Flag for country code $alpha2CountryCode does not exist');
       }
       // save also empty flag so it does not have to be fetched again
       emit(
         state.copyWith(
           countryCodeFlags: {
             ...state.countryCodeFlags,
-            countryCode: flag,
+            alpha3CountryCode: flag,
           },
           fetchInProgress: false,
         ),
       );
       await _saveFlags();
     } on ClientException catch (err) {
-      Logger.root
-          .warning('Failed to fetch flag model info for $countryCode, $err');
+      Logger.root.warning(
+          'Failed to fetch flag model info for $alpha3CountryCode, $err');
       emit(state.copyWith(fetchInProgress: false));
     }
   }
@@ -182,10 +202,6 @@ class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
 
   AircraftModelInfo? getModelInfo(String uasId) {
     return state.aircraftModelInfo[uasId];
-  }
-
-  Uint8List? getFlag(String countryCode) {
-    return state.countryCodeFlags[countryCode];
   }
 
   Future<void> clearModelInfo() async {
