@@ -25,7 +25,7 @@ class _ScreenSleepCheckboxState extends State<ScreenSleepCheckbox> {
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         inactiveThumbColor: AppColors.preferencesButtonColor,
         activeColor: AppColors.highlightBlue,
-        trackColor: MaterialStateProperty.all<Color>(
+        trackColor: WidgetStateProperty.all<Color>(
           AppColors.lightGray,
         ),
         value: _screenSleepDisabled,

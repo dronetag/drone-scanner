@@ -63,7 +63,7 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
 
   void updateUseConversionForExportSetting({required bool newValue}) async {
     await storage.setItem(_useConversionInExportKey, newValue);
-    emit(state.copyWith(useConversionInExports: newValue));
+    emit(state.copyWith(useConversionInExport: newValue));
   }
 
   UnitValue distanceDefaultToCurrent(UnitValue value) =>

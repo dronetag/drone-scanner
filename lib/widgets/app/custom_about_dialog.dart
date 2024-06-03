@@ -14,7 +14,7 @@ class CustomAboutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buttonStyle = ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(
+      backgroundColor: WidgetStateProperty.all<Color>(
         AppColors.preferencesButtonColor,
       ),
     );

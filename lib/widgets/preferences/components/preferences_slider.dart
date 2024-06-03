@@ -31,7 +31,7 @@ class _CleanPacksCheckboxState extends State<PreferencesSlider> {
             ? AppColors.preferencesButtonColor
             : AppColors.lightGray.withOpacity(0.75),
         activeColor: AppColors.highlightBlue,
-        trackColor: MaterialStateProperty.all<Color>(
+        trackColor: WidgetStateProperty.all<Color>(
           widget.enabled
               ? AppColors.lightGray
               : AppColors.lightGray.withOpacity(0.25),

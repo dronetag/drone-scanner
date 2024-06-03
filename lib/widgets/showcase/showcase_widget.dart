@@ -75,7 +75,7 @@ class ShowcaseWidget extends StatelessWidget {
             ElevatedButton(
               onPressed: nextCallback,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
+                backgroundColor: WidgetStateProperty.all<Color>(
                   AppColors.blue,
                 ),
               ),
@@ -88,7 +88,7 @@ class ShowcaseWidget extends StatelessWidget {
             ElevatedButton(
               onPressed: skipCallback,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
+                backgroundColor: WidgetStateProperty.all<Color>(
                   Colors.white,
                 ),
               ),
