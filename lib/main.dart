@@ -28,6 +28,7 @@ import 'services/geocoding_rest_client.dart';
 import 'services/location_service.dart';
 import 'services/notification_service.dart';
 import 'services/ornithology_rest_client.dart';
+import 'utils/message_container_authenticator.dart';
 import 'widgets/app/app.dart';
 
 const sentryDsn = String.fromEnvironment(
@@ -68,13 +69,19 @@ void main() async {
   // init local notifications
   final notificationService = NotificationService();
   await notificationService.setup();
-  // Init Google services
+  // init location services
   final locationService = LocationService();
+
+  await locationService.enableService();
+
   final mapCubit = MapCubit(locationService);
+  final messageContainerAuthenticator =
+      MessageContainerAuthenticator(locationService: locationService);
   final selectedCubit = SelectedAircraftCubit();
   final aircraftExpirationCubit = AircraftExpirationCubit();
   final aircraftCubit = AircraftCubit(
     expirationCubit: aircraftExpirationCubit,
+    messageContainerAuthenticator: messageContainerAuthenticator,
   );
   final aircraftMetadataCubit = await AircraftMetadataCubit(
           ornithologyRestClient: OrnithologyRestClient(),

@@ -22,6 +22,10 @@ class LocationService {
   bool settingsSet = false;
   loc.PermissionStatus permissions = loc.PermissionStatus.denied;
 
+  LocationService() {
+    location.onLocationChanged.listen(_onLocationUpdated);
+  }
+
   bool get missingGrantedPermission =>
       permissions != loc.PermissionStatus.granted;
 
@@ -79,11 +83,17 @@ class LocationService {
 
     final locationData = await location.getLocation();
 
+    _onLocationUpdated(locationData);
+
+    return lastLocation;
+  }
+
+  void _onLocationUpdated(locationData) {
     if (locationData.latitude == null || locationData.longitude == null) {
-      return null;
+      return;
     }
 
-    return lastLocation = Location(
+    lastLocation = Location(
       latitude: locationData.latitude!,
       longitude: locationData.longitude!,
     );

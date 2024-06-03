@@ -3,19 +3,26 @@ import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
 
 import '../models/message_container_authenticity_status.dart';
+import '../services/location_service.dart';
+import 'utils.dart';
 
 class MessageContainerAuthenticator {
+  final LocationService locationService;
+
   /// Detectors that contribute to final score.
-  static final detectors = [
+  late final detectors = [
     MacAddressSpooferDetector(),
     TimestampSpooferDetector(),
     AuthDataSpooferDetector(),
     BasicIdSpooferDetector(),
     OperatorIdSpooferDetector(),
-    LocationSpooferDetector(),
+    LocationMessageSpooferDetector(),
     SelfIdSpooferDetector(),
     SystemDataSpooferDetector(),
+    LocationSpooferDetector(locationService: locationService),
   ];
+
+  MessageContainerAuthenticator({required this.locationService});
 
   /// Check contents of message container using [detectors].
   /// Check if messages contain values used in RemoteIDSpoofer.
@@ -26,7 +33,7 @@ class MessageContainerAuthenticator {
   ///   < max/2 - untrusted
   ///   max/2, max/4*3 - suspicious
   ///   > max/4*3 - counterfeit.
-  static MessageContainerAuthenticityStatus determineAuthenticityStatus(
+  MessageContainerAuthenticityStatus determineAuthenticityStatus(
       MessageContainer container) {
     var score = 0.0;
 
@@ -37,14 +44,19 @@ class MessageContainerAuthenticator {
     return _scoreToStatus(score);
   }
 
-  static MessageContainerAuthenticityStatus _scoreToStatus(double score) {
+  MessageContainerAuthenticityStatus _scoreToStatus(double score) {
     final maxScore = detectors.length;
 
     // if nothing can be decided, score is exactly half, when score is bigger
-    // than half, at least one detector noticed suspisious data
+    // than half, at least one detector noticed suspisious data.
+    // Score bellow 1/4 is considered verified.
+    final untrustedScore = maxScore * 0.25;
     final noSuspisionScore = maxScore * 0.5;
     final counterfeitScore = maxScore * 0.75;
 
+    if (score <= untrustedScore) {
+      return MessageContainerAuthenticityStatus.verified;
+    }
     if (score <= noSuspisionScore) {
       return MessageContainerAuthenticityStatus.untrusted;
     }
@@ -159,7 +171,7 @@ class OperatorIdSpooferDetector implements SpooferDetector {
   }
 }
 
-class LocationSpooferDetector implements SpooferDetector {
+class LocationMessageSpooferDetector implements SpooferDetector {
   @override
   double calculateSpoofedProbability(MessageContainer container) {
     final message = container.locationMessage;
@@ -218,5 +230,45 @@ class SystemDataSpooferDetector implements SpooferDetector {
         message.areaCeiling == null &&
         message.areaFloor == null;
     return spoofed ? 1 : 0.2;
+  }
+}
+
+/// [LocationSpooferDetector] compares location of detected aircraft with
+/// phone location.
+class LocationSpooferDetector implements SpooferDetector {
+  // distance thresholds in meters
+  static const suspiciousDistance = 3000;
+  static const counterfeitDistance = 10000;
+
+  LocationService locationService;
+
+  LocationSpooferDetector({required this.locationService});
+
+  @override
+  double calculateSpoofedProbability(MessageContainer container) {
+    final phoneLocation = locationService.lastLocation;
+    final aircraftLocation = container.locationMessage?.location;
+
+    // when one of locations if null, detector cannot decide
+    if (phoneLocation == null || aircraftLocation == null) return 0.5;
+
+    // calc distance and convert to meters
+    final distance = calculateDistance(
+            phoneLocation.latitude,
+            phoneLocation.longitude,
+            aircraftLocation.latitude,
+            aircraftLocation.longitude) *
+        1000;
+
+    // if distance is shorter than suspicious threshold,
+    // there is still some change that data are spoofed.
+    // Location is configurable in RemoteIDSpoofer.
+    if (distance < suspiciousDistance) {
+      return 0.2;
+    } else if (distance < counterfeitDistance) {
+      return 0.75;
+    }
+    // distance bigger than counterfeitDistance, spoofed for sure
+    return 1;
   }
 }
