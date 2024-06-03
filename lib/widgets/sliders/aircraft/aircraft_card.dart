@@ -236,11 +236,11 @@ class AircraftCard extends StatelessWidget {
         AircraftCardCustomText(
           messagePack: messagePack,
         ),
-        if (authenticityStatus.shouldBeDisplayed)
-          Text(
-            authenticityStatus.name.capitalize(),
-            textScaler: const TextScaler.linear(0.9),
-          )
+
+        Text(
+          authenticityStatus.name.capitalize(),
+          textScaler: const TextScaler.linear(0.9),
+        )
       ],
     );
   }
