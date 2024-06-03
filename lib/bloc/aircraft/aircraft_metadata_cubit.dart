@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:logging/logging.dart';
 
+import '../../exceptions/invalid_country_code_exception.dart';
 import '../../models/aircraft_model_info.dart';
 import '../../services/flag_rest_client.dart';
 import '../../services/ornithology_rest_client.dart';
@@ -144,21 +145,24 @@ class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
     if (state.countryCodeFlags.containsKey(alpha3CountryCode)) {
       return;
     }
+
     try {
       emit(state.copyWith(fetchInProgress: true));
       final alpha2CountryCode = _countryCodeMapping[alpha3CountryCode];
 
       if (alpha2CountryCode == null) {
-        throw Exception('Invalid country code parameter: $alpha3CountryCode');
+        throw InvalidCountryCodeException(
+            'Invalid country code: $alpha3CountryCode');
       }
 
       final flag =
           await flagRestClient.fetchFlag(countryCode: alpha2CountryCode);
       if (flag == null) {
-        Logger.root
-            .warning('Flag for country code $alpha2CountryCode does not exist');
+        Logger.root.warning(
+            'Unable to fetch flag for country code $alpha2CountryCode');
+        return;
       }
-      // save also empty flag so it does not have to be fetched again
+
       emit(
         state.copyWith(
           countryCodeFlags: {
@@ -169,10 +173,23 @@ class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
         ),
       );
       await _saveFlags();
-    } on ClientException catch (err) {
-      Logger.root.warning(
-          'Failed to fetch flag model info for $alpha3CountryCode, $err');
-      emit(state.copyWith(fetchInProgress: false));
+    } catch (err) {
+      Logger.root.warning('Failed to fetch flag for $alpha3CountryCode, $err');
+
+      // if InvalidCountryCodeException is thrown, save emptry flag for code
+      // and proceed normally
+      if (err is! InvalidCountryCodeException) rethrow;
+
+      emit(
+        state.copyWith(
+          countryCodeFlags: {
+            ...state.countryCodeFlags,
+            alpha3CountryCode: null,
+          },
+          fetchInProgress: false,
+        ),
+      );
+      await _saveFlags();
     }
   }
 

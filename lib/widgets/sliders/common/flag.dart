@@ -43,7 +43,7 @@ class _FlagState extends State<Flag> {
         }
         if (state.fetchInProgress) {
           return SmallCircularProgressIndicator(
-            size: Sizes.standard / 10,
+            size: Sizes.standard,
             color: widget.color,
             margin: const EdgeInsets.all(
               Sizes.standard / 3,
