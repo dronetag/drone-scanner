@@ -12,7 +12,8 @@ class MessageContainerAuthenticator {
   /// Detectors that contribute to final score.
   late final detectors = [
     MacAddressSpooferDetector(),
-    TimestampSpooferDetector(),
+    LocationTimestampSpooferDetector(),
+    AuthAndSystemTimestampSpooferDetector(),
     AuthDataSpooferDetector(),
     BasicIdSpooferDetector(),
     OperatorIdSpooferDetector(),
@@ -85,10 +86,50 @@ class MacAddressSpooferDetector implements SpooferDetector {
       container.macAddress.startsWith('0') ? 0.75 : 0;
 }
 
+/// Compare received location timestamps with system time.
+class LocationTimestampSpooferDetector implements SpooferDetector {
+  // time difference thresholds in seconds
+  static const suspiciousTimeDifference = 10;
+  static const counterfeitTimeDifference = 60;
+
+  @override
+  double calculateSpoofedProbability(MessageContainer container) {
+    final locTimestamp = container.locationMessage?.timestamp;
+
+    if (locTimestamp == null) return 0.5;
+
+    final currentTimestamp = DateTime.now().toLocal();
+
+    // subtract last full hour from current timestamp to get duration passed
+    // from the last full hour
+    final currentTimestampDurationSinceLastHour = currentTimestamp.difference(
+      DateTime(currentTimestamp.year, currentTimestamp.month,
+          currentTimestamp.day, currentTimestamp.hour),
+    );
+
+    // calculate absulute difference in seconds
+    final locTimestampDifference = ((locTimestamp.inMilliseconds -
+                currentTimestampDurationSinceLastHour.inMilliseconds) /
+            1000)
+        .abs();
+
+    // if time difference is small, data can be still spoofed because spoofer
+    // could be started at time that matches system timestamp but probability
+    // is small
+    if (locTimestampDifference < suspiciousTimeDifference) {
+      return 0.1;
+    } else if (locTimestampDifference < counterfeitTimeDifference) {
+      return 0.75;
+    }
+    // big difference btw location and system timestamp means data are spoofed
+    return 1;
+  }
+}
+
 /// RemoteIDSpoofer starts counting time from known timestamp.
 /// If received timestamp is in short interval after that timestamp,
 /// data are probably spoofed.
-class TimestampSpooferDetector implements SpooferDetector {
+class AuthAndSystemTimestampSpooferDetector implements SpooferDetector {
   static final spooferTimestamp = DateTime(2022, 11, 16, 10);
   static const maxUptime = Duration(days: 10);
 
@@ -167,7 +208,7 @@ class OperatorIdSpooferDetector implements SpooferDetector {
     if (countryCode != countryCode.toUpperCase()) return 0.9;
     // country code contains capital letters,
     // data can still be spoofed
-    return 0.4;
+    return 0.25;
   }
 }
 
