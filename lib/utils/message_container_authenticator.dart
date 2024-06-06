@@ -50,13 +50,13 @@ class MessageContainerAuthenticator {
 
     // if nothing can be decided, score is exactly half, when score is bigger
     // than half, at least one detector noticed suspisious data.
-    // Score bellow 1/4 is considered verified.
+    // Score bellow 1/4 is considered trusted.
     final untrustedScore = maxScore * 0.25;
     final noSuspisionScore = maxScore * 0.5;
     final counterfeitScore = maxScore * 0.75;
 
     if (score <= untrustedScore) {
-      return MessageContainerAuthenticityStatus.verified;
+      return MessageContainerAuthenticityStatus.trusted;
     }
     if (score <= noSuspisionScore) {
       return MessageContainerAuthenticityStatus.untrusted;

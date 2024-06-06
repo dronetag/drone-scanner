@@ -2,9 +2,11 @@
 enum MessageContainerAuthenticityStatus {
   // verified by authority/multilateration
   verified,
+  // reasonable signs of authenticity exist
+  trusted,
   // default
   untrusted,
-  // signs if questionable authenticity exist
+  // signs of questionable authenticity exist
   suspicious,
   // high certainty of falsehood
   counterfeit
