@@ -21,6 +21,7 @@ import 'bloc/screen_cubit.dart';
 import 'bloc/showcase_cubit.dart';
 import 'bloc/sliders_cubit.dart';
 import 'bloc/standards_cubit.dart';
+import 'bloc/units_settings_cubit.dart';
 import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
 import 'services/flag_rest_client.dart';
@@ -87,9 +88,10 @@ void main() async {
           ornithologyRestClient: OrnithologyRestClient(),
           flagRestClient: FlagCDNRestClient())
       .create();
-
   final proximityAlertsCubit =
       ProximityAlertsCubit(notificationService, aircraftCubit);
+  final unitsSettingsCubit = await UnitsSettingsCubit().create();
+
   final sheetLicense = await rootBundle.loadString('assets/docs/SHEET-LICENSE');
   LicenseRegistry.addLicense(() => Stream<LicenseEntry>.value(
         LicenseEntryWithLineBreaks(
@@ -171,6 +173,10 @@ void main() async {
             create: (context) => GeocodingCubit(
               geocodingRestClient: NominatimGeocodingRestClient(),
             ),
+            lazy: false,
+          ),
+          BlocProvider<UnitsSettingsCubit>(
+            create: (context) => unitsSettingsCubit,
             lazy: false,
           ),
         ],
