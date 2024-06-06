@@ -6,6 +6,9 @@ import '../../../constants/sizes.dart';
 class CustomDropdownButton extends StatelessWidget {
   final String value;
   final List<String> items;
+  // map of items {value: name}
+  // if name is does not exist for some value, value will be used also as name
+  final Map<String, String>? names;
   final Function(String?) valueChangedCallback;
 
   const CustomDropdownButton({
@@ -13,6 +16,7 @@ class CustomDropdownButton extends StatelessWidget {
     required this.value,
     required this.items,
     required this.valueChangedCallback,
+    this.names,
   });
 
   @override
@@ -37,7 +41,7 @@ class CustomDropdownButton extends StatelessWidget {
               (value) => DropdownMenuItem(
                 value: value,
                 child: Text(
-                  value,
+                  names?[value] ?? value,
                   textScaler: const TextScaler.linear(0.9),
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
