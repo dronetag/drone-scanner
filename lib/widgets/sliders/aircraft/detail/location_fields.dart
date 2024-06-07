@@ -8,6 +8,7 @@ import 'package:vector_math/vector_math.dart';
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/standards_cubit.dart';
+import '../../../../bloc/units_settings_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
@@ -32,28 +33,11 @@ class LocationFields {
     BuildContext context,
     LocationMessage? loc,
   ) {
-    double? distanceFromMe;
-    late final String distanceText;
-    if (context.read<StandardsCubit>().state.locationEnabled &&
-        context.read<MapCubit>().state.userLocationValid &&
-        loc != null &&
-        locValid(loc)) {
-      distanceFromMe = calculateDistance(
-        loc.location!.latitude,
-        loc.location!.longitude,
-        context.read<MapCubit>().state.userLocation.latitude,
-        context.read<MapCubit>().state.userLocation.longitude,
-      );
-      if (distanceFromMe > 1) {
-        distanceText = '${distanceFromMe.toStringAsFixed(3)} km';
-      } else {
-        distanceText = '${(distanceFromMe * 1000).toStringAsFixed(1)} m';
-      }
-    } else {
-      distanceText = 'Unknown';
-    }
+    final distanceText = _getDistanceText(context, loc);
+
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+
     return [
       const Headline(text: 'LOCATION'),
       if (isLandscape) const SizedBox(),
@@ -234,5 +218,28 @@ class LocationFields {
         fieldText: timeAccuracyToString(loc?.timestampAccuracy),
       ),
     ];
+  }
+
+  static String _getDistanceText(
+    BuildContext context,
+    LocationMessage? loc,
+  ) {
+    if (context.read<StandardsCubit>().state.locationEnabled &&
+        context.read<MapCubit>().state.userLocationValid &&
+        loc != null &&
+        locValid(loc)) {
+      final distanceFromMe =
+          context.read<UnitsSettingsCubit>().distanceDefaultToCurrent(
+                calculateDistance(
+                  loc.location!.latitude,
+                  loc.location!.longitude,
+                  context.read<MapCubit>().state.userLocation.latitude,
+                  context.read<MapCubit>().state.userLocation.longitude,
+                ),
+              );
+      return distanceFromMe.toStringAsFixed(3);
+    } else {
+      return 'Unknown';
+    }
   }
 }

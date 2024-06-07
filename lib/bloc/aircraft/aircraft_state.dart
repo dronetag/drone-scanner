@@ -82,7 +82,8 @@ class AircraftState {
                 userPos.latitude,
                 userPos.longitude,
               );
-              if (e1Dist < e2Dist) {
+
+              if (e1Dist.value < e2Dist.value) {
                 return -1;
               }
               return 1;

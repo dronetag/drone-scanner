@@ -5,6 +5,7 @@ import 'package:flutter_opendroneid/models/message_container.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
+import '../../../bloc/units_settings_cubit.dart';
 import '../../../utils/utils.dart';
 
 class AircraftCardCustomText extends StatelessWidget {
@@ -18,7 +19,6 @@ class AircraftCardCustomText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = messagePack.locationMessage;
-    double? distanceFromMe;
     final preference = context.watch<SlidersCubit>().state.listFieldPreference;
 
     const emptyText = Text(
@@ -30,17 +30,20 @@ class AircraftCardCustomText extends StatelessWidget {
       if (context.read<StandardsCubit>().state.locationEnabled &&
           loc != null &&
           messagePack.locationValid) {
-        distanceFromMe = calculateDistance(
-          loc.location!.latitude,
-          loc.location!.longitude,
-          context.read<MapCubit>().state.userLocation.latitude,
-          context.read<MapCubit>().state.userLocation.longitude,
-        );
+        final distanceFromMe =
+            context.read<UnitsSettingsCubit>().distanceDefaultToCurrent(
+                  calculateDistance(
+                    loc.location!.latitude,
+                    loc.location!.longitude,
+                    context.read<MapCubit>().state.userLocation.latitude,
+                    context.read<MapCubit>().state.userLocation.longitude,
+                  ),
+                );
         if (!context.read<StandardsCubit>().state.locationEnabled ||
             !context.read<MapCubit>().state.userLocationValid) {
           return emptyText;
         } else {
-          text = '~${distanceFromMe.toStringAsFixed(2)} km away';
+          text = '~${distanceFromMe.toStringAsFixed(2)} away';
         }
       }
     } else if (preference == ListFieldPreference.location) {

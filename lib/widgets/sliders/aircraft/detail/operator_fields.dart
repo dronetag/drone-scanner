@@ -8,6 +8,7 @@ import 'package:flutter_opendroneid/utils/conversions.dart';
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/standards_cubit.dart';
+import '../../../../bloc/units_settings_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../extensions/string_extensions.dart';
@@ -41,24 +42,21 @@ class OperatorFields {
     if (opMessage != null) {
       countryCode = getCountryCode(opMessage.operatorID);
     }
-    double? distanceFromMe;
     late final String distanceText;
     final systemDataValid = systemMessage != null;
     if (context.read<StandardsCubit>().state.locationEnabled &&
         context.read<MapCubit>().state.userLocationValid &&
         systemDataValid &&
         locValid(systemMessage)) {
-      distanceFromMe = calculateDistance(
-        systemMessage.operatorLocation!.latitude,
-        systemMessage.operatorLocation!.longitude,
-        context.read<MapCubit>().state.userLocation.latitude,
-        context.read<MapCubit>().state.userLocation.longitude,
-      );
-      if (distanceFromMe > 1) {
-        distanceText = '${distanceFromMe.toStringAsFixed(3)} km';
-      } else {
-        distanceText = '${(distanceFromMe * 1000).toStringAsFixed(1)} m';
-      }
+      final distanceFromMe = context
+          .read<UnitsSettingsCubit>()
+          .distanceDefaultToCurrent(calculateDistance(
+            systemMessage.operatorLocation!.latitude,
+            systemMessage.operatorLocation!.longitude,
+            context.read<MapCubit>().state.userLocation.latitude,
+            context.read<MapCubit>().state.userLocation.longitude,
+          ));
+      distanceText = distanceFromMe.toStringAsFixed(3);
     } else {
       distanceText = 'Unknown';
     }

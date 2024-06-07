@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '/utils/utils.dart';
 import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
+import '../../../bloc/units_settings_cubit.dart';
 import '../../../bloc/zones/selected_zone_cubit.dart';
 import '../../../bloc/zones/zone_item.dart';
-import '/utils/utils.dart';
+import '../../../models/unit_value.dart';
 
 class ZoneDetail extends StatelessWidget {
   const ZoneDetail({
@@ -15,17 +17,20 @@ class ZoneDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final zoneItem = context.watch<SelectedZoneCubit>().state.selectedZone!;
-
     final countryCode = zoneItem.country;
-    double? distanceFromMe;
+    UnitValue? distanceFromMe;
+
     if (context.read<StandardsCubit>().state.locationEnabled &&
         context.read<MapCubit>().state.userLocationValid) {
-      distanceFromMe = calculateDistance(
-        zoneItem.coordinates.first.latitude,
-        zoneItem.coordinates.first.longitude,
-        context.read<MapCubit>().state.userLocation.latitude,
-        context.read<MapCubit>().state.userLocation.longitude,
-      );
+      distanceFromMe =
+          context.read<UnitsSettingsCubit>().distanceDefaultToCurrent(
+                calculateDistance(
+                  zoneItem.coordinates.first.latitude,
+                  zoneItem.coordinates.first.longitude,
+                  context.read<MapCubit>().state.userLocation.latitude,
+                  context.read<MapCubit>().state.userLocation.longitude,
+                ),
+              );
     }
     var zoneType = '';
     final zoneTypeRaw = zoneItem.type.toString().replaceAll('ZoneType.', '');
@@ -113,9 +118,7 @@ class ZoneDetail extends StatelessWidget {
                 children: [
                   const Text('Distance from me:'),
                   const Spacer(),
-                  Text(
-                    '${distanceFromMe.toStringAsFixed(6)} km',
-                  ),
+                  Text(distanceFromMe.toStringAsFixed(6)),
                 ],
               ),
             const Text('Points:'),
