@@ -11,6 +11,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../utils/csvlogger.dart';
 import '../../utils/gpxlogger.dart';
+import '../units_settings_cubit.dart';
 import 'aircraft_cubit.dart';
 
 enum ExportFormat {
@@ -22,8 +23,12 @@ class ExportState {}
 
 class ExportCubit extends Cubit<ExportState> {
   final AircraftCubit aircraftCubit;
+  final UnitsSettingsCubit unitsSettingsCubit;
 
-  ExportCubit({required this.aircraftCubit}) : super(ExportState());
+  ExportCubit({
+    required this.aircraftCubit,
+    required this.unitsSettingsCubit,
+  }) : super(ExportState());
 
   Future<bool> exportAllPacksToCSV() async {
     final hasPerm = await checkStoragePermission();
@@ -79,10 +84,17 @@ class ExportCubit extends Cubit<ExportState> {
   }
 
   String _createCSV(
-          {required bool includeHeader,
-          required List<MessageContainer> packs}) =>
-      const ListToCsvConverter()
-          .convert(CSVLogger.createCSV(packs, includeHeader: includeHeader));
+      {required bool includeHeader, required List<MessageContainer> packs}) {
+    final logger = CSVLogger(
+      distanceUnit: unitsSettingsCubit.state.exportDistanceUnit,
+      distanceSubUnit: unitsSettingsCubit.state.exportDistanceSubUnit,
+      altitudeUnit: unitsSettingsCubit.state.exportAltitudeUnit,
+      speedUnit: unitsSettingsCubit.state.exportSpeedUnit,
+    );
+
+    return const ListToCsvConverter()
+        .convert(logger.createCSV(packs, includeHeader: includeHeader));
+  }
 
   String _createFilename(String mac) {
     final aircraftState = aircraftCubit.state;

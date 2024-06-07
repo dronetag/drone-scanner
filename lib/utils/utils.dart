@@ -74,7 +74,7 @@ String timeAccuracyToString(Duration? acc) {
 String directionAsString(double? direction) {
   if (direction == null) return 'Unknown';
   if (direction != INV_DIR) {
-    return sprintf('%3.0f °', [direction]);
+    return sprintf('%3.0f°', [direction]);
   } else {
     return 'Unknown';
   }

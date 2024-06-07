@@ -141,7 +141,9 @@ void main() async {
             lazy: false,
           ),
           BlocProvider<ExportCubit>(
-            create: (context) => ExportCubit(aircraftCubit: aircraftCubit),
+            create: (context) => ExportCubit(
+                aircraftCubit: aircraftCubit,
+                unitsSettingsCubit: unitsSettingsCubit),
             lazy: false,
           ),
           BlocProvider<AircraftExpirationCubit>(

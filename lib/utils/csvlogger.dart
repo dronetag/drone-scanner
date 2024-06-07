@@ -4,6 +4,8 @@ import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:flutter_opendroneid/utils/conversions.dart';
 
+import '../models/unit_value.dart';
+import '../services/unit_conversion_service.dart';
 import 'utils.dart';
 
 class CSVLogger {
@@ -13,90 +15,88 @@ class CSVLogger {
   static const authFields = 0;
   static const selfIdFields = 2;
   static const systemFields = 11;
-  static final commonHeader = <dynamic>[
-    // common
-    'Message Type',
-    'Message Source',
-    'Timestamp',
-    'Mac Address',
-    // location
-    'Status',
-    'Latitide',
-    'Logitude',
-    'Direction',
-    'Speed Horizontal',
-    'Speed Vertical',
-    'Altitude Pressure',
-    'Altitude Geodetic',
-    'Height',
-    'Height Type',
-    'Horizontal Accuracy',
-    'Vertical Accuracy',
-    'Baro Accuracy',
-    'Speed Accuracy',
-    'Time Accuracy',
-    // basic
-    'ID Type',
-    'UA Type',
-    'UAS ID',
-    // op ID
-    'Operator ID',
-    // self ID
-    'Description Type',
-    'Description',
-    // system
-    'Operator Location Type',
-    'Operator Latitude',
-    'Operator Longitude',
-    'Operator Altitude Geo',
-    'Are Count',
-    'Area Radius',
-    'Area Ceiling',
-    'Area Floor',
-    'Classification Type',
-    'Category',
-    'Class Value',
-  ];
 
-  static List<List<dynamic>> createCSV(List<MessageContainer> list,
+  final String distanceUnit;
+  final String distanceSubUnit;
+  final String altitudeUnit;
+  final String speedUnit;
+
+  final UnitsConversionService unitsConversion = UnitsConversionService();
+
+  CSVLogger({
+    required this.distanceUnit,
+    required this.distanceSubUnit,
+    required this.altitudeUnit,
+    required this.speedUnit,
+  });
+
+  List<List<dynamic>> createCSV(List<MessageContainer> list,
       {bool includeHeader = true}) {
     final csvData = <List<dynamic>>[];
-    if (includeHeader) csvData.add(commonHeader);
+    if (includeHeader) csvData.add(_createCSVHeader());
     for (var i = 0; i < list.length; ++i) {
       csvData.addAll(_logMessagesInContainer(list[i]));
     }
     return csvData;
   }
 
-  static void _addEmptyFields(List<dynamic> list, int numFields) {
+  void _addEmptyFields(List<dynamic> list, int numFields) {
     for (var i = 0; i < numFields; ++i) {
       list.add('');
     }
   }
 
-  static String? _logMessageSource(MessageSource? type) =>
+  String? _logMessageSource(MessageSource? type) =>
       type?.toString().replaceAll('MessageSource.', '');
 
-  static List<dynamic> _logLocationMessage(LocationMessage loc) {
+  List<dynamic> _logLocationMessage(LocationMessage loc) {
     final row = <dynamic>[];
     row.add(loc.status.asString() ?? '');
     row.add(loc.location?.latitude ?? '');
     row.add(loc.location?.longitude ?? '');
     row.add(directionAsString(loc.direction?.toDouble()));
-    row.add(getSpeedHorAsString(loc.horizontalSpeed));
-    row.add(getSpeedHorAsString(loc.verticalSpeed));
-    row.add(getAltitudeAsString(loc.altitudePressure));
-    row.add(getAltitudeAsString(loc.altitudeGeodetic));
-    row.add(getAltitudeAsString(loc.height));
+    row.add(unitsConversion
+            .odidSpeedHorToCurrentUnit(loc.horizontalSpeed, speedUnit)
+            ?.roundedValue(3) ??
+        '');
+    row.add(unitsConversion
+            .odidSpeedHorToCurrentUnit(loc.verticalSpeed, speedUnit)
+            ?.roundedValue(3) ??
+        '');
+    row.add(unitsConversion
+            .odidAltitudeToCurrentUnit(loc.altitudePressure, altitudeUnit)
+            ?.roundedValue(3) ??
+        '');
+    row.add(unitsConversion
+            .odidAltitudeToCurrentUnit(loc.altitudeGeodetic, altitudeUnit)
+            ?.roundedValue(3) ??
+        '');
+    row.add(unitsConversion
+            .odidAltitudeToCurrentUnit(loc.height, altitudeUnit)
+            ?.roundedValue(3) ??
+        '');
     row.add(loc.heightType.asString() ?? '');
     row.add(
-      horizontalAccuracyToString(loc.horizontalAccuracy),
+      unitsConversion
+              .odidHorizontalAccuracyToCurrentUnit(
+                  loc.horizontalAccuracy, distanceUnit)
+              ?.roundedValue(3) ??
+          '',
     );
-    row.add(
-      verticalAccuracyToString(loc.verticalAccuracy),
-    );
-    row.add(verticalAccuracyToString(loc.baroAltitudeAccuracy));
-    row.add(speedAccuracyToString(loc.speedAccuracy));
+    row.add(unitsConversion
+            .odidVerticalAccuracyToCurrentUnit(
+                loc.verticalAccuracy, distanceUnit)
+            ?.roundedValue(3) ??
+        '');
+    row.add(unitsConversion
+            .odidVerticalAccuracyToCurrentUnit(
+                loc.baroAltitudeAccuracy, altitudeUnit)
+            ?.roundedValue(3) ??
+        '');
+    row.add(unitsConversion
+            .odidSpeedAccuracyToCurrentUnit(loc.speedAccuracy, speedUnit)
+            ?.roundedValue(3) ??
+        '');
     row.add(timeAccuracyToString(loc.timestampAccuracy));
     _addEmptyFields(
       row,
@@ -105,7 +105,7 @@ class CSVLogger {
     return row;
   }
 
-  static List<dynamic> _logBasicMessage(BasicIDMessage message) {
+  List<dynamic> _logBasicMessage(BasicIDMessage message) {
     final row = <dynamic>[];
     _addEmptyFields(row, locationFields);
     row.add(message.uasID.type.asString() ?? '');
@@ -118,7 +118,7 @@ class CSVLogger {
     return row;
   }
 
-  static List<dynamic> _logOperatorMessage(OperatorIDMessage message) {
+  List<dynamic> _logOperatorMessage(OperatorIDMessage message) {
     final row = <dynamic>[];
     _addEmptyFields(row, locationFields + basicFields);
 
@@ -133,7 +133,7 @@ class CSVLogger {
   }
 
   // TODO: implement
-  static List<dynamic> _logAuthMessage(AuthMessage message) {
+  List<dynamic> _logAuthMessage(AuthMessage message) {
     final row = <dynamic>[];
     _addEmptyFields(
         row,
@@ -145,7 +145,7 @@ class CSVLogger {
     return row;
   }
 
-  static List<dynamic> _logSelfIdMessage(SelfIDMessage message) {
+  List<dynamic> _logSelfIdMessage(SelfIDMessage message) {
     final row = <dynamic>[];
     _addEmptyFields(
         row, locationFields + basicFields + operatorFields + authFields);
@@ -158,7 +158,7 @@ class CSVLogger {
     return row;
   }
 
-  static List<dynamic> _logSystemDataMessage(SystemMessage message) {
+  List<dynamic> _logSystemDataMessage(SystemMessage message) {
     final row = <dynamic>[];
     _addEmptyFields(
         row,
@@ -172,11 +172,23 @@ class CSVLogger {
     );
     row.add(message.operatorLocation?.latitude ?? '');
     row.add(message.operatorLocation?.longitude ?? '');
-    row.add(getAltitudeAsString(message.operatorAltitude));
+    row.add(unitsConversion
+            .odidAltitudeToCurrentUnit(message.operatorAltitude, altitudeUnit)
+            ?.roundedValue(3) ??
+        '');
     row.add(message.areaCount);
-    row.add(message.areaRadius);
-    row.add(getAltitudeAsString(message.areaCeiling));
-    row.add(getAltitudeAsString(message.areaFloor));
+    row.add(unitsConversion
+        .distanceDefaultToCurrent(
+            UnitValue.meters(message.areaRadius), distanceUnit)
+        .roundedValue(3));
+    row.add(unitsConversion
+            .odidAltitudeToCurrentUnit(message.areaCeiling, altitudeUnit)
+            ?.roundedValue(3) ??
+        '');
+    row.add(unitsConversion
+            .odidAltitudeToCurrentUnit(message.areaFloor, distanceUnit)
+            ?.roundedValue(3) ??
+        '');
     row.add(message.uaClassification
         .toString()
         .replaceAll('UAClassification.', ''));
@@ -185,8 +197,7 @@ class CSVLogger {
     return row;
   }
 
-  static List<dynamic> logMetadata(
-      MessageContainer container, String messageType) {
+  List<dynamic> _logMetadata(MessageContainer container, String messageType) {
     final row = <dynamic>[];
     row.add(messageType);
     row.add(_logMessageSource(container.source) ?? 'Unknown');
@@ -195,41 +206,85 @@ class CSVLogger {
     return row;
   }
 
-  static List<List<dynamic>> _logMessagesInContainer(
-      MessageContainer container) {
+  List<List<dynamic>> _logMessagesInContainer(MessageContainer container) {
     final csvData = <List<dynamic>>[];
     if (container.locationMessage != null) {
-      final row = logMetadata(container, 'Location');
+      final row = _logMetadata(container, 'Location');
       row.addAll(_logLocationMessage(container.locationMessage!));
       csvData.add(row);
     }
     if (container.basicIdMessages != null) {
       for (final basicIdMessage in container.basicIdMessages!.values) {
-        final row = logMetadata(container, 'Basic ID');
+        final row = _logMetadata(container, 'Basic ID');
         row.addAll(_logBasicMessage(basicIdMessage));
         csvData.add(row);
       }
     }
     if (container.operatorIdMessage != null) {
-      final row = logMetadata(container, 'Operator ID');
+      final row = _logMetadata(container, 'Operator ID');
       row.addAll(_logOperatorMessage(container.operatorIdMessage!));
       csvData.add(row);
     }
     if (container.selfIdMessage != null) {
-      final row = logMetadata(container, 'Self ID');
+      final row = _logMetadata(container, 'Self ID');
       row.addAll(_logSelfIdMessage(container.selfIdMessage!));
       csvData.add(row);
     }
     if (container.authenticationMessage != null) {
-      final row = logMetadata(container, 'Authentication');
+      final row = _logMetadata(container, 'Authentication');
       row.addAll(_logAuthMessage(container.authenticationMessage!));
       csvData.add(row);
     }
     if (container.systemDataMessage != null) {
-      final row = logMetadata(container, 'System Data');
+      final row = _logMetadata(container, 'System Data');
       row.addAll(_logSystemDataMessage(container.systemDataMessage!));
       csvData.add(row);
     }
     return csvData;
   }
+
+  List<String> _createCSVHeader() => [
+        // common
+        'Message Type',
+        'Message Source',
+        'Timestamp',
+        'Mac Address',
+        // location
+        'Status',
+        'Latitude',
+        'Longitude',
+        'Direction',
+        'Speed Horizontal ($speedUnit)',
+        'Speed Vertical ($speedUnit)',
+        'Altitude Pressure ($altitudeUnit)',
+        'Altitude Geodetic ($altitudeUnit)',
+        'Height ($altitudeUnit)',
+        'Height Type ($altitudeUnit)',
+        'Horizontal Accuracy ($distanceSubUnit)',
+        'Vertical Accuracy ($distanceSubUnit)',
+        'Baro Accuracy ($distanceSubUnit)',
+        'Speed Accuracy ($speedUnit)',
+        'Time Accuracy',
+        // basic
+        'ID Type',
+        'UA Type',
+        'UAS ID',
+        // op ID
+        'Operator ID',
+        // self ID
+        'Description Type',
+        'Description',
+        // system
+        'Operator Location Type',
+        'Operator Latitude',
+        'Operator Longitude',
+        'Operator Altitude Geo ($altitudeUnit)',
+        'Area Count',
+        'Area Radius ($distanceSubUnit)',
+        'Area Ceiling ($altitudeUnit)',
+        'Area Floor ($altitudeUnit)',
+        'Classification Type',
+        'Category',
+        'Class Value',
+      ];
 }

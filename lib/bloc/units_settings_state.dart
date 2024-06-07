@@ -29,4 +29,20 @@ class UnitsSettingsState {
 
   String get distanceSubUnit =>
       distanceUnit == UnitsConversionService.defaultDistanceUnit ? 'm' : 'yd';
+
+  String get exportDistanceUnit => useConversionInExport
+      ? distanceUnit
+      : UnitsConversionService.defaultDistanceUnit;
+
+  String get exportDistanceSubUnit => useConversionInExport
+      ? distanceSubUnit
+      : UnitsConversionService.defaultDistanceSubUnit;
+
+  String get exportAltitudeUnit => useConversionInExport
+      ? altitudeUnit
+      : UnitsConversionService.defaultAltitudeUnit;
+
+  String get exportSpeedUnit => useConversionInExport
+      ? speedUnit
+      : UnitsConversionService.defaultSpeedUnit;
 }
