@@ -2,20 +2,12 @@
 enum MessageContainerAuthenticityStatus {
   // verified by authority/multilateration
   verified,
+  // reasonable signs of authenticity exist
+  trusted,
   // default
   untrusted,
-  // signs if questionable authenticity exist
+  // signs of questionable authenticity exist
   suspicious,
   // high certainty of falsehood
   counterfeit
-}
-
-// only suspicious and counterfeit statuses are displayed in UI,
-// temporary measure until verification is complete
-extension MessageContainerAuthenticityStatusExtension
-    on MessageContainerAuthenticityStatus {
-  bool get shouldBeDisplayed {
-    return this == MessageContainerAuthenticityStatus.suspicious ||
-        this == MessageContainerAuthenticityStatus.counterfeit;
-  }
 }

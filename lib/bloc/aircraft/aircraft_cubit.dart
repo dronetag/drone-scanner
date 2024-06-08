@@ -20,6 +20,8 @@ class AircraftCubit extends Cubit<AircraftState> {
   Timer? _refreshTimer;
   final AircraftExpirationCubit expirationCubit;
 
+  final MessageContainerAuthenticator messageContainerAuthenticator;
+
   static const uiUpdateIntervalMs = 200;
 
   // data for showcase
@@ -71,8 +73,10 @@ class AircraftCubit extends Cubit<AircraftState> {
     ),
   ];
 
-  AircraftCubit({required this.expirationCubit})
-      : super(AircraftState(packHistory: {}, dataAuthenticityStatuses: {})) {
+  AircraftCubit({
+    required this.expirationCubit,
+    required this.messageContainerAuthenticator,
+  }) : super(AircraftState(packHistory: {}, dataAuthenticityStatuses: {})) {
     expirationCubit.deleteCallback = deletePack;
   }
 
@@ -147,7 +151,7 @@ class AircraftCubit extends Cubit<AircraftState> {
           dataAuthenticityStatuses: state.dataAuthenticityStatuses
             ..addAll({
               pack.macAddress:
-                  MessageContainerAuthenticator.determineAuthenticityStatus(
+                  messageContainerAuthenticator.determineAuthenticityStatus(
                 pack,
               )
             }),
