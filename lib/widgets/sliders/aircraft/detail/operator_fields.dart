@@ -12,6 +12,7 @@ import '../../../../bloc/units_settings_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../extensions/string_extensions.dart';
+import '../../../../models/unit_value.dart';
 import '../../../../utils/utils.dart';
 import '../../common/flag.dart';
 import '../../common/headline.dart';
@@ -36,30 +37,18 @@ class OperatorFields {
     BuildContext context,
     MessageContainer pack,
   ) {
+    final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
+
     final systemMessage = pack.systemDataMessage;
+    final systemDataValid = systemMessage != null;
+
     final opMessage = pack.operatorIdMessage;
     String? countryCode;
     if (opMessage != null) {
       countryCode = getCountryCode(opMessage.operatorID);
     }
-    late final String distanceText;
-    final systemDataValid = systemMessage != null;
-    if (context.read<StandardsCubit>().state.locationEnabled &&
-        context.read<MapCubit>().state.userLocationValid &&
-        systemDataValid &&
-        locValid(systemMessage)) {
-      final distanceFromMe = context
-          .read<UnitsSettingsCubit>()
-          .distanceDefaultToCurrent(calculateDistance(
-            systemMessage.operatorLocation!.latitude,
-            systemMessage.operatorLocation!.longitude,
-            context.read<MapCubit>().state.userLocation.latitude,
-            context.read<MapCubit>().state.userLocation.longitude,
-          ));
-      distanceText = distanceFromMe.toStringAsFixed(3);
-    } else {
-      distanceText = 'Unknown';
-    }
+    final distanceText = _getDistanceText(context, systemMessage);
+
     final locationText = systemMessage != null && locValid(systemMessage)
         ? '${systemMessage.operatorLocation!.latitude.toStringAsFixed(4)}, '
             '${systemMessage.operatorLocation!.longitude.toStringAsFixed(4)}'
@@ -182,7 +171,10 @@ class OperatorFields {
             fieldText: systemDataValid &&
                     systemMessage.operatorAltitude != null &&
                     systemMessage.operatorAltitude?.toInt() != INV_ALT
-                ? '${systemMessage.operatorAltitude?.toStringAsFixed(2)}  m'
+                ? unitsSettingsCubit
+                    .altitudeDefaultToCurrent(
+                        UnitValue.meters(systemMessage.operatorAltitude!))
+                    .toStringAsFixed(2)
                 : 'Unknown',
           ),
           AircraftDetailField(
@@ -198,7 +190,10 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Area Radius',
             fieldText: systemDataValid
-                ? '${systemMessage.areaRadius.toString()}  m'
+                ? unitsSettingsCubit
+                    .distanceDefaultToCurrent(
+                        UnitValue.meters(systemMessage.areaRadius))
+                    .toStringAsFixed(2)
                 : 'Unknown',
           ),
           AircraftDetailField(
@@ -214,13 +209,15 @@ class OperatorFields {
           AircraftDetailField(
             headlineText: 'Area Ceiling',
             fieldText: systemDataValid
-                ? getAltitudeAsString(systemMessage.areaCeiling)
+                ? unitsSettingsCubit
+                    .getAltitudeAsString(systemMessage.areaCeiling)
                 : 'Unknown',
           ),
           AircraftDetailField(
             headlineText: 'Area Floor',
             fieldText: systemDataValid
-                ? getAltitudeAsString(systemMessage.areaFloor)
+                ? unitsSettingsCubit
+                    .getAltitudeAsString(systemMessage.areaFloor)
                 : 'Unknown',
           ),
         ],
@@ -242,5 +239,26 @@ class OperatorFields {
         ],
       ),
     ];
+  }
+
+  static String _getDistanceText(
+      BuildContext context, SystemMessage? systemMessage) {
+    final systemDataValid = systemMessage != null;
+    if (context.read<StandardsCubit>().state.locationEnabled &&
+        context.read<MapCubit>().state.userLocationValid &&
+        systemDataValid &&
+        locValid(systemMessage)) {
+      final distanceFromMe = context
+          .read<UnitsSettingsCubit>()
+          .distanceDefaultToCurrent(calculateDistance(
+            systemMessage.operatorLocation!.latitude,
+            systemMessage.operatorLocation!.longitude,
+            context.read<MapCubit>().state.userLocation.latitude,
+            context.read<MapCubit>().state.userLocation.longitude,
+          ));
+      return distanceFromMe.toStringAsFixed(3);
+    } else {
+      return 'Unknown';
+    }
   }
 }

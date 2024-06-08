@@ -33,6 +33,7 @@ class LocationFields {
     BuildContext context,
     LocationMessage? loc,
   ) {
+    final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
     final distanceText = _getDistanceText(context, loc);
 
     final isLandscape =
@@ -155,7 +156,7 @@ class LocationFields {
           if (loc != null && loc.height != null)
             AircraftDetailField(
               headlineText: 'Height',
-              fieldText: getAltitudeAsString(loc.height),
+              fieldText: unitsSettingsCubit.getAltitudeAsString(loc.height),
             ),
           if (loc != null)
             AircraftDetailField(
@@ -168,11 +169,13 @@ class LocationFields {
         children: [
           AircraftDetailField(
             headlineText: 'Altitude Press.',
-            fieldText: getAltitudeAsString(loc?.altitudePressure),
+            fieldText:
+                unitsSettingsCubit.getAltitudeAsString(loc?.altitudePressure),
           ),
           AircraftDetailField(
             headlineText: 'Altitude Geod.',
-            fieldText: getAltitudeAsString(loc?.altitudeGeodetic),
+            fieldText:
+                unitsSettingsCubit.getAltitudeAsString(loc?.altitudeGeodetic),
           ),
         ],
       ),
@@ -181,11 +184,13 @@ class LocationFields {
           if (loc != null)
             AircraftDetailField(
                 headlineText: 'Horizontal Speed',
-                fieldText: getSpeedHorAsString(loc.horizontalSpeed)),
+                fieldText: unitsSettingsCubit
+                    .getSpeedHorAsString(loc.horizontalSpeed)),
           if (loc != null)
             AircraftDetailField(
               headlineText: 'Vertical Speed',
-              fieldText: getSpeedVertAsString(loc.verticalSpeed),
+              fieldText:
+                  unitsSettingsCubit.getSpeedVertAsString(loc.verticalSpeed),
             ),
         ],
       ),
@@ -193,11 +198,13 @@ class LocationFields {
         children: [
           AircraftDetailField(
             headlineText: 'Horizontal Accuracy',
-            fieldText: horizontalAccuracyToString(loc?.horizontalAccuracy),
+            fieldText: unitsSettingsCubit
+                .horizontalAccuracyToString(loc?.horizontalAccuracy),
           ),
           AircraftDetailField(
             headlineText: 'Vertical Accuracy',
-            fieldText: verticalAccuracyToString(loc?.verticalAccuracy),
+            fieldText: unitsSettingsCubit
+                .verticalAccuracyToString(loc?.verticalAccuracy),
           ),
         ],
       ),
@@ -205,11 +212,13 @@ class LocationFields {
         children: [
           AircraftDetailField(
             headlineText: 'Speed Accuracy',
-            fieldText: speedAccuracyToString(loc?.speedAccuracy),
+            fieldText:
+                unitsSettingsCubit.speedAccuracyToString(loc?.speedAccuracy),
           ),
           AircraftDetailField(
             headlineText: 'Baro Accuracy',
-            fieldText: verticalAccuracyToString(loc?.baroAltitudeAccuracy),
+            fieldText: unitsSettingsCubit
+                .verticalAccuracyToString(loc?.baroAltitudeAccuracy),
           ),
         ],
       ),

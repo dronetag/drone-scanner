@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
 import 'package:sprintf/sprintf.dart';
@@ -63,74 +62,6 @@ String getSourceShortcut(MessageSource source) {
   return sourceText;
 }
 
-String horizontalAccuracyToString(HorizontalAccuracy? acc) {
-  if (acc == null) return 'Unknown';
-  switch (acc) {
-    case HorizontalAccuracy.unknown:
-      return 'Unknown';
-    case HorizontalAccuracy.meters_30:
-      return '< 30 m';
-    case HorizontalAccuracy.meters_1:
-      return '< 1 m';
-    case HorizontalAccuracy.meters_10:
-      return '< 10 m';
-    case HorizontalAccuracy.meters_926:
-      return '< 926 m';
-    case HorizontalAccuracy.meters_555_6:
-      return '< 555.6 km';
-    case HorizontalAccuracy.meters_185_2:
-      return '< 185.2 km';
-    case HorizontalAccuracy.meters_92_6:
-      return '< 92.6 m';
-    case HorizontalAccuracy.meters_3:
-      return '< 3 m';
-    case HorizontalAccuracy.kilometers_18_52:
-      return '< 18.52 km';
-    case HorizontalAccuracy.kilometers_7_408:
-      return '< 7.408 km';
-    case HorizontalAccuracy.kilometers_3_704:
-      return '< 3.704 km';
-    case HorizontalAccuracy.kilometers_1_852:
-      return '< 1.852 km';
-  }
-}
-
-String verticalAccuracyToString(VerticalAccuracy? acc) {
-  if (acc == null) return 'Unknown';
-  switch (acc) {
-    case VerticalAccuracy.meters_150:
-      return '< 150 m';
-    case VerticalAccuracy.meters_45:
-      return '< 45 m';
-    case VerticalAccuracy.meters_25:
-      return '< 25 m';
-    case VerticalAccuracy.meters_10:
-      return '< 10 m';
-    case VerticalAccuracy.meters_3:
-      return '< 3 m';
-    case VerticalAccuracy.meters_1:
-      return '< 1 m';
-    default:
-      return 'Unknown';
-  }
-}
-
-String speedAccuracyToString(SpeedAccuracy? acc) {
-  if (acc == null) return 'Unknown';
-  switch (acc) {
-    case SpeedAccuracy.meterPerSecond_10:
-      return '< 10 m/s';
-    case SpeedAccuracy.meterPerSecond_3:
-      return '< 3 m/s';
-    case SpeedAccuracy.meterPerSecond_1:
-      return '< 1 m/s';
-    case SpeedAccuracy.meterPerSecond_0_3:
-      return '< 0.3 m/s';
-    default:
-      return 'Unknown';
-  }
-}
-
 String timeAccuracyToString(Duration? acc) {
   if (acc == null) return 'Unknown';
   if (acc.inMilliseconds == 0) {
@@ -147,21 +78,6 @@ String directionAsString(double? direction) {
   } else {
     return 'Unknown';
   }
-}
-
-String getAltitudeAsString(double? altitude) {
-  if (altitude == null || altitude == INV_ALT) return 'Unknown';
-  return sprintf('%3.1f m', [altitude]);
-}
-
-String getSpeedVertAsString(double? speed) {
-  if (speed == null || speed == INV_SPEED_V) return 'Unknown';
-  return sprintf('%3.2f m/s', [speed]);
-}
-
-String getSpeedHorAsString(double? speed) {
-  if (speed == null || speed == INV_SPEED_H) return 'Unknown';
-  return sprintf('%3.2f m/s', [speed]);
 }
 
 String? getCountryCode(String operatorId) {
