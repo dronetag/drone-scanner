@@ -84,9 +84,8 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           usersAircraftUASID: usersAircraftUASID == null
               ? null
               : (usersAircraftUASID as String),
-          proximityAlertDistance: proximityAlertDistance == null
-              ? defaultProximityAlertDistance
-              : proximityAlertDistance as double,
+          proximityAlertDistance:
+              proximityAlertDistance ?? defaultProximityAlertDistance,
           proximityAlertActive: proximityAlertActive == null
               ? false
               : proximityAlertActive as bool,
@@ -206,19 +205,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     if (state.proximityAlertActive) _startAlerts();
   }
 
-  void _startAlerts() {
-    _refreshTimer = Timer.periodic(
-      const Duration(seconds: alertsUpdateIntervalSec),
-      (_) => checkProximityAlerts(),
-    );
-    checkProximityAlerts();
-  }
-
-  void _stopAlerts() {
-    _alertEventController.add(AlertStop());
-    _refreshTimer?.cancel();
-  }
-
   void setSendNotifications({required bool send}) async {
     await storage.setItem(
       sendNotificationsKey,
@@ -226,35 +212,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     );
     emit(state.copyWith(sendNotifications: send));
   }
-
-  void _sendAlert(List<DroneNearbyAlert> dronesNearby) {
-    _alertController.add(dronesNearby);
-    emit(
-      state.updateFoundAircraft(
-        dronesNearby,
-      ),
-    );
-  }
-
-  void _sendStartAlert() {
-    _alertController.add([ProximityAlertsStart()]);
-  }
-
-  // check if owned drone has location, expected uasid
-  bool _alertsReady(MessageContainer pack) =>
-      state.proximityAlertActive &&
-      state.usersAircraftUASID != null &&
-      pack.containsUasId(state.usersAircraftUASID!) &&
-      pack.locationValid;
-
-  // check distance, consider just packs not older than expiration time
-  bool _isNearby(MessageContainer pack, double distance) =>
-      distance <= state.proximityAlertDistance &&
-      pack.lastUpdate.isAfter(
-        DateTime.now().subtract(
-          Duration(seconds: state.expirationTimeSec),
-        ),
-      );
 
   void checkProximityAlerts() {
     if (state.usersAircraftUASID == null ||
@@ -272,14 +229,16 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
             !value.last.locationValid) {
           return;
         }
-
-        // calc distance and convert to meters
+        // calculate distance in kilometers, convert to meters
         final distance = calculateDistance(
-                pack.locationMessage!.location!.latitude,
-                pack.locationMessage!.location!.longitude,
-                value.last.locationMessage!.location!.latitude,
-                value.last.locationMessage!.location!.longitude) *
+                    pack.locationMessage!.location!.latitude,
+                    pack.locationMessage!.location!.longitude,
+                    value.last.locationMessage!.location!.latitude,
+                    value.last.locationMessage!.location!.longitude)
+                .value
+                .toDouble() *
             1000;
+
         if (_isNearby(value.last, distance)) {
           final uasId = value.last.preferredBasicIdMessage?.uasID;
           // refresh if not marked as expired
@@ -308,5 +267,49 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
     if (foundAlerts.isNotEmpty) {
       _sendAlert(foundAlerts);
     }
+  }
+
+  void _sendAlert(List<DroneNearbyAlert> dronesNearby) {
+    _alertController.add(dronesNearby);
+    emit(
+      state.updateFoundAircraft(
+        dronesNearby,
+      ),
+    );
+  }
+
+  void _sendStartAlert() {
+    _alertController.add([ProximityAlertsStart()]);
+  }
+
+  // check if owned drone has location, expected uasid
+  bool _alertsReady(MessageContainer pack) =>
+      state.proximityAlertActive &&
+      state.usersAircraftUASID != null &&
+      pack.containsUasId(state.usersAircraftUASID!) &&
+      pack.locationValid;
+
+  // check distance, consider just packs not older than expiration time
+  // distance is in meters
+  bool _isNearby(MessageContainer pack, double distance) {
+    return distance <= state.proximityAlertDistance &&
+        pack.lastUpdate.isAfter(
+          DateTime.now().subtract(
+            Duration(seconds: state.expirationTimeSec),
+          ),
+        );
+  }
+
+  void _startAlerts() {
+    _refreshTimer = Timer.periodic(
+      const Duration(seconds: alertsUpdateIntervalSec),
+      (_) => checkProximityAlerts(),
+    );
+    checkProximityAlerts();
+  }
+
+  void _stopAlerts() {
+    _alertEventController.add(AlertStop());
+    _refreshTimer?.cancel();
   }
 }
