@@ -93,7 +93,8 @@ class LocationFields {
                     width: 10,
                   ),
                   Text(
-                    directionAsString(loc.direction!.toDouble()),
+                    unitsSettingsCubit
+                        .getDirectionAsString(loc.direction!.toDouble()),
                     style: const TextStyle(
                       color: AppColors.detailFieldColor,
                     ),
@@ -224,7 +225,8 @@ class LocationFields {
       ),
       AircraftDetailField(
         headlineText: 'Time Accuracy',
-        fieldText: timeAccuracyToString(loc?.timestampAccuracy),
+        fieldText:
+            unitsSettingsCubit.timeAccuracyToString(loc?.timestampAccuracy),
       ),
     ];
   }

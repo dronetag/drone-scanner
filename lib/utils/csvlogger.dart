@@ -6,7 +6,6 @@ import 'package:flutter_opendroneid/utils/conversions.dart';
 
 import '../models/unit_value.dart';
 import '../services/unit_conversion_service.dart';
-import 'utils.dart';
 
 class CSVLogger {
   static const locationFields = 15;
@@ -54,7 +53,10 @@ class CSVLogger {
     row.add(loc.status.asString() ?? '');
     row.add(loc.location?.latitude ?? '');
     row.add(loc.location?.longitude ?? '');
-    row.add(directionAsString(loc.direction?.toDouble()));
+    row.add(unitsConversion
+            .odidDirectionToUnitValue(loc.direction?.toDouble())
+            ?.value ??
+        '');
     row.add(unitsConversion
             .odidSpeedHorToCurrentUnit(loc.horizontalSpeed, speedUnit)
             ?.roundedValue(3) ??
@@ -97,7 +99,9 @@ class CSVLogger {
             .odidSpeedAccuracyToCurrentUnit(loc.speedAccuracy, speedUnit)
             ?.roundedValue(3) ??
         '');
-    row.add(timeAccuracyToString(loc.timestampAccuracy));
+    row.add(
+        unitsConversion.timeAccuracyToUnitValue(loc.timestampAccuracy)?.value ??
+            '');
     _addEmptyFields(
       row,
       basicFields + operatorFields + authFields + selfIdFields + systemFields,
@@ -253,7 +257,7 @@ class CSVLogger {
         'Status',
         'Latitude',
         'Longitude',
-        'Direction',
+        'Direction (degrees)',
         'Speed Horizontal ($speedUnit)',
         'Speed Vertical ($speedUnit)',
         'Altitude Pressure ($altitudeUnit)',
@@ -264,7 +268,7 @@ class CSVLogger {
         'Vertical Accuracy ($distanceSubUnit)',
         'Baro Accuracy ($distanceSubUnit)',
         'Speed Accuracy ($speedUnit)',
-        'Time Accuracy',
+        'Time Accuracy (s)',
         // basic
         'ID Type',
         'UA Type',

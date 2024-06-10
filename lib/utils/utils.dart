@@ -1,9 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_opendroneid/models/constants.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
-import 'package:sprintf/sprintf.dart';
 
 import '../extensions/string_extensions.dart';
 import '../models/unit_value.dart';
@@ -60,24 +58,6 @@ String getSourceShortcut(MessageSource source) {
     sourceText = 'N';
   }
   return sourceText;
-}
-
-String timeAccuracyToString(Duration? acc) {
-  if (acc == null) return 'Unknown';
-  if (acc.inMilliseconds == 0) {
-    return 'Unknown';
-  } else {
-    return sprintf('<= %1.1f s', [acc.inMilliseconds / 1000.0]);
-  }
-}
-
-String directionAsString(double? direction) {
-  if (direction == null) return 'Unknown';
-  if (direction != INV_DIR) {
-    return sprintf('%3.0f°', [direction]);
-  } else {
-    return 'Unknown';
-  }
 }
 
 String? getCountryCode(String operatorId) {

@@ -44,6 +44,10 @@ class UnitValue {
 
   static UnitValue yards(num value) => UnitValue(value: value, unit: 'yd');
 
+  static UnitValue degrees(num value) => UnitValue(value: value, unit: '°');
+
+  static UnitValue seconds(num value) => UnitValue(value: value, unit: 's');
+
   static UnitValue metersPerSecond(num value) =>
       UnitValue(value: value, unit: 'm/s');
 }

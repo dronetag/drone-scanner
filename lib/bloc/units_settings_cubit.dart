@@ -100,6 +100,10 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
           ?.toStringAsFixed(1) ??
       'Unknown';
 
+  String getDirectionAsString(double? direction) =>
+      unitsConversion.odidDirectionToUnitValue(direction)?.toStringAsFixed(1) ??
+      'Unknown';
+
   String horizontalAccuracyToString(HorizontalAccuracy? acc) {
     final convertedUnitValue = unitsConversion
         .odidHorizontalAccuracyToCurrentUnit(acc, state.distanceUnit);
@@ -125,6 +129,14 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
     if (convertedUnitValue == null) return 'Unknown';
 
     return '< ${convertedUnitValue.toStringAsFixed(3)}';
+  }
+
+  String timeAccuracyToString(Duration? acc) {
+    final convertedUnitValue = unitsConversion.timeAccuracyToUnitValue(acc);
+
+    if (convertedUnitValue == null) return 'Unknown';
+
+    return convertedUnitValue.toString();
   }
 
   Future<void> _saveUnitsSetting(String newValue, String settingKey) async =>

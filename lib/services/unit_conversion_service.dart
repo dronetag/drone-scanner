@@ -212,4 +212,15 @@ class UnitsConversionService {
     if (unitValue == null) return null;
     return speedDefaultToCurrent(unitValue, currentSpeedUnit);
   }
+
+  UnitValue? timeAccuracyToUnitValue(Duration? acc) {
+    if (acc == null || acc.inMilliseconds == 0) return null;
+    return UnitValue.seconds(acc.inMilliseconds / 1000);
+  }
+
+  UnitValue? odidDirectionToUnitValue(double? direction) {
+    if (direction == null || direction == INV_DIR) return null;
+
+    return UnitValue.degrees(direction);
+  }
 }
