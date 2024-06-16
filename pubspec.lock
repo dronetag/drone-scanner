@@ -970,7 +970,7 @@ packages:
     source: hosted
     version: "1.10.0"
   sprintf:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sprintf
       sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
