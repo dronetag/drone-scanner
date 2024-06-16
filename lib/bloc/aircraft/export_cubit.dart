@@ -96,10 +96,11 @@ class ExportCubit extends Cubit<ExportState> {
         .convert(logger.createCSV(packs, includeHeader: includeHeader));
   }
 
+  // create filename from uasID or mac plus timestamp
   String _createFilename(String mac) {
     final aircraftState = aircraftCubit.state;
 
-    late final String filename;
+    late final String aircraftIdentificator;
     if (aircraftState.packHistory()[mac]!.isNotEmpty &&
         aircraftState
                 .packHistory()[mac]
@@ -108,16 +109,22 @@ class ExportCubit extends Cubit<ExportState> {
                 ?.uasID
                 .asString() !=
             null) {
-      filename = aircraftState
+      aircraftIdentificator = aircraftState
           .packHistory()[mac]!
           .last
           .preferredBasicIdMessage!
           .uasID
           .asString()!;
     } else {
-      filename = mac;
+      aircraftIdentificator = mac;
     }
-    return filename;
+    // replace delimiters with dash and remove milliseconds
+    final timestampString =
+        DateTime.now().toLocal().toString().replaceAll(RegExp(r'[ :.]'), '-');
+    final timestampWithoutMs =
+        timestampString.substring(0, timestampString.lastIndexOf('-'));
+
+    return '$aircraftIdentificator-$timestampWithoutMs';
   }
 
   Future<bool> _storagePermissionCheck() async {
