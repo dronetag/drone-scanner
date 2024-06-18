@@ -24,117 +24,96 @@ class UnitsConversionService {
   static const defaultAltitudeUnit = 'm';
 
   UnitValue distanceDefaultToCurrent(
-      UnitValue value, String currentDistanceUnit) {
-    if (currentDistanceUnit == 'mi') {
-      if (value.unit == 'm') {
-        return UnitValue(
-          value: value.value
-              .toDouble()
-              .convertFromTo(LENGTH.meters, LENGTH.yards)!,
-          unit: 'yd',
-        );
-      } else if (value.unit == 'km') {
-        return UnitValue(
-          value: value.value
-              .toDouble()
-              .convertFromTo(LENGTH.kilometers, LENGTH.miles)!,
-          unit: 'mi',
-        );
-      } else {
-        return value;
-      }
-    }
-    return value;
-  }
+          UnitValue value, String currentDistanceUnit) =>
+      switch ((currentDistanceUnit, value.unit)) {
+        ('mi', 'm') => UnitValue(
+            value: value.value
+                .toDouble()
+                .convertFromTo(LENGTH.meters, LENGTH.yards)!,
+            unit: 'yd',
+          ),
+        ('mi', 'km') => UnitValue(
+            value: value.value
+                .toDouble()
+                .convertFromTo(LENGTH.kilometers, LENGTH.miles)!,
+            unit: 'mi',
+          ),
+        (_, _) => value,
+      };
 
   UnitValue distanceCurrentToDefault(
-      UnitValue value, String currentDistanceUnit) {
-    if (currentDistanceUnit == 'mi') {
-      if (value.unit == 'yd') {
-        return UnitValue(
-          value: value.value.convertFromTo(LENGTH.yards, LENGTH.meters)!,
-          unit: 'm',
-        );
-      }
-      return UnitValue(
-        value: value.value.convertFromTo(LENGTH.miles, LENGTH.kilometers)!,
-        unit: defaultDistanceUnit,
-      );
-    }
-    return value;
-  }
+          UnitValue value, String currentDistanceUnit) =>
+      switch ((currentDistanceUnit, value.unit)) {
+        ('mi', 'yd') => UnitValue(
+            value: value.value.convertFromTo(LENGTH.yards, LENGTH.meters)!,
+            unit: 'm',
+          ),
+        ('mi', _) => UnitValue(
+            value: value.value.convertFromTo(LENGTH.miles, LENGTH.kilometers)!,
+            unit: defaultDistanceUnit,
+          ),
+        (_, _) => value,
+      };
 
-  UnitValue speedDefaultToCurrent(UnitValue value, String currentSpeedUnit) {
-    if (currentSpeedUnit == 'kph') {
-      return UnitValue(
-        value: value.value
-            .convertFromTo(SPEED.metersPerSecond, SPEED.kilometersPerHour)!,
-        unit: 'kph',
-      );
-    }
-    if (currentSpeedUnit == 'mph') {
-      return UnitValue(
-        value: value.value
-            .convertFromTo(SPEED.metersPerSecond, SPEED.milesPerHour)!,
-        unit: 'mph',
-      );
-    }
-    if (currentSpeedUnit == 'kt') {
-      return UnitValue(
-        value: value.value.convertFromTo(SPEED.metersPerSecond, SPEED.knots)!,
-        unit: 'kt',
-      );
-    }
+  UnitValue speedDefaultToCurrent(UnitValue value, String currentSpeedUnit) =>
+      switch (currentSpeedUnit) {
+        'kph' => UnitValue(
+            value: value.value
+                .convertFromTo(SPEED.metersPerSecond, SPEED.kilometersPerHour)!,
+            unit: 'kph',
+          ),
+        'mph' => UnitValue(
+            value: value.value
+                .convertFromTo(SPEED.metersPerSecond, SPEED.milesPerHour)!,
+            unit: 'mph',
+          ),
+        'kt' => UnitValue(
+            value:
+                value.value.convertFromTo(SPEED.metersPerSecond, SPEED.knots)!,
+            unit: 'kt',
+          ),
+        _ => value,
+      };
 
-    return value;
-  }
-
-  UnitValue speedCurrentToDefault(UnitValue value, String currentSpeedUnit) {
-    if (currentSpeedUnit == 'kph') {
-      return UnitValue(
-        value: value.value
-            .convertFromTo(SPEED.kilometersPerHour, SPEED.metersPerSecond)!,
-        unit: defaultSpeedUnit,
-      );
-    }
-    if (currentSpeedUnit == 'mph') {
-      return UnitValue(
-        value: value.value
-            .convertFromTo(SPEED.milesPerHour, SPEED.metersPerSecond)!,
-        unit: defaultSpeedUnit,
-      );
-    }
-    if (currentSpeedUnit == 'kn') {
-      return UnitValue(
-        value: value.value.convertFromTo(SPEED.knots, SPEED.metersPerSecond)!,
-        unit: defaultSpeedUnit,
-      );
-    }
-
-    return value;
-  }
+  UnitValue speedCurrentToDefault(UnitValue value, String currentSpeedUnit) =>
+      switch (currentSpeedUnit) {
+        'kph' => UnitValue(
+            value: value.value
+                .convertFromTo(SPEED.kilometersPerHour, SPEED.metersPerSecond)!,
+            unit: defaultSpeedUnit,
+          ),
+        'mph' => UnitValue(
+            value: value.value
+                .convertFromTo(SPEED.milesPerHour, SPEED.metersPerSecond)!,
+            unit: defaultSpeedUnit,
+          ),
+        'kn' => UnitValue(
+            value:
+                value.value.convertFromTo(SPEED.knots, SPEED.metersPerSecond)!,
+            unit: defaultSpeedUnit,
+          ),
+        _ => value,
+      };
 
   UnitValue altitudeDefaultToCurrent(
-      UnitValue value, String currentAltitudeUnit) {
-    if (currentAltitudeUnit == 'ft') {
-      return UnitValue(
-        value: value.value.convertFromTo(LENGTH.meters, LENGTH.feet)!,
-        unit: 'ft',
-      );
-    }
-    return value;
-  }
+          UnitValue value, String currentAltitudeUnit) =>
+      switch (currentAltitudeUnit) {
+        'ft' => UnitValue(
+            value: value.value.convertFromTo(LENGTH.meters, LENGTH.feet)!,
+            unit: 'ft',
+          ),
+        _ => value,
+      };
 
   UnitValue altitudeCurrentToDefault(
-      UnitValue value, String currentAltitudeUnit) {
-    if (currentAltitudeUnit == 'ft') {
-      return UnitValue(
-        value: value.value.convertFromTo(LENGTH.feet, LENGTH.meters)!,
-        unit: defaultAltitudeUnit,
-      );
-    }
-    return value;
-  }
+          UnitValue value, String currentAltitudeUnit) =>
+      switch (currentAltitudeUnit) {
+        'ft' => UnitValue(
+            value: value.value.convertFromTo(LENGTH.feet, LENGTH.meters)!,
+            unit: defaultAltitudeUnit,
+          ),
+        _ => value,
+      };
 
   UnitValue? odidAltitudeToCurrentUnit(
       double? altitude, String currentAltitudeUnit) {
