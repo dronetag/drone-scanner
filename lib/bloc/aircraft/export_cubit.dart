@@ -100,7 +100,7 @@ class ExportCubit extends Cubit<ExportState> {
   String _createFilename(String mac) {
     final aircraftState = aircraftCubit.state;
 
-    late final String aircraftIdentificator;
+    late final String aircraftIdentifier;
     if (aircraftState.packHistory()[mac]!.isNotEmpty &&
         aircraftState
                 .packHistory()[mac]
@@ -109,14 +109,14 @@ class ExportCubit extends Cubit<ExportState> {
                 ?.uasID
                 .asString() !=
             null) {
-      aircraftIdentificator = aircraftState
+      aircraftIdentifier = aircraftState
           .packHistory()[mac]!
           .last
           .preferredBasicIdMessage!
           .uasID
           .asString()!;
     } else {
-      aircraftIdentificator = mac;
+      aircraftIdentifier = mac;
     }
     // replace delimiters with dash and remove milliseconds
     final timestampString =
@@ -124,7 +124,7 @@ class ExportCubit extends Cubit<ExportState> {
     final timestampWithoutMs =
         timestampString.substring(0, timestampString.lastIndexOf('-'));
 
-    return '$aircraftIdentificator-$timestampWithoutMs';
+    return '$aircraftIdentifier-$timestampWithoutMs';
   }
 
   Future<bool> _storagePermissionCheck() async {

@@ -230,7 +230,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
           return;
         }
         // calculate distance in kilometers, convert to meters
-        final distance = calculateDistance(
+        final distance = calculateDistanceInKm(
                     pack.locationMessage!.location!.latitude,
                     pack.locationMessage!.location!.longitude,
                     value.last.locationMessage!.location!.latitude,

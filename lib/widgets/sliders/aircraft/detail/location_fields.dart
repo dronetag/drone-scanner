@@ -186,12 +186,12 @@ class LocationFields {
             AircraftDetailField(
                 headlineText: 'Horizontal Speed',
                 fieldText: unitsSettingsCubit
-                    .getSpeedHorAsString(loc.horizontalSpeed)),
+                    .getHorizontalSpeedAsString(loc.horizontalSpeed)),
           if (loc != null)
             AircraftDetailField(
               headlineText: 'Vertical Speed',
-              fieldText:
-                  unitsSettingsCubit.getSpeedVertAsString(loc.verticalSpeed),
+              fieldText: unitsSettingsCubit
+                  .getVerticalSpeedAsString(loc.verticalSpeed),
             ),
         ],
       ),
@@ -200,12 +200,12 @@ class LocationFields {
           AircraftDetailField(
             headlineText: 'Horizontal Accuracy',
             fieldText: unitsSettingsCubit
-                .horizontalAccuracyToString(loc?.horizontalAccuracy),
+                .getHorizontalAccuracyAsString(loc?.horizontalAccuracy),
           ),
           AircraftDetailField(
             headlineText: 'Vertical Accuracy',
             fieldText: unitsSettingsCubit
-                .verticalAccuracyToString(loc?.verticalAccuracy),
+                .getVerticalAccuracyAsString(loc?.verticalAccuracy),
           ),
         ],
       ),
@@ -214,19 +214,19 @@ class LocationFields {
           AircraftDetailField(
             headlineText: 'Speed Accuracy',
             fieldText:
-                unitsSettingsCubit.speedAccuracyToString(loc?.speedAccuracy),
+                unitsSettingsCubit.getSpeedAccuracyAsString(loc?.speedAccuracy),
           ),
           AircraftDetailField(
             headlineText: 'Baro Accuracy',
             fieldText: unitsSettingsCubit
-                .verticalAccuracyToString(loc?.baroAltitudeAccuracy),
+                .getVerticalAccuracyAsString(loc?.baroAltitudeAccuracy),
           ),
         ],
       ),
       AircraftDetailField(
         headlineText: 'Time Accuracy',
         fieldText:
-            unitsSettingsCubit.timeAccuracyToString(loc?.timestampAccuracy),
+            unitsSettingsCubit.getTimeAccuracyAsString(loc?.timestampAccuracy),
       ),
     ];
   }
@@ -241,7 +241,7 @@ class LocationFields {
         locValid(loc)) {
       final distanceFromMe =
           context.read<UnitsSettingsCubit>().distanceDefaultToCurrent(
-                calculateDistance(
+                calculateDistanceInKm(
                   loc.location!.latitude,
                   loc.location!.longitude,
                   context.read<MapCubit>().state.userLocation.latitude,

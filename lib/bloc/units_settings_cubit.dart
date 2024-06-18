@@ -88,15 +88,15 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
           ?.toStringAsFixed(1) ??
       'Unknown';
 
-  String getSpeedVertAsString(double? speed) =>
+  String getVerticalSpeedAsString(double? speed) =>
       unitsConversion
-          .odidSpeedVertToCurrentUnit(speed, state.speedUnit)
+          .odidVerticalSpeedToCurrentUnit(speed, state.speedUnit)
           ?.toStringAsFixed(1) ??
       'Unknown';
 
-  String getSpeedHorAsString(double? speed) =>
+  String getHorizontalSpeedAsString(double? speed) =>
       unitsConversion
-          .odidSpeedHorToCurrentUnit(speed, state.speedUnit)
+          .odidHorizontalSpeedToCurrentUnit(speed, state.speedUnit)
           ?.toStringAsFixed(1) ??
       'Unknown';
 
@@ -104,7 +104,7 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
       unitsConversion.odidDirectionToUnitValue(direction)?.toStringAsFixed(1) ??
       'Unknown';
 
-  String horizontalAccuracyToString(HorizontalAccuracy? acc) {
+  String getHorizontalAccuracyAsString(HorizontalAccuracy? acc) {
     final convertedUnitValue = unitsConversion
         .odidHorizontalAccuracyToCurrentUnit(acc, state.distanceUnit);
 
@@ -113,7 +113,7 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
     return '< ${convertedUnitValue.toStringAsFixed(3)}';
   }
 
-  String verticalAccuracyToString(VerticalAccuracy? acc) {
+  String getVerticalAccuracyAsString(VerticalAccuracy? acc) {
     final convertedUnitValue = unitsConversion
         .odidVerticalAccuracyToCurrentUnit(acc, state.distanceUnit);
 
@@ -122,7 +122,7 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
     return '< ${convertedUnitValue.toStringAsFixed(3)}';
   }
 
-  String speedAccuracyToString(SpeedAccuracy? acc) {
+  String getSpeedAccuracyAsString(SpeedAccuracy? acc) {
     final convertedUnitValue =
         unitsConversion.odidSpeedAccuracyToCurrentUnit(acc, state.speedUnit);
 
@@ -131,8 +131,8 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
     return '< ${convertedUnitValue.toStringAsFixed(3)}';
   }
 
-  String timeAccuracyToString(Duration? acc) {
-    final convertedUnitValue = unitsConversion.timeAccuracyToUnitValue(acc);
+  String getTimeAccuracyAsString(Duration? acc) {
+    final convertedUnitValue = unitsConversion.odidTimeAccuracyToUnitValue(acc);
 
     if (convertedUnitValue == null) return 'Unknown';
 

@@ -294,7 +294,7 @@ class LocationSpooferDetector implements SpooferDetector {
     if (phoneLocation == null || aircraftLocation == null) return 0.5;
 
     // calc distance and convert to meters
-    final distance = calculateDistance(
+    final distance = calculateDistanceInKm(
                 phoneLocation.latitude,
                 phoneLocation.longitude,
                 aircraftLocation.latitude,

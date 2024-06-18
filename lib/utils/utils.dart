@@ -21,8 +21,10 @@ double calcHeaderHeight(BuildContext context) {
   return isLandscape ? height / 5 : height / 9;
 }
 
-// calculates distance in km
-UnitValue calculateDistance(
+/// Calculates distance in kilometers between two geographical points
+/// on Earth given their latitude and longitude.
+/// Uses the Haversine formula.
+UnitValue calculateDistanceInKm(
     double lat1, double lon1, double lat2, double lon2) {
   const p = 0.017453292519943295;
   const c = math.cos;

@@ -58,11 +58,11 @@ class CSVLogger {
             ?.value ??
         '');
     row.add(unitsConversion
-            .odidSpeedHorToCurrentUnit(loc.horizontalSpeed, speedUnit)
+            .odidHorizontalSpeedToCurrentUnit(loc.horizontalSpeed, speedUnit)
             ?.roundedValue(3) ??
         '');
     row.add(unitsConversion
-            .odidSpeedHorToCurrentUnit(loc.verticalSpeed, speedUnit)
+            .odidHorizontalSpeedToCurrentUnit(loc.verticalSpeed, speedUnit)
             ?.roundedValue(3) ??
         '');
     row.add(unitsConversion
@@ -99,9 +99,10 @@ class CSVLogger {
             .odidSpeedAccuracyToCurrentUnit(loc.speedAccuracy, speedUnit)
             ?.roundedValue(3) ??
         '');
-    row.add(
-        unitsConversion.timeAccuracyToUnitValue(loc.timestampAccuracy)?.value ??
-            '');
+    row.add(unitsConversion
+            .odidTimeAccuracyToUnitValue(loc.timestampAccuracy)
+            ?.value ??
+        '');
     _addEmptyFields(
       row,
       basicFields + operatorFields + authFields + selfIdFields + systemFields,

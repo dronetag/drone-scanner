@@ -39,7 +39,7 @@ class AircraftCardCustomText extends StatelessWidget {
               loc != null &&
               messagePack.locationValid) {
             final distanceFromMe = unitsSettingsCubit.distanceDefaultToCurrent(
-              calculateDistance(
+              calculateDistanceInKm(
                 loc.location!.latitude,
                 loc.location!.longitude,
                 mapCubit.state.userLocation.latitude,

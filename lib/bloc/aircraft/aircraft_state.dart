@@ -70,13 +70,13 @@ class AircraftState {
               if (!e1.value.last.locationValid) return 0;
               if (!e2.value.last.locationValid) return 0;
 
-              final e1Dist = calculateDistance(
+              final e1Dist = calculateDistanceInKm(
                 e1.value.last.locationMessage!.location!.latitude,
                 e1.value.last.locationMessage!.location!.longitude,
                 userPos.latitude,
                 userPos.longitude,
               );
-              final e2Dist = calculateDistance(
+              final e2Dist = calculateDistanceInKm(
                 e2.value.last.locationMessage!.location!.latitude,
                 e2.value.last.locationMessage!.location!.longitude,
                 userPos.latitude,

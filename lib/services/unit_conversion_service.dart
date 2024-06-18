@@ -143,14 +143,15 @@ class UnitsConversionService {
         UnitValue.meters(altitude), currentAltitudeUnit);
   }
 
-  UnitValue? odidSpeedVertToCurrentUnit(
+  UnitValue? odidVerticalSpeedToCurrentUnit(
       double? speed, String currentSpeedUnit) {
     if (speed == null || speed == INV_SPEED_V) return null;
     return speedDefaultToCurrent(
         UnitValue.metersPerSecond(speed), currentSpeedUnit);
   }
 
-  UnitValue? odidSpeedHorToCurrentUnit(double? speed, String currentSpeedUnit) {
+  UnitValue? odidHorizontalSpeedToCurrentUnit(
+      double? speed, String currentSpeedUnit) {
     if (speed == null || speed == INV_SPEED_H) return null;
     return speedDefaultToCurrent(
         UnitValue.metersPerSecond(speed), currentSpeedUnit);
@@ -213,7 +214,7 @@ class UnitsConversionService {
     return speedDefaultToCurrent(unitValue, currentSpeedUnit);
   }
 
-  UnitValue? timeAccuracyToUnitValue(Duration? acc) {
+  UnitValue? odidTimeAccuracyToUnitValue(Duration? acc) {
     if (acc == null || acc.inMilliseconds == 0) return null;
     return UnitValue.seconds(acc.inMilliseconds / 1000);
   }

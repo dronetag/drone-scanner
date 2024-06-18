@@ -24,7 +24,7 @@ class ZoneDetail extends StatelessWidget {
         context.read<MapCubit>().state.userLocationValid) {
       distanceFromMe =
           context.read<UnitsSettingsCubit>().distanceDefaultToCurrent(
-                calculateDistance(
+                calculateDistanceInKm(
                   zoneItem.coordinates.first.latitude,
                   zoneItem.coordinates.first.longitude,
                   context.read<MapCubit>().state.userLocation.latitude,

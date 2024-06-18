@@ -250,7 +250,7 @@ class OperatorFields {
         locValid(systemMessage)) {
       final distanceFromMe = context
           .read<UnitsSettingsCubit>()
-          .distanceDefaultToCurrent(calculateDistance(
+          .distanceDefaultToCurrent(calculateDistanceInKm(
             systemMessage.operatorLocation!.latitude,
             systemMessage.operatorLocation!.longitude,
             context.read<MapCubit>().state.userLocation.latitude,
