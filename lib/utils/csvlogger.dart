@@ -195,9 +195,9 @@ class CSVLogger {
             .odidAltitudeToCurrentUnit(message.areaFloor, distanceUnit)
             ?.roundedValue(3) ??
         '');
-    row.add(message.uaClassification
-        .toString()
-        .replaceAll('UAClassification.', ''));
+    row.add(message.uaClassification.isEuropeClassification()
+        ? 'Europe'
+        : 'Undeclared');
     row.add(message.uaClassification.uaCategoryEuropeString() ?? '');
     row.add(message.uaClassification.uaClassEuropeString() ?? '');
     return row;
