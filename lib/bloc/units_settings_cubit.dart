@@ -20,11 +20,13 @@ class UnitsSettingsCubit extends Cubit<UnitsSettingsState> {
   static const _altitudeUnitKey = 'unit_altitude';
   static const _useConversionInExportKey = 'use_conversion_in_export';
 
-  final UnitsConversionService unitsConversion = UnitsConversionService();
-  final LocalStorage storage = LocalStorage('dronescanner-units-settings');
+  final UnitsConversionService unitsConversion;
+  final LocalStorage storage;
 
-  UnitsSettingsCubit()
-      : super(
+  UnitsSettingsCubit({
+    required this.unitsConversion,
+    required this.storage,
+  }) : super(
           UnitsSettingsState(
             altitudeUnit: UnitsConversionService.defaultAltitudeUnit,
             speedUnit: UnitsConversionService.defaultSpeedUnit,

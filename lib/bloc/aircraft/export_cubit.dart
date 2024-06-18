@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../services/unit_conversion_service.dart';
 import '../../utils/csvlogger.dart';
 import '../../utils/gpxlogger.dart';
 import '../units_settings_cubit.dart';
@@ -24,10 +25,12 @@ class ExportState {}
 class ExportCubit extends Cubit<ExportState> {
   final AircraftCubit aircraftCubit;
   final UnitsSettingsCubit unitsSettingsCubit;
+  final UnitsConversionService unitsConversion;
 
   ExportCubit({
     required this.aircraftCubit,
     required this.unitsSettingsCubit,
+    required this.unitsConversion,
   }) : super(ExportState());
 
   Future<bool> exportAllPacksToCSV() async {
@@ -90,6 +93,7 @@ class ExportCubit extends Cubit<ExportState> {
       distanceSubUnit: unitsSettingsCubit.state.exportDistanceSubUnit,
       altitudeUnit: unitsSettingsCubit.state.exportAltitudeUnit,
       speedUnit: unitsSettingsCubit.state.exportSpeedUnit,
+      unitsConversion: unitsConversion,
     );
 
     return const ListToCsvConverter()

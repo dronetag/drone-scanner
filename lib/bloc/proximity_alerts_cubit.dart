@@ -37,7 +37,7 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
   final NotificationService notificationService;
   final AircraftCubit aircraftCubit;
 
-  final LocalStorage storage = LocalStorage('dronescanner-proximity-alerts');
+  final LocalStorage storage;
 
   final StreamController<List<ProximityAlert>> _alertController =
       BehaviorSubject();
@@ -49,8 +49,11 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   Timer? _refreshTimer;
 
-  ProximityAlertsCubit(this.notificationService, this.aircraftCubit)
-      : super(
+  ProximityAlertsCubit({
+    required this.notificationService,
+    required this.aircraftCubit,
+    required this.storage,
+  }) : super(
           ProximityAlertsState(
             usersAircraftUASID: null,
             proximityAlertDistance: defaultProximityAlertDistance,

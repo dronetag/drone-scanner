@@ -20,13 +20,14 @@ class CSVLogger {
   final String altitudeUnit;
   final String speedUnit;
 
-  final UnitsConversionService unitsConversion = UnitsConversionService();
+  final UnitsConversionService unitsConversion;
 
   CSVLogger({
     required this.distanceUnit,
     required this.distanceSubUnit,
     required this.altitudeUnit,
     required this.speedUnit,
+    required this.unitsConversion,
   });
 
   List<List<dynamic>> createCSV(List<MessageContainer> list,
