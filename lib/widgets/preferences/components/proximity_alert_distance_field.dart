@@ -128,9 +128,8 @@ class ProximityAlertDistanceField extends StatelessWidget {
   // convert from current units to default meters that are saved in a cubit
   void _onChange(BuildContext context, double value) {
     final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
-    final unitValue = unitsSettingsCubit.state.distanceSubUnit == 'm'
-        ? UnitValue.meters(value)
-        : UnitValue.yards(value);
+    final unitValue =
+        UnitValue(value: value, unit: unitsSettingsCubit.state.distanceSubUnit);
 
     context.read<ProximityAlertsCubit>().setProximityAlertsDistance(
         unitsSettingsCubit

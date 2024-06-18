@@ -6,7 +6,6 @@ import '../../../bloc/map/map_cubit.dart';
 import '../../../bloc/sliders_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../bloc/units_settings_cubit.dart';
-import '../../../models/unit_value.dart';
 import '../../../utils/utils.dart';
 
 class AircraftCardCustomText extends StatelessWidget {
@@ -36,8 +35,9 @@ class AircraftCardCustomText extends StatelessWidget {
       case ListFieldPreference.distance:
         {
           if (standardsCubit.state.locationEnabled &&
-              loc != null &&
-              messagePack.locationValid) {
+              mapCubit.state.userLocationValid &&
+              messagePack.locationValid &&
+              loc != null) {
             final distanceFromMe = unitsSettingsCubit.distanceDefaultToCurrent(
               calculateDistanceInKm(
                 loc.location!.latitude,
@@ -46,12 +46,7 @@ class AircraftCardCustomText extends StatelessWidget {
                 mapCubit.state.userLocation.longitude,
               ),
             );
-            if (!standardsCubit.state.locationEnabled ||
-                !mapCubit.state.userLocationValid) {
-              return 'Unknown Distance';
-            } else {
-              return '~${distanceFromMe.toStringAsFixed(3)} away';
-            }
+            return '~${distanceFromMe.toStringAsFixed(3)} away';
           } else {
             return 'Unknown Distance';
           }
@@ -73,12 +68,12 @@ class AircraftCardCustomText extends StatelessWidget {
               loc.verticalSpeed == null) {
             return 'Unknown Speed';
           } else {
-            final horSpeedUnitValue = unitsSettingsCubit.speedDefaultToCurrent(
-                UnitValue.metersPerSecond(loc.horizontalSpeed!));
-            final vertSpeedUnitValue = unitsSettingsCubit.speedDefaultToCurrent(
-                UnitValue.metersPerSecond(loc.verticalSpeed!));
-            return '${horSpeedUnitValue.toStringAsFixed(1)}, '
-                '${vertSpeedUnitValue.toStringAsFixed(1)}';
+            final horizontalSpeedStr = unitsSettingsCubit
+                .getHorizontalSpeedAsString(loc.horizontalSpeed!);
+            final verticalSpeedStr = unitsSettingsCubit
+                .getVerticalSpeedAsString(loc.horizontalSpeed!);
+
+            return '$horizontalSpeedStr, $verticalSpeedStr';
           }
         }
     }
