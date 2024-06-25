@@ -18,7 +18,7 @@ import '../help/help_page.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/common/headline.dart';
 import 'components/custom_dropdown_button.dart';
-import 'components/preferences_field_with_description.dart';
+import 'components/preferences_item.dart';
 import 'components/preferences_slider.dart';
 import 'components/proximity_alert_distance_field.dart';
 import 'components/rotating_icon.dart';
@@ -340,7 +340,7 @@ class ProximityAlertsPage extends StatelessWidget {
       ),
       Padding(
         padding: itemPadding,
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'Send proximity push notifications',
           description: 'Notification will be sent when there is another drone '
               'close to yours',
@@ -375,7 +375,7 @@ class ProximityAlertsPage extends StatelessWidget {
       // TODO: put back when there are more data sources available
       /*Padding(
         padding: EdgeInsets.only(bottom: Sizes.standard * 4),
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'Data Source',
           description: 'Select the data source to be used '
               'for the radar functionality',
@@ -413,7 +413,7 @@ class ProximityAlertsPage extends StatelessWidget {
       }
     }
 
-    return PreferencesFieldWithDescription(
+    return PreferencesItem(
       label: 'Notification display duration',
       description:
           'The duration until the radar notifications are automatically closed',

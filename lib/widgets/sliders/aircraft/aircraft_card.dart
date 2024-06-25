@@ -10,9 +10,11 @@ import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
+import '../../../bloc/units_settings_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../models/message_container_authenticity_status.dart';
+import '../../../models/unit_value.dart';
 import '../../../utils/utils.dart';
 import '../common/flag.dart';
 import '../common/refreshing_text.dart';
@@ -71,7 +73,7 @@ class AircraftCard extends StatelessWidget {
             color: proximityAlertsActive ? AppColors.green : null,
           );
 
-    final aircraftText = _getAircraftText();
+    final aircraftText = _getAircraftText(context);
     return Container(
       width: width / 6,
       margin: const EdgeInsets.only(right: 2.0),
@@ -245,13 +247,19 @@ class AircraftCard extends StatelessWidget {
     );
   }
 
-  String _getAircraftText() {
+  String _getAircraftText(BuildContext context) {
     if (messagePack.locationMessage == null) return 'Unknown';
+
     final status = messagePack.locationMessage!.status;
-    return status == OperationalStatus.ground
-        ? 'Grounded'
-        : status == OperationalStatus.airborne
-            ? '${messagePack.locationMessage!.height.toString()}m AGL'
-            : 'Unknown';
+    final height = messagePack.locationMessage!.height;
+    final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
+
+    final heightText = status == OperationalStatus.airborne && height != null
+        ? unitsSettingsCubit
+            .altitudeDefaultToCurrent(UnitValue.meters(height))
+            .toStringAsFixed(1)
+        : 'Unknown';
+
+    return status == OperationalStatus.ground ? 'Grounded' : '$heightText AGL';
   }
 }

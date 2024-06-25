@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/aircraft/aircraft_cubit.dart';
 import '../../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../../bloc/proximity_alerts_cubit.dart';
+import '../../../bloc/units_settings_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../models/unit_value.dart';
 
 class ProximityAlertWidget extends StatelessWidget {
   final DroneNearbyAlert alert;
@@ -17,6 +19,11 @@ class ProximityAlertWidget extends StatelessWidget {
     final aircraftCubit = context.read<AircraftCubit>();
     final aircraftMetadataCubit = context.read<AircraftMetadataCubit>();
     final droneMac = aircraftCubit.findByUasID(alert.uasId)?.macAddress;
+    final distanceText = context
+        .read<UnitsSettingsCubit>()
+        .distanceDefaultToCurrent(UnitValue.meters(alert.distance))
+        .toStringAsFixed(1);
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.pink),
@@ -49,7 +56,7 @@ class ProximityAlertWidget extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '~${alert.distance.toStringAsFixed(1)}m away',
+                '~$distanceText',
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,

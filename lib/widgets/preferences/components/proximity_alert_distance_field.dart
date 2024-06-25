@@ -3,23 +3,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/proximity_alerts_cubit.dart';
+import '../../../bloc/units_settings_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
+import '../../../models/unit_value.dart';
+import 'proximity_alerts_slider.dart';
 
 class ProximityAlertDistanceField extends StatelessWidget {
   const ProximityAlertDistanceField({super.key});
 
-  void _onChange(BuildContext context, double value) =>
-      context.read<ProximityAlertsCubit>().setProximityAlertsDistance(value);
-
-  void _onChangeEnd(BuildContext context, double value) =>
-      context.read<ProximityAlertsCubit>().setProximityAlertsDistance(value);
-
   @override
   Widget build(BuildContext context) {
-    final distance =
-        context.read<ProximityAlertsCubit>().state.proximityAlertDistance;
-    final text = '${distance.round()}m';
+    final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
+    final distanceMeters = context.select<ProximityAlertsCubit, double>(
+        (cubit) => cubit.state.proximityAlertDistance);
+
+    final distanceUnitValue = unitsSettingsCubit
+        .distanceDefaultToCurrent(UnitValue.meters(distanceMeters));
+
+    final text = distanceUnitValue.toStringAsFixed(1);
+
     final controller = TextEditingController.fromValue(
       TextEditingValue(
         text: text,
@@ -27,8 +30,12 @@ class ProximityAlertDistanceField extends StatelessWidget {
             TextSelection.fromPosition(TextPosition(offset: text.length - 1)),
       ),
     );
-    const minValue = ProximityAlertsCubit.minProximityAlertDistance;
-    const maxValue = ProximityAlertsCubit.maxProximityAlertDistance;
+
+    final minValue = unitsSettingsCubit.distanceDefaultToCurrent(
+        UnitValue.meters(ProximityAlertsCubit.minProximityAlertDistance));
+    final maxValue = unitsSettingsCubit.distanceDefaultToCurrent(
+        UnitValue.meters(ProximityAlertsCubit.maxProximityAlertDistance));
+
     const defaultTextFieldWidth = 90.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,14 +74,18 @@ class ProximityAlertDistanceField extends StatelessWidget {
                 keyboardType: const TextInputType.numberWithOptions(),
                 textInputAction: TextInputAction.go,
                 controller: controller,
-                onFieldSubmitted: (value) {
-                  var newValue = double.parse(value.replaceAll('m', ''));
-                  if (newValue < minValue) {
-                    newValue = minValue;
-                  } else if (newValue > maxValue) {
-                    newValue = maxValue;
+                onEditingComplete: () {
+                  final value = controller.text;
+
+                  var newValue = double.parse(value.replaceAll(
+                      unitsSettingsCubit.state.distanceSubUnit, ''));
+
+                  if (newValue < minValue.value) {
+                    newValue = minValue.value.toDouble();
+                  } else if (newValue > maxValue.value) {
+                    newValue = maxValue.value.toDouble();
                   }
-                  _onChangeEnd(context, newValue);
+                  _onChange(context, newValue);
                 },
               ),
             ),
@@ -83,34 +94,24 @@ class ProximityAlertDistanceField extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SliderTheme(
-              data: SliderThemeData(
-                // here
-                trackShape: CustomTrackShape(),
-              ),
-              child: Slider(
-                value: distance,
-                onChanged: (val) => _onChange(context, val),
-                onChangeEnd: (val) => _onChangeEnd(context, val),
-                min: minValue,
-                max: maxValue,
-                thumbColor: AppColors.preferencesButtonColor,
-                activeColor: AppColors.lightGray,
-                inactiveColor: AppColors.lightGray,
-              ),
+            ProximityAlertsSlider(
+              value: distanceUnitValue.value.round().toDouble(),
+              onChangeEnd: (val) => _onChange(context, val),
+              min: minValue.value.toDouble().floorToDouble(),
+              max: maxValue.value.toDouble().ceilToDouble(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${minValue.toStringAsFixed(0)}m',
+                  minValue.toStringAsFixed(0),
                   style: const TextStyle(
                     fontSize: 10,
                     color: AppColors.lightGray,
                   ),
                 ),
                 Text(
-                  '${(maxValue / 1000).toStringAsFixed(0)}km',
+                  maxValue.toStringAsFixed(0),
                   style: const TextStyle(
                     fontSize: 10,
                     color: AppColors.lightGray,
@@ -123,22 +124,17 @@ class ProximityAlertDistanceField extends StatelessWidget {
       ],
     );
   }
-}
 
-class CustomTrackShape extends RoundedRectSliderTrackShape {
-  @override
-  Rect getPreferredRect({
-    required RenderBox parentBox,
-    Offset offset = Offset.zero,
-    required SliderThemeData sliderTheme,
-    bool isEnabled = false,
-    bool isDiscrete = false,
-  }) {
-    const thumbSize = 10;
-    final trackHeight = sliderTheme.trackHeight;
-    final trackLeft = offset.dx + thumbSize;
-    final trackTop = offset.dy + (parentBox.size.height - trackHeight!) / 2;
-    final trackWidth = parentBox.size.width - thumbSize * 2;
-    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  // convert from current units to default meters that are saved in a cubit
+  void _onChange(BuildContext context, double value) {
+    final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
+    final unitValue =
+        UnitValue(value: value, unit: unitsSettingsCubit.state.distanceSubUnit);
+
+    context.read<ProximityAlertsCubit>().setProximityAlertsDistance(
+        unitsSettingsCubit
+            .distanceCurrentToDefault(unitValue)
+            .value
+            .toDouble());
   }
 }

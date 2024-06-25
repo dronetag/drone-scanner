@@ -16,6 +16,7 @@ import '../../bloc/proximity_alerts_cubit.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../../bloc/standards_cubit.dart';
+import '../../bloc/units_settings_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
@@ -28,7 +29,7 @@ import '../sliders/common/headline.dart';
 import 'components/custom_dropdown_button.dart';
 import 'components/custom_spinbox.dart';
 import 'components/preferences_field.dart';
-import 'components/preferences_field_with_description.dart';
+import 'components/preferences_item.dart';
 import 'components/preferences_slider.dart';
 import 'components/scanning_status_field.dart';
 import 'components/screen_sleep_checkbox.dart';
@@ -118,6 +119,7 @@ class PreferencesPage extends StatelessWidget {
     BuildContext context,
     StandardsState state,
   ) {
+    final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
     const positiveIcon = Icon(
       DroneScannerIcon.done,
       color: AppColors.green,
@@ -367,6 +369,75 @@ class PreferencesPage extends StatelessWidget {
         ),
       ),
       const Headline(
+        text: 'Units',
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesItem(
+          label: 'Distance units:',
+          child: CustomDropdownButton(
+            value: context.select<UnitsSettingsCubit, String>(
+                (cubit) => cubit.state.distanceUnit),
+            valueChangedCallback: (newValue) {
+              if (newValue != null) {
+                unitsSettingsCubit.updateDistanceUnitsSetting(newValue);
+              }
+            },
+            items: UnitsSettingsCubit.distanceUnits.keys.toList(),
+            names: UnitsSettingsCubit.distanceUnits,
+          ),
+        ),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesItem(
+          label: 'Speed units:',
+          child: CustomDropdownButton(
+            value: context.select<UnitsSettingsCubit, String>(
+                (cubit) => cubit.state.speedUnit),
+            valueChangedCallback: (newValue) {
+              if (newValue != null) {
+                unitsSettingsCubit.updateSpeedUnitsSetting(newValue);
+              }
+            },
+            items: UnitsSettingsCubit.speedUnits.keys.toList(),
+            names: UnitsSettingsCubit.speedUnits,
+          ),
+        ),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesItem(
+          label: 'Altitude units:',
+          child: CustomDropdownButton(
+            value: context.select<UnitsSettingsCubit, String>(
+                (cubit) => cubit.state.altitudeUnit),
+            valueChangedCallback: (newValue) {
+              if (newValue != null) {
+                unitsSettingsCubit.updateAltitudeUnitsSetting(newValue);
+              }
+            },
+            items: UnitsSettingsCubit.altitudeUnits.keys.toList(),
+            names: UnitsSettingsCubit.altitudeUnits,
+          ),
+        ),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesItem(
+          label: 'Convert units in export:',
+          description:
+              'Use units set in app instead of standard Remote ID units',
+          child: PreferencesSlider(
+              getValue: () => unitsSettingsCubit.state.useConversionInExport,
+              setValue: ({required value}) {
+                unitsSettingsCubit.updateUseConversionForExportSetting(
+                  newValue: value,
+                );
+              }),
+        ),
+      ),
+      const Headline(
         text: 'Data Preferences',
         child: CustomTooltip(
           message: 'The application can delete old records after certain time '
@@ -377,7 +448,7 @@ class PreferencesPage extends StatelessWidget {
       if (isLandscape) const SizedBox(),
       Padding(
         padding: itemPadding / 2,
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'Bluetooth scan priority:',
           description: 'High priority scan gathers more data but uses '
               'more battery energy',
@@ -398,7 +469,7 @@ class PreferencesPage extends StatelessWidget {
       ),
       Padding(
         padding: itemPadding,
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'Clean automatically:',
           description: 'Aircrafts inactive for chosen time '
               'will be automatically cleared',
@@ -415,7 +486,7 @@ class PreferencesPage extends StatelessWidget {
       ),
       Padding(
         padding: itemPadding,
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'Expiration time (sec):',
           description: 'Set the duration between 10 and 600 seconds',
           child: SizedBox(
@@ -442,7 +513,7 @@ class PreferencesPage extends StatelessWidget {
       ),
       Padding(
         padding: itemPadding / 2,
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'List field preference:',
           description: 'Choose which information you prefer to see in the list '
               'of aircrafts',
@@ -464,7 +535,7 @@ class PreferencesPage extends StatelessWidget {
       ),
       Padding(
         padding: itemPadding / 2,
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'My drone position in list:',
           description: 'Choose how your drone should be positioned in a list '
               'of all nearby drones',
@@ -555,7 +626,7 @@ class PreferencesPage extends StatelessWidget {
       ),
       const Padding(
         padding: itemPadding,
-        child: PreferencesFieldWithDescription(
+        child: PreferencesItem(
           label: 'Prevent screen sleep:',
           description: 'Your display will not turn off while using the app.',
           child: ScreenSleepCheckbox(),

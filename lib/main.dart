@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:logging/logging.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -21,6 +22,7 @@ import 'bloc/screen_cubit.dart';
 import 'bloc/showcase_cubit.dart';
 import 'bloc/sliders_cubit.dart';
 import 'bloc/standards_cubit.dart';
+import 'bloc/units_settings_cubit.dart';
 import 'bloc/zones/selected_zone_cubit.dart';
 import 'bloc/zones/zones_cubit.dart';
 import 'services/flag_rest_client.dart';
@@ -28,6 +30,7 @@ import 'services/geocoding_rest_client.dart';
 import 'services/location_service.dart';
 import 'services/notification_service.dart';
 import 'services/ornithology_rest_client.dart';
+import 'services/unit_conversion_service.dart';
 import 'utils/message_container_authenticator.dart';
 import 'widgets/app/app.dart';
 
@@ -65,15 +68,17 @@ void main() async {
     debugPrint('${record.time} [${record.level.name}] ${record.loggerName}: '
         '${record.message}');
   });
-
+  // init local storage
+  final storage = LocalStorage('dronescanner');
   // init local notifications
   final notificationService = NotificationService();
   await notificationService.setup();
   // init location services
   final locationService = LocationService();
-
   await locationService.enableService();
-
+  // init units converion
+  final unitsConversionService = UnitsConversionService();
+  // init cubits
   final mapCubit = MapCubit(locationService);
   final messageContainerAuthenticator =
       MessageContainerAuthenticator(locationService: locationService);
@@ -84,12 +89,20 @@ void main() async {
     messageContainerAuthenticator: messageContainerAuthenticator,
   );
   final aircraftMetadataCubit = await AircraftMetadataCubit(
-          ornithologyRestClient: OrnithologyRestClient(),
-          flagRestClient: FlagCDNRestClient())
-      .create();
+    ornithologyRestClient: OrnithologyRestClient(),
+    flagRestClient: FlagCDNRestClient(),
+    storage: storage,
+  ).create();
+  final proximityAlertsCubit = ProximityAlertsCubit(
+    notificationService: notificationService,
+    aircraftCubit: aircraftCubit,
+    storage: storage,
+  );
+  final unitsSettingsCubit = await UnitsSettingsCubit(
+    unitsConversion: unitsConversionService,
+    storage: storage,
+  ).create();
 
-  final proximityAlertsCubit =
-      ProximityAlertsCubit(notificationService, aircraftCubit);
   final sheetLicense = await rootBundle.loadString('assets/docs/SHEET-LICENSE');
   LicenseRegistry.addLicense(() => Stream<LicenseEntry>.value(
         LicenseEntryWithLineBreaks(
@@ -139,7 +152,11 @@ void main() async {
             lazy: false,
           ),
           BlocProvider<ExportCubit>(
-            create: (context) => ExportCubit(aircraftCubit: aircraftCubit),
+            create: (context) => ExportCubit(
+              aircraftCubit: aircraftCubit,
+              unitsSettingsCubit: unitsSettingsCubit,
+              unitsConversion: unitsConversionService,
+            ),
             lazy: false,
           ),
           BlocProvider<AircraftExpirationCubit>(
@@ -171,6 +188,10 @@ void main() async {
             create: (context) => GeocodingCubit(
               geocodingRestClient: NominatimGeocodingRestClient(),
             ),
+            lazy: false,
+          ),
+          BlocProvider<UnitsSettingsCubit>(
+            create: (context) => unitsSettingsCubit,
             lazy: false,
           ),
         ],

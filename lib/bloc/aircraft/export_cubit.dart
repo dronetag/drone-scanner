@@ -9,8 +9,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../services/unit_conversion_service.dart';
 import '../../utils/csvlogger.dart';
 import '../../utils/gpxlogger.dart';
+import '../units_settings_cubit.dart';
 import 'aircraft_cubit.dart';
 
 enum ExportFormat {
@@ -22,8 +24,14 @@ class ExportState {}
 
 class ExportCubit extends Cubit<ExportState> {
   final AircraftCubit aircraftCubit;
+  final UnitsSettingsCubit unitsSettingsCubit;
+  final UnitsConversionService unitsConversion;
 
-  ExportCubit({required this.aircraftCubit}) : super(ExportState());
+  ExportCubit({
+    required this.aircraftCubit,
+    required this.unitsSettingsCubit,
+    required this.unitsConversion,
+  }) : super(ExportState());
 
   Future<bool> exportAllPacksToCSV() async {
     final hasPerm = await checkStoragePermission();
@@ -79,15 +87,24 @@ class ExportCubit extends Cubit<ExportState> {
   }
 
   String _createCSV(
-          {required bool includeHeader,
-          required List<MessageContainer> packs}) =>
-      const ListToCsvConverter()
-          .convert(CSVLogger.createCSV(packs, includeHeader: includeHeader));
+      {required bool includeHeader, required List<MessageContainer> packs}) {
+    final logger = CSVLogger(
+      distanceUnit: unitsSettingsCubit.state.exportDistanceUnit,
+      distanceSubUnit: unitsSettingsCubit.state.exportDistanceSubUnit,
+      altitudeUnit: unitsSettingsCubit.state.exportAltitudeUnit,
+      speedUnit: unitsSettingsCubit.state.exportSpeedUnit,
+      unitsConversion: unitsConversion,
+    );
 
+    return const ListToCsvConverter()
+        .convert(logger.createCSV(packs, includeHeader: includeHeader));
+  }
+
+  // create filename from uasID or mac plus timestamp
   String _createFilename(String mac) {
     final aircraftState = aircraftCubit.state;
 
-    late final String filename;
+    late final String aircraftIdentifier;
     if (aircraftState.packHistory()[mac]!.isNotEmpty &&
         aircraftState
                 .packHistory()[mac]
@@ -96,16 +113,22 @@ class ExportCubit extends Cubit<ExportState> {
                 ?.uasID
                 .asString() !=
             null) {
-      filename = aircraftState
+      aircraftIdentifier = aircraftState
           .packHistory()[mac]!
           .last
           .preferredBasicIdMessage!
           .uasID
           .asString()!;
     } else {
-      filename = mac;
+      aircraftIdentifier = mac;
     }
-    return filename;
+    // replace delimiters with dash and remove milliseconds
+    final timestampString =
+        DateTime.now().toLocal().toString().replaceAll(RegExp(r'[ :.]'), '-');
+    final timestampWithoutMs =
+        timestampString.substring(0, timestampString.lastIndexOf('-'));
+
+    return '$aircraftIdentifier-$timestampWithoutMs';
   }
 
   Future<bool> _storagePermissionCheck() async {

@@ -8,6 +8,7 @@ import 'package:vector_math/vector_math.dart';
 import '../../../../bloc/map/map_cubit.dart';
 import '../../../../bloc/sliders_cubit.dart';
 import '../../../../bloc/standards_cubit.dart';
+import '../../../../bloc/units_settings_cubit.dart';
 import '../../../../constants/colors.dart';
 import '../../../../utils/utils.dart';
 import '../../common/headline.dart';
@@ -32,28 +33,12 @@ class LocationFields {
     BuildContext context,
     LocationMessage? loc,
   ) {
-    double? distanceFromMe;
-    late final String distanceText;
-    if (context.read<StandardsCubit>().state.locationEnabled &&
-        context.read<MapCubit>().state.userLocationValid &&
-        loc != null &&
-        locValid(loc)) {
-      distanceFromMe = calculateDistance(
-        loc.location!.latitude,
-        loc.location!.longitude,
-        context.read<MapCubit>().state.userLocation.latitude,
-        context.read<MapCubit>().state.userLocation.longitude,
-      );
-      if (distanceFromMe > 1) {
-        distanceText = '${distanceFromMe.toStringAsFixed(3)} km';
-      } else {
-        distanceText = '${(distanceFromMe * 1000).toStringAsFixed(1)} m';
-      }
-    } else {
-      distanceText = 'Unknown';
-    }
+    final unitsSettingsCubit = context.read<UnitsSettingsCubit>();
+    final distanceText = _getDistanceText(context, loc);
+
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+
     return [
       const Headline(text: 'LOCATION'),
       if (isLandscape) const SizedBox(),
@@ -108,7 +93,8 @@ class LocationFields {
                     width: 10,
                   ),
                   Text(
-                    directionAsString(loc.direction!.toDouble()),
+                    unitsSettingsCubit
+                        .getDirectionAsString(loc.direction!.toDouble()),
                     style: const TextStyle(
                       color: AppColors.detailFieldColor,
                     ),
@@ -171,7 +157,7 @@ class LocationFields {
           if (loc != null && loc.height != null)
             AircraftDetailField(
               headlineText: 'Height',
-              fieldText: getAltitudeAsString(loc.height),
+              fieldText: unitsSettingsCubit.getAltitudeAsString(loc.height),
             ),
           if (loc != null)
             AircraftDetailField(
@@ -184,11 +170,13 @@ class LocationFields {
         children: [
           AircraftDetailField(
             headlineText: 'Altitude Press.',
-            fieldText: getAltitudeAsString(loc?.altitudePressure),
+            fieldText:
+                unitsSettingsCubit.getAltitudeAsString(loc?.altitudePressure),
           ),
           AircraftDetailField(
             headlineText: 'Altitude Geod.',
-            fieldText: getAltitudeAsString(loc?.altitudeGeodetic),
+            fieldText:
+                unitsSettingsCubit.getAltitudeAsString(loc?.altitudeGeodetic),
           ),
         ],
       ),
@@ -197,11 +185,13 @@ class LocationFields {
           if (loc != null)
             AircraftDetailField(
                 headlineText: 'Horizontal Speed',
-                fieldText: getSpeedHorAsString(loc.horizontalSpeed)),
+                fieldText: unitsSettingsCubit
+                    .getHorizontalSpeedAsString(loc.horizontalSpeed)),
           if (loc != null)
             AircraftDetailField(
               headlineText: 'Vertical Speed',
-              fieldText: getSpeedVertAsString(loc.verticalSpeed),
+              fieldText: unitsSettingsCubit
+                  .getVerticalSpeedAsString(loc.verticalSpeed),
             ),
         ],
       ),
@@ -209,11 +199,13 @@ class LocationFields {
         children: [
           AircraftDetailField(
             headlineText: 'Horizontal Accuracy',
-            fieldText: horizontalAccuracyToString(loc?.horizontalAccuracy),
+            fieldText: unitsSettingsCubit
+                .getHorizontalAccuracyAsString(loc?.horizontalAccuracy),
           ),
           AircraftDetailField(
             headlineText: 'Vertical Accuracy',
-            fieldText: verticalAccuracyToString(loc?.verticalAccuracy),
+            fieldText: unitsSettingsCubit
+                .getVerticalAccuracyAsString(loc?.verticalAccuracy),
           ),
         ],
       ),
@@ -221,18 +213,44 @@ class LocationFields {
         children: [
           AircraftDetailField(
             headlineText: 'Speed Accuracy',
-            fieldText: speedAccuracyToString(loc?.speedAccuracy),
+            fieldText:
+                unitsSettingsCubit.getSpeedAccuracyAsString(loc?.speedAccuracy),
           ),
           AircraftDetailField(
             headlineText: 'Baro Accuracy',
-            fieldText: verticalAccuracyToString(loc?.baroAltitudeAccuracy),
+            fieldText: unitsSettingsCubit
+                .getVerticalAccuracyAsString(loc?.baroAltitudeAccuracy),
           ),
         ],
       ),
       AircraftDetailField(
         headlineText: 'Time Accuracy',
-        fieldText: timeAccuracyToString(loc?.timestampAccuracy),
+        fieldText:
+            unitsSettingsCubit.getTimeAccuracyAsString(loc?.timestampAccuracy),
       ),
     ];
+  }
+
+  static String _getDistanceText(
+    BuildContext context,
+    LocationMessage? loc,
+  ) {
+    if (context.read<StandardsCubit>().state.locationEnabled &&
+        context.read<MapCubit>().state.userLocationValid &&
+        loc != null &&
+        locValid(loc)) {
+      final distanceFromMe =
+          context.read<UnitsSettingsCubit>().distanceDefaultToCurrent(
+                calculateDistanceInKm(
+                  loc.location!.latitude,
+                  loc.location!.longitude,
+                  context.read<MapCubit>().state.userLocation.latitude,
+                  context.read<MapCubit>().state.userLocation.longitude,
+                ),
+              );
+      return distanceFromMe.toStringAsFixed(3);
+    } else {
+      return 'Unknown';
+    }
   }
 }

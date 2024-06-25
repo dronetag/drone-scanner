@@ -53,9 +53,9 @@ class _RefreshingTextState extends State<RefreshingText> {
                     3);
         final sec = (DateTime.now().millisecondsSinceEpoch - tstamp) / 1000;
         final min = (sec / 60).floor();
-        final minText = min < 1 ? '' : '${min}m';
+        final minText = min < 1 ? '' : '$min m';
         final secText =
-            sec < 1 ? '< 1 s' : '${(sec - min * 60).toStringAsFixed(0)}s';
+            sec < 1 ? '< 1 s' : '${(sec - min * 60).toStringAsFixed(0)} s';
         var text = '';
         if (!widget.short) {
           text = widget.leadingText != null

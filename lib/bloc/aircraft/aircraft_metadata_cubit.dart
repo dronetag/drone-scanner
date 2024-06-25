@@ -20,7 +20,7 @@ part 'aircraft_metadata_state.dart';
 /// Needs to be initialized by calling the [create] method.
 class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
   // storage for user-given labels
-  final LocalStorage storage = LocalStorage('dronescanner');
+  final LocalStorage storage;
   final OrnithologyRestClient ornithologyRestClient;
   final FlagRestClient flagRestClient;
 
@@ -33,9 +33,11 @@ class AircraftMetadataCubit extends Cubit<AircraftMetadataState> {
   static const _modelInfoKey = 'model_info';
   static const _flagsKey = 'flags';
 
-  AircraftMetadataCubit(
-      {required this.ornithologyRestClient, required this.flagRestClient})
-      : super(
+  AircraftMetadataCubit({
+    required this.ornithologyRestClient,
+    required this.flagRestClient,
+    required this.storage,
+  }) : super(
           AircraftMetadataState(
             aircraftLabels: <String, String>{},
             aircraftModelInfo: <String, AircraftModelInfo>{},

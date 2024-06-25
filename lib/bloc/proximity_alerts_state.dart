@@ -4,6 +4,7 @@ abstract class ProximityAlert {}
 
 class DroneNearbyAlert extends ProximityAlert {
   final String uasId;
+  // distance in meters
   final double distance;
   final int expirationTimeSec;
   final DateTime timestamp;

@@ -23,9 +23,10 @@ class MapOptionsToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final proxAlertsState = context.read<ProximityAlertsCubit>().state;
-    final showAlertIcon = proxAlertsState.proximityAlertActive &&
-        proxAlertsState.hasRecentAlerts();
+    final showAlertIcon = context.select<ProximityAlertsCubit, bool>(
+      (cubit) =>
+          cubit.state.proximityAlertActive && cubit.state.hasRecentAlerts(),
+    );
     final baseHeight = MediaQuery.of(context).size.height / 5;
     final toolbarHeight = showAlertIcon ? baseHeight * 1.2 : baseHeight;
     final toolbarWidth = MediaQuery.of(context).size.width / 8;
@@ -103,8 +104,8 @@ class MapOptionsToolbar extends StatelessWidget {
               'assets/images/radar-icon.png',
               width: Sizes.iconSize,
             ),
-            rotating:
-                context.read<ProximityAlertsCubit>().state.proximityAlertActive,
+            rotating: context.select<ProximityAlertsCubit, bool>(
+                (cubit) => cubit.state.proximityAlertActive),
           ),
         ),
       ),
