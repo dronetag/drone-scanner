@@ -15,20 +15,20 @@ class ButtonsAppTheme {
 
   // -- Styles definitions
 
-  /// Resolves [MaterialStateProperty] simply for [normal] and [disabled]
+  /// Resolves [WidgetStateProperty] simply for [normal] and [disabled]
   /// states.
   /// FIXME: Not enough, resolve for the rest of states.
-  static MaterialStateProperty<T> _resolveWithDisabled<T>(
+  static WidgetStateProperty<T> _resolveWithDisabled<T>(
     T normal,
     T disabled,
   ) =>
-      MaterialStateProperty.resolveWith(
-        (states) => states.contains(MaterialState.disabled) ? disabled : normal,
+      WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.disabled) ? disabled : normal,
       );
 
   static final baseStyle = ButtonStyle(
-    shape: MaterialStateProperty.all(defaultShape),
-    elevation: MaterialStateProperty.all(0.0),
+    shape: WidgetStateProperty.all(defaultShape),
+    elevation: WidgetStateProperty.all(0.0),
   );
 
   /// Default button style (gray with white text, outlined when disabled)
@@ -44,7 +44,7 @@ class ButtonsAppTheme {
 
   /// Default text button style
   static final textButtonStyle = baseStyle.copyWith(
-    backgroundColor: MaterialStateProperty.all(Colors.transparent),
+    backgroundColor: WidgetStateProperty.all(Colors.transparent),
     foregroundColor: _resolveWithDisabled(AppColors.dark, AppColors.lightGray),
   );
 
@@ -56,7 +56,7 @@ class ButtonsAppTheme {
       BorderSide.none,
       const BorderSide(color: AppColors.lightGray, width: 2.0),
     ),
-    shadowColor: MaterialStateProperty.all(AppColors.lightGray),
+    shadowColor: WidgetStateProperty.all(AppColors.lightGray),
     elevation: _resolveWithDisabled(8.0, 0),
   );
 
@@ -64,20 +64,20 @@ class ButtonsAppTheme {
   static final lightStyle = defaultStyle.copyWith(
     backgroundColor: _resolveWithDisabled(Colors.white, Colors.transparent),
     foregroundColor: _resolveWithDisabled(AppColors.dark, AppColors.lightGray),
-    overlayColor: MaterialStateProperty.all(AppColors.blue.withOpacity(0.1)),
+    overlayColor: WidgetStateProperty.all(AppColors.blue.withOpacity(0.1)),
     elevation: _resolveWithDisabled(buttonElevation, 0),
-    shadowColor: MaterialStateProperty.all(AppColors.lightGray),
+    shadowColor: WidgetStateProperty.all(AppColors.lightGray),
   );
 
   static final largeStyle = baseStyle.copyWith(
-    minimumSize: MaterialStateProperty.all(
+    minimumSize: WidgetStateProperty.all(
       const Size(Sizes.standard * 6, Sizes.standard * 6),
     ),
   );
 
   static final withoutPaddingStyle = baseStyle.copyWith(
-    padding: MaterialStateProperty.all(EdgeInsets.zero),
-    minimumSize: MaterialStateProperty.all(
+    padding: WidgetStateProperty.all(EdgeInsets.zero),
+    minimumSize: WidgetStateProperty.all(
       const Size(Sizes.standard * 6, Sizes.standard * 6),
     ),
   );
@@ -85,31 +85,31 @@ class ButtonsAppTheme {
   static final largeWithoutPaddingStyle = largeStyle.merge(withoutPaddingStyle);
 
   static final smallToolbarStyle = baseStyle.copyWith(
-    padding: MaterialStateProperty.all(EdgeInsets.zero),
-    minimumSize: MaterialStateProperty.all(const Size.square(32.0)),
+    padding: WidgetStateProperty.all(EdgeInsets.zero),
+    minimumSize: WidgetStateProperty.all(const Size.square(32.0)),
   );
 
   static final smallerStyle = baseStyle.copyWith(
-    padding: MaterialStateProperty.all(
+    padding: WidgetStateProperty.all(
       const EdgeInsets.symmetric(horizontal: Sizes.standard),
     ),
-    minimumSize: MaterialStateProperty.all(const Size.square(32.0)),
+    minimumSize: WidgetStateProperty.all(const Size.square(32.0)),
   );
 
   static final underlinedTextButtonStyle = textButtonStyle.copyWith(
-    textStyle: MaterialStateProperty.all(
+    textStyle: WidgetStateProperty.all(
       AppTheme.lightTheme.textTheme.bodyMedium!.copyWith(
         decoration: TextDecoration.underline,
       ),
     ),
-    foregroundColor: MaterialStateProperty.all(
+    foregroundColor: WidgetStateProperty.all(
       AppColors.lightGray,
     ),
   );
 
   static final negativeStyle = baseStyle.copyWith(
-    backgroundColor: MaterialStateProperty.all(AppColors.red),
-    foregroundColor: MaterialStateProperty.all(Colors.white),
+    backgroundColor: WidgetStateProperty.all(AppColors.red),
+    foregroundColor: WidgetStateProperty.all(Colors.white),
   );
 
   static final negativeWithoutPaddingStyle =
@@ -117,7 +117,7 @@ class ButtonsAppTheme {
 
   static final primaryTextStyle = textButtonStyle.copyWith(
     foregroundColor: _resolveWithDisabled(AppColors.blue, AppColors.lightGray),
-    textStyle: MaterialStateProperty.all(
+    textStyle: WidgetStateProperty.all(
       AppTheme.lightTheme.textTheme.bodyLarge!.copyWith(
         fontWeight: FontWeight.w700,
       ),
@@ -135,9 +135,9 @@ class ButtonsAppTheme {
 
   static final navBarButtonTheme = TextButtonThemeData(
     style: textButtonStyle.copyWith(
-      padding: MaterialStateProperty.all(EdgeInsets.zero),
+      padding: WidgetStateProperty.all(EdgeInsets.zero),
       textStyle:
-          MaterialStateProperty.all(AppTheme.lightTheme.textTheme.bodyLarge),
+          WidgetStateProperty.all(AppTheme.lightTheme.textTheme.bodyLarge),
       alignment: Alignment.centerRight,
     ),
   );

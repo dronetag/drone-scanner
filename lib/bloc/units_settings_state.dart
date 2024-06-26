@@ -17,14 +17,14 @@ class UnitsSettingsState {
     String? distanceUnit,
     String? speedUnit,
     String? altitudeUnit,
-    bool? useConversionInExports,
+    bool? useConversionInExport,
   }) =>
       UnitsSettingsState(
         distanceUnit: distanceUnit ?? this.distanceUnit,
         speedUnit: speedUnit ?? this.speedUnit,
         altitudeUnit: altitudeUnit ?? this.altitudeUnit,
         useConversionInExport:
-            useConversionInExports ?? this.useConversionInExport,
+            useConversionInExport ?? this.useConversionInExport,
       );
 
   String get distanceSubUnit =>

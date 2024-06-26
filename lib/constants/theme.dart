@@ -15,12 +15,10 @@ class AppTheme {
     secondary: Color.fromARGB(255, 22, 24, 25),
     secondaryContainer: AppColors.highlightBlue,
     surface: Colors.white,
-    background: Colors.white,
     error: AppColors.red,
     onPrimary: AppColors.dark,
     onSecondary: Colors.white,
     onSurface: AppColors.dark,
-    onBackground: AppColors.dark,
     onError: Colors.white,
     brightness: Brightness.light,
   );

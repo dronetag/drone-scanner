@@ -48,7 +48,7 @@ class ProximityAlertsPage extends StatelessWidget {
                     'This page let you set proximity alerts for your device',
                 title: 'Proximity Alerts',
                 child: ColoredBox(
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Padding(
                     padding: isLandscape
                         ? EdgeInsets.only(
@@ -318,10 +318,10 @@ class ProximityAlertsPage extends StatelessWidget {
             context.read<SlidersCubit>().openSlider();
           },
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
+            backgroundColor: WidgetStateProperty.all<Color>(
               AppColors.preferencesButtonColor,
             ),
-            padding: MaterialStateProperty.all(
+            padding: WidgetStateProperty.all(
               const EdgeInsets.symmetric(
                 horizontal: Sizes.standard * 4,
                 vertical: Sizes.standard * 1.5,

@@ -123,7 +123,7 @@ class HelpPage extends StatelessWidget {
             ),
             ElevatedButton.icon(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
+                backgroundColor: WidgetStateProperty.all<Color>(
                   AppColors.preferencesButtonColor,
                 ),
               ),

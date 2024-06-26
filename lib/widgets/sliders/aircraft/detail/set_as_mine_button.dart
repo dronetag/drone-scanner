@@ -47,10 +47,10 @@ class SetAsMineButton extends StatelessWidget {
         }
       },
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
           proximityAlertsActive ? AppColors.green : Colors.white,
         ),
-        side: MaterialStateProperty.all<BorderSide>(
+        side: WidgetStateProperty.all<BorderSide>(
           BorderSide(
               width: 2.0,
               color: proximityAlertsActive ? Colors.white : AppColors.green),

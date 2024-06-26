@@ -63,7 +63,7 @@ class PreferencesPage extends StatelessWidget {
                     'on your device and additional settings',
                 title: 'Preferences',
                 child: ColoredBox(
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Padding(
                     padding: isLandscape
                         ? EdgeInsets.only(
@@ -139,7 +139,7 @@ class PreferencesPage extends StatelessWidget {
     final wifiNanText = state.wifiNaN ? 'Fully supported' : 'Not supported';
     final maxAdvDataLenText = state.maxAdvDataLen.toString();
     final buttonStyle = ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(
+      backgroundColor: WidgetStateProperty.all<Color>(
         AppColors.preferencesButtonColor,
       ),
     );

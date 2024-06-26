@@ -53,13 +53,13 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
             showcaseState.showcaseActive) {
           showcaseSub = context.read<ShowcaseCubit>().stream.listen((event) {
             if (event is ShowcaseStateInitialized && !event.showcaseActive) {
-              initPlatformState(context);
+              initPlatformState();
               showcaseSub?.cancel();
             }
           });
           return;
         } else {
-          initPlatformState(context);
+          initPlatformState();
         }
       },
     );
@@ -70,7 +70,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     super.didChangeDependencies();
   }
 
-  Future<void> initPlatformState(BuildContext context) async {
+  Future<void> initPlatformState() async {
     if (Platform.isAndroid) {
       await _initPermissionsAndroid(context);
     } else if (Platform.isIOS) {
@@ -260,7 +260,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
             .setInternetAvailable(available: true);
       }
     } on SocketException catch (_) {
-      if (context.mounted) {
+      if (mounted) {
         await context
             .read<StandardsCubit>()
             .setInternetAvailable(available: false);

@@ -173,7 +173,7 @@ class _MapUIGoogleState extends State<MapUIGoogle> with WidgetsBindingObserver {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: height,
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               child: const Center(
                 child: SizedBox(
                   width: 50,
