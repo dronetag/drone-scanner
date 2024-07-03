@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
@@ -48,25 +50,7 @@ Future<bool> showLocationPermissionDialog({
   required bool showWhileUsingPermissionExplanation,
 }) async {
   // set up the buttons
-  final Widget cancelButton = TextButton(
-    child: const Text('Cancel'),
-    onPressed: () {
-      Navigator.pop(context, false);
-    },
-  );
-  final Widget appSettingsButton = TextButton(
-    child: const Text('App settings'),
-    onPressed: () {
-      Navigator.pop(context, false);
-      AppSettings.openAppSettings();
-    },
-  );
-  final Widget continueButton = TextButton(
-    child: const Text('Continue'),
-    onPressed: () {
-      Navigator.pop(context, true);
-    },
-  );
+  final actions = _getPermissionDialogActions(context);
   // set up the AlertDialog
   final alert = AlertDialog(
     title: const Text('Location permission required'),
@@ -82,7 +66,8 @@ Future<bool> showLocationPermissionDialog({
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
             const TextSpan(
-              text: 'option to enable scans in the background.\n\n',
+              text:
+                  'option to enable scans while the app is in foreground.\n\n',
             ),
           ],
           const TextSpan(
@@ -96,10 +81,49 @@ Future<bool> showLocationPermissionDialog({
         ],
       ),
     ),
+    actions: actions.values.toList(),
+  );
+  // show the dialog
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return alert;
+    },
+  );
+  return result ?? false;
+}
+
+Future<bool> showBackgroundPermissionDialog({
+  required BuildContext context,
+}) async {
+  // set up the buttons
+  final actions = _getPermissionDialogActions(context);
+  final isAndroid = Platform.isAndroid;
+  // set up the AlertDialog
+  final alert = AlertDialog(
+    title: const Text('Background location permission'),
+    content: const Text.rich(
+      TextSpan(
+        text: 'Drone Scanner requires background location permission to scan '
+            'for nearby aircraft while in the background.\n\n',
+        children: [
+          TextSpan(
+              text: 'If you wish to use the Drone Radar feature or gather data '
+                  'while the app is minimized, please select\nthe '),
+          TextSpan(
+            text: '"Allow all the time"\n',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          TextSpan(
+            text: 'option in application settings.\n\n',
+          ),
+        ],
+      ),
+    ),
     actions: [
-      cancelButton,
-      appSettingsButton,
-      continueButton,
+      actions['cancel']!,
+      if (isAndroid) actions['continue']!,
+      if (!isAndroid) actions['appSettings']!,
     ],
   );
   // show the dialog
@@ -110,6 +134,30 @@ Future<bool> showLocationPermissionDialog({
     },
   );
   return result ?? false;
+}
+
+Map<String, Widget> _getPermissionDialogActions(BuildContext context) {
+  return {
+    'cancel': TextButton(
+      child: const Text('Cancel'),
+      onPressed: () {
+        Navigator.pop(context, false);
+      },
+    ),
+    'appSettings': TextButton(
+      child: const Text('App settings'),
+      onPressed: () {
+        Navigator.pop(context, true);
+        AppSettings.openAppSettings();
+      },
+    ),
+    'continue': TextButton(
+      child: const Text('Continue'),
+      onPressed: () {
+        Navigator.pop(context, true);
+      },
+    ),
+  };
 }
 
 void showSnackBar(
