@@ -50,7 +50,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Application needs Your location to show nearby aircraft.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Application needs Your location to show nearby aircraft.</string>
+	<string>Application needs background location for Drone Radar feature.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Application needs Your location to show nearby aircraft.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
