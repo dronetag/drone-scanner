@@ -32,8 +32,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      checkPermissions();
-      Future.delayed(const Duration(seconds: 5), checkInternetConnection);
+      _checkPermissions();
+      Future.delayed(const Duration(seconds: 5), _checkInternetConnection);
       final alertsState = context.read<ProximityAlertsCubit>().state;
       if (alertsState.proximityAlertActive && alertsState.hasRecentAlerts()) {
         Future.delayed(const Duration(seconds: 1),
@@ -53,13 +53,13 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
             showcaseState.showcaseActive) {
           showcaseSub = context.read<ShowcaseCubit>().stream.listen((event) {
             if (event is ShowcaseStateInitialized && !event.showcaseActive) {
-              initPlatformState();
+              _initPlatformState();
               showcaseSub?.cancel();
             }
           });
           return;
         } else {
-          initPlatformState();
+          _initPlatformState();
         }
       },
     );
@@ -70,33 +70,24 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     super.didChangeDependencies();
   }
 
-  Future<void> initPlatformState() async {
-    if (Platform.isAndroid) {
-      await _initPermissionsAndroid(context);
-    } else if (Platform.isIOS) {
-      await _initPermissionsIOS(context);
-    } else {
-      return;
-    }
-    if (!mounted) return;
-    if (context.read<ShowcaseCubit>().state.showcaseActive) {
-      await context.read<OpendroneIdCubit>().stop();
-    }
-    // check internet connection
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        if (!mounted) return;
-        await context
-            .read<StandardsCubit>()
-            .setInternetAvailable(available: true);
-      }
-    } on SocketException catch (_) {
-      if (!mounted) return;
-      await context
-          .read<StandardsCubit>()
-          .setInternetAvailable(available: false);
-    }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    showcaseSub?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: widget.child,
+    );
   }
 
   Future<void> _initPermissionsIOS(BuildContext context) async {
@@ -106,7 +97,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
 
     if (btStatus.isGranted) {
       if (!mounted) return;
-      await standardsCubit.setBluetoothEnabled(enabled: true);
+      standardsCubit.setBluetoothEnabled(enabled: true);
       if (!mounted) return;
       final btTurnedOn = await odidCubit.isBtTurnedOn();
 
@@ -115,22 +106,22 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
       }
     } else {
       if (!mounted) return;
-      await standardsCubit.setBluetoothEnabled(enabled: false);
+      standardsCubit.setBluetoothEnabled(enabled: false);
     }
 
     final status = await Permission.location.request();
     if (status.isGranted) {
-      initLocation();
+      _initLocation();
       if (!mounted) return;
-      await standardsCubit.setLocationEnabled(enabled: true);
+      standardsCubit.setLocationEnabled(enabled: true);
     } else {
       if (!mounted) return;
-      await standardsCubit.setLocationEnabled(enabled: false);
+      standardsCubit.setLocationEnabled(enabled: false);
     }
 
     final notificationStatus = await Permission.notification.request();
     if (notificationStatus.isGranted) {
-      await standardsCubit.setNotificationsEnabled(enabled: true);
+      standardsCubit.setNotificationsEnabled(enabled: true);
     }
   }
 
@@ -138,40 +129,40 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     final odidCubit = context.read<OpendroneIdCubit>();
     final standardsCubit = context.read<StandardsCubit>();
 
-    final version = await getAndroidVersionNumber();
+    final version = await _getAndroidVersionNumber();
     if (version == null) return;
     final locStatus = await Permission.location.status;
     // show dialog before asking for location
     // when already granted or pernamently denied, request is not needed
-    if (!(locStatus.isGranted || locStatus.isPermanentlyDenied) &&
-        context.mounted) {
+    if (!(locStatus.isGranted) && context.mounted) {
       if (await showLocationPermissionDialog(
         context: context,
         showWhileUsingPermissionExplanation: version >= 11,
       )) {
         final status = await Permission.location.request();
         if (status.isDenied) {
-          await standardsCubit.setLocationEnabled(enabled: false);
+          standardsCubit.setLocationEnabled(enabled: false);
         } else {
-          initLocation();
-          await standardsCubit.setLocationEnabled(enabled: true);
+          _initLocation();
+          standardsCubit.setLocationEnabled(enabled: true);
         }
       }
     } else if (locStatus.isGranted) {
-      initLocation();
-      await standardsCubit.setLocationEnabled(enabled: true);
+      _initLocation();
+      standardsCubit.setLocationEnabled(enabled: true);
     }
+
     final btStatus = await Permission.bluetooth.request();
     // scan makes sense just on android
     final btScanStatus = await Permission.bluetoothScan.request();
     if (btStatus.isGranted && btScanStatus.isGranted) {
-      await standardsCubit.setBluetoothEnabled(enabled: true);
+      standardsCubit.setBluetoothEnabled(enabled: true);
       final btTurnedOn = await odidCubit.isBtTurnedOn();
       if (btTurnedOn) {
         await odidCubit.setBtUsed(btUsed: true);
       }
     } else {
-      await standardsCubit.setBluetoothEnabled(enabled: false);
+      standardsCubit.setBluetoothEnabled(enabled: false);
     }
     if (!mounted) {
       return;
@@ -188,44 +179,100 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestPermission();
-    await standardsCubit.setNotificationsEnabled(enabled: result ?? false);
+    standardsCubit.setNotificationsEnabled(enabled: result ?? false);
   }
 
-  Future<int?> getAndroidVersionNumber() async {
+  Future<void> _initBackgroundLocationPermission(BuildContext context) async {
+    final standardsCubit = context.read<StandardsCubit>();
+    final locStatus = await Permission.location.status;
+
+    final backgroundLocStatus = await Permission.locationAlways.status;
+    // do not ask for locationAlways if location is not granted
+    if (!locStatus.isGranted) return;
+    if ((backgroundLocStatus.isGranted)) {
+      standardsCubit.setBackgroundLocationEnabled(enabled: true);
+      return;
+    }
+
+    if (context.mounted && !standardsCubit.state.backgroundLocationDenied) {
+      // show dialog to ask user for background location permission
+      if (await showBackgroundPermissionDialog(
+        context: context,
+      )) {
+        final status = await Permission.locationAlways.request();
+
+        if (status.isGranted) {
+          if (!mounted) return;
+          standardsCubit.setBackgroundLocationEnabled(enabled: true);
+        } else {
+          if (!mounted) return;
+          standardsCubit.setBackgroundLocationEnabled(enabled: false);
+        }
+      }
+      // user denied background loc -> save response and do not ask again
+      else {
+        await standardsCubit.setBackgroundLocationDenied();
+      }
+    }
+  }
+
+  Future<void> _initPlatformState() async {
+    if (Platform.isAndroid) {
+      await _initPermissionsAndroid(context);
+    } else if (Platform.isIOS) {
+      await _initPermissionsIOS(context);
+    } else {
+      return;
+    }
+
+    if (!mounted) return;
+
+    await _initBackgroundLocationPermission(context);
+
+    if (!mounted) return;
+    if (context.read<ShowcaseCubit>().state.showcaseActive) {
+      await context.read<OpendroneIdCubit>().stop();
+    }
+    _checkInternetConnection();
+  }
+
+  Future<int?> _getAndroidVersionNumber() async {
     final deviceInfo = DeviceInfoPlugin();
     final androidVersion = (await deviceInfo.androidInfo).version.release;
     return int.tryParse(androidVersion);
   }
 
-  void initLocation() {
+  void _initLocation() {
     final location = Location();
-    location.getLocation().then(userLocationChanged);
-    location.onLocationChanged.listen(userLocationChanged);
+    location.getLocation().then(_userLocationChanged);
+    location.onLocationChanged.listen(_userLocationChanged);
   }
 
   // check permission status without requests
-  Future<void> checkPermissions() async {
+  Future<void> _checkPermissions() async {
     final standardsCubit = context.read<StandardsCubit>();
     if (!mounted) return;
     final loc = await Permission.location.isGranted;
     // check loc, if was not set before, init listener
     if (loc && !standardsCubit.state.locationEnabled) {
-      initLocation();
+      _initLocation();
     }
-    await standardsCubit.setLocationEnabled(enabled: loc);
+    standardsCubit.setLocationEnabled(enabled: loc);
+    final backgroundLoc = await Permission.locationAlways.isGranted;
+    standardsCubit.setBackgroundLocationEnabled(enabled: backgroundLoc);
     final bt = await Permission.bluetooth.isGranted;
     if (Platform.isAndroid) {
       final btScan = await Permission.bluetoothScan.isGranted;
-      await standardsCubit.setBluetoothEnabled(enabled: bt && btScan);
+      standardsCubit.setBluetoothEnabled(enabled: bt && btScan);
     } else {
-      await standardsCubit.setBluetoothEnabled(enabled: bt);
+      standardsCubit.setBluetoothEnabled(enabled: bt);
     }
 
-    await standardsCubit.setNotificationsEnabled(
+    standardsCubit.setNotificationsEnabled(
         enabled: await Permission.notification.isGranted);
   }
 
-  void userLocationChanged(LocationData currentLocation) {
+  void _userLocationChanged(LocationData currentLocation) {
     void updateLoc() {
       final mapCubit = context.read<MapCubit>();
       if (currentLocation.latitude != null &&
@@ -249,42 +296,16 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     }
   }
 
-  Future<void> checkInternetConnection() async {
+  Future<void> _checkInternetConnection() async {
     // check internet
+    final standardsCubit = context.read<StandardsCubit>();
     try {
       final result = await InternetAddress.lookup('example.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        if (!mounted) return;
-        await context
-            .read<StandardsCubit>()
-            .setInternetAvailable(available: true);
+        standardsCubit.setInternetAvailable(available: true);
       }
     } on SocketException catch (_) {
-      if (mounted) {
-        await context
-            .read<StandardsCubit>()
-            .setInternetAvailable(available: false);
-      }
+      standardsCubit.setInternetAvailable(available: false);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    showcaseSub?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: widget.child,
-    );
   }
 }

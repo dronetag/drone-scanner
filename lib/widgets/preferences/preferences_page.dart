@@ -322,6 +322,16 @@ class PreferencesPage extends StatelessWidget {
       Padding(
         padding: itemPadding,
         child: PreferencesField(
+          label: 'Background Location',
+          text: state.backgroundLocationEnabled ? 'Granted' : 'Not Granted',
+          color:
+              state.backgroundLocationEnabled ? AppColors.green : AppColors.red,
+          icon: state.backgroundLocationEnabled ? positiveIcon : negativeIcon,
+        ),
+      ),
+      Padding(
+        padding: itemPadding,
+        child: PreferencesField(
           label: 'Bluetooth',
           text: state.btEnabled ? 'Granted' : 'Not Granted',
           color: state.btEnabled ? AppColors.green : AppColors.red,

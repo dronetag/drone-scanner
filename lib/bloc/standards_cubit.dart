@@ -8,19 +8,25 @@ import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StandardsState {
-  bool androidSystem = false;
-  bool btLegacy = false; // bt4
-  bool btExtended = false; // bt4
-  bool wifiBeacon = false;
-  bool wifiNaN = false; // aware on android
-  bool btExtendedClaimed = false; // can be claimed but still not work
+  final bool androidSystem;
+  final bool btLegacy; // bt4
+  final bool btExtended; // bt5
+  final bool wifiBeacon;
+  final bool wifiNaN; // aware on android
+  final bool btExtendedClaimed; // can be claimed but still not work
   // if adv len is < 1000, we stronly suspect Bt long range scanning wont work
-  int maxAdvDataLen = 0;
+  final int maxAdvDataLen;
   // permissions
-  bool btEnabled = false;
-  bool locationEnabled = false;
-  bool notificationsEnabled = false;
-  bool internetAvailable = false;
+  final bool btEnabled;
+  final bool locationEnabled;
+  final bool backgroundLocationEnabled;
+  // true if user was asked about background location and cancelled request
+  final bool backgroundLocationDenied;
+  final bool notificationsEnabled;
+  final bool internetAvailable;
+
+  static const logPlatformStandardsKey = 'logPlatformStandards';
+  static const backgroundLocationDeniedKey = 'backgroundLocationDenied';
 
   StandardsState({
     required this.androidSystem,
@@ -32,6 +38,8 @@ class StandardsState {
     required this.maxAdvDataLen,
     required this.btEnabled,
     required this.locationEnabled,
+    required this.backgroundLocationEnabled,
+    required this.backgroundLocationDenied,
     required this.notificationsEnabled,
     required this.internetAvailable,
   });
@@ -46,6 +54,8 @@ class StandardsState {
     int? maxAdvDataLen,
     bool? btEnabled,
     bool? locationEnabled,
+    bool? backgroundLocationEnabled,
+    bool? backgroundLocationDenied,
     bool? notificationsEnabled,
     bool? internetAvailable,
   }) =>
@@ -59,6 +69,10 @@ class StandardsState {
         maxAdvDataLen: maxAdvDataLen ?? this.maxAdvDataLen,
         btEnabled: btEnabled ?? this.btEnabled,
         locationEnabled: locationEnabled ?? this.locationEnabled,
+        backgroundLocationDenied:
+            backgroundLocationDenied ?? this.backgroundLocationDenied,
+        backgroundLocationEnabled:
+            backgroundLocationEnabled ?? this.backgroundLocationEnabled,
         notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
         internetAvailable: internetAvailable ?? this.internetAvailable,
       );
@@ -79,6 +93,8 @@ class StandardsCubit extends Cubit<StandardsState> {
             internetAvailable: false,
             notificationsEnabled: false,
             locationEnabled: false,
+            backgroundLocationEnabled: false,
+            backgroundLocationDenied: false,
           ),
         );
 
@@ -128,7 +144,14 @@ class StandardsCubit extends Cubit<StandardsState> {
     );
 
     final preferences = await SharedPreferences.getInstance();
-    final logPlatformStatus = preferences.getBool('logPlatformStandards');
+
+    final backgroundLocationDenied =
+        preferences.getBool(StandardsState.backgroundLocationDeniedKey) ??
+            false;
+    emit(state.copyWith(backgroundLocationDenied: backgroundLocationDenied));
+
+    final logPlatformStatus =
+        preferences.getBool(StandardsState.logPlatformStandardsKey);
     // skip if info was already logged
     if (logPlatformStatus != null && !logPlatformStatus) {
       return;
@@ -159,22 +182,28 @@ class StandardsCubit extends Cubit<StandardsState> {
     Logger.root.info('maxAdvDataLen $maxAdvDataLen');
 
     // set that platforms standards were already logged
-    await preferences.setBool('logPlatformStandards', true);
+    await preferences.setBool(StandardsState.logPlatformStandardsKey, true);
   }
 
-  Future<void> setLocationEnabled({required bool enabled}) async {
-    emit(state.copyWith(locationEnabled: enabled));
+  void setLocationEnabled({required bool enabled}) =>
+      emit(state.copyWith(locationEnabled: enabled));
+
+  void setBackgroundLocationEnabled({required bool enabled}) async =>
+      emit(state.copyWith(backgroundLocationEnabled: enabled));
+
+  Future<void> setBackgroundLocationDenied() async {
+    final preferences = await SharedPreferences.getInstance();
+    preferences.setBool(StandardsState.backgroundLocationDeniedKey, true);
+    emit(state.copyWith(
+        backgroundLocationEnabled: false, backgroundLocationDenied: true));
   }
 
-  Future<void> setBluetoothEnabled({required bool enabled}) async {
-    emit(state.copyWith(btEnabled: enabled));
-  }
+  void setBluetoothEnabled({required bool enabled}) =>
+      emit(state.copyWith(btEnabled: enabled));
 
-  Future<void> setNotificationsEnabled({required bool enabled}) async {
-    emit(state.copyWith(notificationsEnabled: enabled));
-  }
+  void setNotificationsEnabled({required bool enabled}) =>
+      emit(state.copyWith(notificationsEnabled: enabled));
 
-  Future<void> setInternetAvailable({required bool available}) async {
-    emit(state.copyWith(internetAvailable: available));
-  }
+  void setInternetAvailable({required bool available}) =>
+      emit(state.copyWith(internetAvailable: available));
 }
