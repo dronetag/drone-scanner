@@ -8,7 +8,7 @@ import '../models/unit_value.dart';
 import '../services/unit_conversion_service.dart';
 
 class CSVLogger {
-  static const locationFields = 15;
+  static const locationFields = 16;
   static const basicFields = 3;
   static const operatorFields = 1;
   static const authFields = 0;
@@ -51,6 +51,7 @@ class CSVLogger {
 
   List<dynamic> _logLocationMessage(LocationMessage loc) {
     final row = <dynamic>[];
+    row.add(_logLocationTimestamp(loc.timestamp) ?? '');
     row.add(loc.status.asString() ?? '');
     row.add(loc.location?.latitude ?? '');
     row.add(loc.location?.longitude ?? '');
@@ -253,9 +254,10 @@ class CSVLogger {
         // common
         'Message Type',
         'Message Source',
-        'Timestamp',
+        'Received Timestamp',
         'Mac Address',
         // location
+        'Location Timestamp',
         'Status',
         'Latitude',
         'Longitude',
@@ -293,4 +295,17 @@ class CSVLogger {
         'Category',
         'Class Value',
       ];
+
+  // log in format hh:mm:ss.sss
+  String? _logLocationTimestamp(Duration? duration) {
+    if (duration == null) return null;
+    final milliseconds = duration.inMilliseconds;
+    final minutes = (milliseconds / 60000).floor();
+    final seconds = (milliseconds % 60000 / 1000).floor();
+    final millisecondsRemaining = (milliseconds % 1000).round();
+
+    return '00:${minutes.toString().padLeft(2, '0')}:'
+        '${seconds.toString().padLeft(2, '0')}.'
+        '${millisecondsRemaining.toString().padLeft(3, '0')}';
+  }
 }
