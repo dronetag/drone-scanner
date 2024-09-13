@@ -260,7 +260,6 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
                         '${foundAlerts.first.distance.toStringAsFixed(2)} '
                         'meters from your drone'
                     : '${foundAlerts.length} drones are flying close',
-                DateTime.now().millisecondsSinceEpoch + 1000,
               );
             }
           }
