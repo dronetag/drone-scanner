@@ -12,6 +12,8 @@ import 'app/more_page.dart';
 import 'map/map_page.dart';
 import 'preferences/preferences_page.dart';
 import 'preferences/proximity_alerts_page.dart';
+import 'receiver/receiver_page.dart';
+import 'receiver/receiver_page_list_content.dart';
 
 /// HomeScreen is the main screen of the app.
 ///
@@ -99,6 +101,7 @@ class _MyHomePageState extends State<HomeScreen> {
         children: const [
           MapPage(),
           ProximityAlertsPage(),
+          ReceiverPage(),
           PreferencesPage(),
           MorePage(),
         ],

@@ -40,6 +40,17 @@ class HomeScreenNavigationBar extends StatelessWidget {
           ),
           label: 'Radar',
         ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'assets/images/rider.png',
+            width: Sizes.iconSize,
+          ),
+          activeIcon: BottomNavigationBarItemFrame(
+            child: Image.asset('assets/images/rider.png',
+                width: Sizes.iconSize, color: AppColors.blue),
+          ),
+          label: 'RIDER',
+        ),
         const BottomNavigationBarItem(
           icon: Icon(Icons.settings),
           activeIcon: BottomNavigationBarItemFrame(child: Icon(Icons.settings)),
