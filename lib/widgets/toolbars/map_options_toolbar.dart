@@ -13,6 +13,7 @@ import '../../constants/sizes.dart';
 import '../app/dialogs.dart';
 import '../preferences/components/rotating_icon.dart';
 import '../preferences/proximity_alerts_page.dart';
+import '../receiver/receiver_list_page.dart';
 import '../showcase/showcase_item.dart';
 import 'components/proximity_alerts_icon.dart';
 
@@ -107,6 +108,26 @@ class MapOptionsToolbar extends StatelessWidget {
             rotating: context.select<ProximityAlertsCubit, bool>(
                 (cubit) => cubit.state.proximityAlertActive),
           ),
+        ),
+      ),
+      IconButton(
+        constraints: const BoxConstraints(),
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ReceiverListPage(),
+              settings: const RouteSettings(
+                name: ReceiverListPage.routeName,
+              ),
+            ),
+          );
+        },
+        iconSize: Sizes.iconSize,
+        icon: Image.asset(
+          'assets/images/rider.png',
+          width: Sizes.iconSize,
         ),
       ),
       if (showAlertIcon) const ProximityAlertsIcon(),

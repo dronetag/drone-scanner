@@ -17,6 +17,7 @@ class CustomNavigationBar extends StatelessWidget {
       unselectedFontSize: 14,
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.black,
+      showUnselectedLabels: true,
       onTap: (index) {
         if (onPageSelected != null) {
           onPageSelected!(DroneScannerPage.values[index]);
@@ -30,6 +31,10 @@ class CustomNavigationBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.radar),
           label: 'Radar',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.record_voice_over),
+          label: 'RIDER',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),

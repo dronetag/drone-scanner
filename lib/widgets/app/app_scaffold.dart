@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../map/map_page.dart';
 import '../preferences/preferences_page.dart';
 import '../preferences/proximity_alerts_page.dart';
+import '../receiver/receiver_list_page.dart';
 import 'custom_navigation_bar.dart';
 import 'more_page.dart';
 
@@ -54,6 +55,7 @@ class _AppScaffoldState extends State<AppScaffold> {
         children: const [
           MapPage(),
           ProximityAlertsPage(),
+          ReceiverListPage(),
           PreferencesPage(),
           MorePage(),
         ],
