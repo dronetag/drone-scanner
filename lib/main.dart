@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dri_receiver/dri_receiver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -110,6 +111,9 @@ void main() async {
           sheetLicense,
         ),
       ));
+
+  // Init DriDeceiver in fake mode
+  DriReceiverManager.initFakeMode();
 
   runAppWithSentry(
     () => runApp(
