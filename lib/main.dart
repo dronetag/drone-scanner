@@ -14,6 +14,7 @@ import 'bloc/aircraft/aircraft_expiration_cubit.dart';
 import 'bloc/aircraft/aircraft_metadata_cubit.dart';
 import 'bloc/aircraft/export_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
+import 'bloc/dri_receiver_cubit.dart';
 import 'bloc/geocoding_cubit.dart';
 import 'bloc/help/help_cubit.dart';
 import 'bloc/map/map_cubit.dart';
@@ -173,6 +174,13 @@ void main() async {
           ),
           BlocProvider<SelectedAircraftCubit>(
             create: (context) => selectedCubit,
+            lazy: false,
+          ),
+          BlocProvider<DriReceiversCubit>(
+            create: (context) => DriReceiversCubit(
+              aircraftCubit: aircraftCubit,
+              messagesManager: DriReceiverManager.messagesManager,
+            ),
             lazy: false,
           ),
           BlocProvider<OpendroneIdCubit>(
