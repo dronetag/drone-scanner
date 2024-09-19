@@ -185,10 +185,7 @@ void main() async {
           ),
           BlocProvider<OpendroneIdCubit>(
             create: (context) => OpendroneIdCubit(
-              mapCubit: mapCubit,
-              selectedAircraftCubit: selectedCubit,
               aircraftCubit: aircraftCubit,
-              aircraftMetadataCubit: aircraftMetadataCubit,
             ),
             lazy: false,
           ),

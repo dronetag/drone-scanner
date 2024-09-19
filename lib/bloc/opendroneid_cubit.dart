@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dri_receiver/dri_receiver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
@@ -9,13 +10,11 @@ import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/snackbar_messages.dart';
 import 'aircraft/aircraft_cubit.dart';
-import 'aircraft/aircraft_metadata_cubit.dart';
-import 'aircraft/selected_aircraft_cubit.dart';
-import 'map/map_cubit.dart';
 
 class ScanningState {
   bool isScanningWifi;
   bool isScanningBluetooth;
+
   UsedTechnologies usedTechnologies;
   pigeon.ScanPriority scanPriority;
 
@@ -26,11 +25,12 @@ class ScanningState {
     required this.scanPriority,
   });
 
-  ScanningState copyWith(
-          {bool? isScanningWifi,
-          bool? isScanningBluetooth,
-          UsedTechnologies? usedTechnologies,
-          pigeon.ScanPriority? scanPriority}) =>
+  ScanningState copyWith({
+    bool? isScanningWifi,
+    bool? isScanningBluetooth,
+    UsedTechnologies? usedTechnologies,
+    pigeon.ScanPriority? scanPriority,
+  }) =>
       ScanningState(
         isScanningBluetooth: isScanningBluetooth ?? this.isScanningBluetooth,
         isScanningWifi: isScanningWifi ?? this.isScanningWifi,
@@ -47,21 +47,16 @@ class SetScanResult {
 }
 
 class OpendroneIdCubit extends Cubit<ScanningState> {
-  StreamSubscription? listener;
-  StreamSubscription? btStateListener;
-  StreamSubscription? wifiStateListener;
-  MapCubit mapCubit;
-  SelectedAircraftCubit selectedAircraftCubit;
-  AircraftCubit aircraftCubit;
-  AircraftMetadataCubit aircraftMetadataCubit;
+  StreamSubscription? _listener;
+  StreamSubscription? _btStateListener;
+  StreamSubscription? _wifiStateListener;
+
+  final AircraftCubit aircraftCubit;
 
   static const messageDebounceMs = 50;
 
   OpendroneIdCubit({
-    required this.mapCubit,
-    required this.selectedAircraftCubit,
     required this.aircraftCubit,
-    required this.aircraftMetadataCubit,
   }) : super(
           ScanningState(
             isScanningBluetooth: false,
@@ -70,9 +65,18 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
             scanPriority: pigeon.ScanPriority.High,
           ),
         ) {
-    initBtListener();
-    initWifiListener();
+    _initBtListener();
+    _initWifiListener();
+
     fetchAndSetPreference();
+  }
+
+  @override
+  Future<void> close() {
+    _listener?.cancel();
+    _btStateListener?.cancel();
+    _wifiStateListener?.cancel();
+    return super.close();
   }
 
   Future<void> fetchAndSetPreference() async {
@@ -89,66 +93,12 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     }
   }
 
-  void initWifiListener() {
-    wifiStateListener = FlutterOpenDroneId.wifiState.listen(
-      (scanning) => wifiStateCallback(
-        isScanning: scanning,
-      ),
-    );
-  }
-
-  void initBtListener() =>
-      btStateListener = FlutterOpenDroneId.bluetoothState.listen(
-        (scanning) => btStateCallback(
-          isScanning: scanning,
-        ),
-      );
-
-  void cancelListener() {
-    listener?.cancel();
-    btStateListener?.cancel();
-    wifiStateListener?.cancel();
-  }
-
-  void btStateCallback({required bool isScanning}) {
-    // refresh ui just when state changes
-    if (isScanning == state.isScanningBluetooth) {
-      return;
-    }
-    emit(
-      state.copyWith(isScanningBluetooth: isScanning),
-    );
-  }
-
-  void wifiStateCallback({required bool isScanning}) {
-    // refresh ui just when state changes
-    if (isScanning == state.isScanningWifi) {
-      return;
-    }
-    emit(
-      state.copyWith(isScanningWifi: isScanning),
-    );
-  }
-
-  void scanCallback(MessageContainer pack) {
-    aircraftCubit.addPack(pack);
-    if (mapCubit.state.lockOnPoint &&
-        pack.macAddress == selectedAircraftCubit.state.selectedAircraftMac &&
-        pack.locationValid) {
-      mapCubit.centerToLocDouble(
-        pack.locationMessage!.location!.latitude,
-        pack.locationMessage!.location!.longitude,
-      );
-    }
-  }
-
   Future<SetScanResult> start(UsedTechnologies usedTechnology) async {
     try {
-      await FlutterOpenDroneId.startScan(usedTechnology);
-      listener = FlutterOpenDroneId.allMessages
+      //await FlutterOpenDroneId.startScan(usedTechnology);
+      _listener = FlutterOpenDroneId.allMessages
           .debounceTime(const Duration(milliseconds: messageDebounceMs))
-          .listen(scanCallback);
-      aircraftCubit.initEmitTimer();
+          .listen(_flutterOdidScanCallback);
     } on PermissionsMissingException catch (e) {
       return SetScanResult(
           success: false,
@@ -157,17 +107,12 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     return SetScanResult(success: true);
   }
 
-  Future<bool> isBtTurnedOn() async {
-    return FlutterOpenDroneId.btTurnedOn;
-  }
+  Future<bool> isBtTurnedOn() async => FlutterOpenDroneId.btTurnedOn;
 
-  Future<bool> isWifiTurnedOn() async {
-    return FlutterOpenDroneId.wifiTurnedOn;
-  }
+  Future<bool> isWifiTurnedOn() async => FlutterOpenDroneId.wifiTurnedOn;
 
   Future<void> stop() async {
-    await listener?.cancel();
-    aircraftCubit.stopEmitTimer();
+    await _listener?.cancel();
     unawaited(FlutterOpenDroneId.stopScan());
   }
 
@@ -176,7 +121,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
     var usedT = state.usedTechnologies;
     // cancel wifi subscription to avoid receiving events
     // until restart is complete
-    await wifiStateListener?.cancel();
+    await _wifiStateListener?.cancel();
     // turning on bt, if wifi was active, restart scans
     if (btUsed) {
       if (state.usedTechnologies != UsedTechnologies.Wifi) {
@@ -201,7 +146,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
         usedT = UsedTechnologies.None;
       }
     }
-    initWifiListener();
+    _initWifiListener();
     if (restart) {
       final res = await start(usedT);
       if (res.success) emit(state.copyWith(usedTechnologies: usedT));
@@ -214,7 +159,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
   Future<SetScanResult> setWifiUsed({required bool wifiUsed}) async {
     var restart = false;
     var usedT = state.usedTechnologies;
-    await btStateListener?.cancel();
+    await _btStateListener?.cancel();
     // turning on Wifi, if bt was active, restart scans
     if (wifiUsed) {
       if (state.usedTechnologies != UsedTechnologies.Bluetooth) {
@@ -239,7 +184,7 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
         usedT = UsedTechnologies.None;
       }
     }
-    initBtListener();
+    _initBtListener();
     if (restart) {
       final res = await start(usedT);
       if (res.success) {
@@ -259,5 +204,44 @@ class OpendroneIdCubit extends Cubit<ScanningState> {
 
     await FlutterOpenDroneId.setBtScanPriority(priority);
     emit(state.copyWith(scanPriority: priority));
+  }
+
+  void _initWifiListener() {
+    _wifiStateListener = FlutterOpenDroneId.wifiState.listen(
+      (scanning) => _wifiStateCallback(
+        isScanning: scanning,
+      ),
+    );
+  }
+
+  void _initBtListener() =>
+      _btStateListener = FlutterOpenDroneId.bluetoothState.listen(
+        (scanning) => _btStateCallback(
+          isScanning: scanning,
+        ),
+      );
+
+  void _btStateCallback({required bool isScanning}) {
+    // refresh ui just when state changes
+    if (isScanning == state.isScanningBluetooth) {
+      return;
+    }
+    emit(
+      state.copyWith(isScanningBluetooth: isScanning),
+    );
+  }
+
+  void _wifiStateCallback({required bool isScanning}) {
+    // refresh ui just when state changes
+    if (isScanning == state.isScanningWifi) {
+      return;
+    }
+    emit(
+      state.copyWith(isScanningWifi: isScanning),
+    );
+  }
+
+  void _flutterOdidScanCallback(MessageContainer pack) {
+    aircraftCubit.addPack(pack);
   }
 }
