@@ -1,6 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
-import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   final _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -16,13 +15,10 @@ class NotificationService {
 
   void addNotification(
     String title,
-    String body,
-    int endTime, {
+    String body, {
     String channel = 'default',
   }) async {
     tz_data.initializeTimeZones();
-    final scheduleTime =
-        tz.TZDateTime.fromMillisecondsSinceEpoch(tz.local, endTime);
     const iosDetail = DarwinNotificationDetails(
       presentAlert: false,
       presentBadge: false,
@@ -39,15 +35,6 @@ class NotificationService {
     );
     const id = 0;
 
-    await _localNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduleTime,
-      noticeDetail,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    );
+    await _localNotificationsPlugin.show(id, title, body, noticeDetail);
   }
 }

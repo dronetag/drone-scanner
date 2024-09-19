@@ -178,7 +178,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     final result = await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestPermission();
+        ?.requestNotificationsPermission();
     standardsCubit.setNotificationsEnabled(enabled: result ?? false);
   }
 
