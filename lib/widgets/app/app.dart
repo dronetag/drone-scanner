@@ -3,7 +3,7 @@ import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../constants/theme.dart';
-import '../mainpage/home_page.dart';
+import '../home_screen.dart';
 import 'life_cycle_manager.dart';
 
 PackageInfo? packageInfo;
@@ -31,7 +31,7 @@ class _AppState extends State<App> {
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.light,
       home: const LifeCycleManager(
-        child: MyHomePage(),
+        child: HomeScreen(),
       ),
       navigatorObservers: [NavigationHistoryObserver()],
     );

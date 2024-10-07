@@ -3,15 +3,35 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-import '../../bloc/showcase_cubit.dart';
-import '../../bloc/sliders_cubit.dart';
-import '../app/app_scaffold.dart';
-import 'home_body.dart';
+import '../bloc/showcase_cubit.dart';
+import '../bloc/sliders_cubit.dart';
+import '../models/home_screen_page.dart';
+import 'app/app_scaffold.dart';
+import 'app/home_screen_navigation_bar.dart';
+import 'app/more_page.dart';
+import 'map/map_page.dart';
+import 'preferences/preferences_page.dart';
+import 'preferences/proximity_alerts_page.dart';
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({
+/// HomeScreen is the main screen of the app.
+///
+/// It contains a page view
+/// with 5 pages - map, radar, rider, settings and more. User can switch btw
+/// these pages using navigation bar
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
     super.key,
   });
+
+  @override
+  State<HomeScreen> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<HomeScreen> {
+  late final PageController _pageController =
+      PageController(initialPage: _currentPage.index);
+
+  HomeScreenPage _currentPage = HomeScreenPage.map;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +73,17 @@ class MyHomePage extends StatelessWidget {
                     return;
                   }
                 },
-                child: const AppScaffold(
-                  child: HomeBody(),
+                child: AppScaffold(
+                  bottomNavigationBar: HomeScreenNavigationBar(
+                    currentPage: _currentPage,
+                    onPageSelected: (page) {
+                      setState(() {
+                        _currentPage = page;
+                      });
+                      _pageController.jumpToPage(page.index);
+                    },
+                  ),
+                  child: _buildContent(),
                 ),
               ),
             );
@@ -63,4 +92,15 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildContent() => PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: const [
+          MapPage(),
+          ProximityAlertsPage(),
+          PreferencesPage(),
+          MorePage(),
+        ],
+      );
 }
