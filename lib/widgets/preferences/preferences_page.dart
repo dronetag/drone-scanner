@@ -20,8 +20,9 @@ import '../../bloc/units_settings_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../../utils/drone_scanner_icon_icons.dart';
-import '../app/app_scaffold.dart';
+
 import '../app/custom_tooltip.dart';
+
 import '../app/dialogs.dart';
 import '../help/help_page.dart';
 import '../showcase/showcase_item.dart';
@@ -55,57 +56,53 @@ class PreferencesPage extends StatelessWidget {
         );
         return ShowCaseWidget(
           builder: Builder(
-            builder: (context) => AppScaffold(
-              child: ShowcaseItem(
-                showcaseKey: context.read<ShowcaseCubit>().aboutPageKey,
-                description:
-                    'This page contains infomation about supported standards '
-                    'on your device and additional settings',
-                title: 'Preferences',
-                child: ColoredBox(
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Padding(
-                    padding: isLandscape
-                        ? EdgeInsets.only(
-                            top: MediaQuery.of(context).viewPadding.top,
-                            bottom: 5,
-                            left: Sizes.preferencesMargin,
-                            right: Sizes.preferencesMargin,
-                          )
-                        : EdgeInsets.only(
-                            top: MediaQuery.of(context).viewPadding.top,
-                            left: Sizes.preferencesMargin,
-                            right: Sizes.preferencesMargin,
+            builder: (context) => ShowcaseItem(
+              showcaseKey: context.read<ShowcaseCubit>().aboutPageKey,
+              description:
+                  'This page contains infomation about supported standards '
+                  'on your device and additional settings',
+              title: 'Preferences',
+              child: ColoredBox(
+                color: Theme.of(context).colorScheme.surface,
+                child: Padding(
+                  padding: isLandscape
+                      ? EdgeInsets.only(
+                          top: MediaQuery.of(context).viewPadding.top,
+                          bottom: 5,
+                          left: Sizes.preferencesMargin,
+                          right: Sizes.preferencesMargin,
+                        )
+                      : EdgeInsets.only(
+                          top: MediaQuery.of(context).viewPadding.top,
+                          left: Sizes.preferencesMargin,
+                          right: Sizes.preferencesMargin,
+                        ),
+                  child: isLandscape
+                      ? GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisExtent:
+                                MediaQuery.of(context).size.height / 5.5,
                           ),
-                    child: isLandscape
-                        ? GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisExtent:
-                                  MediaQuery.of(context).size.height / 5.5,
-                            ),
-                            shrinkWrap: true,
-                            itemCount: itemList.length,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 2),
-                                child: itemList[index],
-                              );
-                            },
-                          )
-                        : ListView.builder(
-                            padding: MediaQuery.of(context)
-                                .padding
-                                .copyWith(top: 0.0),
-                            itemBuilder: (context, index) => itemList[index],
-                            itemCount: itemList.length,
-                            physics: const BouncingScrollPhysics(),
-                          ),
-                  ),
+                          shrinkWrap: true,
+                          itemCount: itemList.length,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 2),
+                              child: itemList[index],
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          padding:
+                              MediaQuery.of(context).padding.copyWith(top: 0.0),
+                          itemBuilder: (context, index) => itemList[index],
+                          itemCount: itemList.length,
+                          physics: const BouncingScrollPhysics(),
+                        ),
                 ),
               ),
             ),
@@ -146,23 +143,10 @@ class PreferencesPage extends StatelessWidget {
     const itemPadding = EdgeInsets.only(bottom: 10);
 
     return [
-      Align(
-        alignment: Alignment.centerLeft,
-        child: IconButton(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.zero,
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            DroneScannerIcon.arrowBack,
-            size: Sizes.iconSize,
-          ),
-        ),
-      ),
-      if (isLandscape) const SizedBox(),
       const Align(
         alignment: Alignment.centerLeft,
         child: Padding(
-          padding: EdgeInsets.only(bottom: 15.0),
+          padding: EdgeInsets.symmetric(vertical: Sizes.standard * 2),
           child: Text(
             'Preferences',
             textScaler: TextScaler.linear(2),

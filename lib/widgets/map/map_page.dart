@@ -16,16 +16,16 @@ import '../toolbars/map_options_toolbar.dart';
 import '../toolbars/toolbar.dart';
 import 'map_ui_google.dart';
 
-class HomeBody extends StatefulWidget {
-  const HomeBody({
+class MapPage extends StatefulWidget {
+  const MapPage({
     super.key,
   });
 
   @override
-  State<HomeBody> createState() => _HomeBodyState();
+  State<MapPage> createState() => _MapPageState();
 }
 
-class _HomeBodyState extends State<HomeBody> with WidgetsBindingObserver {
+class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   BuildContext? currentContext;
   StreamSubscription? alertsStreamSub;
   Flushbar? alertFlushbar;
