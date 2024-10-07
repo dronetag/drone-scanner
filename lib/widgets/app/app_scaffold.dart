@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 // scaffold inside safe area with bottom padding and white background
 // used as root of all pages
 class AppScaffold extends StatelessWidget {
-  final Widget child;
+  final Widget? bottomNavigationBar;
+  final Widget? child;
 
-  const AppScaffold({required this.child, super.key});
+  const AppScaffold({super.key, this.bottomNavigationBar, this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,7 @@ class AppScaffold extends StatelessWidget {
       child: Scaffold(
         // ensure the keyboard does not move the content up
         resizeToAvoidBottomInset: true,
+        bottomNavigationBar: bottomNavigationBar,
         body: child,
       ),
     );
