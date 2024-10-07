@@ -58,6 +58,11 @@ dependencies:
   timezone: ^0.9.2
   logging: ^1.2.0
   units_converter: ^3.0.0
+  dri_receiver:
+    git:
+      url: git@github.com:dronetag/flutter_packages.git
+      ref: feat/add-dri-receiver
+      path: packages/dri_receiver
 
 dev_dependencies:
   dependency_validator: ^3.0.0

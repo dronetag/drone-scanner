@@ -41,9 +41,9 @@ class ProximityAlertsCubit extends Cubit<ProximityAlertsState> {
 
   final StreamController<List<ProximityAlert>> _alertController =
       BehaviorSubject();
-
   final StreamController<AlertUpdate> _alertEventController =
-      StreamController<AlertUpdate>();
+      StreamController<AlertUpdate>.broadcast();
+
   Stream<List<ProximityAlert>> get alertStream => _alertController.stream;
   Stream<AlertUpdate> get alertStateStream => _alertEventController.stream;
 

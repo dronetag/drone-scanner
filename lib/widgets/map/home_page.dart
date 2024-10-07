@@ -6,7 +6,7 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../bloc/showcase_cubit.dart';
 import '../../bloc/sliders_cubit.dart';
 import '../app/app_scaffold.dart';
-import 'home_body.dart';
+import 'map_page.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({
@@ -53,9 +53,7 @@ class MyHomePage extends StatelessWidget {
                     return;
                   }
                 },
-                child: const AppScaffold(
-                  child: HomeBody(),
-                ),
+                child: const AppScaffold(),
               ),
             );
           },

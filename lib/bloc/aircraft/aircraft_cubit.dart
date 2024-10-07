@@ -78,35 +78,13 @@ class AircraftCubit extends Cubit<AircraftState> {
     required this.messageContainerAuthenticator,
   }) : super(AircraftState(packHistory: {}, dataAuthenticityStatuses: {})) {
     expirationCubit.deleteCallback = deletePack;
+    _initEmitTimer();
   }
 
-  // timer used to notify UI
-  void initEmitTimer({
-    Duration duration = const Duration(
-      milliseconds: uiUpdateIntervalMs,
-    ),
-  }) {
-    stopEmitTimer();
-    _refreshTimer = Timer.periodic(
-      duration,
-      (_) => aircraftUpdate,
-    );
-  }
-
-  void aircraftUpdate() {
-    emit(
-      AircraftStateUpdate(
-        packHistory: state.packHistory(),
-        dataAuthenticityStatuses: state.dataAuthenticityStatuses,
-      ),
-    );
-  }
-
-  void stopEmitTimer() {
-    if (_refreshTimer != null) {
-      _refreshTimer!.cancel();
-      _refreshTimer = null;
-    }
+  @override
+  Future<void> close() {
+    _stopEmitTimer();
+    return super.close();
   }
 
   MessageContainer? findByMacAddress(String mac) {
@@ -203,5 +181,34 @@ class AircraftCubit extends Cubit<AircraftState> {
 
   void applyState(AircraftState state) {
     emit(state);
+  }
+
+  void _aircraftUpdate() {
+    emit(
+      AircraftStateUpdate(
+        packHistory: state.packHistory(),
+        dataAuthenticityStatuses: state.dataAuthenticityStatuses,
+      ),
+    );
+  }
+
+  // timer used to notify UI
+  void _initEmitTimer({
+    Duration duration = const Duration(
+      milliseconds: uiUpdateIntervalMs,
+    ),
+  }) {
+    _stopEmitTimer();
+    _refreshTimer = Timer.periodic(
+      duration,
+      (_) => _aircraftUpdate,
+    );
+  }
+
+  void _stopEmitTimer() {
+    if (_refreshTimer != null) {
+      _refreshTimer!.cancel();
+      _refreshTimer = null;
+    }
   }
 }

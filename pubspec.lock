@@ -217,6 +217,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  dri_receiver:
+    dependency: "direct main"
+    description:
+      path: "packages/dri_receiver"
+      ref: "feat/add-dri-receiver"
+      resolved-ref: "6ec69a29222497dd2385b3012f7e36f9ec6466f4"
+      url: "git@github.com:dronetag/flutter_packages.git"
+    source: git
+    version: "0.0.1"
   ffi:
     dependency: transitive
     description:
@@ -755,6 +764,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      sha256: "68645b24e0716782e58948f8467fd42a880f255096a821f9e7d0ec625b00c84d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   provider:
     dependency: transitive
     description:
@@ -779,6 +796,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  receiver_protocol:
+    dependency: transitive
+    description:
+      path: dart
+      ref: master
+      resolved-ref: c0906b08c0671366d835c80119f5dc350499769c
+      url: "git@github.com:dronetag/protocol-reciever.git"
+    source: git
+    version: "0.0.1"
   rxdart:
     dependency: "direct main"
     description:

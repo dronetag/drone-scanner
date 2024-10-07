@@ -19,15 +19,13 @@ class HelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<HelpCubit>().fetchHelp();
-    return AppScaffold(
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).viewPadding.top,
-          left: Sizes.preferencesMargin,
-          right: Sizes.preferencesMargin,
-        ),
-        child: buildContent(context),
+    return Padding(
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).viewPadding.top,
+        left: Sizes.preferencesMargin,
+        right: Sizes.preferencesMargin,
       ),
+      child: buildContent(context),
     );
   }
 
