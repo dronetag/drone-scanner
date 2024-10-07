@@ -55,57 +55,53 @@ class PreferencesPage extends StatelessWidget {
         );
         return ShowCaseWidget(
           builder: Builder(
-            builder: (context) => AppScaffold(
-              child: ShowcaseItem(
-                showcaseKey: context.read<ShowcaseCubit>().aboutPageKey,
-                description:
-                    'This page contains infomation about supported standards '
-                    'on your device and additional settings',
-                title: 'Preferences',
-                child: ColoredBox(
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Padding(
-                    padding: isLandscape
-                        ? EdgeInsets.only(
-                            top: MediaQuery.of(context).viewPadding.top,
-                            bottom: 5,
-                            left: Sizes.preferencesMargin,
-                            right: Sizes.preferencesMargin,
-                          )
-                        : EdgeInsets.only(
-                            top: MediaQuery.of(context).viewPadding.top,
-                            left: Sizes.preferencesMargin,
-                            right: Sizes.preferencesMargin,
+            builder: (context) => ShowcaseItem(
+              showcaseKey: context.read<ShowcaseCubit>().aboutPageKey,
+              description:
+                  'This page contains infomation about supported standards '
+                  'on your device and additional settings',
+              title: 'Preferences',
+              child: ColoredBox(
+                color: Theme.of(context).colorScheme.surface,
+                child: Padding(
+                  padding: isLandscape
+                      ? EdgeInsets.only(
+                          top: MediaQuery.of(context).viewPadding.top,
+                          bottom: 5,
+                          left: Sizes.preferencesMargin,
+                          right: Sizes.preferencesMargin,
+                        )
+                      : EdgeInsets.only(
+                          top: MediaQuery.of(context).viewPadding.top,
+                          left: Sizes.preferencesMargin,
+                          right: Sizes.preferencesMargin,
+                        ),
+                  child: isLandscape
+                      ? GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisExtent:
+                                MediaQuery.of(context).size.height / 5.5,
                           ),
-                    child: isLandscape
-                        ? GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisExtent:
-                                  MediaQuery.of(context).size.height / 5.5,
-                            ),
-                            shrinkWrap: true,
-                            itemCount: itemList.length,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 2),
-                                child: itemList[index],
-                              );
-                            },
-                          )
-                        : ListView.builder(
-                            padding: MediaQuery.of(context)
-                                .padding
-                                .copyWith(top: 0.0),
-                            itemBuilder: (context, index) => itemList[index],
-                            itemCount: itemList.length,
-                            physics: const BouncingScrollPhysics(),
-                          ),
-                  ),
+                          shrinkWrap: true,
+                          itemCount: itemList.length,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 2),
+                              child: itemList[index],
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          padding:
+                              MediaQuery.of(context).padding.copyWith(top: 0.0),
+                          itemBuilder: (context, index) => itemList[index],
+                          itemCount: itemList.length,
+                          physics: const BouncingScrollPhysics(),
+                        ),
                 ),
               ),
             ),

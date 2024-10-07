@@ -3,7 +3,7 @@ import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../constants/theme.dart';
-import '../mainpage/home_page.dart';
+import '../map/home_page.dart';
 import 'life_cycle_manager.dart';
 
 PackageInfo? packageInfo;
