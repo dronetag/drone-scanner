@@ -11,6 +11,7 @@ import '../../bloc/sliders_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/sizes.dart';
 import '../app/dialogs.dart';
+import '../map/map_button.dart';
 import '../preferences/components/rotating_icon.dart';
 import '../preferences/proximity_alerts_page.dart';
 import '../showcase/showcase_item.dart';
@@ -27,14 +28,10 @@ class MapOptionsToolbar extends StatelessWidget {
       (cubit) =>
           cubit.state.proximityAlertActive && cubit.state.hasRecentAlerts(),
     );
-    final baseHeight = MediaQuery.of(context).size.height / 5;
-    final toolbarHeight = showAlertIcon ? baseHeight * 1.2 : baseHeight;
-    final toolbarWidth = MediaQuery.of(context).size.width / 8;
+
     final items = [
-      IconButton(
-        constraints: const BoxConstraints(),
-        padding: EdgeInsets.zero,
-        iconSize: Sizes.iconSize,
+      MapButton(
+        size: Sizes.mapIconSize,
         onPressed: () {
           context.read<MapCubit>().centerToUser()?.catchError((error) {
             showSnackBar(context, 'Location not enabled.');
@@ -44,9 +41,7 @@ class MapOptionsToolbar extends StatelessWidget {
           Icons.location_searching,
         ),
       ),
-      IconButton(
-        constraints: const BoxConstraints(),
-        padding: EdgeInsets.zero,
+      MapButton(
         onPressed: () {
           if (context.read<MapCubit>().state.mapStyle == MapType.normal) {
             context.read<MapCubit>().setMapStyle(MapType.satellite);
@@ -54,10 +49,10 @@ class MapOptionsToolbar extends StatelessWidget {
             context.read<MapCubit>().setMapStyle(MapType.normal);
           }
         },
-        iconSize: Sizes.iconSize,
+        size: Sizes.mapIconSize,
         icon: const Icon(Icons.layers),
       ),
-      IconButton(
+      /*IconButton(
         constraints: const BoxConstraints(),
         padding: EdgeInsets.zero,
         onPressed: () {
@@ -79,7 +74,8 @@ class MapOptionsToolbar extends StatelessWidget {
         },
         iconSize: Sizes.iconSize,
         icon: const Icon(Icons.delete),
-      ),
+      ),*/
+      /*
       ShowcaseItem(
         showcaseKey: context.read<ShowcaseCubit>().droneRadarKey,
         description: context.read<ShowcaseCubit>().droneRadarDescription,
@@ -109,33 +105,14 @@ class MapOptionsToolbar extends StatelessWidget {
           ),
         ),
       ),
-      if (showAlertIcon) const ProximityAlertsIcon(),
+      if (showAlertIcon) const ProximityAlertsIcon(),*/
     ];
     return ShowcaseItem(
       showcaseKey: context.read<ShowcaseCubit>().mapToolbarKey,
       description: context.read<ShowcaseCubit>().mapToolbarDescription,
       title: 'Map Options',
-      child: Container(
-        padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          color: AppColors.lightGray.withOpacity(0.5),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(Sizes.panelBorderRadius),
-          ),
-          boxShadow: const <BoxShadow>[
-            BoxShadow(
-              blurRadius: Sizes.panelBorderRadius,
-              color: Color.fromRGBO(0, 0, 0, 0.1),
-            )
-          ],
-        ),
-        height: toolbarHeight,
-        width: toolbarWidth,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: items,
-        ),
+      child: Column(
+        children: items,
       ),
     );
   }

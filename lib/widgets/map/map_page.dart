@@ -13,7 +13,8 @@ import '../app/dialogs.dart';
 import '../showcase/showcase_item.dart';
 import '../sliders/airspace_sliding_panel.dart';
 import '../toolbars/map_options_toolbar.dart';
-import '../toolbars/toolbar.dart';
+import '../toolbars/scan_toolbar.dart';
+import 'map_button.dart';
 import 'map_ui_google.dart';
 
 class MapPage extends StatefulWidget {
@@ -84,7 +85,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   Stack buildMapView(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    // acc to doc, wakelock should not be used in main but in widgets build m
+    // acc to doc, wakelock should not be used in main but in widgets build
     WakelockPlus.toggle(
         enable: context.watch<ScreenCubit>().state.screenSleepDisabled);
     return Stack(
@@ -99,12 +100,22 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
             child: const MapUIGoogle(),
           ),
         ),
-        const Toolbar(),
         Positioned(
-          top: Sizes.toolbarHeight +
-              MediaQuery.of(context).viewPadding.top +
-              Sizes.mapContentMargin +
-              context.read<ScreenCubit>().scaleHeight * 25,
+          top: MediaQuery.of(context).viewPadding.top + Sizes.mapContentMargin,
+          left: Sizes.mapContentMargin,
+          child: const ScanToolbar(),
+        ),
+        Positioned(
+          top: MediaQuery.of(context).viewPadding.top + Sizes.mapContentMargin,
+          right: Sizes.mapContentMargin,
+          child: MapButton(
+            icon: const Icon(Icons.search_outlined),
+            onPressed: () {},
+            size: Sizes.mapIconSize,
+          ),
+        ),
+        Positioned(
+          top: MediaQuery.of(context).size.height / 2,
           right: Sizes.mapContentMargin,
           child: const MapOptionsToolbar(),
         ),
