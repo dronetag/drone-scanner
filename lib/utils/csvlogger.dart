@@ -299,13 +299,8 @@ class CSVLogger {
   // log in format hh:mm:ss.sss
   String? _logLocationTimestamp(Duration? duration) {
     if (duration == null) return null;
-    final milliseconds = duration.inMilliseconds;
-    final minutes = (milliseconds / 60000).floor();
-    final seconds = (milliseconds % 60000 / 1000).floor();
-    final millisecondsRemaining = (milliseconds % 1000).round();
-
-    return '00:${minutes.toString().padLeft(2, '0')}:'
-        '${seconds.toString().padLeft(2, '0')}.'
-        '${millisecondsRemaining.toString().padLeft(3, '0')}';
+    // toString uses format H:MM:SS.mmmmmm, remove last 3 digits
+    final durationString = duration.toString();
+    return durationString.substring(0, durationString.length - 3);
   }
 }
