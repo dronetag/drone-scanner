@@ -3,6 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 final _usedPermissionsDisplayNames = {
   Permission.bluetooth: 'Bluetooth',
   Permission.bluetoothScan: 'Bluetooth nearby scan',
+  Permission.bluetoothConnect: 'Bluetooth connect',
   Permission.location: 'Location',
   Permission.locationAlways: 'Location',
   Permission.locationWhenInUse: 'Location',
