@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 
+import '../../../bloc/dri_receiver_cubit.dart';
 import '../../../bloc/opendroneid_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
@@ -72,6 +73,39 @@ class ScanningStateIcons extends StatelessWidget {
                           : AppColors.iconDisabledColor,
                     ),
                     if (!state.isScanningWifi)
+                      Transform.rotate(
+                        angle: -math.pi / 4,
+                        child: Container(
+                          width: Sizes.iconSize / 8,
+                          height: Sizes.iconSize + 3,
+                          color: AppColors.dark,
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
+        if (context.select<DriReceiversCubit, bool>(
+            (cubit) => cubit.state.connectedReceiverId != null))
+          BlocBuilder<DriReceiversCubit, DriReceiversState>(
+            builder: (context, state) {
+              return MapButton(
+                onPressed: () => _onReceiverButtonPressed(context, state),
+                size: Sizes.mapIconSize,
+                margin: EdgeInsets.zero,
+                icon: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/rider.png',
+                      width: Sizes.iconSize,
+                      height: Sizes.iconSize,
+                      color: state.isReceiving
+                          ? AppColors.dark
+                          : AppColors.iconDisabledColor,
+                    ),
+                    if (!state.isReceiving)
                       Transform.rotate(
                         angle: -math.pi / 4,
                         child: Container(
@@ -154,5 +188,15 @@ class ScanningStateIcons extends StatelessWidget {
         );
       }
     });
+  }
+
+  void _onReceiverButtonPressed(
+      BuildContext context, DriReceiversState receiversState) {
+    final cubit = context.read<DriReceiversCubit>();
+    if (receiversState.isReceiving) {
+      cubit.stopReceivingMessages();
+    } else {
+      cubit.startReceivingMessages();
+    }
   }
 }
