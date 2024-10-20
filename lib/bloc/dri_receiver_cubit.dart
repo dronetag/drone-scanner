@@ -4,7 +4,9 @@ import 'package:dri_receiver/dri_receiver.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/models/message_container.dart';
 import 'package:flutter_opendroneid/pigeon.dart';
+import 'package:localstorage/localstorage.dart';
 
+import '../main.dart';
 import 'aircraft/aircraft_cubit.dart';
 
 class DriReceiversState {
@@ -45,6 +47,7 @@ class DriReceiversCubit extends Cubit<DriReceiversState> {
   final AircraftCubit aircraftCubit;
   final DriMessagesManager messagesManager;
   final ConnectionManager connectionManager;
+  final LocalStorage storage;
 
   StreamSubscription? messagesListener;
   StreamSubscription? managedReceiversListener;
@@ -53,6 +56,7 @@ class DriReceiversCubit extends Cubit<DriReceiversState> {
     required this.aircraftCubit,
     required this.messagesManager,
     required this.connectionManager,
+    required this.storage,
   }) : super(DriReceiversState.initialState()) {
     managedReceiversListener =
         messagesManager.stream.listen(_handleManagedReceiversChanged);
@@ -94,6 +98,10 @@ class DriReceiversCubit extends Cubit<DriReceiversState> {
     messagesManager.stopReceivingMessages(state.connectedReceiverId!);
     emit(state.copyWith(isReceiving: false));
   }
+
+  bool get useFakeReceivers => storage.getItem(fakeReceiverKey) ?? false;
+
+  set useFakeReceivers(bool value) => storage.setItem(fakeReceiverKey, value);
 
   void _handleReceivedData(ReceivedDriData driData) {
     final messageSource = _sourceFromReceiverSource(driData.messageSource);

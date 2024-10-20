@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/pigeon.dart' as pigeon;
@@ -9,6 +10,7 @@ import '../../bloc/aircraft/aircraft_expiration_cubit.dart';
 import '../../bloc/aircraft/aircraft_metadata_cubit.dart';
 import '../../bloc/aircraft/export_cubit.dart';
 import '../../bloc/aircraft/selected_aircraft_cubit.dart';
+import '../../bloc/dri_receiver_cubit.dart';
 import '../../bloc/help/help_cubit.dart';
 import '../../bloc/map/map_cubit.dart';
 import '../../bloc/opendroneid_cubit.dart';
@@ -640,6 +642,25 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
+      if (kDebugMode) ...[
+        const Headline(
+          text: 'Developer',
+        ),
+        Padding(
+          padding: itemPadding,
+          child: PreferencesItem(
+            label: 'Use fake receivers:',
+            description: 'Fake receivers mode for testing. '
+                'Restart the app to apply change.',
+            child: PreferencesSlider(
+                getValue: () =>
+                    context.read<DriReceiversCubit>().useFakeReceivers,
+                setValue: ({required value}) {
+                  context.read<DriReceiversCubit>().useFakeReceivers = value;
+                }),
+          ),
+        ),
+      ]
     ];
   }
 }

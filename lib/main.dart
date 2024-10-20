@@ -41,6 +41,8 @@ const sentryDsn = String.fromEnvironment(
   defaultValue: '',
 );
 
+const fakeReceiverKey = 'useFakeReceivers';
+
 const bool kReleaseMode = bool.fromEnvironment('dart.vm.product');
 const bool kProfileMode = bool.fromEnvironment('dart.vm.profile');
 const bool kDebugMode = !kReleaseMode && !kProfileMode;
@@ -113,8 +115,14 @@ void main() async {
         ),
       ));
 
-  // Init DriDeceiver in fake mode
-  DriReceiverManager.initFakeMode();
+  // allow fake receivers just in debug mode
+  final useFakeReceivers =
+      kDebugMode && (storage.getItem(fakeReceiverKey) ?? false);
+  if (useFakeReceivers) {
+    DriReceiverManager.initFakeMode();
+  } else {
+    DriReceiverManager.init();
+  }
 
   runAppWithSentry(
     () => runApp(
@@ -180,6 +188,8 @@ void main() async {
             create: (context) => DriReceiversCubit(
               aircraftCubit: aircraftCubit,
               messagesManager: DriReceiverManager.messagesManager,
+              connectionManager: DriReceiverManager.connectionManager,
+              storage: storage,
             ),
             lazy: false,
           ),
