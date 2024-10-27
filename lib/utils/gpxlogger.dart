@@ -17,8 +17,18 @@ class GPXLogger {
     gpxBuffer.writeln('<trkseg>');
     for (final pack in list) {
       if (!pack.locationValid) continue;
-      gpxBuffer.writeln(
-          '<trkpt lat="${pack.locationMessage!.location!.latitude}" lon="${pack.locationMessage!.location!.longitude}"/>');
+      gpxBuffer
+          .writeln('<trkpt lat="${pack.locationMessage!.location!.latitude}" '
+              'lon="${pack.locationMessage!.location!.longitude}">');
+      if (pack.locationMessage?.altitudePressure != null) {
+        gpxBuffer
+            .writeln('<ele>${pack.locationMessage!.altitudePressure}</ele>');
+      }
+      if (pack.locationMessage?.timestamp != null) {
+        gpxBuffer.writeln(
+            '<time>${pack.locationMessage!.timestamp.toString()}</time>');
+      }
+      gpxBuffer.writeln('</trkpt>');
     }
     gpxBuffer.writeln('</trkseg>');
     gpxBuffer.writeln('</trk>');
