@@ -642,25 +642,6 @@ class PreferencesPage extends StatelessWidget {
           ),
         ),
       ),
-      if (kDebugMode) ...[
-        const Headline(
-          text: 'Developer',
-        ),
-        Padding(
-          padding: itemPadding,
-          child: PreferencesItem(
-            label: 'Use fake receivers:',
-            description: 'Fake receivers mode for testing. '
-                'Restart the app to apply change.',
-            child: PreferencesSlider(
-                getValue: () =>
-                    context.read<DriReceiversCubit>().useFakeReceivers,
-                setValue: ({required value}) {
-                  context.read<DriReceiversCubit>().useFakeReceivers = value;
-                }),
-          ),
-        ),
-      ]
     ];
   }
 }

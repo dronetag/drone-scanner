@@ -116,12 +116,9 @@ void main() async {
       ));
 
   // allow fake receivers just in debug mode
-  final useFakeReceivers =
-      kDebugMode && (storage.getItem(fakeReceiverKey) ?? false);
+  const useFakeReceivers = kDebugMode;
   if (useFakeReceivers) {
     DriReceiverManager.initFakeMode();
-  } else {
-    DriReceiverManager.init();
   }
 
   runAppWithSentry(
