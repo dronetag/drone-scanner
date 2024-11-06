@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_opendroneid/flutter_opendroneid.dart';
 
+import '../../../bloc/dri_receiver_cubit.dart';
 import '../../../bloc/opendroneid_cubit.dart';
 import '../../../bloc/standards_cubit.dart';
 import '../../../constants/colors.dart';
 import '../../../constants/sizes.dart';
 import '../../../constants/snackbar_messages.dart';
 import '../../app/dialogs.dart';
+import '../../map/map_button.dart';
 
 class ScanningStateIcons extends StatelessWidget {
   const ScanningStateIcons({
@@ -18,61 +20,22 @@ class ScanningStateIcons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         BlocBuilder<OpendroneIdCubit, ScanningState>(
           builder: (context, state) {
-            return RawMaterialButton(
-              onPressed: () {
-                late final String snackBarText;
-                context
-                    .read<OpendroneIdCubit>()
-                    .isBtTurnedOn()
-                    .then((turnedOn) {
-                  if (turnedOn) {
-                    if (state.isScanningBluetooth &&
-                        (state.usedTechnologies == UsedTechnologies.Bluetooth ||
-                            state.usedTechnologies == UsedTechnologies.Both)) {
-                      context.read<OpendroneIdCubit>().setBtUsed(btUsed: false);
-                      snackBarText = btScanStopMessage;
-                      showSnackBar(context, snackBarText);
-                    } else {
-                      context
-                          .read<OpendroneIdCubit>()
-                          .setBtUsed(btUsed: true)
-                          .then((result) {
-                        if (result.success) {
-                          snackBarText = btScanStartMessage;
-                        } else {
-                          snackBarText = unableToStartMessage(result.error!);
-                        }
-                        showSnackBar(context, snackBarText);
-                      });
-                    }
-                  } else {
-                    showSnackBar(
-                      context,
-                      btTurnedOffMessage(
-                          isAndroidSystem: context
-                              .read<StandardsCubit>()
-                              .state
-                              .androidSystem),
-                    );
-                  }
-                });
-              },
-              //padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              shape: const CircleBorder(),
-              child: Stack(
+            return MapButton(
+              size: Sizes.mapIconSize,
+              margin: EdgeInsets.zero,
+              onPressed: () => _onBTButtonPressed(context, state),
+              icon: Stack(
                 alignment: AlignmentDirectional.center,
                 children: [
                   Icon(
                     Icons.bluetooth,
                     color: state.isScanningBluetooth
-                        ? Colors.white
+                        ? AppColors.dark
                         : AppColors.iconDisabledColor,
                     size: Sizes.iconSize,
                   ),
@@ -82,7 +45,7 @@ class ScanningStateIcons extends StatelessWidget {
                       child: Container(
                         width: Sizes.iconSize / 8,
                         height: Sizes.iconSize + 3,
-                        color: Colors.white,
+                        color: AppColors.dark,
                       ),
                     ),
                 ],
@@ -94,50 +57,11 @@ class ScanningStateIcons extends StatelessWidget {
         if (context.watch<StandardsCubit>().state.androidSystem)
           BlocBuilder<OpendroneIdCubit, ScanningState>(
             builder: (context, state) {
-              return RawMaterialButton(
-                onPressed: () {
-                  late final String snackBarText;
-                  context
-                      .read<OpendroneIdCubit>()
-                      .isWifiTurnedOn()
-                      .then((turnedOn) {
-                    if (turnedOn) {
-                      if (state.isScanningWifi &&
-                          (state.usedTechnologies == UsedTechnologies.Wifi ||
-                              state.usedTechnologies ==
-                                  UsedTechnologies.Both)) {
-                        context
-                            .read<OpendroneIdCubit>()
-                            .setWifiUsed(wifiUsed: false);
-                        snackBarText = wifiScanStopMessage;
-                        showSnackBar(context, snackBarText);
-                      } else {
-                        context
-                            .read<OpendroneIdCubit>()
-                            .setWifiUsed(wifiUsed: true)
-                            .then((result) {
-                          if (result.success) {
-                            snackBarText = wifiScanStartMessage;
-                          } else {
-                            snackBarText = unableToStartMessage(result.error!);
-                          }
-                          showSnackBar(context, snackBarText);
-                        });
-                      }
-                    } else {
-                      snackBarText = wifiTurnedOffMessage;
-                      showSnackBar(
-                        context,
-                        snackBarText,
-                      );
-                    }
-                  });
-                },
-                //padding: const EdgeInsets.all(8),
-                constraints: const BoxConstraints(),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: const CircleBorder(),
-                child: Stack(
+              return MapButton(
+                onPressed: () => _onWiFiButtonPressed(context, state),
+                size: Sizes.mapIconSize,
+                margin: EdgeInsets.zero,
+                icon: Stack(
                   alignment: AlignmentDirectional.center,
                   children: [
                     Image.asset(
@@ -145,7 +69,7 @@ class ScanningStateIcons extends StatelessWidget {
                       width: Sizes.iconSize,
                       height: Sizes.iconSize,
                       color: state.isScanningWifi
-                          ? Colors.white
+                          ? AppColors.dark
                           : AppColors.iconDisabledColor,
                     ),
                     if (!state.isScanningWifi)
@@ -154,7 +78,40 @@ class ScanningStateIcons extends StatelessWidget {
                         child: Container(
                           width: Sizes.iconSize / 8,
                           height: Sizes.iconSize + 3,
-                          color: Colors.white,
+                          color: AppColors.dark,
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
+        if (context.select<DriReceiversCubit, bool>(
+            (cubit) => cubit.state.connectedReceiverId != null))
+          BlocBuilder<DriReceiversCubit, DriReceiversState>(
+            builder: (context, state) {
+              return MapButton(
+                onPressed: () => _onReceiverButtonPressed(context, state),
+                size: Sizes.mapIconSize,
+                margin: EdgeInsets.zero,
+                icon: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/rider.png',
+                      width: Sizes.iconSize,
+                      height: Sizes.iconSize,
+                      color: state.isReceiving
+                          ? AppColors.dark
+                          : AppColors.iconDisabledColor,
+                    ),
+                    if (!state.isReceiving)
+                      Transform.rotate(
+                        angle: -math.pi / 4,
+                        child: Container(
+                          width: Sizes.iconSize / 8,
+                          height: Sizes.iconSize + 3,
+                          color: AppColors.dark,
                         ),
                       ),
                   ],
@@ -164,5 +121,82 @@ class ScanningStateIcons extends StatelessWidget {
           ),
       ],
     );
+  }
+
+  void _onBTButtonPressed(BuildContext context, ScanningState scanningState) {
+    late final String snackBarText;
+    context.read<OpendroneIdCubit>().isBtTurnedOn().then((turnedOn) {
+      if (turnedOn) {
+        if (scanningState.isScanningBluetooth &&
+            (scanningState.usedTechnologies == UsedTechnologies.Bluetooth ||
+                scanningState.usedTechnologies == UsedTechnologies.Both)) {
+          context.read<OpendroneIdCubit>().setBtUsed(btUsed: false);
+          snackBarText = btScanStopMessage;
+          showSnackBar(context, snackBarText);
+        } else {
+          context
+              .read<OpendroneIdCubit>()
+              .setBtUsed(btUsed: true)
+              .then((result) {
+            if (result.success) {
+              snackBarText = btScanStartMessage;
+            } else {
+              snackBarText = unableToStartMessage(result.error!);
+            }
+            showSnackBar(context, snackBarText);
+          });
+        }
+      } else {
+        showSnackBar(
+          context,
+          btTurnedOffMessage(
+              isAndroidSystem:
+                  context.read<StandardsCubit>().state.androidSystem),
+        );
+      }
+    });
+  }
+
+  void _onWiFiButtonPressed(BuildContext context, ScanningState scanningState) {
+    late final String snackBarText;
+    context.read<OpendroneIdCubit>().isWifiTurnedOn().then((turnedOn) {
+      if (turnedOn) {
+        if (scanningState.isScanningWifi &&
+            (scanningState.usedTechnologies == UsedTechnologies.Wifi ||
+                scanningState.usedTechnologies == UsedTechnologies.Both)) {
+          context.read<OpendroneIdCubit>().setWifiUsed(wifiUsed: false);
+          snackBarText = wifiScanStopMessage;
+          showSnackBar(context, snackBarText);
+        } else {
+          context
+              .read<OpendroneIdCubit>()
+              .setWifiUsed(wifiUsed: true)
+              .then((result) {
+            if (result.success) {
+              snackBarText = wifiScanStartMessage;
+            } else {
+              snackBarText = unableToStartMessage(result.error!);
+            }
+            showSnackBar(context, snackBarText);
+          });
+        }
+      } else {
+        snackBarText = wifiTurnedOffMessage;
+        showSnackBar(
+          context,
+          snackBarText,
+        );
+      }
+    });
+  }
+
+  void _onReceiverButtonPressed(
+      BuildContext context, DriReceiversState receiversState) {
+    final cubit = context.read<DriReceiversCubit>();
+    if (receiversState.isReceiving) {
+      cubit.stopReceivingMessages();
+    } else {
+      cubit.startReceivingMessages();
+    }
   }
 }

@@ -3,19 +3,29 @@ PODS:
     - Flutter
   - device_info_plus (0.0.1):
     - Flutter
+  - dri_receiver (0.0.1):
+    - Flutter
+    - iOSMcuManagerLibrary (~> 1.7.0)
+    - SwiftProtobuf (~> 1.15)
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_opendroneid (1.0.0):
     - Flutter
+  - Google-Maps-iOS-Utils (5.0.0):
+    - GoogleMaps (~> 8.0)
   - google_maps_flutter_ios (0.0.1):
     - Flutter
-    - GoogleMaps (< 9.0)
+    - Google-Maps-iOS-Utils (< 7.0, >= 5.0)
+    - GoogleMaps (< 10.0, >= 8.4)
   - GoogleMaps (8.4.0):
     - GoogleMaps/Maps (= 8.4.0)
   - GoogleMaps/Base (8.4.0)
   - GoogleMaps/Maps (8.4.0):
     - GoogleMaps/Base
+  - iOSMcuManagerLibrary (1.7.3):
+    - SwiftCBOR (= 0.4.7)
+    - ZIPFoundation (= 0.9.19)
   - location (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
@@ -35,14 +45,18 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - SwiftCBOR (0.4.7)
+  - SwiftProtobuf (1.28.1)
   - url_launcher_ios (0.0.1):
     - Flutter
   - wakelock_plus (0.0.1):
     - Flutter
+  - ZIPFoundation (0.9.19)
 
 DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - dri_receiver (from `.symlinks/plugins/dri_receiver/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_opendroneid (from `.symlinks/plugins/flutter_opendroneid/ios`)
@@ -59,14 +73,21 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Google-Maps-iOS-Utils
     - GoogleMaps
+    - iOSMcuManagerLibrary
     - Sentry
+    - SwiftCBOR
+    - SwiftProtobuf
+    - ZIPFoundation
 
 EXTERNAL SOURCES:
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
+  dri_receiver:
+    :path: ".symlinks/plugins/dri_receiver/ios"
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -97,21 +118,27 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
+  dri_receiver: d0ed31905fe6c3fd80dd8aa08d6297875fcca206
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_opendroneid: 92e28add32d6bf2b5705fdad0666657476de2e15
-  google_maps_flutter_ios: f135b968a67c05679e0a53538e900b5c174b0d99
+  Google-Maps-iOS-Utils: 66d6de12be1ce6d3742a54661e7a79cb317a9321
+  google_maps_flutter_ios: e31555a04d1986ab130f2b9f24b6cdc861acc6d3
   GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
+  iOSMcuManagerLibrary: bca75cc86a64612ed7257c0f8b14c54765a8b680
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
-  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  permission_handler_apple: 036b856153a2b1f61f21030ff725f3e6fece2b78
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   Sentry: f8374b5415bc38dfb5645941b3ae31230fbeae57
   sentry_flutter: 0eb93e5279eb41e2392212afe1ccd2fecb4f8cbe
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  SwiftCBOR: 465775bed0e8bac7bfb8160bcf7b95d7f75971e4
+  SwiftProtobuf: cc47329e2a10c235e35ba4faed831742ae5135ce
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
+  ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
 PODFILE CHECKSUM: a1259a7fc402ace8f6edaea2622af986625b8779
 

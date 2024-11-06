@@ -34,7 +34,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
         // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -49,7 +48,7 @@ android {
     defaultConfig {
         applicationId "cz.dronetag.dronescanner"
         compileSdk 34
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

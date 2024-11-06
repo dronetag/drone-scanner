@@ -155,6 +155,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
     final btStatus = await Permission.bluetooth.request();
     // scan makes sense just on android
     final btScanStatus = await Permission.bluetoothScan.request();
+    final btConnectStatus = await Permission.bluetoothConnect.request();
     if (btStatus.isGranted && btScanStatus.isGranted) {
       standardsCubit.setBluetoothEnabled(enabled: true);
       final btTurnedOn = await odidCubit.isBtTurnedOn();

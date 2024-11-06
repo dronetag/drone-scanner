@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dri_receiver/dri_receiver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -13,6 +14,7 @@ import 'bloc/aircraft/aircraft_expiration_cubit.dart';
 import 'bloc/aircraft/aircraft_metadata_cubit.dart';
 import 'bloc/aircraft/export_cubit.dart';
 import 'bloc/aircraft/selected_aircraft_cubit.dart';
+import 'bloc/dri_receiver_cubit.dart';
 import 'bloc/geocoding_cubit.dart';
 import 'bloc/help/help_cubit.dart';
 import 'bloc/map/map_cubit.dart';
@@ -38,6 +40,8 @@ const sentryDsn = String.fromEnvironment(
   'SENTRY_DSN',
   defaultValue: '',
 );
+
+const fakeReceiverKey = 'useFakeReceivers';
 
 const bool kReleaseMode = bool.fromEnvironment('dart.vm.product');
 const bool kProfileMode = bool.fromEnvironment('dart.vm.profile');
@@ -111,6 +115,12 @@ void main() async {
         ),
       ));
 
+  // allow fake receivers just in debug mode
+  const useFakeReceivers = kDebugMode;
+  if (useFakeReceivers) {
+    DriReceiverManager.initFakeMode();
+  }
+
   runAppWithSentry(
     () => runApp(
       MultiBlocProvider(
@@ -171,12 +181,18 @@ void main() async {
             create: (context) => selectedCubit,
             lazy: false,
           ),
+          BlocProvider<DriReceiversCubit>(
+            create: (context) => DriReceiversCubit(
+              aircraftCubit: aircraftCubit,
+              messagesManager: DriReceiverManager.messagesManager,
+              connectionManager: DriReceiverManager.connectionManager,
+              storage: storage,
+            ),
+            lazy: false,
+          ),
           BlocProvider<OpendroneIdCubit>(
             create: (context) => OpendroneIdCubit(
-              mapCubit: mapCubit,
-              selectedAircraftCubit: selectedCubit,
               aircraftCubit: aircraftCubit,
-              aircraftMetadataCubit: aircraftMetadataCubit,
             ),
             lazy: false,
           ),
